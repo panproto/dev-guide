@@ -441,8 +441,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
       </ul>
@@ -459,19 +465,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -488,7 +494,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -505,19 +511,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
       </ul>
@@ -653,15 +659,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="release-build" class="level3" data-number="3.2.3">
 <h3 data-number="3.2.3" class="anchored" data-anchor-id="release-build"><span class="header-section-number">3.2.3</span> Release build</h3>
 <p>The workspace defines two release profiles:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="73"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml" style="counter-reset: source-line 72;"><span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="kw">[profile.release]</span></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="dt">lto</span> <span class="op">=</span> <span class="cn">true</span></span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="dt">codegen-units</span> <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="dt">opt-level</span> <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="dt">strip</span> <span class="op">=</span> <span class="cn">true</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="73"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml" style="counter-reset: source-line 72;"><span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="dt">all</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">level</span><span class="op"> =</span> <span class="st">"warn"</span><span class="op">, </span><span class="dt">priority</span><span class="op"> =</span> <span class="dv">-1</span><span class="op"> }</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="dt">pedantic</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">level</span><span class="op"> =</span> <span class="st">"warn"</span><span class="op">, </span><span class="dt">priority</span><span class="op"> =</span> <span class="dv">-1</span><span class="op"> }</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="dt">nursery</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">level</span><span class="op"> =</span> <span class="st">"warn"</span><span class="op">, </span><span class="dt">priority</span><span class="op"> =</span> <span class="dv">-1</span><span class="op"> }</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="dt">unwrap_used</span> <span class="op">=</span> <span class="st">"deny"</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="dt">expect_used</span> <span class="op">=</span> <span class="st">"warn"</span></span>
 <span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="kw">[profile.release-wasm]</span></span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="dt">inherits</span> <span class="op">=</span> <span class="st">"release"</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="dt">opt-level</span> <span class="op">=</span> <span class="st">"z"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="kw">[profile.release]</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="dt">lto</span> <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="dt">codegen-units</span> <span class="op">=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>release</code> enables LTO, single codegen unit, and symbol stripping for maximum performance. <code>release-wasm</code> inherits from <code>release</code> but uses <code>opt-level = "z"</code> to minimize binary size for the WASM target.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Native release build</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">--workspace</span> <span class="at">--release</span></span>
@@ -782,18 +788,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div aria-describedby="fig-build-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <pre class="mermaid mermaid-js" data-label="fig-build-pipeline">flowchart TD
-    A["cargo build --workspace"] --&gt; B["wasm-pack build\ncrates/panproto-wasm\n--target web"]
-    B --&gt; C["cd sdk/typescript\npnpm install &amp;&amp; pnpm build"]
+    A["cargo build --workspace"] --&gt; B["wasm-pack build&lt;br&gt;crates/panproto-wasm&lt;br&gt;--target web"]
+    B --&gt; C["cd sdk/typescript&lt;br&gt;pnpm install &amp;&amp; pnpm build"]
 
-    A --&gt; D["cargo nextest run\n--workspace"]
-    B --&gt; E["wasm-pack test\n--headless --chrome"]
+    A --&gt; D["cargo nextest run&lt;br&gt;--workspace"]
+    B --&gt; E["wasm-pack test&lt;br&gt;--headless --chrome"]
     C --&gt; F["pnpm test"]
 
     D --&gt; G{"All pass?"}
     E --&gt; G
     F --&gt; G
     G --&gt;|yes| H["Ready to commit"]
-    G --&gt;|no| I["Debug\n(see chapter 4)"]
+    G --&gt;|no| I["Debug&lt;br&gt;(see chapter 4)"]
 </pre>
 </div>
 </div>
@@ -1575,18 +1581,18 @@ Figure&nbsp;3.1: Full build and test pipeline
 <span id="cb18-183"><a href="#cb18-183" aria-hidden="true" tabindex="-1"></a>%%| label: fig-build-pipeline</span>
 <span id="cb18-184"><a href="#cb18-184" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Full build and test pipeline</span><span class="ot">"</span></span>
 <span id="cb18-185"><a href="#cb18-185" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
-<span id="cb18-186"><a href="#cb18-186" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">cargo build --workspace</span><span class="ot">"</span>] --&gt; B[<span class="ot">"</span><span class="st">wasm-pack build</span><span class="ch">\n</span><span class="st">crates/panproto-wasm</span><span class="ch">\n</span><span class="st">--target web</span><span class="ot">"</span>]</span>
-<span id="cb18-187"><a href="#cb18-187" aria-hidden="true" tabindex="-1"></a>    B --&gt; C[<span class="ot">"</span><span class="st">cd sdk/typescript</span><span class="ch">\n</span><span class="st">pnpm install &amp;&amp; pnpm build</span><span class="ot">"</span>]</span>
+<span id="cb18-186"><a href="#cb18-186" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">cargo build --workspace</span><span class="ot">"</span>] --&gt; B[<span class="ot">"</span><span class="st">wasm-pack build&lt;br&gt;crates/panproto-wasm&lt;br&gt;--target web</span><span class="ot">"</span>]</span>
+<span id="cb18-187"><a href="#cb18-187" aria-hidden="true" tabindex="-1"></a>    B --&gt; C[<span class="ot">"</span><span class="st">cd sdk/typescript&lt;br&gt;pnpm install &amp;&amp; pnpm build</span><span class="ot">"</span>]</span>
 <span id="cb18-188"><a href="#cb18-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-189"><a href="#cb18-189" aria-hidden="true" tabindex="-1"></a>    A --&gt; D[<span class="ot">"</span><span class="st">cargo nextest run</span><span class="ch">\n</span><span class="st">--workspace</span><span class="ot">"</span>]</span>
-<span id="cb18-190"><a href="#cb18-190" aria-hidden="true" tabindex="-1"></a>    B --&gt; E[<span class="ot">"</span><span class="st">wasm-pack test</span><span class="ch">\n</span><span class="st">--headless --chrome</span><span class="ot">"</span>]</span>
+<span id="cb18-189"><a href="#cb18-189" aria-hidden="true" tabindex="-1"></a>    A --&gt; D[<span class="ot">"</span><span class="st">cargo nextest run&lt;br&gt;--workspace</span><span class="ot">"</span>]</span>
+<span id="cb18-190"><a href="#cb18-190" aria-hidden="true" tabindex="-1"></a>    B --&gt; E[<span class="ot">"</span><span class="st">wasm-pack test&lt;br&gt;--headless --chrome</span><span class="ot">"</span>]</span>
 <span id="cb18-191"><a href="#cb18-191" aria-hidden="true" tabindex="-1"></a>    C --&gt; F[<span class="ot">"</span><span class="st">pnpm test</span><span class="ot">"</span>]</span>
 <span id="cb18-192"><a href="#cb18-192" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-193"><a href="#cb18-193" aria-hidden="true" tabindex="-1"></a>    D --&gt; G{<span class="ot">"</span><span class="st">All pass?</span><span class="ot">"</span>}</span>
 <span id="cb18-194"><a href="#cb18-194" aria-hidden="true" tabindex="-1"></a>    E --&gt; G</span>
 <span id="cb18-195"><a href="#cb18-195" aria-hidden="true" tabindex="-1"></a>    F --&gt; G</span>
 <span id="cb18-196"><a href="#cb18-196" aria-hidden="true" tabindex="-1"></a>    G --&gt;|yes| H[<span class="ot">"</span><span class="st">Ready to commit</span><span class="ot">"</span>]</span>
-<span id="cb18-197"><a href="#cb18-197" aria-hidden="true" tabindex="-1"></a>    G --&gt;|<span class="fu">no</span>| I[<span class="ot">"</span><span class="st">Debug</span><span class="ch">\n</span><span class="st">(see chapter 4)</span><span class="ot">"</span>]</span>
+<span id="cb18-197"><a href="#cb18-197" aria-hidden="true" tabindex="-1"></a>    G --&gt;|<span class="fu">no</span>| I[<span class="ot">"</span><span class="st">Debug&lt;br&gt;(see chapter 4)</span><span class="ot">"</span>]</span>
 <span id="cb18-198"><a href="#cb18-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-199"><a href="#cb18-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-200"><a href="#cb18-200" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lint checks</span></span>

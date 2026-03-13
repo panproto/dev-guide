@@ -460,8 +460,14 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
       </ul>
@@ -478,19 +484,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -507,7 +513,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -524,19 +530,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
       </ul>
@@ -739,11 +745,11 @@ Tip
 <div>
 <pre class="mermaid mermaid-js" data-label="fig-restrict-pipeline">flowchart TD
     I["Source WInstance"] --&gt; S1
-    S1["Step 1: anchor_surviving\n(keep nodes whose anchor survives)"] --&gt; S2
-    S2["Step 2: reachable_from_root\n(BFS from root in surviving subgraph)"] --&gt; S3
-    S3["Step 3: ancestor_contraction\n(find nearest surviving ancestor)"] --&gt; S4
-    S4["Step 4: resolve_edge\n(remap edges for contracted arcs)"] --&gt; S5
-    S5["Step 5: reconstruct_fans\n(rebuild hyper-edge fans)"] --&gt; O
+    S1["Step 1: anchor_surviving&lt;br&gt;(keep nodes whose anchor survives)"] --&gt; S2
+    S2["Step 2: reachable_from_root&lt;br&gt;(BFS from root in surviving subgraph)"] --&gt; S3
+    S3["Step 3: ancestor_contraction&lt;br&gt;(find nearest surviving ancestor)"] --&gt; S4
+    S4["Step 4: resolve_edge&lt;br&gt;(remap edges for contracted arcs)"] --&gt; S5
+    S5["Step 5: reconstruct_fans&lt;br&gt;(rebuild hyper-edge fans)"] --&gt; O
     O["Target WInstance"]
 
     style S1 fill:#e8f0fe,stroke:#1a73e8
@@ -1111,13 +1117,34 @@ Important
 <h2 data-number="8.8" class="anchored" data-anchor-id="instance-lifecycle"><span class="header-section-number">8.8</span> Instance Lifecycle</h2>
 <p>Putting it all together, the typical lifecycle of a W-type instance is:</p>
 <ol type="1">
-<li><strong>Parse</strong>: <code>parse_json(schema_v1, root, json)</code> creates a <code>WInstance</code> from raw data.</li>
+<li><strong>Parse</strong>: Create a <code>WInstance</code> from raw data via one of two pathways:
+<ul>
+<li><strong>Format-specific</strong> (recommended): <code>panproto_io::parse_wtype("html", schema_v1, &amp;raw_bytes)</code> — uses SIMD-accelerated format-specific parsers for maximum throughput.</li>
+<li><strong>Generic JSON</strong>: <code>parse_json(schema_v1, root, &amp;json_value)</code> — for data already in JSON form.</li>
+</ul></li>
 <li><strong>Validate</strong>: <code>validate_wtype(schema_v1, instance)</code> confirms well-formedness.</li>
 <li><strong>Restrict</strong>: <code>wtype_restrict(instance, schema_v1, schema_v2, migration)</code> projects to the new schema.</li>
 <li><strong>Validate</strong> (optional): <code>validate_wtype(schema_v2, restricted)</code> confirms the result.</li>
-<li><strong>Serialize</strong>: <code>to_json(schema_v2, restricted)</code> produces the migrated JSON.</li>
+<li><strong>Serialize</strong>: Emit the migrated instance via:
+<ul>
+<li><strong>Format-specific</strong>: <code>panproto_io::emit_wtype("html", schema_v2, &amp;restricted)</code> — native format output.</li>
+<li><strong>Generic JSON</strong>: <code>to_json(schema_v2, restricted)</code> — produces JSON.</li>
+</ul></li>
 </ol>
 <p>Steps 2 and 4 are optional in production (the pipeline is designed to preserve validity), but recommended during development and testing.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>panproto-io</code> crate provides format-specific parsers for all 77 supported protocols. The generic <code>parse_json</code>/<code>to_json</code> functions in this crate remain useful as the foundation for <code>panproto-io</code>’s JSON pathway and for direct JSON manipulation in tests and tooling.</p>
+</div>
+</div>
 </section>
 <section id="design-rationale" class="level2" data-number="8.9">
 <h2 data-number="8.9" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">8.9</span> Design Rationale</h2>
@@ -1706,11 +1733,11 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">The 5-step wtype_restrict pipeline. Each step filters or transforms the instance, producing a progressively restricted version.</span><span class="ot">"</span></span>
 <span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
 <span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    I[<span class="ot">"</span><span class="st">Source WInstance</span><span class="ot">"</span>] --&gt; S1</span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>    S1[<span class="ot">"</span><span class="st">Step 1: anchor_surviving</span><span class="ch">\n</span><span class="st">(keep nodes whose anchor survives)</span><span class="ot">"</span>] --&gt; S2</span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>    S2[<span class="ot">"</span><span class="st">Step 2: reachable_from_root</span><span class="ch">\n</span><span class="st">(BFS from root in surviving subgraph)</span><span class="ot">"</span>] --&gt; S3</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>    S3[<span class="ot">"</span><span class="st">Step 3: ancestor_contraction</span><span class="ch">\n</span><span class="st">(find nearest surviving ancestor)</span><span class="ot">"</span>] --&gt; S4</span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    S4[<span class="ot">"</span><span class="st">Step 4: resolve_edge</span><span class="ch">\n</span><span class="st">(remap edges for contracted arcs)</span><span class="ot">"</span>] --&gt; S5</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>    S5[<span class="ot">"</span><span class="st">Step 5: reconstruct_fans</span><span class="ch">\n</span><span class="st">(rebuild hyper-edge fans)</span><span class="ot">"</span>] --&gt; O</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>    S1[<span class="ot">"</span><span class="st">Step 1: anchor_surviving&lt;br&gt;(keep nodes whose anchor survives)</span><span class="ot">"</span>] --&gt; S2</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>    S2[<span class="ot">"</span><span class="st">Step 2: reachable_from_root&lt;br&gt;(BFS from root in surviving subgraph)</span><span class="ot">"</span>] --&gt; S3</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>    S3[<span class="ot">"</span><span class="st">Step 3: ancestor_contraction&lt;br&gt;(find nearest surviving ancestor)</span><span class="ot">"</span>] --&gt; S4</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>    S4[<span class="ot">"</span><span class="st">Step 4: resolve_edge&lt;br&gt;(remap edges for contracted arcs)</span><span class="ot">"</span>] --&gt; S5</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>    S5[<span class="ot">"</span><span class="st">Step 5: reconstruct_fans&lt;br&gt;(rebuild hyper-edge fans)</span><span class="ot">"</span>] --&gt; O</span>
 <span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>    O[<span class="ot">"</span><span class="st">Target WInstance</span><span class="ot">"</span>]</span>
 <span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    style S1 fill:<span class="co">#e8f0fe,stroke:#1a73e8</span></span>
@@ -1842,32 +1869,40 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>Putting it all together, the typical lifecycle of a W-type instance is:</span>
 <span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Parse**: <span class="in">`parse_json(schema_v1, root, json)`</span> creates a <span class="in">`WInstance`</span> from raw data.</span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Validate**: <span class="in">`validate_wtype(schema_v1, instance)`</span> confirms well-formedness.</span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Restrict**: <span class="in">`wtype_restrict(instance, schema_v1, schema_v2, migration)`</span> projects to the new schema.</span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Validate** (optional): <span class="in">`validate_wtype(schema_v2, restricted)`</span> confirms the result.</span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Serialize**: <span class="in">`to_json(schema_v2, restricted)`</span> produces the migrated JSON.</span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>Steps 2 and 4 are optional in production (the pipeline is designed to preserve validity), but recommended during development and testing.</span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Parse**: Create a <span class="in">`WInstance`</span> from raw data via one of two pathways:</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Format-specific** (recommended): <span class="in">`panproto_io::parse_wtype("html", schema_v1, &amp;raw_bytes)`</span> — uses SIMD-accelerated format-specific parsers for maximum throughput.</span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Generic JSON**: <span class="in">`parse_json(schema_v1, root, &amp;json_value)`</span> — for data already in JSON form.</span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Validate**: <span class="in">`validate_wtype(schema_v1, instance)`</span> confirms well-formedness.</span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Restrict**: <span class="in">`wtype_restrict(instance, schema_v1, schema_v2, migration)`</span> projects to the new schema.</span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Validate** (optional): <span class="in">`validate_wtype(schema_v2, restricted)`</span> confirms the result.</span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Serialize**: Emit the migrated instance via:</span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Format-specific**: <span class="in">`panproto_io::emit_wtype("html", schema_v2, &amp;restricted)`</span> — native format output.</span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Generic JSON**: <span class="in">`to_json(schema_v2, restricted)`</span> — produces JSON.</span>
 <span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Separate Node IDs from Anchors</span></span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>Steps 2 and 4 are optional in production (the pipeline is designed to preserve validity), but recommended during development and testing.</span>
 <span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>Node IDs are <span class="in">`u32`</span> values, while anchors are <span class="in">`String`</span> schema vertex IDs. Multiple nodes can share the same anchor (e.g., an array of strings all anchored to the same <span class="in">`"items"`</span> vertex). Keeping IDs numeric and anchors semantic gives O(1) node lookup by ID while preserving the schema-level meaning through the anchor.</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Precomputed Parent and Children Maps</span></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-io`</span> crate provides format-specific parsers for all 77 supported protocols. The generic <span class="in">`parse_json`</span>/<span class="in">`to_json`</span> functions in this crate remain useful as the foundation for <span class="in">`panproto-io`</span>'s JSON pathway and for direct JSON manipulation in tests and tooling.</span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>The <span class="in">`parent_map`</span> and <span class="in">`children_map`</span> are computed once in <span class="in">`WInstance::new()`</span> and never updated. This is safe because <span class="in">`WInstance`</span> is immutable after construction. The restrict pipeline creates a new <span class="in">`WInstance`</span> rather than mutating the source.</span>
+<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
 <span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Five Steps Instead of One</span></span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Separate Node IDs from Anchors</span></span>
 <span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>Decomposing the restrict algorithm into five independent functions serves two purposes:</span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>Node IDs are <span class="in">`u32`</span> values, while anchors are <span class="in">`String`</span> schema vertex IDs. Multiple nodes can share the same anchor (e.g., an array of strings all anchored to the same <span class="in">`"items"`</span> vertex). Keeping IDs numeric and anchors semantic gives O(1) node lookup by ID while preserving the schema-level meaning through the anchor.</span>
 <span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Testability**: each step can be unit-tested in isolation with small, purpose-built instances. The test suite in <span class="in">`wtype.rs`</span> tests each step individually before testing the composed pipeline.</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Debuggability**: when a migration produces unexpected results, you can inspect the output of each step to locate the problem. The CLI's <span class="in">`--verbose`</span> mode logs intermediate results at each step.</span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>The five-step decomposition also mirrors the mathematical structure: signature restriction (Step 1) is the pullback on objects, reachability (Step 2) enforces the wellfoundedness condition, contraction (Step 3) computes the pushforward on the tree, edge resolution (Step 4) lifts the tree morphism to the arc level, and fan reconstruction (Step 5) handles the higher-dimensional structure.</span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Precomputed Parent and Children Maps</span></span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>The <span class="in">`parent_map`</span> and <span class="in">`children_map`</span> are computed once in <span class="in">`WInstance::new()`</span> and never updated. This is safe because <span class="in">`WInstance`</span> is immutable after construction. The restrict pipeline creates a new <span class="in">`WInstance`</span> rather than mutating the source.</span>
+<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Five Steps Instead of One</span></span>
+<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>Decomposing the restrict algorithm into five independent functions serves two purposes:</span>
+<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Testability**: each step can be unit-tested in isolation with small, purpose-built instances. The test suite in <span class="in">`wtype.rs`</span> tests each step individually before testing the composed pipeline.</span>
+<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Debuggability**: when a migration produces unexpected results, you can inspect the output of each step to locate the problem. The CLI's <span class="in">`--verbose`</span> mode logs intermediate results at each step.</span>
+<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a>The five-step decomposition also mirrors the mathematical structure: signature restriction (Step 1) is the pullback on objects, reachability (Step 2) enforces the wellfoundedness condition, contraction (Step 3) computes the pushforward on the tree, edge resolution (Step 4) lifts the tree morphism to the arc level, and fan reconstruction (Step 5) handles the higher-dimensional structure.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

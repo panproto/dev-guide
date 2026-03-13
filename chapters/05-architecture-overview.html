@@ -460,8 +460,14 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
       </ul>
@@ -478,19 +484,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -507,7 +513,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -524,19 +530,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
       </ul>
@@ -595,11 +601,11 @@ div.csl-indent {
 <p>This chapter presents the 30,000-foot view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end, you should be able to trace any piece of functionality back to the crate that owns it and understand <em>why</em> the system is structured the way it is.</p>
 <section id="the-crate-dependency-hierarchy" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</h2>
-<p>panproto is organized into ten crates arranged in five dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</p>
+<p>panproto is organized into eleven crates arranged in six dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</p>
 <div id="tbl-crate-levels" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-crate-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.1: The five-level crate hierarchy.
+Table&nbsp;5.1: The six-level crate hierarchy.
 </figcaption>
 <div aria-describedby="tbl-crate-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -634,9 +640,14 @@ Table&nbsp;5.1: The five-level crate hierarchy.
 <tr class="even">
 <td>3</td>
 <td><code>panproto-protocols</code></td>
-<td>Built-in protocol definitions (AT Protocol, SQL, Protobuf, …)</td>
+<td>Protocol definitions: theory composition, schema-level presentation functors</td>
 </tr>
 <tr class="odd">
+<td>3.5</td>
+<td><code>panproto-io</code></td>
+<td>Instance-level presentation functors: format-specific parse/emit for all 77 protocols</td>
+</tr>
+<tr class="even">
 <td>4</td>
 <td><code>panproto-core</code>, <code>panproto-wasm</code>, <code>panproto-cli</code></td>
 <td>Re-export facade, WASM boundary, CLI</td>
@@ -649,7 +660,8 @@ Table&nbsp;5.1: The five-level crate hierarchy.
 <p><strong>Level 0</strong> is the mathematical foundation. It knows nothing about schemas, instances, or protocols – only about the algebra of generalized algebraic theories.</p>
 <p><strong>Level 1</strong> introduces the data model. <code>panproto-schema</code> defines the hypergraph structure that represents a data format’s type system; <code>panproto-inst</code> defines instances (actual data) conforming to those schemas.</p>
 <p><strong>Level 2</strong> is where the interesting operations live: compiling migration specifications into executable form (<code>panproto-mig</code>), constructing bidirectional lenses (<code>panproto-lens</code>), and classifying schema changes as breaking or non-breaking (<code>panproto-check</code>).</p>
-<p><strong>Level 3</strong> bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0–2.</p>
+<p><strong>Level 3</strong> bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0–2. It also provides <strong>schema-level presentation functors</strong>: the parse/emit operations that convert native format specifications (<code>.proto</code> files, SQL DDL, GraphQL SDL) into abstract <code>Schema</code> models.</p>
+<p><strong>Level 3.5</strong> provides the <strong>instance-level presentation functors</strong> via <code>panproto-io</code>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<code>WInstance</code>/<code>FInstance</code>). Together with <code>panproto-protocols</code>, it completes both levels of the functorial data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly.</p>
 <p><strong>Level 4</strong> provides the consumer-facing surfaces: <code>panproto-core</code> re-exports everything through a single dependency, <code>panproto-wasm</code> exposes a handle-based WebAssembly API, and <code>panproto-cli</code> wraps it all in a command-line tool.</p>
 <section id="the-re-export-facade" class="level3" data-number="5.1.1">
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</h3>
@@ -671,10 +683,11 @@ Table&nbsp;5.1: The five-level crate hierarchy.
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_lens <span class="kw">as</span> lens<span class="op">;</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-mig` for migration and lifting operations.</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_mig <span class="kw">as</span> mig<span class="op">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-protocols` for built-in protocol definitions.</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_protocols <span class="kw">as</span> protocols<span class="op">;</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_schema <span class="kw">as</span> schema<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-io` for instance-level parse/emit across all protocols.</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_io <span class="kw">as</span> io<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-protocols` for built-in protocol definitions.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_protocols <span class="kw">as</span> protocols<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This means downstream code writes <code>panproto::gat::Theory</code> rather than importing <code>panproto-gat</code> directly. The facade adds no logic of its own.</p>
 </section>
 <section id="crate-dependency-graph" class="level3" data-number="5.1.2">
@@ -701,6 +714,9 @@ Table&nbsp;5.1: The five-level crate hierarchy.
     subgraph Level 3
         protocols["panproto-protocols"]
     end
+    subgraph "Level 3.5"
+        io["panproto-io"]
+    end
     subgraph Level 4
         core["panproto-core"]
         wasm["panproto-wasm"]
@@ -721,6 +737,9 @@ Table&nbsp;5.1: The five-level crate hierarchy.
     check --&gt; mig
     protocols --&gt; gat
     protocols --&gt; schema
+    io --&gt; schema
+    io --&gt; inst
+    io --&gt; protocols
     core --&gt; gat
     core --&gt; schema
     core --&gt; inst
@@ -728,6 +747,7 @@ Table&nbsp;5.1: The five-level crate hierarchy.
     core --&gt; lens
     core --&gt; check
     core --&gt; protocols
+    core --&gt; io
     wasm --&gt; core
     cli --&gt; core
 </pre>
@@ -809,6 +829,7 @@ Note
 <div>
 <pre class="mermaid mermaid-js" data-label="fig-migration-lifecycle">sequenceDiagram
     participant User
+    participant IO as panproto-io
     participant Protocols as panproto-protocols
     participant Schema as panproto-schema
     participant Check as panproto-check
@@ -822,15 +843,17 @@ Note
     Check--&gt;&gt;User: ExistenceReport (added/removed/modified)
     User-&gt;&gt;Mig: compile(migration_spec)
     Mig--&gt;&gt;User: CompiledMigration
+    User-&gt;&gt;IO: parse(protocol, schema_v1, raw_bytes)
+    IO--&gt;&gt;User: WInstance / FInstance (source)
     User-&gt;&gt;Inst: wtype_restrict(instance, v1, v2, compiled)
     Inst--&gt;&gt;User: Migrated WInstance
-    User-&gt;&gt;Inst: to_json(v2, migrated_instance)
-    Inst--&gt;&gt;User: JSON output
+    User-&gt;&gt;IO: emit(protocol, schema_v2, migrated_instance)
+    IO--&gt;&gt;User: Raw bytes (target format)
 </pre>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-migration-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.2: Full migration lifecycle, from protocol definition through data lifting.
+Figure&nbsp;5.2: Full migration lifecycle, from raw data through migration to target format.
 </figcaption>
 </figure>
 </div>
@@ -855,6 +878,10 @@ Table&nbsp;5.2: Where to find things.
 </figcaption>
 <div aria-describedby="tbl-where-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>If you need to…</th>
@@ -871,34 +898,38 @@ Table&nbsp;5.2: Where to find things.
 <td><code>panproto-schema</code></td>
 </tr>
 <tr class="odd">
-<td>Parse JSON into a tree instance</td>
+<td>Parse generic JSON into a tree instance</td>
 <td><code>panproto-inst</code></td>
 </tr>
 <tr class="even">
+<td>Parse format-specific data (HTML, CoNLL-U, Protobuf, …)</td>
+<td><code>panproto-io</code></td>
+</tr>
+<tr class="odd">
 <td>Compile a migration</td>
 <td><code>panproto-mig</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Build a bidirectional lens</td>
 <td><code>panproto-lens</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Detect breaking changes</td>
 <td><code>panproto-check</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Use a built-in protocol (AT Proto, SQL, …)</td>
 <td><code>panproto-protocols</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Import everything at once</td>
 <td><code>panproto-core</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Call from JavaScript</td>
 <td><code>panproto-wasm</code> + <code>@panproto/core</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Run from the command line</td>
 <td><code>panproto-cli</code></td>
 </tr>
@@ -1408,196 +1439,210 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Crate Dependency Hierarchy</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>panproto is organized into ten crates arranged in five dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>panproto is organized into eleven crates arranged in six dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Crates <span class="pp">|</span> Role <span class="pp">|</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|--------|------|</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> The GAT engine: theories, morphisms, colimits <span class="pp">|</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span> <span class="pp">|</span> Schema graphs and instance trees <span class="pp">|</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>, <span class="in">`panproto-check`</span> <span class="pp">|</span> Migration compilation, lenses, breaking-change analysis <span class="pp">|</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Built-in protocol definitions (AT Protocol, SQL, Protobuf, ...) <span class="pp">|</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>: The five-level crate hierarchy. {#tbl-crate-levels}</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>**Level 0** is the mathematical foundation. It knows nothing about schemas, instances, or protocols -- only about the algebra of generalized algebraic theories.</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>**Level 1** introduces the data model. <span class="in">`panproto-schema`</span> defines the hypergraph structure that represents a data format's type system; <span class="in">`panproto-inst`</span> defines instances (actual data) conforming to those schemas.</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>**Level 2** is where the interesting operations live: compiling migration specifications into executable form (<span class="in">`panproto-mig`</span>), constructing bidirectional lenses (<span class="in">`panproto-lens`</span>), and classifying schema changes as breaking or non-breaking (<span class="in">`panproto-check`</span>).</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>**Level 3** bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0--2.</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>**Level 4** provides the consumer-facing surfaces: <span class="in">`panproto-core`</span> re-exports everything through a single dependency, <span class="in">`panproto-wasm`</span> exposes a handle-based WebAssembly API, and <span class="in">`panproto-cli`</span> wraps it all in a command-line tool.</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Re-export Facade</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-core`</span> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-core/src/lib.rs" start-line=1 end-line=22}</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Protocol definitions: theory composition, schema-level presentation functors <span class="pp">|</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3.5 <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span> Instance-level presentation functors: format-specific parse/emit for all 77 protocols <span class="pp">|</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>: The six-level crate hierarchy. {#tbl-crate-levels}</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>**Level 0** is the mathematical foundation. It knows nothing about schemas, instances, or protocols -- only about the algebra of generalized algebraic theories.</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>**Level 1** introduces the data model. <span class="in">`panproto-schema`</span> defines the hypergraph structure that represents a data format's type system; <span class="in">`panproto-inst`</span> defines instances (actual data) conforming to those schemas.</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>**Level 2** is where the interesting operations live: compiling migration specifications into executable form (<span class="in">`panproto-mig`</span>), constructing bidirectional lenses (<span class="in">`panproto-lens`</span>), and classifying schema changes as breaking or non-breaking (<span class="in">`panproto-check`</span>).</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>**Level 3** bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0--2. It also provides **schema-level presentation functors**: the parse/emit operations that convert native format specifications (<span class="in">`.proto`</span> files, SQL DDL, GraphQL SDL) into abstract <span class="in">`Schema`</span> models.</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>**Level 3.5** provides the **instance-level presentation functors** via <span class="in">`panproto-io`</span>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<span class="in">`WInstance`</span>/<span class="in">`FInstance`</span>). Together with <span class="in">`panproto-protocols`</span>, it completes both levels of the functorial data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly.</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>**Level 4** provides the consumer-facing surfaces: <span class="in">`panproto-core`</span> re-exports everything through a single dependency, <span class="in">`panproto-wasm`</span> exposes a handle-based WebAssembly API, and <span class="in">`panproto-cli`</span> wraps it all in a command-line tool.</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Re-export Facade</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-core`</span> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>This means downstream code writes <span class="in">`panproto::gat::Theory`</span> rather than importing <span class="in">`panproto-gat`</span> directly. The facade adds no logic of its own.</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### Crate Dependency Graph</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>%%| label: fig-crate-dag</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Crate dependency graph. Arrows point from dependant to dependency.</span><span class="ot">"</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>graph BT</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">0</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        gat[<span class="ot">"</span><span class="st">panproto-gat</span><span class="ot">"</span>]</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    end</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">1</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        schema[<span class="ot">"</span><span class="st">panproto-schema</span><span class="ot">"</span>]</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        inst[<span class="ot">"</span><span class="st">panproto-inst</span><span class="ot">"</span>]</span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    end</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">2</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        mig[<span class="ot">"</span><span class="st">panproto-mig</span><span class="ot">"</span>]</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        lens[<span class="ot">"</span><span class="st">panproto-lens</span><span class="ot">"</span>]</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        check[<span class="ot">"</span><span class="st">panproto-check</span><span class="ot">"</span>]</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    end</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">3</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        protocols[<span class="ot">"</span><span class="st">panproto-protocols</span><span class="ot">"</span>]</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-core/src/lib.rs" start-line=1 end-line=22}</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>This means downstream code writes <span class="in">`panproto::gat::Theory`</span> rather than importing <span class="in">`panproto-gat`</span> directly. The facade adds no logic of its own.</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Crate Dependency Graph</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>%%| label: fig-crate-dag</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Crate dependency graph. Arrows point from dependant to dependency.</span><span class="ot">"</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>graph BT</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">0</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        gat[<span class="ot">"</span><span class="st">panproto-gat</span><span class="ot">"</span>]</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">1</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        schema[<span class="ot">"</span><span class="st">panproto-schema</span><span class="ot">"</span>]</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        inst[<span class="ot">"</span><span class="st">panproto-inst</span><span class="ot">"</span>]</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">2</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        mig[<span class="ot">"</span><span class="st">panproto-mig</span><span class="ot">"</span>]</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        lens[<span class="ot">"</span><span class="st">panproto-lens</span><span class="ot">"</span>]</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        check[<span class="ot">"</span><span class="st">panproto-check</span><span class="ot">"</span>]</span>
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    end</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">4</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        core[<span class="ot">"</span><span class="st">panproto-core</span><span class="ot">"</span>]</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        wasm[<span class="ot">"</span><span class="st">panproto-wasm</span><span class="ot">"</span>]</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        cli[<span class="ot">"</span><span class="st">panproto-cli</span><span class="ot">"</span>]</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    end</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    schema --&gt; gat</span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    inst --&gt; gat</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    inst --&gt; schema</span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    mig --&gt; gat</span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    mig --&gt; schema</span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    mig --&gt; inst</span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    lens --&gt; gat</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    lens --&gt; schema</span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    lens --&gt; mig</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    check --&gt; gat</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    check --&gt; schema</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    check --&gt; mig</span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; gat</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; schema</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    core --&gt; gat</span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    core --&gt; schema</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    core --&gt; inst</span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    core --&gt; mig</span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    core --&gt; lens</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    core --&gt; check</span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    core --&gt; protocols</span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>    wasm --&gt; core</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    cli --&gt; core</span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Design Decisions</span></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why GATs</span></span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>panproto formalizes data format specifications as _generalized algebraic theories_ (GATs), following the framework introduced by @cartmell1986. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., "the type of a field depends on a discriminator tag").</span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>Ordinary algebraic theories in the sense of @lawvere1963 cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dependent sorts**: <span class="in">`Hom(a: Ob, b: Ob)`</span> in a category theory, or <span class="in">`Constraint(v: Vertex)`</span> in a schema theory.</span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Structure-preserving morphisms**: maps between theories that respect arities and equations, enabling principled schema migration.</span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Colimits**: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">3</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        protocols[<span class="ot">"</span><span class="st">panproto-protocols</span><span class="ot">"</span>]</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    subgraph <span class="ot">"</span><span class="st">Level 3.5</span><span class="ot">"</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        io[<span class="ot">"</span><span class="st">panproto-io</span><span class="ot">"</span>]</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">4</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        core[<span class="ot">"</span><span class="st">panproto-core</span><span class="ot">"</span>]</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        wasm[<span class="ot">"</span><span class="st">panproto-wasm</span><span class="ot">"</span>]</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        cli[<span class="ot">"</span><span class="st">panproto-cli</span><span class="ot">"</span>]</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    schema --&gt; gat</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    inst --&gt; gat</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    inst --&gt; schema</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    mig --&gt; gat</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    mig --&gt; schema</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    mig --&gt; inst</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    lens --&gt; gat</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    lens --&gt; schema</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    lens --&gt; mig</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    check --&gt; gat</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    check --&gt; schema</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    check --&gt; mig</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; gat</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; schema</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    io --&gt; schema</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>    io --&gt; inst</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    io --&gt; protocols</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    core --&gt; gat</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>    core --&gt; schema</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    core --&gt; inst</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>    core --&gt; mig</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>    core --&gt; lens</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>    core --&gt; check</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>    core --&gt; protocols</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>    core --&gt; io</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>    wasm --&gt; core</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>    cli --&gt; core</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Design Decisions</span></span>
 <span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to theories and protocols, see the <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.github.io/tutorial/)</span> chapters 3--4.</span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why GATs</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>panproto formalizes data format specifications as _generalized algebraic theories_ (GATs), following the framework introduced by @cartmell1986. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., "the type of a field depends on a discriminator tag").</span>
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Handle-Based WASM API</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>Ordinary algebraic theories in the sense of @lawvere1963 cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</span>
 <span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>The WASM boundary (<span class="in">`panproto-wasm`</span>) uses a handle/slab architecture rather than <span class="in">`serde-wasm-bindgen`</span> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side, and JavaScript receives an opaque <span class="in">`u32`</span> handle.</span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>The reason is performance. Serializing a large schema through <span class="in">`serde-wasm-bindgen`</span> on every API call would dominate the cost of actual computation. With handles, the only data that crosses the WASM boundary is numeric IDs and small MessagePack payloads for results. The TypeScript SDK wraps these handles in ergonomic classes with <span class="in">`Symbol.dispose`</span> support for deterministic cleanup.</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dependent sorts**: <span class="in">`Hom(a: Ob, b: Ob)`</span> in a category theory, or <span class="in">`Constraint(v: Vertex)`</span> in a schema theory.</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Structure-preserving morphisms**: maps between theories that respect arities and equations, enabling principled schema migration.</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Colimits**: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</span>
 <span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why MessagePack</span></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>panproto uses MessagePack (via <span class="in">`rmp-serde`</span>) as its primary serialization format for schema and instance data at rest. The choice over JSON, CBOR, or Protobuf-the-format comes down to:</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to theories and protocols, see the <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.github.io/tutorial/)</span> chapters 3--4.</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Deterministic serialization**: MessagePack's canonical form guarantees that structurally identical objects produce byte-identical output, which is essential for content-addressed storage and migration hash verification.</span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compact binary representation**: schemas with hundreds of vertices serialize to kilobytes rather than tens of kilobytes.</span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Wide ecosystem support**: MessagePack libraries exist for every language panproto targets.</span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Handle-Based WASM API</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>The WASM boundary (<span class="in">`panproto-wasm`</span>) uses a handle/slab architecture rather than <span class="in">`serde-wasm-bindgen`</span> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side, and JavaScript receives an opaque <span class="in">`u32`</span> handle.</span>
 <span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>JSON is still used as the human-facing format for CLI output and the <span class="in">`parse_json`</span>/<span class="in">`to_json`</span> round-trip in <span class="in">`panproto-inst`</span>.</span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>The reason is performance. Serializing a large schema through <span class="in">`serde-wasm-bindgen`</span> on every API call would dominate the cost of actual computation. With handles, the only data that crosses the WASM boundary is numeric IDs and small MessagePack payloads for results. The TypeScript SDK wraps these handles in ergonomic classes with <span class="in">`Symbol.dispose`</span> support for deterministic cleanup.</span>
 <span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Immutable Fluent Builders</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why MessagePack</span></span>
 <span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction -- you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>panproto uses MessagePack (via <span class="in">`rmp-serde`</span>) as its primary serialization format for schema and instance data at rest. The choice over JSON, CBOR, or Protobuf-the-format comes down to:</span>
 <span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Two-Parameter Architecture</span></span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>Every protocol in panproto is defined by a pair of GATs:</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Deterministic serialization**: MessagePack's canonical form guarantees that structurally identical objects produce byte-identical output, which is essential for content-addressed storage and migration hash verification.</span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compact binary representation**: schemas with hundreds of vertices serialize to kilobytes rather than tens of kilobytes.</span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Wide ecosystem support**: MessagePack libraries exist for every language panproto targets.</span>
 <span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Schema theory** -- describes the _shape_ of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Instance theory** -- describes the _content_ that inhabits a schema. Its models are instances (trees or tables of data).</span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <span class="in">`panproto-schema`</span> captures this pairing:</span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="in">Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</span></span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial -- it composes correctly and preserves the structural axioms of the instance theory <span class="co">[</span><span class="ot">@spivak2012</span><span class="co">]</span>.</span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Lifecycle</span></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>JSON is still used as the human-facing format for CLI output and the <span class="in">`parse_json`</span>/<span class="in">`to_json`</span> round-trip in <span class="in">`panproto-inst`</span>.</span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Immutable Fluent Builders</span></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction -- you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Two-Parameter Architecture</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>Every protocol in panproto is defined by a pair of GATs:</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Schema theory** -- describes the _shape_ of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Instance theory** -- describes the _content_ that inhabits a schema. Its models are instances (trees or tables of data).</span>
 <span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <span class="in">`panproto-schema`</span> captures this pairing:</span>
 <span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>%%| label: fig-migration-lifecycle</span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Full migration lifecycle, from protocol definition through data lifting.</span><span class="ot">"</span></span>
-<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
-<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>    participant User</span>
-<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>    participant Protocols as panproto-protocols</span>
-<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>    participant Schema as panproto-schema</span>
-<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>    participant Check as panproto-check</span>
-<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>    participant Mig as panproto-mig</span>
-<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>    participant Inst as panproto-inst</span>
-<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Protocols: Define protocol (schema theory + instance theory)</span>
-<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v1 via SchemaBuilder</span>
-<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v2 via SchemaBuilder</span>
-<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Check: check_existence(v1, v2)</span>
-<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>    Check--&gt;&gt;User: ExistenceReport (added/removed/modified)</span>
-<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Mig: compile(migration_spec)</span>
-<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>    Mig--&gt;&gt;User: CompiledMigration</span>
-<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Inst: wtype_restrict(instance, v1, v2, compiled)</span>
-<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>    Inst--&gt;&gt;User: Migrated WInstance</span>
-<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Inst: to_json(v2, migrated_instance)</span>
-<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>    Inst--&gt;&gt;User: JSON output</span>
-<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>The pipeline is:</span>
-<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Define protocols** -- select or compose GATs from the <span class="in">`panproto-protocols`</span> registry.</span>
-<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Build schemas** -- construct v1 and v2 using <span class="in">`SchemaBuilder`</span>, which validates each element against the protocol's edge rules.</span>
-<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Check existence** -- use <span class="in">`panproto-check`</span> to classify the differences between v1 and v2 (what was added, removed, modified).</span>
-<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Compile migration** -- <span class="in">`panproto-mig`</span> compiles a migration specification into a <span class="in">`CompiledMigration`</span> containing vertex remaps, edge remaps, and contraction resolvers.</span>
-<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Lift data** -- <span class="in">`panproto-inst`</span> executes the 5-step <span class="in">`wtype_restrict`</span> pipeline to project instance data from v1 to v2.</span>
-<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Lives Where</span></span>
-<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>A quick reference for locating functionality:</span>
-<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> If you need to... <span class="pp">|</span> Look in... <span class="pp">|</span></span>
-<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Define or inspect a GAT <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span></span>
-<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a schema graph <span class="pp">|</span> <span class="in">`panproto-schema`</span> <span class="pp">|</span></span>
-<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parse JSON into a tree instance <span class="pp">|</span> <span class="in">`panproto-inst`</span> <span class="pp">|</span></span>
-<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Compile a migration <span class="pp">|</span> <span class="in">`panproto-mig`</span> <span class="pp">|</span></span>
-<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a bidirectional lens <span class="pp">|</span> <span class="in">`panproto-lens`</span> <span class="pp">|</span></span>
-<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Detect breaking changes <span class="pp">|</span> <span class="in">`panproto-check`</span> <span class="pp">|</span></span>
-<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Use a built-in protocol (AT Proto, SQL, ...) <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span></span>
-<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Import everything at once <span class="pp">|</span> <span class="in">`panproto-core`</span> <span class="pp">|</span></span>
-<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Call from JavaScript <span class="pp">|</span> <span class="in">`panproto-wasm`</span> + <span class="in">`@panproto/core`</span> <span class="pp">|</span></span>
-<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Run from the command line <span class="pp">|</span> <span class="in">`panproto-cli`</span> <span class="pp">|</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a><span class="in">Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</span></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial -- it composes correctly and preserves the structural axioms of the instance theory <span class="co">[</span><span class="ot">@spivak2012</span><span class="co">]</span>.</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Lifecycle</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>%%| label: fig-migration-lifecycle</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Full migration lifecycle, from raw data through migration to target format.</span><span class="ot">"</span></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>    participant User</span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>    participant IO as panproto-io</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>    participant Protocols as panproto-protocols</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>    participant Schema as panproto-schema</span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>    participant Check as panproto-check</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>    participant Mig as panproto-mig</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>    participant Inst as panproto-inst</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Protocols: Define protocol (schema theory + instance theory)</span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v1 via SchemaBuilder</span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v2 via SchemaBuilder</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Check: check_existence(v1, v2)</span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a>    Check--&gt;&gt;User: ExistenceReport (added/removed/modified)</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Mig: compile(migration_spec)</span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a>    Mig--&gt;&gt;User: CompiledMigration</span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;IO: parse(protocol, schema_v1, raw_bytes)</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a>    IO--&gt;&gt;User: WInstance / FInstance (source)</span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Inst: wtype_restrict(instance, v1, v2, compiled)</span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a>    Inst--&gt;&gt;User: Migrated WInstance</span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;IO: emit(protocol, schema_v2, migrated_instance)</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>    IO--&gt;&gt;User: Raw <span class="kw">bytes</span> (target <span class="fu">format</span>)</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a>The pipeline is:</span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Define protocols** -- select or compose GATs from the <span class="in">`panproto-protocols`</span> registry.</span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Build schemas** -- construct v1 and v2 using <span class="in">`SchemaBuilder`</span>, which validates each element against the protocol's edge rules.</span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Check existence** -- use <span class="in">`panproto-check`</span> to classify the differences between v1 and v2 (what was added, removed, modified).</span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Compile migration** -- <span class="in">`panproto-mig`</span> compiles a migration specification into a <span class="in">`CompiledMigration`</span> containing vertex remaps, edge remaps, and contraction resolvers.</span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Lift data** -- <span class="in">`panproto-inst`</span> executes the 5-step <span class="in">`wtype_restrict`</span> pipeline to project instance data from v1 to v2.</span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Lives Where</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>A quick reference for locating functionality:</span>
 <span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>: Where to find things. {#tbl-where}</span>
-<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>The next four chapters dive deep into the core crates -- starting with the GAT engine in @sec-gat-engine, then schemas and protocols in @sec-schema-protocols, and instances in @sec-instances-wtype.</span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> If you need to... <span class="pp">|</span> Look in... <span class="pp">|</span></span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Define or inspect a GAT <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a schema graph <span class="pp">|</span> <span class="in">`panproto-schema`</span> <span class="pp">|</span></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parse generic JSON into a tree instance <span class="pp">|</span> <span class="in">`panproto-inst`</span> <span class="pp">|</span></span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parse format-specific data (HTML, CoNLL-U, Protobuf, ...) <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Compile a migration <span class="pp">|</span> <span class="in">`panproto-mig`</span> <span class="pp">|</span></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a bidirectional lens <span class="pp">|</span> <span class="in">`panproto-lens`</span> <span class="pp">|</span></span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Detect breaking changes <span class="pp">|</span> <span class="in">`panproto-check`</span> <span class="pp">|</span></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Use a built-in protocol (AT Proto, SQL, ...) <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span></span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Import everything at once <span class="pp">|</span> <span class="in">`panproto-core`</span> <span class="pp">|</span></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Call from JavaScript <span class="pp">|</span> <span class="in">`panproto-wasm`</span> + <span class="in">`@panproto/core`</span> <span class="pp">|</span></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Run from the command line <span class="pp">|</span> <span class="in">`panproto-cli`</span> <span class="pp">|</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>: Where to find things. {#tbl-where}</span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>The next four chapters dive deep into the core crates -- starting with the GAT engine in @sec-gat-engine, then schemas and protocols in @sec-schema-protocols, and instances in @sec-instances-wtype.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

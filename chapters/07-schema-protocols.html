@@ -441,8 +441,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
       </ul>
@@ -459,19 +465,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -488,7 +494,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -505,19 +511,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
       </ul>
@@ -912,23 +918,23 @@ Figure&nbsp;7.1: Class diagram showing the relationships between Protocol, Schem
 <div aria-describedby="fig-builder-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <pre class="mermaid mermaid-js" data-label="fig-builder-pipeline">flowchart LR
-    A["vertex()"] --&gt; B{"Vertex kind\nin protocol?"}
-    B --&gt;|yes| C{"Duplicate\nID?"}
-    B --&gt;|no| X1["SchemaError::\nUnknownVertexKind"]
+    A["vertex()"] --&gt; B{"Vertex kind&lt;br&gt;in protocol?"}
+    B --&gt;|yes| C{"Duplicate&lt;br&gt;ID?"}
+    B --&gt;|no| X1["SchemaError::&lt;br&gt;UnknownVertexKind"]
     C --&gt;|no| D["Accept vertex"]
-    C --&gt;|yes| X2["SchemaError::\nDuplicateVertex"]
+    C --&gt;|yes| X2["SchemaError::&lt;br&gt;DuplicateVertex"]
 
-    E["edge()"] --&gt; F{"src &amp; tgt\nexist?"}
-    F --&gt;|yes| G{"Edge kind\nhas rule?"}
-    F --&gt;|no| X3["SchemaError::\nVertexNotFound"]
-    G --&gt;|yes| H{"src/tgt kinds\nmatch rule?"}
-    G --&gt;|no| X4["SchemaError::\nUnknownEdgeKind"]
+    E["edge()"] --&gt; F{"src &amp; tgt&lt;br&gt;exist?"}
+    F --&gt;|yes| G{"Edge kind&lt;br&gt;has rule?"}
+    F --&gt;|no| X3["SchemaError::&lt;br&gt;VertexNotFound"]
+    G --&gt;|yes| H{"src/tgt kinds&lt;br&gt;match rule?"}
+    G --&gt;|no| X4["SchemaError::&lt;br&gt;UnknownEdgeKind"]
     H --&gt;|yes| I["Accept edge"]
-    H --&gt;|no| X5["SchemaError::\nInvalidEdge*"]
+    H --&gt;|no| X5["SchemaError::&lt;br&gt;InvalidEdge*"]
 
-    J["build()"] --&gt; K{"Any\nvertices?"}
-    K --&gt;|yes| L["Compute\nadjacency indices"]
-    K --&gt;|no| X6["SchemaError::\nEmptySchema"]
+    J["build()"] --&gt; K{"Any&lt;br&gt;vertices?"}
+    K --&gt;|yes| L["Compute&lt;br&gt;adjacency indices"]
+    K --&gt;|no| X6["SchemaError::&lt;br&gt;EmptySchema"]
     L --&gt; M["Return Schema"]
 
     style X1 fill:#fdd,stroke:#c33
@@ -1662,23 +1668,23 @@ Tip
 <span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>%%| label: fig-builder-pipeline</span>
 <span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">SchemaBuilder validation pipeline. Each step checks one class of invariant.</span><span class="ot">"</span></span>
 <span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">vertex()</span><span class="ot">"</span>] --&gt; B{<span class="ot">"</span><span class="st">Vertex kind</span><span class="ch">\n</span><span class="st">in protocol?</span><span class="ot">"</span>}</span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    B --&gt;|yes| C{<span class="ot">"</span><span class="st">Duplicate</span><span class="ch">\n</span><span class="st">ID?</span><span class="ot">"</span>}</span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>    B --&gt;|<span class="fu">no</span>| X1[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">UnknownVertexKind</span><span class="ot">"</span>]</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">vertex()</span><span class="ot">"</span>] --&gt; B{<span class="ot">"</span><span class="st">Vertex kind&lt;br&gt;in protocol?</span><span class="ot">"</span>}</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    B --&gt;|yes| C{<span class="ot">"</span><span class="st">Duplicate&lt;br&gt;ID?</span><span class="ot">"</span>}</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>    B --&gt;|<span class="fu">no</span>| X1[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;UnknownVertexKind</span><span class="ot">"</span>]</span>
 <span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>    C --&gt;|<span class="fu">no</span>| D[<span class="ot">"</span><span class="st">Accept vertex</span><span class="ot">"</span>]</span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>    C --&gt;|yes| X2[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">DuplicateVertex</span><span class="ot">"</span>]</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>    C --&gt;|yes| X2[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;DuplicateVertex</span><span class="ot">"</span>]</span>
 <span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>    E[<span class="ot">"</span><span class="st">edge()</span><span class="ot">"</span>] --&gt; F{<span class="ot">"</span><span class="st">src &amp; tgt</span><span class="ch">\n</span><span class="st">exist?</span><span class="ot">"</span>}</span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>    F --&gt;|yes| G{<span class="ot">"</span><span class="st">Edge kind</span><span class="ch">\n</span><span class="st">has rule?</span><span class="ot">"</span>}</span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    F --&gt;|<span class="fu">no</span>| X3[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">VertexNotFound</span><span class="ot">"</span>]</span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>    G --&gt;|yes| H{<span class="ot">"</span><span class="st">src/tgt kinds</span><span class="ch">\n</span><span class="st">match rule?</span><span class="ot">"</span>}</span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>    G --&gt;|<span class="fu">no</span>| X4[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">UnknownEdgeKind</span><span class="ot">"</span>]</span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>    E[<span class="ot">"</span><span class="st">edge()</span><span class="ot">"</span>] --&gt; F{<span class="ot">"</span><span class="st">src &amp; tgt&lt;br&gt;exist?</span><span class="ot">"</span>}</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>    F --&gt;|yes| G{<span class="ot">"</span><span class="st">Edge kind&lt;br&gt;has rule?</span><span class="ot">"</span>}</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    F --&gt;|<span class="fu">no</span>| X3[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;VertexNotFound</span><span class="ot">"</span>]</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>    G --&gt;|yes| H{<span class="ot">"</span><span class="st">src/tgt kinds&lt;br&gt;match rule?</span><span class="ot">"</span>}</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>    G --&gt;|<span class="fu">no</span>| X4[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;UnknownEdgeKind</span><span class="ot">"</span>]</span>
 <span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>    H --&gt;|yes| I[<span class="ot">"</span><span class="st">Accept edge</span><span class="ot">"</span>]</span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    H --&gt;|<span class="fu">no</span>| X5[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">InvalidEdge*</span><span class="ot">"</span>]</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    H --&gt;|<span class="fu">no</span>| X5[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;InvalidEdge*</span><span class="ot">"</span>]</span>
 <span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>    J[<span class="ot">"</span><span class="st">build()</span><span class="ot">"</span>] --&gt; K{<span class="ot">"</span><span class="st">Any</span><span class="ch">\n</span><span class="st">vertices?</span><span class="ot">"</span>}</span>
-<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    K --&gt;|yes| L[<span class="ot">"</span><span class="st">Compute</span><span class="ch">\n</span><span class="st">adjacency indices</span><span class="ot">"</span>]</span>
-<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>    K --&gt;|<span class="fu">no</span>| X6[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">EmptySchema</span><span class="ot">"</span>]</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>    J[<span class="ot">"</span><span class="st">build()</span><span class="ot">"</span>] --&gt; K{<span class="ot">"</span><span class="st">Any&lt;br&gt;vertices?</span><span class="ot">"</span>}</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    K --&gt;|yes| L[<span class="ot">"</span><span class="st">Compute&lt;br&gt;adjacency indices</span><span class="ot">"</span>]</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>    K --&gt;|<span class="fu">no</span>| X6[<span class="ot">"</span><span class="st">SchemaError::&lt;br&gt;EmptySchema</span><span class="ot">"</span>]</span>
 <span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>    L --&gt; M[<span class="ot">"</span><span class="st">Return Schema</span><span class="ot">"</span>]</span>
 <span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>    style X1 fill:<span class="co">#fdd,stroke:#c33</span></span>

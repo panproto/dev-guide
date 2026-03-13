@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; panproto-lens — Bidirectional Lenses – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/11-breaking-changes.html" rel="next">
+<link href="../chapters/09-migration-engine.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/10-lenses.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-lenses" id="toc-why-lenses" class="nav-link active" data-scroll-target="#why-lenses"><span class="header-section-number">10.1</span> Why Lenses?</a></li>
+  <li><a href="#the-complement" id="toc-the-complement" class="nav-link" data-scroll-target="#the-complement"><span class="header-section-number">10.2</span> The Complement</a></li>
+  <li><a href="#forward-direction-get" id="toc-forward-direction-get" class="nav-link" data-scroll-target="#forward-direction-get"><span class="header-section-number">10.3</span> Forward Direction: get</a></li>
+  <li><a href="#backward-direction-put" id="toc-backward-direction-put" class="nav-link" data-scroll-target="#backward-direction-put"><span class="header-section-number">10.4</span> Backward Direction: put</a></li>
+  <li><a href="#the-getput-round-trip" id="toc-the-getput-round-trip" class="nav-link" data-scroll-target="#the-getput-round-trip"><span class="header-section-number">10.5</span> The get/put Round-Trip</a></li>
+  <li><a href="#lens-laws" id="toc-lens-laws" class="nav-link" data-scroll-target="#lens-laws"><span class="header-section-number">10.6</span> Lens Laws</a>
+  <ul class="collapse">
+  <li><a href="#property-testing" id="toc-property-testing" class="nav-link" data-scroll-target="#property-testing"><span class="header-section-number">10.6.1</span> Property Testing</a></li>
+  </ul></li>
+  <li><a href="#cambria-style-combinators" id="toc-cambria-style-combinators" class="nav-link" data-scroll-target="#cambria-style-combinators"><span class="header-section-number">10.7</span> Cambria-Style Combinators</a>
+  <ul class="collapse">
+  <li><a href="#combinator-semantics" id="toc-combinator-semantics" class="nav-link" data-scroll-target="#combinator-semantics"><span class="header-section-number">10.7.1</span> Combinator Semantics</a></li>
+  <li><a href="#building-a-lens-from-combinators" id="toc-building-a-lens-from-combinators" class="nav-link" data-scroll-target="#building-a-lens-from-combinators"><span class="header-section-number">10.7.2</span> Building a Lens from Combinators</a></li>
+  </ul></li>
+  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link" data-scroll-target="#design-rationale"><span class="header-section-number">10.8</span> Design Rationale</a></li>
+  <li><a href="#worked-example-removing-a-deprecated-field" id="toc-worked-example-removing-a-deprecated-field" class="nav-link" data-scroll-target="#worked-example-removing-a-deprecated-field"><span class="header-section-number">10.9</span> Worked Example: Removing a Deprecated Field</a></li>
+  <li><a href="#complement-storage-strategies" id="toc-complement-storage-strategies" class="nav-link" data-scroll-target="#complement-storage-strategies"><span class="header-section-number">10.10</span> Complement Storage Strategies</a></li>
+  <li><a href="#interaction-with-breaking-change-detection" id="toc-interaction-with-breaking-change-detection" class="nav-link" data-scroll-target="#interaction-with-breaking-change-detection"><span class="header-section-number">10.11</span> Interaction with Breaking Change Detection</a></li>
+  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">10.12</span> Error Handling</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">10.13</span> Summary</a></li>
+  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">10.14</span> Module Map</a></li>
+  <li><a href="#when-to-use-lenses-vs.-migrations" id="toc-when-to-use-lenses-vs.-migrations" class="nav-link" data-scroll-target="#when-to-use-lenses-vs.-migrations"><span class="header-section-number">10.15</span> When to Use Lenses vs.&nbsp;Migrations</a></li>
+  <li><a href="#performance-considerations" id="toc-performance-considerations" class="nav-link" data-scroll-target="#performance-considerations"><span class="header-section-number">10.16</span> Performance Considerations</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/10-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/10-lenses.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The <code>panproto-lens</code> crate implements bidirectional lenses for panproto, enabling round-trip transformations between schema versions even when the mapping is not bijective. Where <code>panproto-mig</code> requires bijectivity for inversion, lenses track a <em>complement</em>—the data discarded during the forward direction—so that the backward direction can reconstruct the original source from a (possibly modified) view.</p>
+<p>This chapter covers the asymmetric lens primitives (<code>get</code> and <code>put</code>), the complement type, Cambria-style combinators for building lenses declaratively, and the lens laws that guarantee correctness.</p>
+<p>The crate lives at <code>crates/panproto-lens</code> and is published as <code>panproto-lens</code> on crates.io. It depends on <code>panproto-schema</code> for schema types, <code>panproto-inst</code> for W-type instances and compiled migrations, and <code>panproto-mig</code> for migration composition. It is a Level 2 crate in panproto’s dependency hierarchy.</p>
+<section id="why-lenses" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="why-lenses"><span class="header-section-number">10.1</span> Why Lenses?</h2>
+<p>Migrations (Chapter 9) handle the common case where a schema evolution preserves all information—renames, reorderings, and bijective restructurings. But many real-world evolutions are lossy: removing a deprecated field, collapsing two fields into one, or changing a field’s type. These transformations cannot be inverted by <code>panproto-mig</code> because there is no unique preimage.</p>
+<p>Lenses solve this by capturing the “lost” information in a complement. The forward direction (<code>get</code>) produces a view of the data under the new schema plus a complement recording everything that was discarded. The backward direction (<code>put</code>) takes a (possibly modified) view and the stored complement, and reconstructs the original data.</p>
+<p>This makes lenses the right tool for:</p>
+<ul>
+<li><strong>Schema downgrades</strong>: projecting data from a newer schema version to an older one while retaining enough information to upgrade back.</li>
+<li><strong>Cross-protocol bridges</strong>: converting between protocols where the target has fewer fields than the source.</li>
+<li><strong>Selective views</strong>: exposing a subset of a record to an API consumer while preserving the full record server-side.</li>
+<li><strong>Incremental adoption</strong>: migrating to a new schema incrementally, with the complement serving as a rollback mechanism during the transition period.</li>
+</ul>
+</section>
+<section id="the-complement" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="the-complement"><span class="header-section-number">10.2</span> The Complement</h2>
+<p>When <code>get</code> projects a source instance onto a target view, some data is inevitably lost: nodes that have no counterpart in the target schema, arcs that connect dropped nodes, fans whose children were pruned, and structural decisions made during ancestor contraction. The <code>Complement</code> struct captures all of this.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="17"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 16;"><span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// The complement: data discarded by `get`, needed by `put` to restore the</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// original source instance.</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// When `get` projects a source instance to a target view, some nodes, arcs,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// and structural decisions are lost. The complement records all of this so</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// that `put` can reconstruct the full source.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Complement <span class="op">{</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Nodes from the source that do not appear in the target view.</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> dropped_nodes<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> Node<span class="op">&gt;,</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Arcs from the source that do not appear in the target view.</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> dropped_arcs<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">,</span> Edge)<span class="op">&gt;,</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Fans from the source whose parent or children were dropped during `get`.</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> dropped_fans<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Fan<span class="op">&gt;,</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Resolver decisions made during ancestor contraction.</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> contraction_choices<span class="op">:</span> HashMap<span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span>)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Original parent mapping before contraction.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> original_parent<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Complement <span class="op">{</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns `true` if the complement is empty (lossless transformation).</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> is_empty(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>dropped_nodes<span class="op">.</span>is_empty()</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>dropped_arcs<span class="op">.</span>is_empty()</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>dropped_fans<span class="op">.</span>is_empty()</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>contraction_choices<span class="op">.</span>is_empty()</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;&amp;</span> <span class="kw">self</span><span class="op">.</span>original_parent<span class="op">.</span>is_empty()</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each field in the complement records a specific category of lost information:</p>
+<ul>
+<li><strong><code>dropped_nodes</code></strong>: a map from node ID to <code>Node</code> for every source node that does not appear in the target view. These are the nodes whose anchor vertex was not in the migration’s surviving set.</li>
+<li><strong><code>dropped_arcs</code></strong>: source arcs where either the parent or child node was dropped. These arcs have no representation in the view.</li>
+<li><strong><code>dropped_fans</code></strong>: source fans (hyper-edge instances) where the parent or any child was dropped during <code>get</code>. Fans model multi-arity relationships in protocols like SQL.</li>
+<li><strong><code>contraction_choices</code></strong>: when <code>get</code> contracts intermediate vertices (connecting grandparent to grandchild directly), multiple edges may be candidates. This map records which edge was chosen for each contracted pair, so <code>put</code> can undo the contraction correctly.</li>
+<li><strong><code>original_parent</code></strong>: the parent mapping for surviving nodes before any contraction occurred. During <code>put</code>, this enables restoration of the original tree topology even when contraction changed the parent-child relationships.</li>
+</ul>
+<p>A complement is empty when the transformation is lossless—for example, a pure rename. The <code>is_empty</code> method provides a quick check for this case. When the complement is non-empty, it must be stored alongside the view so that <code>put</code> can later restore the original.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In production systems, the complement is typically stored alongside the view in a metadata sidecar—either as a separate column in a database, a companion file, or an opaque blob attached to the record. The complement is serializable via <code>serde</code>, so it can be stored in any format that supports <code>Serialize</code>/<code>Deserialize</code>.</p>
+</div>
+</div>
+</section>
+<section id="forward-direction-get" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="forward-direction-get"><span class="header-section-number">10.3</span> Forward Direction: get</h2>
+<p>The <code>get</code> function runs the forward (restrict) pipeline, producing both the projected view and its complement.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="49"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">/// Forward lens direction: restrict the source instance to the target view</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">/// and capture the complement.</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">/// This runs `wtype_restrict` and then computes the set difference between</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">/// the source and result to populate the complement.</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `LensError::Restrict` if the underlying restrict pipeline fails.</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> get(lens<span class="op">:</span> <span class="op">&amp;</span>Lens<span class="op">,</span> instance<span class="op">:</span> <span class="op">&amp;</span>WInstance) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>(WInstance<span class="op">,</span> Complement)<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> view <span class="op">=</span> wtype_restrict(instance<span class="op">,</span> <span class="op">&amp;</span>lens<span class="op">.</span>src_schema<span class="op">,</span> <span class="op">&amp;</span>lens<span class="op">.</span>tgt_schema<span class="op">,</span> <span class="op">&amp;</span>lens<span class="op">.</span>compiled)<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Internally, <code>get</code> delegates to <code>wtype_restrict</code> from <code>panproto-inst</code> to compute the view, then calculates the set difference between the source and result to populate each complement field:</p>
+<ol type="1">
+<li><strong>View computation</strong>: calls <code>wtype_restrict</code> with the lens’s compiled migration. This produces the projected instance under the target schema.</li>
+<li><strong>Dropped nodes</strong>: iterates over source nodes, collecting any not present in the view.</li>
+<li><strong>Dropped arcs</strong>: iterates over source arcs, collecting any where either endpoint was dropped.</li>
+<li><strong>Contraction choices</strong>: for each arc in the view that connects two nodes not directly connected in the source, records the resolver edge that was used. This is the “decision” that contraction made.</li>
+<li><strong>Original parents</strong>: for each surviving node in the view, records what its parent was in the source instance (before contraction may have changed the parent).</li>
+<li><strong>Dropped fans</strong>: iterates over source fans, collecting any where the parent or a child was dropped.</li>
+</ol>
+<p>The resulting <code>(WInstance, Complement)</code> pair contains all the information from the original source, just partitioned into “visible” (the view) and “invisible” (the complement).</p>
+</section>
+<section id="backward-direction-put" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="backward-direction-put"><span class="header-section-number">10.4</span> Backward Direction: put</h2>
+<p>The <code>put</code> function restores a source instance from a (possibly modified) view and the stored complement. The reconstruction proceeds in stages:</p>
+<ol type="1">
+<li><strong>Copy view nodes</strong>: all nodes from the view are copied, with their anchors un-remapped from target vertex IDs back to source vertex IDs using the inverse of the compiled migration’s vertex remap.</li>
+<li><strong>Re-insert dropped nodes</strong>: every node recorded in the complement’s <code>dropped_nodes</code> is inserted back into the node set.</li>
+<li><strong>Rebuild arcs from original parents</strong>: for each surviving node, the <code>original_parent</code> mapping tells us who its parent was in the source. The function finds the appropriate edge (consulting <code>contraction_choices</code> for disambiguation) and creates an arc.</li>
+<li><strong>Re-insert dropped arcs</strong>: arcs from the complement are added back, provided both endpoints are present in the restored node set.</li>
+<li><strong>Reconstruct fans</strong>: view fans are un-remapped; dropped fans whose nodes are all present are re-inserted.</li>
+</ol>
+<p>The result is a full source instance that incorporates any edits made to the view while preserving the structural elements that were invisible to the view.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the view was modified between <code>get</code> and <code>put</code> (e.g., a field value was changed by an API consumer), those modifications are preserved in the restored instance. The complement provides the <em>structure</em> that the view cannot represent; the view provides the <em>content</em> that may have been updated.</p>
+</div>
+</div>
+</section>
+<section id="the-getput-round-trip" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="the-getput-round-trip"><span class="header-section-number">10.5</span> The get/put Round-Trip</h2>
+<p>The following diagram illustrates the data flow through a complete round-trip:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    S[Source Instance] --&gt;|get| V[View]
+    S --&gt;|get| C[Complement]
+    V --&gt;|put| R[Restored Instance]
+    C --&gt;|put| R
+    R ---|should equal| S
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The complement acts as a side channel, carrying exactly the information that the view cannot represent. Together, the view and complement contain all the information in the source—just partitioned differently.</p>
+<p>Consider a concrete example. Suppose a source schema has fields <code>{name, email, age}</code> and the target schema has only <code>{name, email}</code>. The <code>get</code> direction produces a view with <code>{name, email}</code> and a complement containing the <code>age</code> node, its arc from the parent, and any constraints. If an API consumer updates <code>email</code> in the view, calling <code>put</code> with the modified view and the original complement produces a source instance with the updated <code>email</code>, the original <code>name</code>, and the original <code>age</code>—nothing is lost.</p>
+</section>
+<section id="lens-laws" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="lens-laws"><span class="header-section-number">10.6</span> Lens Laws</h2>
+<p>panproto lenses satisfy two laws that jointly guarantee correctness:</p>
+<p><strong>GetPut law</strong>: applying <code>put</code> to the result of <code>get</code> recovers the original source.</p>
+<p><span class="math display">\[\text{put}(\text{get}(s).\text{view},\; \text{get}(s).\text{complement}) = s\]</span></p>
+<p>This law says that <code>get</code> followed by <code>put</code> is a no-op: the round-trip preserves the source exactly. If this law were violated, data would be silently lost or corrupted during the round-trip.</p>
+<p><strong>PutGet law</strong>: applying <code>get</code> to the result of <code>put</code> recovers the view and complement.</p>
+<p><span class="math display">\[\text{get}(\text{put}(v, c)) = (v, c)\]</span></p>
+<p>This law says that <code>put</code> followed by <code>get</code> is also a no-op: restoring a source from a view and complement, then projecting it again, yields the same view and complement. If this law were violated, <code>put</code> would introduce phantom data that <code>get</code> would then discard, or <code>put</code> would fail to fully incorporate the complement.</p>
+<section id="property-testing" class="level3" data-number="10.6.1">
+<h3 data-number="10.6.1" class="anchored" data-anchor-id="property-testing"><span class="header-section-number">10.6.1</span> Property Testing</h3>
+<p>These laws are property-tested in <code>panproto-lens</code> via the <code>check_laws</code> function, which:</p>
+<ol type="1">
+<li>Generates random source schemas using the protocol’s theory.</li>
+<li>Generates random source instances conforming to those schemas.</li>
+<li>Constructs lenses from random combinator chains.</li>
+<li>Verifies both GetPut and PutGet for each generated triple.</li>
+</ol>
+<p>The property tests run as part of the standard <code>cargo test</code> suite and also in the CI pipeline with extended iteration counts.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The lens laws follow the formulation of asymmetric lenses from <span class="citation" data-cites="foster2007">Foster et al. (<a href="#ref-foster2007" role="doc-biblioref">2007</a>)</span>, adapted to the setting of W-type instances over GAT-based schema theories. The complement corresponds to the abstract complement in the lens framework of <span class="citation" data-cites="johnson2013">Johnson and Rosebrugh (<a href="#ref-johnson2013" role="doc-biblioref">2013</a>)</span>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="cambria-style-combinators" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="cambria-style-combinators"><span class="header-section-number">10.7</span> Cambria-Style Combinators</h2>
+<p>Rather than constructing <code>Migration</code> objects and compiling them by hand, the combinator API lets you describe schema transformations as a chain of atomic operations. Each combinator represents a single, well-understood schema change.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="27"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 26;"><span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// A lens combinator describing an atomic schema transformation.</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">/// Combinators can be composed via `Compose` or chained in a slice</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">/// passed to [`from_combinators`].</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>non_exhaustive<span class="at">]</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Combinator <span class="op">{</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename a field (edge label). Lossless: complement is empty.</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    RenameField <span class="op">{</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The old field name.</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        old<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new field name.</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a field with a default value.</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    AddField <span class="op">{</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field name (used as edge label and vertex ID suffix).</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The vertex kind for the new field (e.g., `"string"`).</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        vertex_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Default value for the field.</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">default</span><span class="op">:</span> Value<span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Remove a field from the schema.</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    RemoveField <span class="op">{</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field name to remove.</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Wrap existing children in a new intermediate object vertex.</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    WrapInObject <span class="op">{</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The name for the new wrapper object.</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        field_name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hoist a nested field up to a parent vertex.</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    HoistField <span class="op">{</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The host vertex that currently owns the field.</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        host<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field to hoist from the host to its parent.</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        field<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Change the kind (type) of a vertex.</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    CoerceType <span class="op">{</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The source kind.</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        from_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The target kind.</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        to_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Sequential composition of two combinators.</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    Compose(<span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="combinator-semantics" class="level3" data-number="10.7.1">
+<h3 data-number="10.7.1" class="anchored" data-anchor-id="combinator-semantics"><span class="header-section-number">10.7.1</span> Combinator Semantics</h3>
+<p>Each combinator has a precise effect on the schema and a defined impact on the complement:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Combinator</th>
+<th>Effect</th>
+<th>Lossless?</th>
+<th>Complement Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>RenameField</code></td>
+<td>Changes an edge label</td>
+<td>Yes</td>
+<td>Empty complement</td>
+</tr>
+<tr class="even">
+<td><code>AddField</code></td>
+<td>Introduces a new vertex with default</td>
+<td>Yes</td>
+<td>Default recorded</td>
+</tr>
+<tr class="odd">
+<td><code>RemoveField</code></td>
+<td>Drops a vertex and incident edges</td>
+<td>No</td>
+<td>Dropped nodes/arcs stored</td>
+</tr>
+<tr class="even">
+<td><code>WrapInObject</code></td>
+<td>Inserts intermediate object vertex</td>
+<td>No</td>
+<td>Re-parenting tracked</td>
+</tr>
+<tr class="odd">
+<td><code>HoistField</code></td>
+<td>Moves nested field to grandparent</td>
+<td>No</td>
+<td>Original topology tracked</td>
+</tr>
+<tr class="even">
+<td><code>CoerceType</code></td>
+<td>Changes kind of matching vertices</td>
+<td>Depends</td>
+<td>Kind mapping stored if lossy</td>
+</tr>
+<tr class="odd">
+<td><code>Compose</code></td>
+<td>Sequential composition</td>
+<td>Depends</td>
+<td>Union of sub-complements</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>RenameField</code></strong> is the simplest combinator: it changes an edge’s <code>name</code> field from <code>old</code> to <code>new</code>. No data is lost because the edge still connects the same vertices. The complement is empty.</p>
+<p><strong><code>AddField</code></strong> introduces a new vertex (with a specified kind and default value) connected to the root by a new edge. During <code>get</code>, the new field appears in the view with its default value. During <code>put</code>, if the view’s value differs from the default, that value is preserved.</p>
+<p><strong><code>RemoveField</code></strong> drops a vertex and all edges incident on it. The complement stores the dropped node and its arcs. This is the canonical lossy combinator.</p>
+<p><strong><code>WrapInObject</code></strong> creates a new intermediate object vertex and re-parents existing children of the root under it. The complement tracks the original parent-child relationships.</p>
+<p><strong><code>HoistField</code></strong> moves a field from a nested object up to its grandparent. The complement tracks the original nesting so <code>put</code> can restore it.</p>
+<p><strong><code>CoerceType</code></strong> changes the <code>kind</code> of all vertices matching <code>from_kind</code> to <code>to_kind</code>. Whether this is lossless depends on the kinds involved—<code>string</code> to <code>text</code> might be lossless; <code>float</code> to <code>integer</code> is not.</p>
+<p><strong><code>Compose</code></strong> enables sequential composition of two combinators within the enum itself, providing a recursive structure for complex transformations.</p>
+</section>
+<section id="building-a-lens-from-combinators" class="level3" data-number="10.7.2">
+<h3 data-number="10.7.2" class="anchored" data-anchor-id="building-a-lens-from-combinators"><span class="header-section-number">10.7.2</span> Building a Lens from Combinators</h3>
+<p>The <code>from_combinators</code> function takes a source schema and a slice of combinators, applies each in sequence, and produces a fully compiled <code>Lens</code>:</p>
+<ol type="1">
+<li>For each combinator, derive the next schema by applying the atomic transformation.</li>
+<li>Build a compiled migration for that step.</li>
+<li>Compose the step migration with the accumulated result.</li>
+<li>Return a <code>Lens</code> containing the composed compiled migration, the original source schema, and the final target schema.</li>
+</ol>
+<p>This means you never need to manually construct vertex maps, edge maps, or resolvers when using combinators. The target schema and migration are derived automatically from the combinator chain. Multi-step chains work correctly because each combinator operates on the output schema of the previous step—a rename followed by a hoist that references the renamed name will find the name as expected.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Combinators are inspired by the Cambria lens language <span class="citation" data-cites="clarke2020">(<a href="#ref-clarke2020" role="doc-biblioref">Clarke 2020</a>)</span>. If you are familiar with Cambria’s JSON lens combinators, panproto’s combinators will feel familiar—but they operate on the graph-level schema representation rather than on JSON paths, making them protocol-agnostic. The same combinator chain works for JSON Schema, Protobuf, SQL, or any other supported protocol.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="design-rationale" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">10.8</span> Design Rationale</h2>
+<p>The asymmetric lens design follows the theoretical framework of <span class="citation" data-cites="hofmann2011">Hofmann et al. (<a href="#ref-hofmann2011" role="doc-biblioref">2011</a>)</span>, which establishes that complement-based lenses form a category: identity lenses exist, and lenses compose associatively. panproto exploits this by allowing lens composition through <code>Compose</code> combinators and through direct composition of compiled migrations.</p>
+<p>The choice of asymmetric (rather than symmetric) lenses is deliberate. In protocol evolution, one direction is typically authoritative—the new schema version defines the “view,” and the old schema’s extra structure is captured as complement. Symmetric lenses <span class="citation" data-cites="hofmann2011">(<a href="#ref-hofmann2011" role="doc-biblioref">Hofmann et al. 2011</a>)</span> would require both sides to carry complements, adding complexity without clear benefit for the schema migration use case.</p>
+<p>The complement-based approach also integrates naturally with panproto’s existing infrastructure. A <code>Lens</code> wraps a <code>CompiledMigration</code> (the same type used by <code>panproto-mig</code>), so the forward direction of a lens is exactly a migration lift. The complement is the additional information needed to make the transformation reversible.</p>
+</section>
+<section id="worked-example-removing-a-deprecated-field" class="level2" data-number="10.9">
+<h2 data-number="10.9" class="anchored" data-anchor-id="worked-example-removing-a-deprecated-field"><span class="header-section-number">10.9</span> Worked Example: Removing a Deprecated Field</h2>
+<p>Consider a schema with vertices <code>{post, post.text, post.legacy_id}</code> and edges from <code>post</code> to both children. The <code>legacy_id</code> field is deprecated and should be removed from the API view, but existing data in storage must retain it.</p>
+<p><strong>Step 1: Define the lens via combinators.</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> combinators <span class="op">=</span> <span class="op">&amp;</span>[<span class="pp">Combinator::</span>RemoveField <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    name<span class="op">:</span> <span class="st">"legacy_id"</span><span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span>]<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> lens <span class="op">=</span> from_combinators(<span class="op">&amp;</span>src_schema<span class="op">,</span> combinators<span class="op">,</span> <span class="op">&amp;</span>protocol)<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>from_combinators</code> function derives the target schema (with <code>legacy_id</code> removed) and the compiled migration automatically.</p>
+<p><strong>Step 2: Get the view.</strong></p>
+<p>Calling <code>get(&amp;lens, &amp;source_instance)</code> produces:</p>
+<ul>
+<li><strong>View</strong>: an instance with nodes anchored at <code>post</code> and <code>post.text</code> only.</li>
+<li><strong>Complement</strong>: contains the <code>post.legacy_id</code> node, the arc from <code>post</code> to <code>post.legacy_id</code>, and any associated values.</li>
+</ul>
+<p><strong>Step 3: Modify the view (optional).</strong></p>
+<p>An API consumer updates <code>post.text</code> to a new value. The view now differs from the original.</p>
+<p><strong>Step 4: Put it back.</strong></p>
+<p>Calling <code>put(&amp;lens, &amp;modified_view, &amp;complement)</code> produces a restored source instance with all three fields: <code>post</code>, <code>post.text</code> (with the updated value), and <code>post.legacy_id</code> (with the original value from the complement).</p>
+<p>The GetPut and PutGet laws guarantee this round-trip is correct regardless of the specific data values involved.</p>
+</section>
+<section id="complement-storage-strategies" class="level2" data-number="10.10">
+<h2 data-number="10.10" class="anchored" data-anchor-id="complement-storage-strategies"><span class="header-section-number">10.10</span> Complement Storage Strategies</h2>
+<p>In production deployments, the complement must be persisted alongside the view. Common strategies include:</p>
+<ul>
+<li><strong>Database column</strong>: store the serialized complement as a JSONB or BLOB column alongside the view data. This is the simplest approach and works well when the complement is small relative to the view.</li>
+<li><strong>Companion file</strong>: for file-based storage (e.g., Parquet datasets), store the complement in a sidecar file with a <code>.complement.json</code> extension.</li>
+<li><strong>Metadata header</strong>: for protocols with metadata support (e.g., HTTP responses), encode the complement in a custom header or trailer.</li>
+<li><strong>Separate table</strong>: for relational databases, store complements in a dedicated table keyed by record ID and schema version. This avoids schema modifications to the main table.</li>
+</ul>
+<p>The <code>Complement</code> type derives <code>Serialize</code> and <code>Deserialize</code>, so any serde-compatible format works: JSON, MessagePack, CBOR, etc.</p>
+</section>
+<section id="interaction-with-breaking-change-detection" class="level2" data-number="10.11">
+<h2 data-number="10.11" class="anchored" data-anchor-id="interaction-with-breaking-change-detection"><span class="header-section-number">10.11</span> Interaction with Breaking Change Detection</h2>
+<p>Lenses and breaking change detection (Chapter 11) are complementary:</p>
+<ul>
+<li>A <code>RemoveField</code> combinator always produces a non-empty complement. The breaking change detector (<code>panproto-check</code>) will classify the corresponding schema change as breaking (vertex removal).</li>
+<li>A <code>RenameField</code> combinator produces an empty complement. The breaking change detector will see the rename as a vertex removal + vertex addition, classifying the removal as breaking. To avoid this, use the migration engine’s rename support instead.</li>
+<li>A <code>CoerceType</code> combinator may or may not be breaking depending on the kinds involved. The breaking change detector classifies all kind changes as breaking, which aligns with the conservative interpretation.</li>
+</ul>
+<p>This interplay means you can use <code>panproto-check</code> to validate whether a lens is necessary: if the compatibility report says “fully compatible,” a lens is unnecessary (a migration suffices). If it says “breaking,” a lens with complement tracking is the appropriate tool.</p>
+</section>
+<section id="error-handling" class="level2" data-number="10.12">
+<h2 data-number="10.12" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">10.12</span> Error Handling</h2>
+<p>The <code>panproto-lens</code> error types cover failures in both the combinator and primitive layers:</p>
+<ul>
+<li><strong><code>LensError::Restrict</code></strong>: the underlying <code>wtype_restrict</code> call failed during <code>get</code>. This typically indicates a mismatch between the lens’s schemas and the instance.</li>
+<li><strong><code>LensError::ComplementMismatch</code></strong>: during <code>put</code>, the complement is inconsistent with the view. This can happen if the complement was generated by a different lens or a different source instance.</li>
+<li><strong><code>LensError::FieldNotFound</code></strong>: a combinator references a field name not present in the schema.</li>
+<li><strong><code>LensError::VertexNotFound</code></strong>: a combinator references a vertex ID not present in the schema.</li>
+<li><strong><code>LensError::IncompatibleCoercion</code></strong>: a <code>CoerceType</code> combinator references a kind not present in any vertex.</li>
+</ul>
+<p>For a hands-on introduction to building and applying lenses, see <a href="https://panproto.github.io/tutorial/chapters/08-lenses.html">tutorial chapter 8</a>.</p>
+</section>
+<section id="summary" class="level2" data-number="10.13">
+<h2 data-number="10.13" class="anchored" data-anchor-id="summary"><span class="header-section-number">10.13</span> Summary</h2>
+<p>The <code>panproto-lens</code> crate provides three layers of abstraction:</p>
+<ul>
+<li><strong>Primitives</strong>: <code>get</code> and <code>put</code> operate on <code>Lens</code> values, producing views and complements.</li>
+<li><strong>Combinators</strong>: <code>RenameField</code>, <code>AddField</code>, <code>RemoveField</code>, <code>WrapInObject</code>, <code>HoistField</code>, <code>CoerceType</code>, and <code>Compose</code> describe transformations declaratively.</li>
+<li><strong>Laws</strong>: <code>check_laws</code> property-tests GetPut and PutGet to verify correctness.</li>
+</ul>
+<p>Together, these layers enable safe, reversible schema evolution across all panproto-supported protocols, even when the evolution involves lossy structural changes. The complement is the key innovation: it makes non-bijective transformations reversible by explicitly tracking what was lost, rather than silently discarding it.</p>
+</section>
+<section id="module-map" class="level2" data-number="10.14">
+<h2 data-number="10.14" class="anchored" data-anchor-id="module-map"><span class="header-section-number">10.14</span> Module Map</h2>
+<p>The crate is organized into the following modules:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Exports</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>asymmetric</code></td>
+<td><code>Complement</code>, <code>get</code>, <code>put</code></td>
+<td>Core lens primitives with complement tracking</td>
+</tr>
+<tr class="even">
+<td><code>combinators</code></td>
+<td><code>Combinator</code>, <code>from_combinators</code></td>
+<td>Cambria-style declarative lens construction</td>
+</tr>
+<tr class="odd">
+<td><code>compose</code></td>
+<td><code>compose_compiled_migrations</code></td>
+<td>Composition of compiled migrations for multi-step lenses</td>
+</tr>
+<tr class="even">
+<td><code>laws</code></td>
+<td><code>check_laws</code></td>
+<td>Property-based testing of GetPut and PutGet laws</td>
+</tr>
+<tr class="odd">
+<td><code>error</code></td>
+<td><code>LensError</code></td>
+<td>Error types for lens operations</td>
+</tr>
+</tbody>
+</table>
+<p>The crate root re-exports <code>Lens</code>, <code>Complement</code>, <code>get</code>, <code>put</code>, <code>Combinator</code>, and <code>from_combinators</code> for convenient access.</p>
+</section>
+<section id="when-to-use-lenses-vs.-migrations" class="level2" data-number="10.15">
+<h2 data-number="10.15" class="anchored" data-anchor-id="when-to-use-lenses-vs.-migrations"><span class="header-section-number">10.15</span> When to Use Lenses vs.&nbsp;Migrations</h2>
+<p>The choice between lenses and migrations depends on the nature of the schema change:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>Use Migration</th>
+<th>Use Lens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rename a field</td>
+<td>Yes (bijective)</td>
+<td>Yes (but unnecessary overhead)</td>
+</tr>
+<tr class="even">
+<td>Reorder fields</td>
+<td>Yes (bijective)</td>
+<td>Yes (but unnecessary overhead)</td>
+</tr>
+<tr class="odd">
+<td>Remove a field</td>
+<td>No (not invertible)</td>
+<td>Yes (complement stores removed data)</td>
+</tr>
+<tr class="even">
+<td>Add a required field</td>
+<td>Possible (with default)</td>
+<td>Yes (complement stores default)</td>
+</tr>
+<tr class="odd">
+<td>Change a field’s type</td>
+<td>No (not invertible)</td>
+<td>Yes (if coercion is defined)</td>
+</tr>
+<tr class="even">
+<td>Wrap fields in a new object</td>
+<td>No (not invertible)</td>
+<td>Yes (complement tracks re-parenting)</td>
+</tr>
+<tr class="odd">
+<td>Multi-step evolution</td>
+<td>Compose migrations</td>
+<td>Chain combinators</td>
+</tr>
+</tbody>
+</table>
+<p>As a rule of thumb: if <code>panproto-mig</code>’s <code>invert</code> would succeed on your migration, use a migration. If it would fail, use a lens.</p>
+</section>
+<section id="performance-considerations" class="level2" data-number="10.16">
+<h2 data-number="10.16" class="anchored" data-anchor-id="performance-considerations"><span class="header-section-number">10.16</span> Performance Considerations</h2>
+<p>Lens operations are slightly more expensive than plain migrations because of the complement computation:</p>
+<ul>
+<li><strong><code>get</code></strong> performs one <code>wtype_restrict</code> call (same cost as <code>lift_wtype</code>) plus a set-difference pass over the source instance to compute the complement. The overhead is O(|source nodes|).</li>
+<li><strong><code>put</code></strong> performs a reconstruction pass that is O(|view nodes| + |complement nodes|), with hash-map lookups for un-remapping and contraction choice disambiguation.</li>
+<li><strong>Complement serialization</strong> depends on the complement size, which is proportional to the amount of data dropped during <code>get</code>.</li>
+</ul>
+<p>For lossless transformations (empty complement), <code>get</code> and <code>put</code> have essentially the same cost as a migration lift and its inverse.</p>
+<p>In batch scenarios where the same lens is applied to many instances (e.g., projecting a million records to an API view), the lens should be constructed once and reused. The <code>Lens</code> struct is <code>Clone</code> and can be shared across threads via <code>Arc&lt;Lens&gt;</code>. The compiled migration inside the lens is immutable after construction, so concurrent <code>get</code> calls are safe without synchronization.</p>
+<p>The complement size is the primary cost driver. A lens that drops a single leaf field produces a small complement (one node, one arc). A lens that removes an entire subtree produces a complement proportional to the subtree size. When designing lens-based APIs, consider whether the complement can be compressed or whether a more targeted lens (removing only the specific fields needed) would reduce overhead.</p>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-clarke2020" class="csl-entry" role="listitem">
+Clarke, Bryce. 2020. <span>“Internal Lenses as Functors and Cofunctors.”</span> <em>Applied Category Theory 2019</em>, Electronic proceedings in theoretical computer science, vol. 323: 183–95. <a href="https://doi.org/10.4204/EPTCS.323.13">https://doi.org/10.4204/EPTCS.323.13</a>.
+</div>
+<div id="ref-foster2007" class="csl-entry" role="listitem">
+Foster, J. Nathan, Michael B. Greenwald, Jonathan T. Moore, Benjamin C. Pierce, and Alan Schmitt. 2007. <span>“Combinators for Bidirectional Tree Transformations: A Linguistic Approach to the View-Update Problem.”</span> <em>ACM Transactions on Programming Languages and Systems</em> 29 (3): Article 17. <a href="https://doi.org/10.1145/1232420.1232424">https://doi.org/10.1145/1232420.1232424</a>.
+</div>
+<div id="ref-hofmann2011" class="csl-entry" role="listitem">
+Hofmann, Martin, Benjamin C. Pierce, and Daniel Wagner. 2011. <span>“Symmetric Lenses.”</span> <em>Proceedings of the 38th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (POPL 2011)</em>, 371–84. <a href="https://doi.org/10.1145/1926385.1926428">https://doi.org/10.1145/1926385.1926428</a>.
+</div>
+<div id="ref-johnson2013" class="csl-entry" role="listitem">
+Johnson, Michael, and Robert Rosebrugh. 2013. <span>“Delta Lenses and Opfibrations.”</span> <em>Proceedings of the 2nd International Workshop on Bidirectional Transformations (BX 2013)</em>, Electronic communications of the EASST, vol. 57. <a href="https://doi.org/10.14279/tuj.eceasst.57.875">https://doi.org/10.14279/tuj.eceasst.57.875</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/09-migration-engine.html" class="pagination-link" aria-label="panproto-mig --- The Migration Engine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/11-breaking-changes.html" class="pagination-link" aria-label="panproto-check --- Breaking Change Detection">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-lens --- Bidirectional Lenses</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-lens`</span> crate implements bidirectional lenses for panproto, enabling round-trip transformations between schema versions even when the mapping is not bijective. Where <span class="in">`panproto-mig`</span> requires bijectivity for inversion, lenses track a *complement*---the data discarded during the forward direction---so that the backward direction can reconstruct the original source from a (possibly modified) view.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>This chapter covers the asymmetric lens primitives (<span class="in">`get`</span> and <span class="in">`put`</span>), the complement type, Cambria-style combinators for building lenses declaratively, and the lens laws that guarantee correctness.</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>The crate lives at <span class="in">`crates/panproto-lens`</span> and is published as <span class="in">`panproto-lens`</span> on crates.io. It depends on <span class="in">`panproto-schema`</span> for schema types, <span class="in">`panproto-inst`</span> for W-type instances and compiled migrations, and <span class="in">`panproto-mig`</span> for migration composition. It is a Level 2 crate in panproto's dependency hierarchy.</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why Lenses?</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>Migrations (Chapter 9) handle the common case where a schema evolution preserves all information---renames, reorderings, and bijective restructurings. But many real-world evolutions are lossy: removing a deprecated field, collapsing two fields into one, or changing a field's type. These transformations cannot be inverted by <span class="in">`panproto-mig`</span> because there is no unique preimage.</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Lenses solve this by capturing the "lost" information in a complement. The forward direction (<span class="in">`get`</span>) produces a view of the data under the new schema plus a complement recording everything that was discarded. The backward direction (<span class="in">`put`</span>) takes a (possibly modified) view and the stored complement, and reconstructs the original data.</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>This makes lenses the right tool for:</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Schema downgrades**: projecting data from a newer schema version to an older one while retaining enough information to upgrade back.</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cross-protocol bridges**: converting between protocols where the target has fewer fields than the source.</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Selective views**: exposing a subset of a record to an API consumer while preserving the full record server-side.</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Incremental adoption**: migrating to a new schema incrementally, with the complement serving as a rollback mechanism during the transition period.</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Complement</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>When <span class="in">`get`</span> projects a source instance onto a target view, some data is inevitably lost: nodes that have no counterpart in the target schema, arcs that connect dropped nodes, fans whose children were pruned, and structural decisions made during ancestor contraction. The <span class="in">`Complement`</span> struct captures all of this.</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/asymmetric.rs" start-line=17 end-line=47}</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>Each field in the complement records a specific category of lost information:</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`dropped_nodes`**: a map from node ID to <span class="in">`Node`</span> for every source node that does not appear in the target view. These are the nodes whose anchor vertex was not in the migration's surviving set.</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`dropped_arcs`**: source arcs where either the parent or child node was dropped. These arcs have no representation in the view.</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`dropped_fans`**: source fans (hyper-edge instances) where the parent or any child was dropped during <span class="in">`get`</span>. Fans model multi-arity relationships in protocols like SQL.</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`contraction_choices`**: when <span class="in">`get`</span> contracts intermediate vertices (connecting grandparent to grandchild directly), multiple edges may be candidates. This map records which edge was chosen for each contracted pair, so <span class="in">`put`</span> can undo the contraction correctly.</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`original_parent`**: the parent mapping for surviving nodes before any contraction occurred. During <span class="in">`put`</span>, this enables restoration of the original tree topology even when contraction changed the parent-child relationships.</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>A complement is empty when the transformation is lossless---for example, a pure rename. The <span class="in">`is_empty`</span> method provides a quick check for this case. When the complement is non-empty, it must be stored alongside the view so that <span class="in">`put`</span> can later restore the original.</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>In production systems, the complement is typically stored alongside the view in a metadata sidecar---either as a separate column in a database, a companion file, or an opaque blob attached to the record. The complement is serializable via <span class="in">`serde`</span>, so it can be stored in any format that supports <span class="in">`Serialize`</span>/<span class="in">`Deserialize`</span>.</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## Forward Direction: get</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>The <span class="in">`get`</span> function runs the forward (restrict) pipeline, producing both the projected view and its complement.</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/asymmetric.rs" start-line=49 end-line=59}</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>Internally, <span class="in">`get`</span> delegates to <span class="in">`wtype_restrict`</span> from <span class="in">`panproto-inst`</span> to compute the view, then calculates the set difference between the source and result to populate each complement field:</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**View computation**: calls <span class="in">`wtype_restrict`</span> with the lens's compiled migration. This produces the projected instance under the target schema.</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Dropped nodes**: iterates over source nodes, collecting any not present in the view.</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Dropped arcs**: iterates over source arcs, collecting any where either endpoint was dropped.</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Contraction choices**: for each arc in the view that connects two nodes not directly connected in the source, records the resolver edge that was used. This is the "decision" that contraction made.</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Original parents**: for each surviving node in the view, records what its parent was in the source instance (before contraction may have changed the parent).</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Dropped fans**: iterates over source fans, collecting any where the parent or a child was dropped.</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>The resulting <span class="in">`(WInstance, Complement)`</span> pair contains all the information from the original source, just partitioned into "visible" (the view) and "invisible" (the complement).</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## Backward Direction: put</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>The <span class="in">`put`</span> function restores a source instance from a (possibly modified) view and the stored complement. The reconstruction proceeds in stages:</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Copy view nodes**: all nodes from the view are copied, with their anchors un-remapped from target vertex IDs back to source vertex IDs using the inverse of the compiled migration's vertex remap.</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Re-insert dropped nodes**: every node recorded in the complement's <span class="in">`dropped_nodes`</span> is inserted back into the node set.</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Rebuild arcs from original parents**: for each surviving node, the <span class="in">`original_parent`</span> mapping tells us who its parent was in the source. The function finds the appropriate edge (consulting <span class="in">`contraction_choices`</span> for disambiguation) and creates an arc.</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Re-insert dropped arcs**: arcs from the complement are added back, provided both endpoints are present in the restored node set.</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Reconstruct fans**: view fans are un-remapped; dropped fans whose nodes are all present are re-inserted.</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>The result is a full source instance that incorporates any edits made to the view while preserving the structural elements that were invisible to the view.</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>If the view was modified between <span class="in">`get`</span> and <span class="in">`put`</span> (e.g., a field value was changed by an API consumer), those modifications are preserved in the restored instance. The complement provides the *structure* that the view cannot represent; the view provides the *content* that may have been updated.</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## The get/put Round-Trip</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>The following diagram illustrates the data flow through a complete round-trip:</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>    S[Source Instance] --&gt;|get| V[View]</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>    S --&gt;|get| C[Complement]</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>    V --&gt;|put| R[Restored Instance]</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>    C --&gt;|put| R</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>    R ---|should equal| S</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>The complement acts as a side channel, carrying exactly the information that the view cannot represent. Together, the view and complement contain all the information in the source---just partitioned differently.</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>Consider a concrete example. Suppose a source schema has fields <span class="in">`{name, email, age}`</span> and the target schema has only <span class="in">`{name, email}`</span>. The <span class="in">`get`</span> direction produces a view with <span class="in">`{name, email}`</span> and a complement containing the <span class="in">`age`</span> node, its arc from the parent, and any constraints. If an API consumer updates <span class="in">`email`</span> in the view, calling <span class="in">`put`</span> with the modified view and the original complement produces a source instance with the updated <span class="in">`email`</span>, the original <span class="in">`name`</span>, and the original <span class="in">`age`</span>---nothing is lost.</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens Laws</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>panproto lenses satisfy two laws that jointly guarantee correctness:</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>**GetPut law**: applying <span class="in">`put`</span> to the result of <span class="in">`get`</span> recovers the original source.</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>$$\text{put}(\text{get}(s).\text{view},\; \text{get}(s).\text{complement}) = s$$</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>This law says that <span class="in">`get`</span> followed by <span class="in">`put`</span> is a no-op: the round-trip preserves the source exactly. If this law were violated, data would be silently lost or corrupted during the round-trip.</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>**PutGet law**: applying <span class="in">`get`</span> to the result of <span class="in">`put`</span> recovers the view and complement.</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>$$\text{get}(\text{put}(v, c)) = (v, c)$$</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>This law says that <span class="in">`put`</span> followed by <span class="in">`get`</span> is also a no-op: restoring a source from a view and complement, then projecting it again, yields the same view and complement. If this law were violated, <span class="in">`put`</span> would introduce phantom data that <span class="in">`get`</span> would then discard, or <span class="in">`put`</span> would fail to fully incorporate the complement.</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="fu">### Property Testing</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>These laws are property-tested in <span class="in">`panproto-lens`</span> via the <span class="in">`check_laws`</span> function, which:</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Generates random source schemas using the protocol's theory.</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Generates random source instances conforming to those schemas.</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Constructs lenses from random combinator chains.</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Verifies both GetPut and PutGet for each generated triple.</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>The property tests run as part of the standard <span class="in">`cargo test`</span> suite and also in the CI pipeline with extended iteration counts.</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>The lens laws follow the formulation of asymmetric lenses from @foster2007, adapted to the setting of W-type instances over GAT-based schema theories. The complement corresponds to the abstract complement in the lens framework of @johnson2013.</span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="fu">## Cambria-Style Combinators</span></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>Rather than constructing <span class="in">`Migration`</span> objects and compiling them by hand, the combinator API lets you describe schema transformations as a chain of atomic operations. Each combinator represents a single, well-understood schema change.</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/combinators.rs" start-line=27 end-line=76}</span></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Combinator Semantics</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>Each combinator has a precise effect on the schema and a defined impact on the complement:</span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Combinator <span class="pp">|</span> Effect <span class="pp">|</span> Lossless? <span class="pp">|</span> Complement Impact <span class="pp">|</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameField`</span> <span class="pp">|</span> Changes an edge label <span class="pp">|</span> Yes <span class="pp">|</span> Empty complement <span class="pp">|</span></span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`AddField`</span> <span class="pp">|</span> Introduces a new vertex with default <span class="pp">|</span> Yes <span class="pp">|</span> Default recorded <span class="pp">|</span></span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RemoveField`</span> <span class="pp">|</span> Drops a vertex and incident edges <span class="pp">|</span> No <span class="pp">|</span> Dropped nodes/arcs stored <span class="pp">|</span></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`WrapInObject`</span> <span class="pp">|</span> Inserts intermediate object vertex <span class="pp">|</span> No <span class="pp">|</span> Re-parenting tracked <span class="pp">|</span></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`HoistField`</span> <span class="pp">|</span> Moves nested field to grandparent <span class="pp">|</span> No <span class="pp">|</span> Original topology tracked <span class="pp">|</span></span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`CoerceType`</span> <span class="pp">|</span> Changes kind of matching vertices <span class="pp">|</span> Depends <span class="pp">|</span> Kind mapping stored if lossy <span class="pp">|</span></span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Compose`</span> <span class="pp">|</span> Sequential composition <span class="pp">|</span> Depends <span class="pp">|</span> Union of sub-complements <span class="pp">|</span></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>**`RenameField`** is the simplest combinator: it changes an edge's <span class="in">`name`</span> field from <span class="in">`old`</span> to <span class="in">`new`</span>. No data is lost because the edge still connects the same vertices. The complement is empty.</span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>**`AddField`** introduces a new vertex (with a specified kind and default value) connected to the root by a new edge. During <span class="in">`get`</span>, the new field appears in the view with its default value. During <span class="in">`put`</span>, if the view's value differs from the default, that value is preserved.</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>**`RemoveField`** drops a vertex and all edges incident on it. The complement stores the dropped node and its arcs. This is the canonical lossy combinator.</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>**`WrapInObject`** creates a new intermediate object vertex and re-parents existing children of the root under it. The complement tracks the original parent-child relationships.</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>**`HoistField`** moves a field from a nested object up to its grandparent. The complement tracks the original nesting so <span class="in">`put`</span> can restore it.</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>**`CoerceType`** changes the <span class="in">`kind`</span> of all vertices matching <span class="in">`from_kind`</span> to <span class="in">`to_kind`</span>. Whether this is lossless depends on the kinds involved---<span class="in">`string`</span> to <span class="in">`text`</span> might be lossless; <span class="in">`float`</span> to <span class="in">`integer`</span> is not.</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>**`Compose`** enables sequential composition of two combinators within the enum itself, providing a recursive structure for complex transformations.</span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a><span class="fu">### Building a Lens from Combinators</span></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>The <span class="in">`from_combinators`</span> function takes a source schema and a slice of combinators, applies each in sequence, and produces a fully compiled <span class="in">`Lens`</span>:</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>For each combinator, derive the next schema by applying the atomic transformation.</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Build a compiled migration for that step.</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Compose the step migration with the accumulated result.</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Return a <span class="in">`Lens`</span> containing the composed compiled migration, the original source schema, and the final target schema.</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>This means you never need to manually construct vertex maps, edge maps, or resolvers when using combinators. The target schema and migration are derived automatically from the combinator chain. Multi-step chains work correctly because each combinator operates on the output schema of the previous step---a rename followed by a hoist that references the renamed name will find the name as expected.</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>Combinators are inspired by the Cambria lens language <span class="co">[</span><span class="ot">@clarke2020</span><span class="co">]</span>. If you are familiar with Cambria's JSON lens combinators, panproto's combinators will feel familiar---but they operate on the graph-level schema representation rather than on JSON paths, making them protocol-agnostic. The same combinator chain works for JSON Schema, Protobuf, SQL, or any other supported protocol.</span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>The asymmetric lens design follows the theoretical framework of @hofmann2011, which establishes that complement-based lenses form a category: identity lenses exist, and lenses compose associatively. panproto exploits this by allowing lens composition through <span class="in">`Compose`</span> combinators and through direct composition of compiled migrations.</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>The choice of asymmetric (rather than symmetric) lenses is deliberate. In protocol evolution, one direction is typically authoritative---the new schema version defines the "view," and the old schema's extra structure is captured as complement. Symmetric lenses <span class="co">[</span><span class="ot">@hofmann2011</span><span class="co">]</span> would require both sides to carry complements, adding complexity without clear benefit for the schema migration use case.</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>The complement-based approach also integrates naturally with panproto's existing infrastructure. A <span class="in">`Lens`</span> wraps a <span class="in">`CompiledMigration`</span> (the same type used by <span class="in">`panproto-mig`</span>), so the forward direction of a lens is exactly a migration lift. The complement is the additional information needed to make the transformation reversible.</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a><span class="fu">## Worked Example: Removing a Deprecated Field</span></span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>Consider a schema with vertices <span class="in">`{post, post.text, post.legacy_id}`</span> and edges from <span class="in">`post`</span> to both children. The <span class="in">`legacy_id`</span> field is deprecated and should be removed from the API view, but existing data in storage must retain it.</span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>**Step 1: Define the lens via combinators.**</span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>let combinators <span class="ot">=</span> <span class="er">&amp;</span>[Combinator<span class="sc">::</span>RemoveField {</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    name<span class="sc">:</span> <span class="st">"legacy_id"</span><span class="fu">.to_string</span>(),</span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>}];</span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>let lens <span class="ot">=</span> <span class="fu">from_combinators</span>(<span class="sc">&amp;</span>src_schema, combinators, <span class="sc">&amp;</span>protocol)?;</span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>The <span class="in">`from_combinators`</span> function derives the target schema (with <span class="in">`legacy_id`</span> removed) and the compiled migration automatically.</span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>**Step 2: Get the view.**</span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>Calling <span class="in">`get(&amp;lens, &amp;source_instance)`</span> produces:</span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**View**: an instance with nodes anchored at <span class="in">`post`</span> and <span class="in">`post.text`</span> only.</span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Complement**: contains the <span class="in">`post.legacy_id`</span> node, the arc from <span class="in">`post`</span> to <span class="in">`post.legacy_id`</span>, and any associated values.</span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>**Step 3: Modify the view (optional).**</span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>An API consumer updates <span class="in">`post.text`</span> to a new value. The view now differs from the original.</span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>**Step 4: Put it back.**</span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>Calling <span class="in">`put(&amp;lens, &amp;modified_view, &amp;complement)`</span> produces a restored source instance with all three fields: <span class="in">`post`</span>, <span class="in">`post.text`</span> (with the updated value), and <span class="in">`post.legacy_id`</span> (with the original value from the complement).</span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>The GetPut and PutGet laws guarantee this round-trip is correct regardless of the specific data values involved.</span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement Storage Strategies</span></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>In production deployments, the complement must be persisted alongside the view. Common strategies include:</span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Database column**: store the serialized complement as a JSONB or BLOB column alongside the view data. This is the simplest approach and works well when the complement is small relative to the view.</span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Companion file**: for file-based storage (e.g., Parquet datasets), store the complement in a sidecar file with a <span class="in">`.complement.json`</span> extension.</span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Metadata header**: for protocols with metadata support (e.g., HTTP responses), encode the complement in a custom header or trailer.</span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Separate table**: for relational databases, store complements in a dedicated table keyed by record ID and schema version. This avoids schema modifications to the main table.</span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Complement`</span> type derives <span class="in">`Serialize`</span> and <span class="in">`Deserialize`</span>, so any serde-compatible format works: JSON, MessagePack, CBOR, etc.</span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interaction with Breaking Change Detection</span></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>Lenses and breaking change detection (Chapter 11) are complementary:</span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A <span class="in">`RemoveField`</span> combinator always produces a non-empty complement. The breaking change detector (<span class="in">`panproto-check`</span>) will classify the corresponding schema change as breaking (vertex removal).</span>
+<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A <span class="in">`RenameField`</span> combinator produces an empty complement. The breaking change detector will see the rename as a vertex removal + vertex addition, classifying the removal as breaking. To avoid this, use the migration engine's rename support instead.</span>
+<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A <span class="in">`CoerceType`</span> combinator may or may not be breaking depending on the kinds involved. The breaking change detector classifies all kind changes as breaking, which aligns with the conservative interpretation.</span>
+<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a>This interplay means you can use <span class="in">`panproto-check`</span> to validate whether a lens is necessary: if the compatibility report says "fully compatible," a lens is unnecessary (a migration suffices). If it says "breaking," a lens with complement tracking is the appropriate tool.</span>
+<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-lens`</span> error types cover failures in both the combinator and primitive layers:</span>
+<span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensError::Restrict`**: the underlying <span class="in">`wtype_restrict`</span> call failed during <span class="in">`get`</span>. This typically indicates a mismatch between the lens's schemas and the instance.</span>
+<span id="cb5-243"><a href="#cb5-243" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensError::ComplementMismatch`**: during <span class="in">`put`</span>, the complement is inconsistent with the view. This can happen if the complement was generated by a different lens or a different source instance.</span>
+<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensError::FieldNotFound`**: a combinator references a field name not present in the schema.</span>
+<span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensError::VertexNotFound`**: a combinator references a vertex ID not present in the schema.</span>
+<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensError::IncompatibleCoercion`**: a <span class="in">`CoerceType`</span> combinator references a kind not present in any vertex.</span>
+<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a>For a hands-on introduction to building and applying lenses, see <span class="co">[</span><span class="ot">tutorial chapter 8</span><span class="co">](https://panproto.github.io/tutorial/chapters/08-lenses.html)</span>.</span>
+<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-250"><a href="#cb5-250" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-lens`</span> crate provides three layers of abstraction:</span>
+<span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Primitives**: <span class="in">`get`</span> and <span class="in">`put`</span> operate on <span class="in">`Lens`</span> values, producing views and complements.</span>
+<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Combinators**: <span class="in">`RenameField`</span>, <span class="in">`AddField`</span>, <span class="in">`RemoveField`</span>, <span class="in">`WrapInObject`</span>, <span class="in">`HoistField`</span>, <span class="in">`CoerceType`</span>, and <span class="in">`Compose`</span> describe transformations declaratively.</span>
+<span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Laws**: <span class="in">`check_laws`</span> property-tests GetPut and PutGet to verify correctness.</span>
+<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>Together, these layers enable safe, reversible schema evolution across all panproto-supported protocols, even when the evolution involves lossy structural changes. The complement is the key innovation: it makes non-bijective transformations reversible by explicitly tracking what was lost, rather than silently discarding it.</span>
+<span id="cb5-259"><a href="#cb5-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-260"><a href="#cb5-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
+<span id="cb5-261"><a href="#cb5-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-262"><a href="#cb5-262" aria-hidden="true" tabindex="-1"></a>The crate is organized into the following modules:</span>
+<span id="cb5-263"><a href="#cb5-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-264"><a href="#cb5-264" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Exports <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb5-265"><a href="#cb5-265" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb5-266"><a href="#cb5-266" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`asymmetric`</span> <span class="pp">|</span> <span class="in">`Complement`</span>, <span class="in">`get`</span>, <span class="in">`put`</span> <span class="pp">|</span> Core lens primitives with complement tracking <span class="pp">|</span></span>
+<span id="cb5-267"><a href="#cb5-267" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`combinators`</span> <span class="pp">|</span> <span class="in">`Combinator`</span>, <span class="in">`from_combinators`</span> <span class="pp">|</span> Cambria-style declarative lens construction <span class="pp">|</span></span>
+<span id="cb5-268"><a href="#cb5-268" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose`</span> <span class="pp">|</span> <span class="in">`compose_compiled_migrations`</span> <span class="pp">|</span> Composition of compiled migrations for multi-step lenses <span class="pp">|</span></span>
+<span id="cb5-269"><a href="#cb5-269" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`laws`</span> <span class="pp">|</span> <span class="in">`check_laws`</span> <span class="pp">|</span> Property-based testing of GetPut and PutGet laws <span class="pp">|</span></span>
+<span id="cb5-270"><a href="#cb5-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error`</span> <span class="pp">|</span> <span class="in">`LensError`</span> <span class="pp">|</span> Error types for lens operations <span class="pp">|</span></span>
+<span id="cb5-271"><a href="#cb5-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-272"><a href="#cb5-272" aria-hidden="true" tabindex="-1"></a>The crate root re-exports <span class="in">`Lens`</span>, <span class="in">`Complement`</span>, <span class="in">`get`</span>, <span class="in">`put`</span>, <span class="in">`Combinator`</span>, and <span class="in">`from_combinators`</span> for convenient access.</span>
+<span id="cb5-273"><a href="#cb5-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-274"><a href="#cb5-274" aria-hidden="true" tabindex="-1"></a><span class="fu">## When to Use Lenses vs. Migrations</span></span>
+<span id="cb5-275"><a href="#cb5-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-276"><a href="#cb5-276" aria-hidden="true" tabindex="-1"></a>The choice between lenses and migrations depends on the nature of the schema change:</span>
+<span id="cb5-277"><a href="#cb5-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-278"><a href="#cb5-278" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Scenario <span class="pp">|</span> Use Migration <span class="pp">|</span> Use Lens <span class="pp">|</span></span>
+<span id="cb5-279"><a href="#cb5-279" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb5-280"><a href="#cb5-280" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rename a field <span class="pp">|</span> Yes (bijective) <span class="pp">|</span> Yes (but unnecessary overhead) <span class="pp">|</span></span>
+<span id="cb5-281"><a href="#cb5-281" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Reorder fields <span class="pp">|</span> Yes (bijective) <span class="pp">|</span> Yes (but unnecessary overhead) <span class="pp">|</span></span>
+<span id="cb5-282"><a href="#cb5-282" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Remove a field <span class="pp">|</span> No (not invertible) <span class="pp">|</span> Yes (complement stores removed data) <span class="pp">|</span></span>
+<span id="cb5-283"><a href="#cb5-283" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Add a required field <span class="pp">|</span> Possible (with default) <span class="pp">|</span> Yes (complement stores default) <span class="pp">|</span></span>
+<span id="cb5-284"><a href="#cb5-284" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Change a field's type <span class="pp">|</span> No (not invertible) <span class="pp">|</span> Yes (if coercion is defined) <span class="pp">|</span></span>
+<span id="cb5-285"><a href="#cb5-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Wrap fields in a new object <span class="pp">|</span> No (not invertible) <span class="pp">|</span> Yes (complement tracks re-parenting) <span class="pp">|</span></span>
+<span id="cb5-286"><a href="#cb5-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Multi-step evolution <span class="pp">|</span> Compose migrations <span class="pp">|</span> Chain combinators <span class="pp">|</span></span>
+<span id="cb5-287"><a href="#cb5-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-288"><a href="#cb5-288" aria-hidden="true" tabindex="-1"></a>As a rule of thumb: if <span class="in">`panproto-mig`</span>'s <span class="in">`invert`</span> would succeed on your migration, use a migration. If it would fail, use a lens.</span>
+<span id="cb5-289"><a href="#cb5-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-290"><a href="#cb5-290" aria-hidden="true" tabindex="-1"></a><span class="fu">## Performance Considerations</span></span>
+<span id="cb5-291"><a href="#cb5-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-292"><a href="#cb5-292" aria-hidden="true" tabindex="-1"></a>Lens operations are slightly more expensive than plain migrations because of the complement computation:</span>
+<span id="cb5-293"><a href="#cb5-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-294"><a href="#cb5-294" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`get`** performs one <span class="in">`wtype_restrict`</span> call (same cost as <span class="in">`lift_wtype`</span>) plus a set-difference pass over the source instance to compute the complement. The overhead is O(|source nodes|).</span>
+<span id="cb5-295"><a href="#cb5-295" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`put`** performs a reconstruction pass that is O(|view nodes| + |complement nodes|), with hash-map lookups for un-remapping and contraction choice disambiguation.</span>
+<span id="cb5-296"><a href="#cb5-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Complement serialization** depends on the complement size, which is proportional to the amount of data dropped during <span class="in">`get`</span>.</span>
+<span id="cb5-297"><a href="#cb5-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-298"><a href="#cb5-298" aria-hidden="true" tabindex="-1"></a>For lossless transformations (empty complement), <span class="in">`get`</span> and <span class="in">`put`</span> have essentially the same cost as a migration lift and its inverse.</span>
+<span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a>In batch scenarios where the same lens is applied to many instances (e.g., projecting a million records to an API view), the lens should be constructed once and reused. The <span class="in">`Lens`</span> struct is <span class="in">`Clone`</span> and can be shared across threads via <span class="in">`Arc&lt;Lens&gt;`</span>. The compiled migration inside the lens is immutable after construction, so concurrent <span class="in">`get`</span> calls are safe without synchronization.</span>
+<span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a>The complement size is the primary cost driver. A lens that drops a single leaf field produces a small complement (one node, one arc). A lens that removes an entire subtree produces a complement proportional to the subtree size. When designing lens-based APIs, consider whether the complement can be compressed or whether a more targeted lens (removing only the specific fields needed) would reduce overhead.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/10-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

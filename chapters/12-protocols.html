@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>12&nbsp; panproto-protocols — Protocol Definitions – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/13-wasm-boundary.html" rel="next">
+<link href="../chapters/11-breaking-changes.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/12-protocols.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#protocol-categories" id="toc-protocol-categories" class="nav-link active" data-scroll-target="#protocol-categories"><span class="header-section-number">12.1</span> Protocol Categories</a></li>
+  <li><a href="#building-block-theories" id="toc-building-block-theories" class="nav-link" data-scroll-target="#building-block-theories"><span class="header-section-number">12.2</span> Building-Block Theories</a>
+  <ul class="collapse">
+  <li><a href="#graph-theories" id="toc-graph-theories" class="nav-link" data-scroll-target="#graph-theories"><span class="header-section-number">12.2.1</span> Graph Theories</a></li>
+  <li><a href="#constraint-theory" id="toc-constraint-theory" class="nav-link" data-scroll-target="#constraint-theory"><span class="header-section-number">12.2.2</span> Constraint Theory</a></li>
+  <li><a href="#instance-theories" id="toc-instance-theories" class="nav-link" data-scroll-target="#instance-theories"><span class="header-section-number">12.2.3</span> Instance Theories</a></li>
+  </ul></li>
+  <li><a href="#the-colimit-composition-pattern" id="toc-the-colimit-composition-pattern" class="nav-link" data-scroll-target="#the-colimit-composition-pattern"><span class="header-section-number">12.3</span> The Colimit Composition Pattern</a>
+  <ul class="collapse">
+  <li><a href="#why-colimit" id="toc-why-colimit" class="nav-link" data-scroll-target="#why-colimit"><span class="header-section-number">12.3.1</span> Why Colimit?</a></li>
+  </ul></li>
+  <li><a href="#theory-groups" id="toc-theory-groups" class="nav-link" data-scroll-target="#theory-groups"><span class="header-section-number">12.4</span> Theory Groups</a>
+  <ul class="collapse">
+  <li><a href="#group-a-constrained-multigraph-w-type" id="toc-group-a-constrained-multigraph-w-type" class="nav-link" data-scroll-target="#group-a-constrained-multigraph-w-type"><span class="header-section-number">12.4.1</span> Group A: Constrained Multigraph + W-Type</a></li>
+  <li><a href="#group-b-hypergraph-functor" id="toc-group-b-hypergraph-functor" class="nav-link" data-scroll-target="#group-b-hypergraph-functor"><span class="header-section-number">12.4.2</span> Group B: Hypergraph + Functor</a></li>
+  <li><a href="#group-c-simple-graph-flat" id="toc-group-c-simple-graph-flat" class="nav-link" data-scroll-target="#group-c-simple-graph-flat"><span class="header-section-number">12.4.3</span> Group C: Simple Graph + Flat</a></li>
+  <li><a href="#group-d-typed-graph-w-type-with-interfaces" id="toc-group-d-typed-graph-w-type-with-interfaces" class="nav-link" data-scroll-target="#group-d-typed-graph-w-type-with-interfaces"><span class="header-section-number">12.4.4</span> Group D: Typed Graph + W-Type with Interfaces</a></li>
+  <li><a href="#group-e-multigraph-w-type-metadata" id="toc-group-e-multigraph-w-type-metadata" class="nav-link" data-scroll-target="#group-e-multigraph-w-type-metadata"><span class="header-section-number">12.4.5</span> Group E: Multigraph + W-Type + Metadata</a></li>
+  </ul></li>
+  <li><a href="#the-protocol-interface" id="toc-the-protocol-interface" class="nav-link" data-scroll-target="#the-protocol-interface"><span class="header-section-number">12.5</span> The Protocol Interface</a></li>
+  <li><a href="#parseremitter-convention" id="toc-parseremitter-convention" class="nav-link" data-scroll-target="#parseremitter-convention"><span class="header-section-number">12.6</span> Parser/Emitter Convention</a>
+  <ul class="collapse">
+  <li><a href="#parsing-strategy" id="toc-parsing-strategy" class="nav-link" data-scroll-target="#parsing-strategy"><span class="header-section-number">12.6.1</span> Parsing Strategy</a></li>
+  <li><a href="#emitting-strategy" id="toc-emitting-strategy" class="nav-link" data-scroll-target="#emitting-strategy"><span class="header-section-number">12.6.2</span> Emitting Strategy</a></li>
+  </ul></li>
+  <li><a href="#adding-a-new-protocol" id="toc-adding-a-new-protocol" class="nav-link" data-scroll-target="#adding-a-new-protocol"><span class="header-section-number">12.7</span> Adding a New Protocol</a>
+  <ul class="collapse">
+  <li><a href="#step-1-identify-component-theories" id="toc-step-1-identify-component-theories" class="nav-link" data-scroll-target="#step-1-identify-component-theories"><span class="header-section-number">12.7.1</span> Step 1: Identify Component Theories</a></li>
+  <li><a href="#step-2-compose-via-colimit" id="toc-step-2-compose-via-colimit" class="nav-link" data-scroll-target="#step-2-compose-via-colimit"><span class="header-section-number">12.7.2</span> Step 2: Compose via Colimit</a></li>
+  <li><a href="#step-3-define-edge-rules-and-vertex-kinds" id="toc-step-3-define-edge-rules-and-vertex-kinds" class="nav-link" data-scroll-target="#step-3-define-edge-rules-and-vertex-kinds"><span class="header-section-number">12.7.3</span> Step 3: Define Edge Rules and Vertex Kinds</a></li>
+  <li><a href="#step-4-implement-parser-and-emitter" id="toc-step-4-implement-parser-and-emitter" class="nav-link" data-scroll-target="#step-4-implement-parser-and-emitter"><span class="header-section-number">12.7.4</span> Step 4: Implement Parser and Emitter</a></li>
+  <li><a href="#step-5-add-integration-tests" id="toc-step-5-add-integration-tests" class="nav-link" data-scroll-target="#step-5-add-integration-tests"><span class="header-section-number">12.7.5</span> Step 5: Add Integration Tests</a></li>
+  <li><a href="#worked-example-a-hypothetical-taskml-protocol" id="toc-worked-example-a-hypothetical-taskml-protocol" class="nav-link" data-scroll-target="#worked-example-a-hypothetical-taskml-protocol"><span class="header-section-number">12.7.6</span> Worked Example: A Hypothetical “TaskML” Protocol</a></li>
+  </ul></li>
+  <li><a href="#theoretical-foundations" id="toc-theoretical-foundations" class="nav-link" data-scroll-target="#theoretical-foundations"><span class="header-section-number">12.8</span> Theoretical Foundations</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">12.9</span> Summary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/12-protocols.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/12-protocols.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The <code>panproto-protocols</code> crate is where abstract category theory meets concrete data formats. It defines 60+ protocol specifications across 9 categories, each built by composing reusable building-block theories via colimit. This chapter explains the theory composition pattern, walks through the building blocks, and provides a guide for adding new protocols.</p>
+<p>If you are implementing a new protocol or trying to understand why panproto handles your protocol the way it does, this chapter is the primary reference.</p>
+<section id="protocol-categories" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="protocol-categories"><span class="header-section-number">12.1</span> Protocol Categories</h2>
+<p>panproto organizes protocols into nine categories:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>Examples</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Serialization</td>
+<td>Protobuf, Avro, Thrift, Cap’n Proto, FlatBuffers, ASN.1, Bond, MsgPack</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>Data Schema</td>
+<td>JSON Schema, XML/XSD, CSV/Table Schema, YAML, TOML, CDDL, INI, BSON</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>API</td>
+<td>GraphQL, OpenAPI, AsyncAPI, RAML, JSON:API</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Database</td>
+<td>SQL, MongoDB, Cassandra, DynamoDB, Neo4j, Redis</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>Type System</td>
+<td>TypeScript, Python, Rust, Java, Go, Swift, Kotlin, C#</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>Web/Document</td>
+<td>ATProto, HTML, CSS, DOCX, ODF, Markdown, JSX, Vue, Svelte</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td>Data Science</td>
+<td>Parquet, Arrow, DataFrame</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>Domain</td>
+<td>GeoJSON, FHIR, RSS/Atom, vCard/iCal, EDI X12, SWIFT MT</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>Config</td>
+<td>HCL, K8s CRD, Docker Compose, CloudFormation, Ansible</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>Despite this diversity, every protocol is defined using the same pattern: compose building-block theories via colimit, define edge rules and vertex kinds, and implement a parser/emitter pair. The combinatorial explosion of protocol-specific logic that plagues conventional interop tools is avoided by factoring common structure into shared theories.</p>
+</section>
+<section id="building-block-theories" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="building-block-theories"><span class="header-section-number">12.2</span> Building-Block Theories</h2>
+<p>The <code>theories</code> module defines the reusable GATs that protocols compose to form their schema and instance theories. Each function returns a standalone <code>Theory</code> value that can be registered in a theory registry and referenced by name.</p>
+<section id="graph-theories" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="graph-theories"><span class="header-section-number">12.2.1</span> Graph Theories</h3>
+<p>The three graph theories form the foundation for schema representation:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//! Shared component theory definitions.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">//! These are the building-block GATs that protocols compose via colimit</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">//! to form their schema and instance theories. Each function returns</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">//! a standalone [`panproto_gat::Theory`] that can be registered and referenced by name.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">panproto_gat::</span><span class="op">{</span>Operation<span class="op">,</span> Sort<span class="op">,</span> SortParam<span class="op">,</span> Theory<span class="op">};</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThGraph`: directed graph with `Vertex` and `Edge` sorts.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">/// Operations: `src : Edge -&gt; Vertex`, `tgt : Edge -&gt; Vertex`.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThGraph"</span><span class="op">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span> <span class="pp">Sort::</span>simple(<span class="st">"Edge"</span>)]<span class="op">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"src"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"tgt"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThSimpleGraph`: simple graph (no parallel edges).</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// Same sorts and operations as `ThGraph`, but with an additional</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">/// equation enforcing edge uniqueness by endpoints.</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_simple_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThSimpleGraph"</span><span class="op">,</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span> <span class="pp">Sort::</span>simple(<span class="st">"Edge"</span>)]<span class="op">,</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"src"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"tgt"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThHypergraph`: hypergraph with `Vertex`, `HyperEdge`, and `Label` sorts.</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">/// A hyper-edge connects multiple vertices via labeled positions.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_hypergraph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThHypergraph"</span><span class="op">,</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"HyperEdge"</span>)<span class="op">,</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Label"</span>)<span class="op">,</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>new(</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>                <span class="st">"incident"</span><span class="op">,</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="pp">vec!</span>[</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"he"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"HyperEdge"</span><span class="op">.</span>into())<span class="op">,</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"l"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"Label"</span><span class="op">.</span>into())<span class="op">,</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>                ]<span class="op">,</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Vertex"</span><span class="op">,</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>            )<span class="op">,</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"parent_label"</span><span class="op">,</span> <span class="st">"he"</span><span class="op">,</span> <span class="st">"HyperEdge"</span><span class="op">,</span> <span class="st">"Label"</span>)<span class="op">,</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong><code>th_graph</code></strong> is the most fundamental building block: a directed graph with <code>Vertex</code> and <code>Edge</code> sorts and <code>src</code>/<code>tgt</code> operations. Nearly every protocol uses this theory as its base, since schemas are fundamentally graphs—vertices represent types or fields, and edges represent relationships between them.</p>
+<p><strong><code>th_simple_graph</code></strong> adds an equation enforcing edge uniqueness by endpoints. This is appropriate for protocols like Protobuf where each field name must be unique within a message—there cannot be two distinct edges with the same source and target.</p>
+<p><strong><code>th_hypergraph</code></strong> introduces multi-arity connections via <code>HyperEdge</code> and <code>Label</code> sorts. A hyper-edge connects multiple vertices through labeled positions, modeling constructs like SQL table definitions (where a table relates multiple columns via labeled positions like “column_name” and “column_type”) and multi-argument function signatures.</p>
+</section>
+<section id="constraint-theory" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="constraint-theory"><span class="header-section-number">12.2.2</span> Constraint Theory</h3>
+<p>The constraint theory demonstrates the dependent sort pattern:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThConstraint`: vertex-attached constraints.</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">/// Adds a dependent sort `Constraint(v: Vertex)` with a `target` operation.</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_constraint() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThConstraint"</span><span class="op">,</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>dependent(<span class="st">"Constraint"</span><span class="op">,</span> <span class="pp">vec!</span>[<span class="pp">SortParam::</span>new(<span class="st">"v"</span><span class="op">,</span> <span class="st">"Vertex"</span>)])<span class="op">,</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Operation::</span>unary(<span class="st">"target"</span><span class="op">,</span> <span class="st">"c"</span><span class="op">,</span> <span class="st">"Constraint"</span><span class="op">,</span> <span class="st">"Vertex"</span>)]<span class="op">,</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>Constraint</code> sort is parameterized by a vertex via <code>SortParam::new("v", "Vertex")</code>. This is a GAT-level encoding of the fact that constraints are attached to specific schema elements. A <code>maxLength</code> constraint on a string field is a different sort instance than a <code>maxLength</code> constraint on a different field, even though they share the same sort name.</p>
+<p>This dependent sort pattern has practical consequences throughout panproto:</p>
+<ul>
+<li>The migration engine’s existence checker (Chapter 9) can scope constraint compatibility checks to individual vertices.</li>
+<li>The breaking change detector (Chapter 11) can attribute constraint tightening to the specific vertex affected.</li>
+<li>The lens system (Chapter 10) can track per-vertex constraint changes in the complement.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The dependent sort <code>Constraint(v: Vertex)</code> is a GAT-level encoding of the categorical notion of a fibered sort <span class="citation" data-cites="cartmell1986">(<a href="#ref-cartmell1986" role="doc-biblioref">Cartmell 1986</a>)</span>. It ensures that constraint-related operations are automatically scoped to the correct vertex, without requiring runtime dispatch or downcasting.</p>
+</div>
+</div>
+</section>
+<section id="instance-theories" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="instance-theories"><span class="header-section-number">12.2.3</span> Instance Theories</h3>
+<p>Beyond the schema theories, panproto defines instance theories that model how data is structured within a schema:</p>
+<ul>
+<li><p><strong><code>th_wtype</code></strong>: W-type trees with <code>Node</code>, <code>Arc</code>, and <code>Value</code> sorts. Operations include <code>anchor</code> (mapping nodes to schema vertices), <code>arc_src</code>/<code>arc_tgt</code> (tree edges), <code>arc_edge</code> (labeling arcs with schema edges), and <code>node_value</code> (payload). Used by JSON-like, XML-like, and document protocols.</p></li>
+<li><p><strong><code>th_functor</code></strong>: set-valued functors with <code>Table</code>, <code>Row</code>, and <code>ForeignKey</code> sorts. Operations include <code>table_vertex</code> (mapping tables to schema vertices) and <code>fk_src</code>/<code>fk_tgt</code> (foreign key endpoints). Used by relational and columnar protocols.</p></li>
+<li><p><strong><code>th_flat</code></strong>: flat key-value structures with <code>Node</code>, <code>Field</code>, and <code>Value</code> sorts. Operations include <code>field_node</code> (owning node), <code>field_value</code> (payload), and <code>node_anchor</code> (schema vertex). Used by IDL protocols like Protobuf where data has a flat field structure without deep nesting.</p></li>
+<li><p><strong><code>th_meta</code></strong>: metadata extension adding <code>Discriminator</code> and <code>ExtraField</code> sorts. Composes with <code>th_wtype</code> via colimit over the shared <code>Node</code> sort. Used by document protocols with mixed content models (XML, HTML) where elements can have both structured children and unstructured attributes.</p></li>
+</ul>
+</section>
+</section>
+<section id="the-colimit-composition-pattern" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="the-colimit-composition-pattern"><span class="header-section-number">12.3</span> The Colimit Composition Pattern</h2>
+<p>Each protocol is defined by composing building-block theories via <em>colimit</em>—the categorical operation that glues theories together along shared sorts. The shared sorts act as the “meeting point” where two theories agree on what a concept means.</p>
+<p>For example, ATProto’s schema theory is the colimit of <code>ThGraph</code>, <code>ThConstraint</code>, and <code>ThMulti</code>, all sharing the <code>Vertex</code> sort:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">graph TD
+    ThGraph["ThGraph&lt;br/&gt;(Vertex, Edge, src, tgt)"]
+    ThConstraint["ThConstraint&lt;br/&gt;(Vertex, Constraint)"]
+    ThMulti["ThMulti&lt;br/&gt;(Vertex, Edge, EdgeLabel)"]
+    SharedV["Shared: Vertex"]
+    SharedVE["Shared: Vertex, Edge"]
+
+    ThGraph --&gt;|colimit over| SharedV
+    ThConstraint --&gt;|colimit over| SharedV
+    SharedV --&gt; GC["ThGraph + ThConstraint"]
+    GC --&gt;|colimit over| SharedVE
+    ThMulti --&gt;|colimit over| SharedVE
+    SharedVE --&gt; Schema["ATProto Schema Theory"]
+
+    ThWType["ThWType&lt;br/&gt;(Node, Arc, Value)"] --&gt; Instance["ATProto Instance Theory"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The colimit ensures that the <code>Vertex</code> sort in <code>ThGraph</code> and the <code>Vertex</code> sort in <code>ThConstraint</code> are identified—they refer to the same concept. The resulting schema theory has all the sorts and operations from both components, with shared sorts unified. This is not a mere union; the colimit preserves the equations and operation signatures from both theories, ensuring that the composed theory is well-formed.</p>
+<section id="why-colimit" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="why-colimit"><span class="header-section-number">12.3.1</span> Why Colimit?</h3>
+<p>The colimit is the right categorical construction because it is the universal way to combine theories while identifying shared structure. Alternatives like products or coproducts either identify too much (products force all sorts to be shared) or too little (coproducts share nothing). The colimit lets you precisely control which sorts are identified and which remain distinct.</p>
+<p>In practice, this means:</p>
+<ul>
+<li><code>ThGraph</code> and <code>ThConstraint</code> share <code>Vertex</code> but not <code>Edge</code> and <code>Constraint</code>—edges and constraints are distinct concepts that happen to be attached to the same vertex sort.</li>
+<li><code>ThGraph</code> and <code>ThMulti</code> share both <code>Vertex</code> and <code>Edge</code>—multi-edge labels are an extension of the same edge concept.</li>
+<li><code>ThWType</code> and <code>ThMeta</code> share <code>Node</code>—metadata is an extension of the same node concept.</li>
+</ul>
+</section>
+</section>
+<section id="theory-groups" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="theory-groups"><span class="header-section-number">12.4</span> Theory Groups</h2>
+<p>Protocols cluster into five theory groups based on their schema/instance theory pair. Each group has a corresponding <code>register_*</code> helper function that handles the colimit computation:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Schema Theory</th>
+<th>Instance Theory</th>
+<th>Registration Helper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>ThGraph + ThConstraint + ThMulti</td>
+<td>ThWType</td>
+<td><code>register_constrained_multigraph_wtype</code></td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>ThHypergraph + ThConstraint</td>
+<td>ThFunctor</td>
+<td><code>register_hypergraph_functor</code></td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>ThSimpleGraph + ThConstraint</td>
+<td>ThFlat</td>
+<td><code>register_simple_graph_flat</code></td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>ThGraph + ThConstraint + ThMulti + ThInterface</td>
+<td>ThWType</td>
+<td><code>register_typed_graph_wtype</code></td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>ThGraph + ThConstraint + ThMulti</td>
+<td>ThWType + ThMeta</td>
+<td><code>register_multigraph_wtype_meta</code></td>
+</tr>
+</tbody>
+</table>
+<section id="group-a-constrained-multigraph-w-type" class="level3" data-number="12.4.1">
+<h3 data-number="12.4.1" class="anchored" data-anchor-id="group-a-constrained-multigraph-w-type"><span class="header-section-number">12.4.1</span> Group A: Constrained Multigraph + W-Type</h3>
+<p>The largest group, covering protocols with tree-shaped data and potentially parallel edges. ATProto, JSON Schema, OpenAPI, AsyncAPI, MongoDB, YAML Schema, TOML Schema, and many more belong here. The schema theory combines directed graphs (for type relationships), constraints (for validation rules like <code>maxLength</code>), and multi-edge support (for fields that share the same type). Instances are W-type trees.</p>
+</section>
+<section id="group-b-hypergraph-functor" class="level3" data-number="12.4.2">
+<h3 data-number="12.4.2" class="anchored" data-anchor-id="group-b-hypergraph-functor"><span class="header-section-number">12.4.2</span> Group B: Hypergraph + Functor</h3>
+<p>Covers relational and columnar protocols: SQL, Cassandra, DynamoDB, Parquet, Arrow, DataFrame, CSV/Table Schema. The schema theory uses hypergraphs because tables are multi-arity relations (a table “connects” its columns). Instances are set-valued functors—each table maps to a set of rows.</p>
+</section>
+<section id="group-c-simple-graph-flat" class="level3" data-number="12.4.3">
+<h3 data-number="12.4.3" class="anchored" data-anchor-id="group-c-simple-graph-flat"><span class="header-section-number">12.4.3</span> Group C: Simple Graph + Flat</h3>
+<p>Covers IDL and serialization protocols: Protobuf, Avro, Thrift, Cap’n Proto, FlatBuffers, ASN.1, Bond, HCL, Redis. These protocols have flat field structures (no deep nesting within a single message/record) and enforce field uniqueness, hence the simple graph. Instances are flat key-value structures.</p>
+</section>
+<section id="group-d-typed-graph-w-type-with-interfaces" class="level3" data-number="12.4.4">
+<h3 data-number="12.4.4" class="anchored" data-anchor-id="group-d-typed-graph-w-type-with-interfaces"><span class="header-section-number">12.4.4</span> Group D: Typed Graph + W-Type with Interfaces</h3>
+<p>Covers type systems and API schemas with inheritance: GraphQL, TypeScript, Python, Rust, Java, Go, Swift, Kotlin, C#. Adds the <code>ThInterface</code> theory to Group A, modeling constructs like GraphQL interfaces, TypeScript interfaces, and Java abstract classes.</p>
+</section>
+<section id="group-e-multigraph-w-type-metadata" class="level3" data-number="12.4.5">
+<h3 data-number="12.4.5" class="anchored" data-anchor-id="group-e-multigraph-w-type-metadata"><span class="header-section-number">12.4.5</span> Group E: Multigraph + W-Type + Metadata</h3>
+<p>Covers document formats with mixed content: XML/XSD, HTML, CSS, DOCX, ODF, Neo4j. Combines Group A’s schema theory with an instance theory that adds metadata support (discriminators and extra fields) for elements that have both structured children and unstructured attributes.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When adding a new protocol, first determine which theory group it belongs to. If it fits an existing group, you can reuse the corresponding <code>register_*</code> function and only need to define the protocol’s edge rules, vertex kinds, and parser/emitter.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="the-protocol-interface" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="the-protocol-interface"><span class="header-section-number">12.5</span> The Protocol Interface</h2>
+<p>Each protocol module exports a <code>protocol()</code> function that returns a <code>Protocol</code> struct. The <code>Protocol</code> specifies:</p>
+<ul>
+<li><strong><code>name</code></strong>: the protocol identifier (e.g., <code>"atproto"</code>, <code>"json_schema"</code>, <code>"sql"</code>).</li>
+<li><strong><code>schema_theory</code></strong> and <strong><code>instance_theory</code></strong>: names referencing entries in the theory registry, populated by the <code>register_*</code> helpers.</li>
+<li><strong><code>edge_rules</code></strong>: which edge kinds are structurally significant and what source/target vertex kinds they connect. Used by <code>panproto-check</code> to classify breaking changes (Chapter 11).</li>
+<li><strong><code>obj_kinds</code></strong>: vertex kinds that represent composite objects (as opposed to scalar values like <code>"string"</code> or <code>"integer"</code>). Used during schema parsing and by the lens system.</li>
+<li><strong><code>constraint_sorts</code></strong>: which constraint sorts this protocol recognizes (e.g., <code>"maxLength"</code>, <code>"pattern"</code>, <code>"maxGraphemes"</code>). Used by both the migration engine’s existence checker and the breaking change detector.</li>
+</ul>
+<p>The theory names in the <code>Protocol</code> struct reference entries in the theory registry, which is populated by the <code>register_*</code> helpers. This indirection keeps protocol definitions declarative—a protocol does not construct its own theories, it names them.</p>
+</section>
+<section id="parseremitter-convention" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="parseremitter-convention"><span class="header-section-number">12.6</span> Parser/Emitter Convention</h2>
+<p>Every protocol implements a bidirectional format conversion following a consistent naming convention:</p>
+<ul>
+<li><strong>Parser</strong>: <code>parse_*(input: &amp;str) -&gt; Result&lt;Schema, ProtocolError&gt;</code> converts a native-format definition into panproto’s graph-level <code>Schema</code> representation.</li>
+<li><strong>Emitter</strong>: <code>emit_*(schema: &amp;Schema) -&gt; Result&lt;String, ProtocolError&gt;</code> converts a <code>Schema</code> back into the native format.</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li><code>parse_json_schema(json_str)</code> parses a JSON Schema document into a <code>Schema</code>.</li>
+<li><code>emit_protobuf(schema)</code> emits a <code>.proto</code> file from a <code>Schema</code>.</li>
+<li><code>parse_sql(ddl_str)</code> parses SQL DDL statements into a <code>Schema</code>.</li>
+</ul>
+<p>This bidirectionality is essential for panproto’s workflow: parse a source format, compute a migration or lens, apply it, and emit the result in the target format. The parser/emitter pair also enables round-trip testing: <code>parse(emit(parse(input)))</code> should produce the same <code>Schema</code> as <code>parse(input)</code>.</p>
+<section id="parsing-strategy" class="level3" data-number="12.6.1">
+<h3 data-number="12.6.1" class="anchored" data-anchor-id="parsing-strategy"><span class="header-section-number">12.6.1</span> Parsing Strategy</h3>
+<p>Parsers typically follow a two-phase approach:</p>
+<ol type="1">
+<li><strong>Syntactic parsing</strong>: use a format-specific parser (e.g., <code>serde_json</code> for JSON Schema, <code>tree-sitter</code> for Protobuf) to produce an AST or intermediate representation.</li>
+<li><strong>Semantic translation</strong>: walk the AST, creating vertices for types and fields, edges for relationships, constraints for validation rules, and hyper-edges for multi-arity relations.</li>
+</ol>
+</section>
+<section id="emitting-strategy" class="level3" data-number="12.6.2">
+<h3 data-number="12.6.2" class="anchored" data-anchor-id="emitting-strategy"><span class="header-section-number">12.6.2</span> Emitting Strategy</h3>
+<p>Emitters reverse the process:</p>
+<ol type="1">
+<li><strong>Topology traversal</strong>: walk the schema graph, identifying root vertices, following edges in topological order.</li>
+<li><strong>Format construction</strong>: generate the native syntax for each vertex (type declaration, field definition, constraint annotation) and edge (relationship, containment).</li>
+</ol>
+</section>
+</section>
+<section id="adding-a-new-protocol" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="adding-a-new-protocol"><span class="header-section-number">12.7</span> Adding a New Protocol</h2>
+<p>To add a new protocol to panproto, follow these five steps:</p>
+<section id="step-1-identify-component-theories" class="level3" data-number="12.7.1">
+<h3 data-number="12.7.1" class="anchored" data-anchor-id="step-1-identify-component-theories"><span class="header-section-number">12.7.1</span> Step 1: Identify Component Theories</h3>
+<p>Determine which building-block theories your protocol needs. Most protocols fit one of the five existing groups. Ask yourself:</p>
+<ul>
+<li>Does the protocol have directed edges between fields/types? Use <code>ThGraph</code>.</li>
+<li>Does the protocol support parallel edges (e.g., multiple fields with the same type)? Add <code>ThMulti</code>.</li>
+<li>Does the protocol have constraints (min/max length, required fields, patterns)? Add <code>ThConstraint</code>.</li>
+<li>Does the protocol have multi-arity relations (e.g., SQL foreign keys, table definitions)? Use <code>ThHypergraph</code> instead of <code>ThGraph</code>.</li>
+<li>Does the protocol support interfaces or inheritance? Add <code>ThInterface</code>.</li>
+<li>Does the protocol have flat field structures with no deep nesting? Use <code>ThFlat</code> as the instance theory.</li>
+<li>Does the protocol have tree-structured data? Use <code>ThWType</code>.</li>
+<li>Does the protocol have mixed content (structured + unstructured)? Add <code>ThMeta</code> to <code>ThWType</code>.</li>
+</ul>
+</section>
+<section id="step-2-compose-via-colimit" class="level3" data-number="12.7.2">
+<h3 data-number="12.7.2" class="anchored" data-anchor-id="step-2-compose-via-colimit"><span class="header-section-number">12.7.2</span> Step 2: Compose via Colimit</h3>
+<p>If your protocol fits an existing group, call the corresponding <code>register_*</code> function with your theory names:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In your protocol module's register function:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="pp">theories::</span>register_constrained_multigraph_wtype(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    registry<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ThMyProtocolSchema"</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ThMyProtocolInstance"</span><span class="op">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If your protocol needs a novel combination, compose the theories manually using <code>panproto_gat::colimit</code>, specifying shared sorts at each step. Follow the pattern established by the existing <code>register_*</code> functions.</p>
+</section>
+<section id="step-3-define-edge-rules-and-vertex-kinds" class="level3" data-number="12.7.3">
+<h3 data-number="12.7.3" class="anchored" data-anchor-id="step-3-define-edge-rules-and-vertex-kinds"><span class="header-section-number">12.7.3</span> Step 3: Define Edge Rules and Vertex Kinds</h3>
+<p>Create a <code>protocol()</code> function in your module:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> protocol() <span class="op">-&gt;</span> Protocol <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    Protocol <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="st">"my_protocol"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        schema_theory<span class="op">:</span> <span class="st">"ThMyProtocolSchema"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        instance_theory<span class="op">:</span> <span class="st">"ThMyProtocolInstance"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        edge_rules<span class="op">:</span> <span class="pp">vec!</span>[<span class="co">/* ... */</span>]<span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        obj_kinds<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"object"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"message"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        constraint_sorts<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"maxLength"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="step-4-implement-parser-and-emitter" class="level3" data-number="12.7.4">
+<h3 data-number="12.7.4" class="anchored" data-anchor-id="step-4-implement-parser-and-emitter"><span class="header-section-number">12.7.4</span> Step 4: Implement Parser and Emitter</h3>
+<p>Write <code>parse_my_protocol</code> to convert the native format into a <code>Schema</code>. Write <code>emit_my_protocol</code> to convert back. Both should handle the full vocabulary of the protocol, mapping native concepts to graph elements.</p>
+</section>
+<section id="step-5-add-integration-tests" class="level3" data-number="12.7.5">
+<h3 data-number="12.7.5" class="anchored" data-anchor-id="step-5-add-integration-tests"><span class="header-section-number">12.7.5</span> Step 5: Add Integration Tests</h3>
+<p>Add tests that round-trip: parse a native document, emit it back, and verify the result matches. Also add migration tests that exercise the protocol’s edge rules and constraint sorts. Finally, add breaking-change tests to verify that the classification logic behaves correctly for your protocol’s edge rules.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When composing theories via colimit, the shared theory must contain exactly the sorts that should be identified. If you share too few sorts, the colimit will create duplicate sorts that should be unified. If you share too many sorts, you may over-constrain the composition. Review the existing <code>register_*</code> functions for examples of correct sharing patterns.</p>
+</div>
+</div>
+</section>
+<section id="worked-example-a-hypothetical-taskml-protocol" class="level3" data-number="12.7.6">
+<h3 data-number="12.7.6" class="anchored" data-anchor-id="worked-example-a-hypothetical-taskml-protocol"><span class="header-section-number">12.7.6</span> Worked Example: A Hypothetical “TaskML” Protocol</h3>
+<p>Suppose you are defining a protocol for a task management markup language with:</p>
+<ul>
+<li>Tasks have fields (name, description, priority).</li>
+<li>Tasks can have subtasks (nesting).</li>
+<li>Fields have validation constraints (maxLength on name, enum values for priority).</li>
+<li>No parallel edges (each field name is unique within a task).</li>
+</ul>
+<p><strong>Step 1</strong>: This maps to Group C (simple graph + flat). The simple graph enforces field uniqueness; the flat instance theory models the non-nested field structure. But wait—subtasks imply nesting, which requires W-type trees. So this is actually Group A (constrained multigraph + W-type), minus the multi-edge support since field names are unique. You could use Group A as-is (the multi-edge capability is unused but harmless) or define a custom composition of <code>ThSimpleGraph + ThConstraint</code> with <code>ThWType</code>.</p>
+<p><strong>Step 2</strong>: Using Group A for simplicity:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">theories::</span>register_constrained_multigraph_wtype(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    registry<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ThTaskMLSchema"</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ThTaskMLInstance"</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Step 3</strong>: Define the protocol:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> protocol() <span class="op">-&gt;</span> Protocol <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    Protocol <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="st">"taskml"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        schema_theory<span class="op">:</span> <span class="st">"ThTaskMLSchema"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        instance_theory<span class="op">:</span> <span class="st">"ThTaskMLInstance"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        edge_rules<span class="op">:</span> <span class="pp">vec!</span>[EdgeRule <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            edge_kind<span class="op">:</span> <span class="st">"field"</span><span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            src_kinds<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"task"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            tgt_kinds<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"string"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"enum"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"integer"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>]<span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        obj_kinds<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"task"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        constraint_sorts<span class="op">:</span> <span class="pp">vec!</span>[<span class="st">"maxLength"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"enumValues"</span><span class="op">.</span>into()]<span class="op">,</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Steps 4–5</strong>: Implement <code>parse_taskml</code> and <code>emit_taskml</code>, then write round-trip and migration tests.</p>
+</section>
+</section>
+<section id="theoretical-foundations" class="level2" data-number="12.8">
+<h2 data-number="12.8" class="anchored" data-anchor-id="theoretical-foundations"><span class="header-section-number">12.8</span> Theoretical Foundations</h2>
+<p>The colimit composition pattern implements the categorical notion of a <em>theory morphism</em> between generalized algebraic theories <span class="citation" data-cites="cartmell1986">(<a href="#ref-cartmell1986" role="doc-biblioref">Cartmell 1986</a>)</span>. Each building-block theory is a GAT, and the colimit computes the pushout in the category of GATs, identifying sorts along the span defined by the shared theory.</p>
+<p>This is not merely an implementation convenience—it is a formal guarantee. The colimit preserves the equations and well-formedness conditions of both component theories. If <code>ThGraph</code> guarantees that every edge has a source and target vertex, and <code>ThConstraint</code> guarantees that every constraint is attached to a vertex, then the colimit theory inherits both guarantees.</p>
+<p>The protocol architecture follows the design principles outlined in <span class="citation" data-cites="lynch2024">Lynch et al. (<a href="#ref-lynch2024" role="doc-biblioref">2024</a>)</span>, where data interchange protocols are understood as presentations of algebraic theories and protocol interoperability is mediated by theory morphisms. panproto’s parser/emitter pairs implement the “model functor” that maps between the abstract theory and its concrete syntactic presentation.</p>
+<p>For a hands-on guide to building your own protocol, see <a href="https://panproto.github.io/tutorial/chapters/10-building-your-own-protocol.html">tutorial chapter 10</a>.</p>
+</section>
+<section id="summary" class="level2" data-number="12.9">
+<h2 data-number="12.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">12.9</span> Summary</h2>
+<p>The <code>panproto-protocols</code> crate provides:</p>
+<ul>
+<li><strong>10 building-block theories</strong> (<code>ThGraph</code>, <code>ThSimpleGraph</code>, <code>ThHypergraph</code>, <code>ThConstraint</code>, <code>ThMulti</code>, <code>ThInterface</code>, <code>ThWType</code>, <code>ThFunctor</code>, <code>ThFlat</code>, <code>ThMeta</code>) that can be composed via colimit.</li>
+<li><strong>5 theory groups</strong> (A through E) covering the structural patterns found across 60+ protocols.</li>
+<li><strong>A uniform protocol interface</strong>: every protocol exports a <code>protocol()</code> function, a parser, and an emitter.</li>
+<li><strong>A clear extension path</strong>: adding a new protocol requires identifying component theories, composing them, defining rules, and implementing format conversion.</li>
+</ul>
+<p>The colimit composition pattern is what makes panproto’s protocol coverage tractable. Rather than implementing migration, lens, and breaking-change logic separately for each protocol, the shared theory infrastructure ensures that all protocols automatically benefit from the same engine. Adding a new protocol is a matter of choosing the right building blocks and writing a parser/emitter—the migration engine, lens system, and breaking change detector work for free.</p>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-cartmell1986" class="csl-entry" role="listitem">
+Cartmell, John. 1986. <span>“Generalised Algebraic Theories and Contextual Categories.”</span> <em>Annals of Pure and Applied Logic</em> 32: 209–43. <a href="https://doi.org/10.1016/0168-0072(86)90053-9">https://doi.org/10.1016/0168-0072(86)90053-9</a>.
+</div>
+<div id="ref-lynch2024" class="csl-entry" role="listitem">
+Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<span>GATlab</span>: Modeling and Programming with Generalized Algebraic Theories.”</span> <em>arXiv Preprint arXiv:2404.04837</em>, ahead of print. <a href="https://doi.org/10.48550/arXiv.2404.04837">https://doi.org/10.48550/arXiv.2404.04837</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/11-breaking-changes.html" class="pagination-link" aria-label="panproto-check --- Breaking Change Detection">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/13-wasm-boundary.html" class="pagination-link" aria-label="panproto-wasm --- The WASM Boundary">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-protocols --- Protocol Definitions</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-protocols`</span> crate is where abstract category theory meets concrete data formats. It defines 60+ protocol specifications across 9 categories, each built by composing reusable building-block theories via colimit. This chapter explains the theory composition pattern, walks through the building blocks, and provides a guide for adding new protocols.</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>If you are implementing a new protocol or trying to understand why panproto handles your protocol the way it does, this chapter is the primary reference.</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol Categories</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>panproto organizes protocols into nine categories:</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Category <span class="pp">|</span> Examples <span class="pp">|</span> Count <span class="pp">|</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Serialization <span class="pp">|</span> Protobuf, Avro, Thrift, Cap'n Proto, FlatBuffers, ASN.1, Bond, MsgPack <span class="pp">|</span> 8 <span class="pp">|</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Data Schema <span class="pp">|</span> JSON Schema, XML/XSD, CSV/Table Schema, YAML, TOML, CDDL, INI, BSON <span class="pp">|</span> 8 <span class="pp">|</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> API <span class="pp">|</span> GraphQL, OpenAPI, AsyncAPI, RAML, JSON:API <span class="pp">|</span> 5 <span class="pp">|</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Database <span class="pp">|</span> SQL, MongoDB, Cassandra, DynamoDB, Neo4j, Redis <span class="pp">|</span> 6 <span class="pp">|</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Type System <span class="pp">|</span> TypeScript, Python, Rust, Java, Go, Swift, Kotlin, C# <span class="pp">|</span> 8 <span class="pp">|</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Web/Document <span class="pp">|</span> ATProto, HTML, CSS, DOCX, ODF, Markdown, JSX, Vue, Svelte <span class="pp">|</span> 9 <span class="pp">|</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Data Science <span class="pp">|</span> Parquet, Arrow, DataFrame <span class="pp">|</span> 3 <span class="pp">|</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Domain <span class="pp">|</span> GeoJSON, FHIR, RSS/Atom, vCard/iCal, EDI X12, SWIFT MT <span class="pp">|</span> 6 <span class="pp">|</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Config <span class="pp">|</span> HCL, K8s CRD, Docker Compose, CloudFormation, Ansible <span class="pp">|</span> 5 <span class="pp">|</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>Despite this diversity, every protocol is defined using the same pattern: compose building-block theories via colimit, define edge rules and vertex kinds, and implement a parser/emitter pair. The combinatorial explosion of protocol-specific logic that plagues conventional interop tools is avoided by factoring common structure into shared theories.</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building-Block Theories</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>The <span class="in">`theories`</span> module defines the reusable GATs that protocols compose to form their schema and instance theories. Each function returns a standalone <span class="in">`Theory`</span> value that can be registered in a theory registry and referenced by name.</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graph Theories</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>The three graph theories form the foundation for schema representation:</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-protocols/src/theories.rs" start-line=1 end-line=67}</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>**`th_graph`** is the most fundamental building block: a directed graph with <span class="in">`Vertex`</span> and <span class="in">`Edge`</span> sorts and <span class="in">`src`</span>/<span class="in">`tgt`</span> operations. Nearly every protocol uses this theory as its base, since schemas are fundamentally graphs---vertices represent types or fields, and edges represent relationships between them.</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>**`th_simple_graph`** adds an equation enforcing edge uniqueness by endpoints. This is appropriate for protocols like Protobuf where each field name must be unique within a message---there cannot be two distinct edges with the same source and target.</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>**`th_hypergraph`** introduces multi-arity connections via <span class="in">`HyperEdge`</span> and <span class="in">`Label`</span> sorts. A hyper-edge connects multiple vertices through labeled positions, modeling constructs like SQL table definitions (where a table relates multiple columns via labeled positions like "column_name" and "column_type") and multi-argument function signatures.</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint Theory</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>The constraint theory demonstrates the dependent sort pattern:</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-protocols/src/theories.rs" start-line=69 end-line=83}</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Constraint`</span> sort is parameterized by a vertex via <span class="in">`SortParam::new("v", "Vertex")`</span>. This is a GAT-level encoding of the fact that constraints are attached to specific schema elements. A <span class="in">`maxLength`</span> constraint on a string field is a different sort instance than a <span class="in">`maxLength`</span> constraint on a different field, even though they share the same sort name.</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>This dependent sort pattern has practical consequences throughout panproto:</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The migration engine's existence checker (Chapter 9) can scope constraint compatibility checks to individual vertices.</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The breaking change detector (Chapter 11) can attribute constraint tightening to the specific vertex affected.</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The lens system (Chapter 10) can track per-vertex constraint changes in the complement.</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>The dependent sort <span class="in">`Constraint(v: Vertex)`</span> is a GAT-level encoding of the categorical notion of a fibered sort <span class="co">[</span><span class="ot">@cartmell1986</span><span class="co">]</span>. It ensures that constraint-related operations are automatically scoped to the correct vertex, without requiring runtime dispatch or downcasting.</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="fu">### Instance Theories</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>Beyond the schema theories, panproto defines instance theories that model how data is structured within a schema:</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`th_wtype`**: W-type trees with <span class="in">`Node`</span>, <span class="in">`Arc`</span>, and <span class="in">`Value`</span> sorts. Operations include <span class="in">`anchor`</span> (mapping nodes to schema vertices), <span class="in">`arc_src`</span>/<span class="in">`arc_tgt`</span> (tree edges), <span class="in">`arc_edge`</span> (labeling arcs with schema edges), and <span class="in">`node_value`</span> (payload). Used by JSON-like, XML-like, and document protocols.</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`th_functor`**: set-valued functors with <span class="in">`Table`</span>, <span class="in">`Row`</span>, and <span class="in">`ForeignKey`</span> sorts. Operations include <span class="in">`table_vertex`</span> (mapping tables to schema vertices) and <span class="in">`fk_src`</span>/<span class="in">`fk_tgt`</span> (foreign key endpoints). Used by relational and columnar protocols.</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`th_flat`**: flat key-value structures with <span class="in">`Node`</span>, <span class="in">`Field`</span>, and <span class="in">`Value`</span> sorts. Operations include <span class="in">`field_node`</span> (owning node), <span class="in">`field_value`</span> (payload), and <span class="in">`node_anchor`</span> (schema vertex). Used by IDL protocols like Protobuf where data has a flat field structure without deep nesting.</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`th_meta`**: metadata extension adding <span class="in">`Discriminator`</span> and <span class="in">`ExtraField`</span> sorts. Composes with <span class="in">`th_wtype`</span> via colimit over the shared <span class="in">`Node`</span> sort. Used by document protocols with mixed content models (XML, HTML) where elements can have both structured children and unstructured attributes.</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Colimit Composition Pattern</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>Each protocol is defined by composing building-block theories via *colimit*---the categorical operation that glues theories together along shared sorts. The shared sorts act as the "meeting point" where two theories agree on what a concept means.</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>For example, ATProto's schema theory is the colimit of <span class="in">`ThGraph`</span>, <span class="in">`ThConstraint`</span>, and <span class="in">`ThMulti`</span>, all sharing the <span class="in">`Vertex`</span> sort:</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>graph TD</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    ThGraph[<span class="ot">"</span><span class="st">ThGraph&lt;br/&gt;(Vertex, Edge, src, tgt)</span><span class="ot">"</span>]</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    ThConstraint[<span class="ot">"</span><span class="st">ThConstraint&lt;br/&gt;(Vertex, Constraint)</span><span class="ot">"</span>]</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    ThMulti[<span class="ot">"</span><span class="st">ThMulti&lt;br/&gt;(Vertex, Edge, EdgeLabel)</span><span class="ot">"</span>]</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    SharedV[<span class="ot">"</span><span class="st">Shared: Vertex</span><span class="ot">"</span>]</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>    SharedVE[<span class="ot">"</span><span class="st">Shared: Vertex, Edge</span><span class="ot">"</span>]</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    ThGraph --&gt;|colimit over| SharedV</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>    ThConstraint --&gt;|colimit over| SharedV</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>    SharedV --&gt; GC[<span class="ot">"</span><span class="st">ThGraph + ThConstraint</span><span class="ot">"</span>]</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>    GC --&gt;|colimit over| SharedVE</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>    ThMulti --&gt;|colimit over| SharedVE</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    SharedVE --&gt; Schema[<span class="ot">"</span><span class="st">ATProto Schema Theory</span><span class="ot">"</span>]</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    ThWType[<span class="ot">"</span><span class="st">ThWType&lt;br/&gt;(Node, Arc, Value)</span><span class="ot">"</span>] --&gt; Instance[<span class="ot">"</span><span class="st">ATProto Instance Theory</span><span class="ot">"</span>]</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>The colimit ensures that the <span class="in">`Vertex`</span> sort in <span class="in">`ThGraph`</span> and the <span class="in">`Vertex`</span> sort in <span class="in">`ThConstraint`</span> are identified---they refer to the same concept. The resulting schema theory has all the sorts and operations from both components, with shared sorts unified. This is not a mere union; the colimit preserves the equations and operation signatures from both theories, ensuring that the composed theory is well-formed.</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Colimit?</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>The colimit is the right categorical construction because it is the universal way to combine theories while identifying shared structure. Alternatives like products or coproducts either identify too much (products force all sorts to be shared) or too little (coproducts share nothing). The colimit lets you precisely control which sorts are identified and which remain distinct.</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>In practice, this means:</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ThGraph`</span> and <span class="in">`ThConstraint`</span> share <span class="in">`Vertex`</span> but not <span class="in">`Edge`</span> and <span class="in">`Constraint`</span>---edges and constraints are distinct concepts that happen to be attached to the same vertex sort.</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ThGraph`</span> and <span class="in">`ThMulti`</span> share both <span class="in">`Vertex`</span> and <span class="in">`Edge`</span>---multi-edge labels are an extension of the same edge concept.</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ThWType`</span> and <span class="in">`ThMeta`</span> share <span class="in">`Node`</span>---metadata is an extension of the same node concept.</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Groups</span></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>Protocols cluster into five theory groups based on their schema/instance theory pair. Each group has a corresponding <span class="in">`register_*`</span> helper function that handles the colimit computation:</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Group <span class="pp">|</span> Schema Theory <span class="pp">|</span> Instance Theory <span class="pp">|</span> Registration Helper <span class="pp">|</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A <span class="pp">|</span> ThGraph + ThConstraint + ThMulti <span class="pp">|</span> ThWType <span class="pp">|</span> <span class="in">`register_constrained_multigraph_wtype`</span> <span class="pp">|</span></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> B <span class="pp">|</span> ThHypergraph + ThConstraint <span class="pp">|</span> ThFunctor <span class="pp">|</span> <span class="in">`register_hypergraph_functor`</span> <span class="pp">|</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> C <span class="pp">|</span> ThSimpleGraph + ThConstraint <span class="pp">|</span> ThFlat <span class="pp">|</span> <span class="in">`register_simple_graph_flat`</span> <span class="pp">|</span></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> D <span class="pp">|</span> ThGraph + ThConstraint + ThMulti + ThInterface <span class="pp">|</span> ThWType <span class="pp">|</span> <span class="in">`register_typed_graph_wtype`</span> <span class="pp">|</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> E <span class="pp">|</span> ThGraph + ThConstraint + ThMulti <span class="pp">|</span> ThWType + ThMeta <span class="pp">|</span> <span class="in">`register_multigraph_wtype_meta`</span> <span class="pp">|</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Group A: Constrained Multigraph + W-Type</span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>The largest group, covering protocols with tree-shaped data and potentially parallel edges. ATProto, JSON Schema, OpenAPI, AsyncAPI, MongoDB, YAML Schema, TOML Schema, and many more belong here. The schema theory combines directed graphs (for type relationships), constraints (for validation rules like <span class="in">`maxLength`</span>), and multi-edge support (for fields that share the same type). Instances are W-type trees.</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Group B: Hypergraph + Functor</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>Covers relational and columnar protocols: SQL, Cassandra, DynamoDB, Parquet, Arrow, DataFrame, CSV/Table Schema. The schema theory uses hypergraphs because tables are multi-arity relations (a table "connects" its columns). Instances are set-valued functors---each table maps to a set of rows.</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### Group C: Simple Graph + Flat</span></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>Covers IDL and serialization protocols: Protobuf, Avro, Thrift, Cap'n Proto, FlatBuffers, ASN.1, Bond, HCL, Redis. These protocols have flat field structures (no deep nesting within a single message/record) and enforce field uniqueness, hence the simple graph. Instances are flat key-value structures.</span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### Group D: Typed Graph + W-Type with Interfaces</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>Covers type systems and API schemas with inheritance: GraphQL, TypeScript, Python, Rust, Java, Go, Swift, Kotlin, C#. Adds the <span class="in">`ThInterface`</span> theory to Group A, modeling constructs like GraphQL interfaces, TypeScript interfaces, and Java abstract classes.</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="fu">### Group E: Multigraph + W-Type + Metadata</span></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>Covers document formats with mixed content: XML/XSD, HTML, CSS, DOCX, ODF, Neo4j. Combines Group A's schema theory with an instance theory that adds metadata support (discriminators and extra fields) for elements that have both structured children and unstructured attributes.</span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>When adding a new protocol, first determine which theory group it belongs to. If it fits an existing group, you can reuse the corresponding <span class="in">`register_*`</span> function and only need to define the protocol's edge rules, vertex kinds, and parser/emitter.</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Protocol Interface</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>Each protocol module exports a <span class="in">`protocol()`</span> function that returns a <span class="in">`Protocol`</span> struct. The <span class="in">`Protocol`</span> specifies:</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`name`**: the protocol identifier (e.g., <span class="in">`"atproto"`</span>, <span class="in">`"json_schema"`</span>, <span class="in">`"sql"`</span>).</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`schema_theory`** and **`instance_theory`**: names referencing entries in the theory registry, populated by the <span class="in">`register_*`</span> helpers.</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`edge_rules`**: which edge kinds are structurally significant and what source/target vertex kinds they connect. Used by <span class="in">`panproto-check`</span> to classify breaking changes (Chapter 11).</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`obj_kinds`**: vertex kinds that represent composite objects (as opposed to scalar values like <span class="in">`"string"`</span> or <span class="in">`"integer"`</span>). Used during schema parsing and by the lens system.</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`constraint_sorts`**: which constraint sorts this protocol recognizes (e.g., <span class="in">`"maxLength"`</span>, <span class="in">`"pattern"`</span>, <span class="in">`"maxGraphemes"`</span>). Used by both the migration engine's existence checker and the breaking change detector.</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>The theory names in the <span class="in">`Protocol`</span> struct reference entries in the theory registry, which is populated by the <span class="in">`register_*`</span> helpers. This indirection keeps protocol definitions declarative---a protocol does not construct its own theories, it names them.</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parser/Emitter Convention</span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>Every protocol implements a bidirectional format conversion following a consistent naming convention:</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Parser**: <span class="in">`parse_*(input: &amp;str) -&gt; Result&lt;Schema, ProtocolError&gt;`</span> converts a native-format definition into panproto's graph-level <span class="in">`Schema`</span> representation.</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Emitter**: <span class="in">`emit_*(schema: &amp;Schema) -&gt; Result&lt;String, ProtocolError&gt;`</span> converts a <span class="in">`Schema`</span> back into the native format.</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>Examples:</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`parse_json_schema(json_str)`</span> parses a JSON Schema document into a <span class="in">`Schema`</span>.</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`emit_protobuf(schema)`</span> emits a <span class="in">`.proto`</span> file from a <span class="in">`Schema`</span>.</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`parse_sql(ddl_str)`</span> parses SQL DDL statements into a <span class="in">`Schema`</span>.</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>This bidirectionality is essential for panproto's workflow: parse a source format, compute a migration or lens, apply it, and emit the result in the target format. The parser/emitter pair also enables round-trip testing: <span class="in">`parse(emit(parse(input)))`</span> should produce the same <span class="in">`Schema`</span> as <span class="in">`parse(input)`</span>.</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parsing Strategy</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>Parsers typically follow a two-phase approach:</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Syntactic parsing**: use a format-specific parser (e.g., <span class="in">`serde_json`</span> for JSON Schema, <span class="in">`tree-sitter`</span> for Protobuf) to produce an AST or intermediate representation.</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Semantic translation**: walk the AST, creating vertices for types and fields, edges for relationships, constraints for validation rules, and hyper-edges for multi-arity relations.</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Emitting Strategy</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>Emitters reverse the process:</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Topology traversal**: walk the schema graph, identifying root vertices, following edges in topological order.</span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Format construction**: generate the native syntax for each vertex (type declaration, field definition, constraint annotation) and edge (relationship, containment).</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a New Protocol</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>To add a new protocol to panproto, follow these five steps:</span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: Identify Component Theories</span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>Determine which building-block theories your protocol needs. Most protocols fit one of the five existing groups. Ask yourself:</span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have directed edges between fields/types? Use <span class="in">`ThGraph`</span>.</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol support parallel edges (e.g., multiple fields with the same type)? Add <span class="in">`ThMulti`</span>.</span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have constraints (min/max length, required fields, patterns)? Add <span class="in">`ThConstraint`</span>.</span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have multi-arity relations (e.g., SQL foreign keys, table definitions)? Use <span class="in">`ThHypergraph`</span> instead of <span class="in">`ThGraph`</span>.</span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol support interfaces or inheritance? Add <span class="in">`ThInterface`</span>.</span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have flat field structures with no deep nesting? Use <span class="in">`ThFlat`</span> as the instance theory.</span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have tree-structured data? Use <span class="in">`ThWType`</span>.</span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Does the protocol have mixed content (structured + unstructured)? Add <span class="in">`ThMeta`</span> to <span class="in">`ThWType`</span>.</span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: Compose via Colimit</span></span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>If your protocol fits an existing group, call the corresponding <span class="in">`register_*`</span> function with your theory names:</span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> In your protocol module<span class="st">'s register function:</span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a><span class="st">theories::register_constrained_multigraph_wtype(</span></span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a><span class="st">    registry,</span></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a><span class="st">    "ThMyProtocolSchema",</span></span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="st">    "ThMyProtocolInstance",</span></span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a><span class="st">);</span></span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a><span class="st">If your protocol needs a novel combination, compose the theories manually using `panproto_gat::colimit`, specifying shared sorts at each step. Follow the pattern established by the existing `register_*` functions.</span></span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a><span class="st">### Step 3: Define Edge Rules and Vertex Kinds</span></span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a><span class="st">Create a `protocol()` function in your module:</span></span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn protocol() -&gt; Protocol {</span></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a><span class="st">    Protocol {</span></span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a><span class="st">        name: "my_protocol".into(),</span></span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a><span class="st">        schema_theory: "ThMyProtocolSchema".into(),</span></span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a><span class="st">        instance_theory: "ThMyProtocolInstance".into(),</span></span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="st">        edge_rules: vec![/* ... */],</span></span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a><span class="st">        obj_kinds: vec!["object".into(), "message".into()],</span></span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a><span class="st">        constraint_sorts: vec!["maxLength".into()],</span></span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a><span class="st">### Step 4: Implement Parser and Emitter</span></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a><span class="st">Write `parse_my_protocol` to convert the native format into a `Schema`. Write `emit_my_protocol` to convert back. Both should handle the full vocabulary of the protocol, mapping native concepts to graph elements.</span></span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="st">### Step 5: Add Integration Tests</span></span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a><span class="st">Add tests that round-trip: parse a native document, emit it back, and verify the result matches. Also add migration tests that exercise the protocol'</span>s edge rules and constraint sorts. Finally, add breaking<span class="sc">-</span>change tests to verify that the classification logic behaves correctly <span class="cf">for</span> your protocol<span class="st">'s edge rules.</span></span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.callout-warning}</span></span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a><span class="st">When composing theories via colimit, the shared theory must contain exactly the sorts that should be identified. If you share too few sorts, the colimit will create duplicate sorts that should be unified. If you share too many sorts, you may over-constrain the composition. Review the existing `register_*` functions for examples of correct sharing patterns.</span></span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="st">### Worked Example: A Hypothetical "TaskML" Protocol</span></span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="st">Suppose you are defining a protocol for a task management markup language with:</span></span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a><span class="st">- Tasks have fields (name, description, priority).</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a><span class="st">- Tasks can have subtasks (nesting).</span></span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a><span class="st">- Fields have validation constraints (maxLength on name, enum values for priority).</span></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a><span class="st">- No parallel edges (each field name is unique within a task).</span></span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a><span class="st">**Step 1**: This maps to Group C (simple graph + flat). The simple graph enforces field uniqueness; the flat instance theory models the non-nested field structure. But wait---subtasks imply nesting, which requires W-type trees. So this is actually Group A (constrained multigraph + W-type), minus the multi-edge support since field names are unique. You could use Group A as-is (the multi-edge capability is unused but harmless) or define a custom composition of `ThSimpleGraph + ThConstraint` with `ThWType`.</span></span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a><span class="st">**Step 2**: Using Group A for simplicity:</span></span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a><span class="st">theories::register_constrained_multigraph_wtype(</span></span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a><span class="st">    registry,</span></span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="st">    "ThTaskMLSchema",</span></span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a><span class="st">    "ThTaskMLInstance",</span></span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a><span class="st">);</span></span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a><span class="st">**Step 3**: Define the protocol:</span></span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn protocol() -&gt; Protocol {</span></span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a><span class="st">    Protocol {</span></span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a><span class="st">        name: "taskml".into(),</span></span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="st">        schema_theory: "ThTaskMLSchema".into(),</span></span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a><span class="st">        instance_theory: "ThTaskMLInstance".into(),</span></span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a><span class="st">        edge_rules: vec![EdgeRule {</span></span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a><span class="st">            edge_kind: "field".into(),</span></span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a><span class="st">            src_kinds: vec!["task".into()],</span></span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a><span class="st">            tgt_kinds: vec!["string".into(), "enum".into(), "integer".into()],</span></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a><span class="st">        }],</span></span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a><span class="st">        obj_kinds: vec!["task".into()],</span></span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a><span class="st">        constraint_sorts: vec!["maxLength".into(), "enumValues".into()],</span></span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="st">**Steps 4--5**: Implement `parse_taskml` and `emit_taskml`, then write round-trip and migration tests.</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a><span class="st">## Theoretical Foundations</span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a><span class="st">The colimit composition pattern implements the categorical notion of a *theory morphism* between generalized algebraic theories [@cartmell1986]. Each building-block theory is a GAT, and the colimit computes the pushout in the category of GATs, identifying sorts along the span defined by the shared theory.</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a><span class="st">This is not merely an implementation convenience---it is a formal guarantee. The colimit preserves the equations and well-formedness conditions of both component theories. If `ThGraph` guarantees that every edge has a source and target vertex, and `ThConstraint` guarantees that every constraint is attached to a vertex, then the colimit theory inherits both guarantees.</span></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a><span class="st">The protocol architecture follows the design principles outlined in @lynch2024, where data interchange protocols are understood as presentations of algebraic theories and protocol interoperability is mediated by theory morphisms. panproto'</span>s parser<span class="sc">/</span>emitter pairs implement the <span class="st">"model functor"</span> that maps between the abstract theory and its concrete syntactic presentation.</span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>For a hands<span class="sc">-</span>on guide to building your own protocol, see [tutorial chapter <span class="dv">10</span>](https<span class="sc">:</span><span class="er">//</span>panproto.github.io<span class="sc">/</span>tutorial<span class="sc">/</span>chapters<span class="sc">/</span><span class="dv">10</span><span class="sc">-</span>building<span class="sc">-</span>your<span class="sc">-</span>own<span class="sc">-</span>protocol.html).</span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a><span class="do">## Summary</span></span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>The <span class="st">`</span><span class="at">panproto-protocols</span><span class="st">`</span> crate provides<span class="sc">:</span></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">10</span> building<span class="sc">-</span>block theories<span class="sc">**</span> (<span class="st">`</span><span class="at">ThGraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThSimpleGraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThHypergraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThConstraint</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThMulti</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThInterface</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThWType</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThFunctor</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThFlat</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThMeta</span><span class="st">`</span>) that can be composed via colimit.</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">5</span> theory groups<span class="sc">**</span> (A through E) covering the structural patterns found across <span class="dv">60</span><span class="sc">+</span> protocols.</span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>A uniform protocol interface<span class="sc">**</span><span class="er">:</span> every protocol exports a <span class="st">`</span><span class="at">protocol()</span><span class="st">`</span> <span class="cf">function</span>, a parser, and an emitter.</span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>A clear extension path<span class="sc">**</span><span class="er">:</span> adding a new protocol requires identifying component theories, composing them, defining rules, and implementing format conversion.</span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>The colimit composition pattern is what makes panproto<span class="st">'s protocol coverage tractable. Rather than implementing migration, lens, and breaking-change logic separately for each protocol, the shared theory infrastructure ensures that all protocols automatically benefit from the same engine. Adding a new protocol is a matter of choosing the right building blocks and writing a parser/emitter---the migration engine, lens system, and breaking change detector work for free.</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/12-protocols.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

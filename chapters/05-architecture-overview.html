@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Architecture Overview – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/06-gat-engine.html" rel="next">
+<link href="../chapters/04-debugging-profiling.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-crate-dependency-hierarchy" id="toc-the-crate-dependency-hierarchy" class="nav-link active" data-scroll-target="#the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</a>
+  <ul class="collapse">
+  <li><a href="#the-re-export-facade" id="toc-the-re-export-facade" class="nav-link" data-scroll-target="#the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</a></li>
+  <li><a href="#crate-dependency-graph" id="toc-crate-dependency-graph" class="nav-link" data-scroll-target="#crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate Dependency Graph</a></li>
+  </ul></li>
+  <li><a href="#key-design-decisions" id="toc-key-design-decisions" class="nav-link" data-scroll-target="#key-design-decisions"><span class="header-section-number">5.2</span> Key Design Decisions</a>
+  <ul class="collapse">
+  <li><a href="#why-gats" id="toc-why-gats" class="nav-link" data-scroll-target="#why-gats"><span class="header-section-number">5.2.1</span> Why GATs</a></li>
+  <li><a href="#why-handle-based-wasm-api" id="toc-why-handle-based-wasm-api" class="nav-link" data-scroll-target="#why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why Handle-Based WASM API</a></li>
+  <li><a href="#why-messagepack" id="toc-why-messagepack" class="nav-link" data-scroll-target="#why-messagepack"><span class="header-section-number">5.2.3</span> Why MessagePack</a></li>
+  <li><a href="#why-immutable-fluent-builders" id="toc-why-immutable-fluent-builders" class="nav-link" data-scroll-target="#why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why Immutable Fluent Builders</a></li>
+  </ul></li>
+  <li><a href="#the-two-parameter-architecture" id="toc-the-two-parameter-architecture" class="nav-link" data-scroll-target="#the-two-parameter-architecture"><span class="header-section-number">5.3</span> The Two-Parameter Architecture</a></li>
+  <li><a href="#migration-lifecycle" id="toc-migration-lifecycle" class="nav-link" data-scroll-target="#migration-lifecycle"><span class="header-section-number">5.4</span> Migration Lifecycle</a></li>
+  <li><a href="#what-lives-where" id="toc-what-lives-where" class="nav-link" data-scroll-target="#what-lives-where"><span class="header-section-number">5.5</span> What Lives Where</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/05-architecture-overview.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-architecture-overview" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter presents the 30,000-foot view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end, you should be able to trace any piece of functionality back to the crate that owns it and understand <em>why</em> the system is structured the way it is.</p>
+<section id="the-crate-dependency-hierarchy" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</h2>
+<p>panproto is organized into ten crates arranged in five dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</p>
+<div id="tbl-crate-levels" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-crate-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: The five-level crate hierarchy.
+</figcaption>
+<div aria-describedby="tbl-crate-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 38%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Crates</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><code>panproto-gat</code></td>
+<td>The GAT engine: theories, morphisms, colimits</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>panproto-schema</code>, <code>panproto-inst</code></td>
+<td>Schema graphs and instance trees</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>panproto-mig</code>, <code>panproto-lens</code>, <code>panproto-check</code></td>
+<td>Migration compilation, lenses, breaking-change analysis</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>panproto-protocols</code></td>
+<td>Built-in protocol definitions (AT Protocol, SQL, Protobuf, …)</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>panproto-core</code>, <code>panproto-wasm</code>, <code>panproto-cli</code></td>
+<td>Re-export facade, WASM boundary, CLI</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><strong>Level 0</strong> is the mathematical foundation. It knows nothing about schemas, instances, or protocols – only about the algebra of generalized algebraic theories.</p>
+<p><strong>Level 1</strong> introduces the data model. <code>panproto-schema</code> defines the hypergraph structure that represents a data format’s type system; <code>panproto-inst</code> defines instances (actual data) conforming to those schemas.</p>
+<p><strong>Level 2</strong> is where the interesting operations live: compiling migration specifications into executable form (<code>panproto-mig</code>), constructing bidirectional lenses (<code>panproto-lens</code>), and classifying schema changes as breaking or non-breaking (<code>panproto-check</code>).</p>
+<p><strong>Level 3</strong> bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0–2.</p>
+<p><strong>Level 4</strong> provides the consumer-facing surfaces: <code>panproto-core</code> re-exports everything through a single dependency, <code>panproto-wasm</code> exposes a handle-based WebAssembly API, and <code>panproto-cli</code> wraps it all in a command-line tool.</p>
+<section id="the-re-export-facade" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</h3>
+<p><code>panproto-core</code> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//! # panproto-core</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">//! Core re-export facade for panproto.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">//! This crate provides a single, convenient entry point for consumers</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">//! by re-exporting the public APIs of all panproto sub-crates.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-check` for validation and axiom checking.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_check <span class="kw">as</span> check<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-gat` for GAT (generalized algebraic theory) types.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_gat <span class="kw">as</span> gat<span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-inst` for instance representations.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_inst <span class="kw">as</span> inst<span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-lens` for bidirectional lens combinators.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_lens <span class="kw">as</span> lens<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-mig` for migration and lifting operations.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_mig <span class="kw">as</span> mig<span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-protocols` for built-in protocol definitions.</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_protocols <span class="kw">as</span> protocols<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_schema <span class="kw">as</span> schema<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This means downstream code writes <code>panproto::gat::Theory</code> rather than importing <code>panproto-gat</code> directly. The facade adds no logic of its own.</p>
+</section>
+<section id="crate-dependency-graph" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate Dependency Graph</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-crate-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crate-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-crate-dag">graph BT
+    subgraph Level 0
+        gat["panproto-gat"]
+    end
+    subgraph Level 1
+        schema["panproto-schema"]
+        inst["panproto-inst"]
+    end
+    subgraph Level 2
+        mig["panproto-mig"]
+        lens["panproto-lens"]
+        check["panproto-check"]
+    end
+    subgraph Level 3
+        protocols["panproto-protocols"]
+    end
+    subgraph Level 4
+        core["panproto-core"]
+        wasm["panproto-wasm"]
+        cli["panproto-cli"]
+    end
+
+    schema --&gt; gat
+    inst --&gt; gat
+    inst --&gt; schema
+    mig --&gt; gat
+    mig --&gt; schema
+    mig --&gt; inst
+    lens --&gt; gat
+    lens --&gt; schema
+    lens --&gt; mig
+    check --&gt; gat
+    check --&gt; schema
+    check --&gt; mig
+    protocols --&gt; gat
+    protocols --&gt; schema
+    core --&gt; gat
+    core --&gt; schema
+    core --&gt; inst
+    core --&gt; mig
+    core --&gt; lens
+    core --&gt; check
+    core --&gt; protocols
+    wasm --&gt; core
+    cli --&gt; core
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crate-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Crate dependency graph. Arrows point from dependant to dependency.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="key-design-decisions" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="key-design-decisions"><span class="header-section-number">5.2</span> Key Design Decisions</h2>
+<section id="why-gats" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="why-gats"><span class="header-section-number">5.2.1</span> Why GATs</h3>
+<p>panproto formalizes data format specifications as <em>generalized algebraic theories</em> (GATs), following the framework introduced by <span class="citation" data-cites="cartmell1986">Cartmell (<a href="#ref-cartmell1986" role="doc-biblioref">1986</a>)</span>. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., “the type of a field depends on a discriminator tag”).</p>
+<p>Ordinary algebraic theories in the sense of <span class="citation" data-cites="lawvere1963">Lawvere (<a href="#ref-lawvere1963" role="doc-biblioref">1963</a>)</span> cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</p>
+<ul>
+<li><strong>Dependent sorts</strong>: <code>Hom(a: Ob, b: Ob)</code> in a category theory, or <code>Constraint(v: Vertex)</code> in a schema theory.</li>
+<li><strong>Structure-preserving morphisms</strong>: maps between theories that respect arities and equations, enabling principled schema migration.</li>
+<li><strong>Colimits</strong>: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the user-facing introduction to theories and protocols, see the <a href="https://panproto.github.io/tutorial/">tutorial</a> chapters 3–4.</p>
+</div>
+</div>
+</section>
+<section id="why-handle-based-wasm-api" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why Handle-Based WASM API</h3>
+<p>The WASM boundary (<code>panproto-wasm</code>) uses a handle/slab architecture rather than <code>serde-wasm-bindgen</code> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side, and JavaScript receives an opaque <code>u32</code> handle.</p>
+<p>The reason is performance. Serializing a large schema through <code>serde-wasm-bindgen</code> on every API call would dominate the cost of actual computation. With handles, the only data that crosses the WASM boundary is numeric IDs and small MessagePack payloads for results. The TypeScript SDK wraps these handles in ergonomic classes with <code>Symbol.dispose</code> support for deterministic cleanup.</p>
+</section>
+<section id="why-messagepack" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="why-messagepack"><span class="header-section-number">5.2.3</span> Why MessagePack</h3>
+<p>panproto uses MessagePack (via <code>rmp-serde</code>) as its primary serialization format for schema and instance data at rest. The choice over JSON, CBOR, or Protobuf-the-format comes down to:</p>
+<ul>
+<li><strong>Deterministic serialization</strong>: MessagePack’s canonical form guarantees that structurally identical objects produce byte-identical output, which is essential for content-addressed storage and migration hash verification.</li>
+<li><strong>Compact binary representation</strong>: schemas with hundreds of vertices serialize to kilobytes rather than tens of kilobytes.</li>
+<li><strong>Wide ecosystem support</strong>: MessagePack libraries exist for every language panproto targets.</li>
+</ul>
+<p>JSON is still used as the human-facing format for CLI output and the <code>parse_json</code>/<code>to_json</code> round-trip in <code>panproto-inst</code>.</p>
+</section>
+<section id="why-immutable-fluent-builders" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why Immutable Fluent Builders</h3>
+<p><code>SchemaBuilder</code> and the migration DSL use an immutable fluent pattern: each method consumes <code>self</code> and returns <code>Result&lt;Self, Error&gt;</code>. This prevents partial construction – you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <code>build()</code> only needs to check global properties (like non-emptiness) and compute indices.</p>
+</section>
+</section>
+<section id="the-two-parameter-architecture" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="the-two-parameter-architecture"><span class="header-section-number">5.3</span> The Two-Parameter Architecture</h2>
+<p>Every protocol in panproto is defined by a pair of GATs:</p>
+<ol type="1">
+<li><strong>Schema theory</strong> – describes the <em>shape</em> of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</li>
+<li><strong>Instance theory</strong> – describes the <em>content</em> that inhabits a schema. Its models are instances (trees or tables of data).</li>
+</ol>
+<p>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <code>panproto-schema</code> captures this pairing:</p>
+<pre><code>Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</code></pre>
+<p>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial – it composes correctly and preserves the structural axioms of the instance theory <span class="citation" data-cites="spivak2012">(<a href="#ref-spivak2012" role="doc-biblioref">Spivak 2012</a>)</span>.</p>
+</section>
+<section id="migration-lifecycle" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="migration-lifecycle"><span class="header-section-number">5.4</span> Migration Lifecycle</h2>
+<p>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-migration-lifecycle" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-migration-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-migration-lifecycle">sequenceDiagram
+    participant User
+    participant Protocols as panproto-protocols
+    participant Schema as panproto-schema
+    participant Check as panproto-check
+    participant Mig as panproto-mig
+    participant Inst as panproto-inst
+
+    User-&gt;&gt;Protocols: Define protocol (schema theory + instance theory)
+    User-&gt;&gt;Schema: Build schema v1 via SchemaBuilder
+    User-&gt;&gt;Schema: Build schema v2 via SchemaBuilder
+    User-&gt;&gt;Check: check_existence(v1, v2)
+    Check--&gt;&gt;User: ExistenceReport (added/removed/modified)
+    User-&gt;&gt;Mig: compile(migration_spec)
+    Mig--&gt;&gt;User: CompiledMigration
+    User-&gt;&gt;Inst: wtype_restrict(instance, v1, v2, compiled)
+    Inst--&gt;&gt;User: Migrated WInstance
+    User-&gt;&gt;Inst: to_json(v2, migrated_instance)
+    Inst--&gt;&gt;User: JSON output
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-migration-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Full migration lifecycle, from protocol definition through data lifting.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The pipeline is:</p>
+<ol type="1">
+<li><strong>Define protocols</strong> – select or compose GATs from the <code>panproto-protocols</code> registry.</li>
+<li><strong>Build schemas</strong> – construct v1 and v2 using <code>SchemaBuilder</code>, which validates each element against the protocol’s edge rules.</li>
+<li><strong>Check existence</strong> – use <code>panproto-check</code> to classify the differences between v1 and v2 (what was added, removed, modified).</li>
+<li><strong>Compile migration</strong> – <code>panproto-mig</code> compiles a migration specification into a <code>CompiledMigration</code> containing vertex remaps, edge remaps, and contraction resolvers.</li>
+<li><strong>Lift data</strong> – <code>panproto-inst</code> executes the 5-step <code>wtype_restrict</code> pipeline to project instance data from v1 to v2.</li>
+</ol>
+</section>
+<section id="what-lives-where" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="what-lives-where"><span class="header-section-number">5.5</span> What Lives Where</h2>
+<p>A quick reference for locating functionality:</p>
+<div id="tbl-where" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-where-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.2: Where to find things.
+</figcaption>
+<div aria-describedby="tbl-where-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>If you need to…</th>
+<th>Look in…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Define or inspect a GAT</td>
+<td><code>panproto-gat</code></td>
+</tr>
+<tr class="even">
+<td>Build a schema graph</td>
+<td><code>panproto-schema</code></td>
+</tr>
+<tr class="odd">
+<td>Parse JSON into a tree instance</td>
+<td><code>panproto-inst</code></td>
+</tr>
+<tr class="even">
+<td>Compile a migration</td>
+<td><code>panproto-mig</code></td>
+</tr>
+<tr class="odd">
+<td>Build a bidirectional lens</td>
+<td><code>panproto-lens</code></td>
+</tr>
+<tr class="even">
+<td>Detect breaking changes</td>
+<td><code>panproto-check</code></td>
+</tr>
+<tr class="odd">
+<td>Use a built-in protocol (AT Proto, SQL, …)</td>
+<td><code>panproto-protocols</code></td>
+</tr>
+<tr class="even">
+<td>Import everything at once</td>
+<td><code>panproto-core</code></td>
+</tr>
+<tr class="odd">
+<td>Call from JavaScript</td>
+<td><code>panproto-wasm</code> + <code>@panproto/core</code></td>
+</tr>
+<tr class="even">
+<td>Run from the command line</td>
+<td><code>panproto-cli</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The next four chapters dive deep into the core crates – starting with the GAT engine in <a href="06-gat-engine.html" class="quarto-xref"><span>Chapter 6</span></a>, then schemas and protocols in <a href="07-schema-protocols.html" class="quarto-xref"><span>Chapter 7</span></a>, and instances in <a href="08-instances-wtype.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-cartmell1986" class="csl-entry" role="listitem">
+Cartmell, John. 1986. <span>“Generalised Algebraic Theories and Contextual Categories.”</span> <em>Annals of Pure and Applied Logic</em> 32: 209–43. <a href="https://doi.org/10.1016/0168-0072(86)90053-9">https://doi.org/10.1016/0168-0072(86)90053-9</a>.
+</div>
+<div id="ref-lawvere1963" class="csl-entry" role="listitem">
+Lawvere, F. William. 1963. <span>“Functorial Semantics of Algebraic Theories.”</span> PhD thesis, Columbia University.
+</div>
+<div id="ref-spivak2012" class="csl-entry" role="listitem">
+Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Information and Computation</em> 217: 31–51. <a href="https://doi.org/10.1016/j.ic.2012.05.001">https://doi.org/10.1016/j.ic.2012.05.001</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/04-debugging-profiling.html" class="pagination-link" aria-label="Debugging and Profiling">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/06-gat-engine.html" class="pagination-link" aria-label="panproto-gat -- The GAT Engine">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Architecture Overview {#sec-architecture-overview}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>This chapter presents the 30,000-foot view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end, you should be able to trace any piece of functionality back to the crate that owns it and understand _why_ the system is structured the way it is.</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Crate Dependency Hierarchy</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>panproto is organized into ten crates arranged in five dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Crates <span class="pp">|</span> Role <span class="pp">|</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|--------|------|</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> The GAT engine: theories, morphisms, colimits <span class="pp">|</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span> <span class="pp">|</span> Schema graphs and instance trees <span class="pp">|</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>, <span class="in">`panproto-check`</span> <span class="pp">|</span> Migration compilation, lenses, breaking-change analysis <span class="pp">|</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Built-in protocol definitions (AT Protocol, SQL, Protobuf, ...) <span class="pp">|</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>: The five-level crate hierarchy. {#tbl-crate-levels}</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>**Level 0** is the mathematical foundation. It knows nothing about schemas, instances, or protocols -- only about the algebra of generalized algebraic theories.</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>**Level 1** introduces the data model. <span class="in">`panproto-schema`</span> defines the hypergraph structure that represents a data format's type system; <span class="in">`panproto-inst`</span> defines instances (actual data) conforming to those schemas.</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>**Level 2** is where the interesting operations live: compiling migration specifications into executable form (<span class="in">`panproto-mig`</span>), constructing bidirectional lenses (<span class="in">`panproto-lens`</span>), and classifying schema changes as breaking or non-breaking (<span class="in">`panproto-check`</span>).</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>**Level 3** bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0--2.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>**Level 4** provides the consumer-facing surfaces: <span class="in">`panproto-core`</span> re-exports everything through a single dependency, <span class="in">`panproto-wasm`</span> exposes a handle-based WebAssembly API, and <span class="in">`panproto-cli`</span> wraps it all in a command-line tool.</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Re-export Facade</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-core`</span> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-core/src/lib.rs" start-line=1 end-line=22}</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>This means downstream code writes <span class="in">`panproto::gat::Theory`</span> rather than importing <span class="in">`panproto-gat`</span> directly. The facade adds no logic of its own.</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### Crate Dependency Graph</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>%%| label: fig-crate-dag</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Crate dependency graph. Arrows point from dependant to dependency.</span><span class="ot">"</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>graph BT</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">0</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        gat[<span class="ot">"</span><span class="st">panproto-gat</span><span class="ot">"</span>]</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">1</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        schema[<span class="ot">"</span><span class="st">panproto-schema</span><span class="ot">"</span>]</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        inst[<span class="ot">"</span><span class="st">panproto-inst</span><span class="ot">"</span>]</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">2</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        mig[<span class="ot">"</span><span class="st">panproto-mig</span><span class="ot">"</span>]</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        lens[<span class="ot">"</span><span class="st">panproto-lens</span><span class="ot">"</span>]</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        check[<span class="ot">"</span><span class="st">panproto-check</span><span class="ot">"</span>]</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">3</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        protocols[<span class="ot">"</span><span class="st">panproto-protocols</span><span class="ot">"</span>]</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    subgraph Level <span class="dv">4</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        core[<span class="ot">"</span><span class="st">panproto-core</span><span class="ot">"</span>]</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        wasm[<span class="ot">"</span><span class="st">panproto-wasm</span><span class="ot">"</span>]</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        cli[<span class="ot">"</span><span class="st">panproto-cli</span><span class="ot">"</span>]</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    end</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    schema --&gt; gat</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    inst --&gt; gat</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    inst --&gt; schema</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    mig --&gt; gat</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    mig --&gt; schema</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    mig --&gt; inst</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    lens --&gt; gat</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    lens --&gt; schema</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    lens --&gt; mig</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    check --&gt; gat</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    check --&gt; schema</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    check --&gt; mig</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; gat</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    protocols --&gt; schema</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    core --&gt; gat</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    core --&gt; schema</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    core --&gt; inst</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    core --&gt; mig</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    core --&gt; lens</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    core --&gt; check</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    core --&gt; protocols</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>    wasm --&gt; core</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    cli --&gt; core</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Design Decisions</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why GATs</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>panproto formalizes data format specifications as _generalized algebraic theories_ (GATs), following the framework introduced by @cartmell1986. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., "the type of a field depends on a discriminator tag").</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>Ordinary algebraic theories in the sense of @lawvere1963 cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dependent sorts**: <span class="in">`Hom(a: Ob, b: Ob)`</span> in a category theory, or <span class="in">`Constraint(v: Vertex)`</span> in a schema theory.</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Structure-preserving morphisms**: maps between theories that respect arities and equations, enabling principled schema migration.</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Colimits**: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to theories and protocols, see the <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.github.io/tutorial/)</span> chapters 3--4.</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Handle-Based WASM API</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>The WASM boundary (<span class="in">`panproto-wasm`</span>) uses a handle/slab architecture rather than <span class="in">`serde-wasm-bindgen`</span> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side, and JavaScript receives an opaque <span class="in">`u32`</span> handle.</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>The reason is performance. Serializing a large schema through <span class="in">`serde-wasm-bindgen`</span> on every API call would dominate the cost of actual computation. With handles, the only data that crosses the WASM boundary is numeric IDs and small MessagePack payloads for results. The TypeScript SDK wraps these handles in ergonomic classes with <span class="in">`Symbol.dispose`</span> support for deterministic cleanup.</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why MessagePack</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>panproto uses MessagePack (via <span class="in">`rmp-serde`</span>) as its primary serialization format for schema and instance data at rest. The choice over JSON, CBOR, or Protobuf-the-format comes down to:</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Deterministic serialization**: MessagePack's canonical form guarantees that structurally identical objects produce byte-identical output, which is essential for content-addressed storage and migration hash verification.</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compact binary representation**: schemas with hundreds of vertices serialize to kilobytes rather than tens of kilobytes.</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Wide ecosystem support**: MessagePack libraries exist for every language panproto targets.</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>JSON is still used as the human-facing format for CLI output and the <span class="in">`parse_json`</span>/<span class="in">`to_json`</span> round-trip in <span class="in">`panproto-inst`</span>.</span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Immutable Fluent Builders</span></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction -- you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Two-Parameter Architecture</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>Every protocol in panproto is defined by a pair of GATs:</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Schema theory** -- describes the _shape_ of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Instance theory** -- describes the _content_ that inhabits a schema. Its models are instances (trees or tables of data).</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <span class="in">`panproto-schema`</span> captures this pairing:</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="in">Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial -- it composes correctly and preserves the structural axioms of the instance theory <span class="co">[</span><span class="ot">@spivak2012</span><span class="co">]</span>.</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Lifecycle</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>%%| label: fig-migration-lifecycle</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Full migration lifecycle, from protocol definition through data lifting.</span><span class="ot">"</span></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>    participant User</span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>    participant Protocols as panproto-protocols</span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>    participant Schema as panproto-schema</span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>    participant Check as panproto-check</span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>    participant Mig as panproto-mig</span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>    participant Inst as panproto-inst</span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Protocols: Define protocol (schema theory + instance theory)</span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v1 via SchemaBuilder</span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Schema: Build schema v2 via SchemaBuilder</span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Check: check_existence(v1, v2)</span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>    Check--&gt;&gt;User: ExistenceReport (added/removed/modified)</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Mig: compile(migration_spec)</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a>    Mig--&gt;&gt;User: CompiledMigration</span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Inst: wtype_restrict(instance, v1, v2, compiled)</span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a>    Inst--&gt;&gt;User: Migrated WInstance</span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Inst: to_json(v2, migrated_instance)</span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a>    Inst--&gt;&gt;User: JSON output</span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>The pipeline is:</span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Define protocols** -- select or compose GATs from the <span class="in">`panproto-protocols`</span> registry.</span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Build schemas** -- construct v1 and v2 using <span class="in">`SchemaBuilder`</span>, which validates each element against the protocol's edge rules.</span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Check existence** -- use <span class="in">`panproto-check`</span> to classify the differences between v1 and v2 (what was added, removed, modified).</span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Compile migration** -- <span class="in">`panproto-mig`</span> compiles a migration specification into a <span class="in">`CompiledMigration`</span> containing vertex remaps, edge remaps, and contraction resolvers.</span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Lift data** -- <span class="in">`panproto-inst`</span> executes the 5-step <span class="in">`wtype_restrict`</span> pipeline to project instance data from v1 to v2.</span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Lives Where</span></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>A quick reference for locating functionality:</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> If you need to... <span class="pp">|</span> Look in... <span class="pp">|</span></span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Define or inspect a GAT <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span></span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a schema graph <span class="pp">|</span> <span class="in">`panproto-schema`</span> <span class="pp">|</span></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parse JSON into a tree instance <span class="pp">|</span> <span class="in">`panproto-inst`</span> <span class="pp">|</span></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Compile a migration <span class="pp">|</span> <span class="in">`panproto-mig`</span> <span class="pp">|</span></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Build a bidirectional lens <span class="pp">|</span> <span class="in">`panproto-lens`</span> <span class="pp">|</span></span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Detect breaking changes <span class="pp">|</span> <span class="in">`panproto-check`</span> <span class="pp">|</span></span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Use a built-in protocol (AT Proto, SQL, ...) <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Import everything at once <span class="pp">|</span> <span class="in">`panproto-core`</span> <span class="pp">|</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Call from JavaScript <span class="pp">|</span> <span class="in">`panproto-wasm`</span> + <span class="in">`@panproto/core`</span> <span class="pp">|</span></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Run from the command line <span class="pp">|</span> <span class="in">`panproto-cli`</span> <span class="pp">|</span></span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>: Where to find things. {#tbl-where}</span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a>The next four chapters dive deep into the core crates -- starting with the GAT engine in @sec-gat-engine, then schemas and protocols in @sec-schema-protocols, and instances in @sec-instances-wtype.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/05-architecture-overview.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

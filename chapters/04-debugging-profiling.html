@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Debugging and Profiling – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/05-architecture-overview.html" rel="next">
+<link href="../chapters/03-building-testing.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/03-building-testing.html">Development Environment</a></li><li class="breadcrumb-item"><a href="../chapters/04-debugging-profiling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#tracing-with-rust_log" id="toc-tracing-with-rust_log" class="nav-link active" data-scroll-target="#tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with RUST_LOG</a></li>
+  <li><a href="#stepping-through-the-w-type-restrict-pipeline" id="toc-stepping-through-the-w-type-restrict-pipeline" class="nav-link" data-scroll-target="#stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</a></li>
+  <li><a href="#inspecting-wasm-boundary-data" id="toc-inspecting-wasm-boundary-data" class="nav-link" data-scroll-target="#inspecting-wasm-boundary-data"><span class="header-section-number">4.3</span> Inspecting WASM boundary data</a>
+  <ul class="collapse">
+  <li><a href="#hex-dump-a-messagepack-payload" id="toc-hex-dump-a-messagepack-payload" class="nav-link" data-scroll-target="#hex-dump-a-messagepack-payload"><span class="header-section-number">4.3.1</span> Hex-dump a MessagePack payload</a></li>
+  <li><a href="#common-deserialization-errors" id="toc-common-deserialization-errors" class="nav-link" data-scroll-target="#common-deserialization-errors"><span class="header-section-number">4.3.2</span> Common deserialization errors</a></li>
+  <li><a href="#handle-related-debugging" id="toc-handle-related-debugging" class="nav-link" data-scroll-target="#handle-related-debugging"><span class="header-section-number">4.3.3</span> Handle-related debugging</a></li>
+  </ul></li>
+  <li><a href="#benchmarking-with-divan" id="toc-benchmarking-with-divan" class="nav-link" data-scroll-target="#benchmarking-with-divan"><span class="header-section-number">4.4</span> Benchmarking with divan</a>
+  <ul class="collapse">
+  <li><a href="#interpreting-output" id="toc-interpreting-output" class="nav-link" data-scroll-target="#interpreting-output"><span class="header-section-number">4.4.1</span> Interpreting output</a></li>
+  <li><a href="#ci-regression-checks" id="toc-ci-regression-checks" class="nav-link" data-scroll-target="#ci-regression-checks"><span class="header-section-number">4.4.2</span> CI regression checks</a></li>
+  </ul></li>
+  <li><a href="#common-debugging-scenarios" id="toc-common-debugging-scenarios" class="nav-link" data-scroll-target="#common-debugging-scenarios"><span class="header-section-number">4.5</span> Common debugging scenarios</a>
+  <ul class="collapse">
+  <li><a href="#migration-compiles-but-lift-returns-wrong-data" id="toc-migration-compiles-but-lift-returns-wrong-data" class="nav-link" data-scroll-target="#migration-compiles-but-lift-returns-wrong-data"><span class="header-section-number">4.5.1</span> Migration compiles but lift returns wrong data</a></li>
+  <li><a href="#existence-check-passes-but-restrict-panics" id="toc-existence-check-passes-but-restrict-panics" class="nav-link" data-scroll-target="#existence-check-passes-but-restrict-panics"><span class="header-section-number">4.5.2</span> Existence check passes but restrict panics</a></li>
+  <li><a href="#property-test-found-a-failure-but-cannot-reproduce-it" id="toc-property-test-found-a-failure-but-cannot-reproduce-it" class="nav-link" data-scroll-target="#property-test-found-a-failure-but-cannot-reproduce-it"><span class="header-section-number">4.5.3</span> Property test found a failure but cannot reproduce it</a></li>
+  <li><a href="#wasm-tests-pass-locally-but-fail-in-ci" id="toc-wasm-tests-pass-locally-but-fail-in-ci" class="nav-link" data-scroll-target="#wasm-tests-pass-locally-but-fail-in-ci"><span class="header-section-number">4.5.4</span> WASM tests pass locally but fail in CI</a></li>
+  <li><a href="#colimit-produces-unexpected-merged-theory" id="toc-colimit-produces-unexpected-merged-theory" class="nav-link" data-scroll-target="#colimit-produces-unexpected-merged-theory"><span class="header-section-number">4.5.5</span> Colimit produces unexpected merged theory</a></li>
+  <li><a href="#schema-validation-passes-but-normalize-changes-structure" id="toc-schema-validation-passes-but-normalize-changes-structure" class="nav-link" data-scroll-target="#schema-validation-passes-but-normalize-changes-structure"><span class="header-section-number">4.5.6</span> Schema validation passes but normalize changes structure</a></li>
+  </ul></li>
+  <li><a href="#profiling-with-system-tools" id="toc-profiling-with-system-tools" class="nav-link" data-scroll-target="#profiling-with-system-tools"><span class="header-section-number">4.6</span> Profiling with system tools</a>
+  <ul class="collapse">
+  <li><a href="#cpu-profiling-on-macos" id="toc-cpu-profiling-on-macos" class="nav-link" data-scroll-target="#cpu-profiling-on-macos"><span class="header-section-number">4.6.1</span> CPU profiling on macOS</a></li>
+  <li><a href="#memory-profiling" id="toc-memory-profiling" class="nav-link" data-scroll-target="#memory-profiling"><span class="header-section-number">4.6.2</span> Memory profiling</a></li>
+  </ul></li>
+  <li><a href="#quick-reference" id="toc-quick-reference" class="nav-link" data-scroll-target="#quick-reference"><span class="header-section-number">4.7</span> Quick reference</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/04-debugging-profiling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/03-building-testing.html">Development Environment</a></li><li class="breadcrumb-item"><a href="../chapters/04-debugging-profiling.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-debugging-profiling" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter covers the tools and techniques for diagnosing issues in panproto — from tracing log output through stepping into the migration pipeline to benchmarking with divan.</p>
+<section id="tracing-with-rust_log" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with RUST_LOG</h2>
+<p>panproto uses the <code>tracing</code> crate for structured logging. Control verbosity through the <code>RUST_LOG</code> environment variable:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Debug output for a single crate</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_inst=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-inst</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace-level output (very verbose) for the migration engine</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_mig=trace <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-mig</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple crates at different levels</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_gat=info,panproto_mig=debug <span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Everything at debug</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>debug <span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Filtering a single test with tracing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Combine <code>RUST_LOG</code> with a test filter to get focused output:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_mig=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-mig <span class="at">--</span> test_lift_roundtrip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="stepping-through-the-w-type-restrict-pipeline" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</h2>
+<p>The restrict pipeline in <code>panproto-inst</code> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</p>
+<ol type="1">
+<li><p><strong><code>compute_surviving_set()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</p></li>
+<li><p><strong><code>anchor_nodes()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Assigns surviving nodes to their new positions in the target schema. If nodes appear at wrong vertices, the anchor computation is the place to look.</p></li>
+<li><p><strong><code>contract_ancestors()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</p></li>
+<li><p><strong><code>resolve_edges()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Rewires edges according to the compiled migration’s edge remap. If edges point to wrong targets, inspect the resolver.</p></li>
+<li><p><strong><code>reconstruct_fans()</code></strong> in <code>crates/panproto-inst/src/fan.rs</code> — Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</p></li>
+</ol>
+<p>Set <code>RUST_LOG=panproto_inst=debug</code> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</p>
+</section>
+<section id="inspecting-wasm-boundary-data" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="inspecting-wasm-boundary-data"><span class="header-section-number">4.3</span> Inspecting WASM boundary data</h2>
+<p>The WASM boundary (<code>panproto-wasm</code>) serializes all data as MessagePack via <code>rmp-serde</code>. When debugging WASM integration issues, you may need to inspect the raw bytes.</p>
+<section id="hex-dump-a-messagepack-payload" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="hex-dump-a-messagepack-payload"><span class="header-section-number">4.3.1</span> Hex-dump a MessagePack payload</h3>
+<p>In the TypeScript SDK, add a temporary log before deserialization:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In sdk/typescript/src/msgpack.ts</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'msgpack hex:'</span><span class="op">,</span> <span class="bu">Buffer</span><span class="op">.</span><span class="fu">from</span>(bytes)<span class="op">.</span><span class="fu">toString</span>(<span class="st">'hex'</span>))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then decode the hex with a MessagePack inspector (e.g., <a href="https://msgpack.org">msgpack.org</a> or the <code>msgpack-tools</code> CLI).</p>
+</section>
+<section id="common-deserialization-errors" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="common-deserialization-errors"><span class="header-section-number">4.3.2</span> Common deserialization errors</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Error</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>InvalidMarkerRead</code></td>
+<td>Empty or truncated payload</td>
+<td>Check that the Rust side returned data (not an empty <code>Vec&lt;u8&gt;</code>)</td>
+</tr>
+<tr class="even">
+<td><code>TypeMismatch</code></td>
+<td>Schema version skew between Rust and TS</td>
+<td>Rebuild WASM and TS SDK from the same commit</td>
+</tr>
+<tr class="odd">
+<td><code>LengthMismatch</code> on arrays</td>
+<td>Struct field added/removed on one side</td>
+<td>Ensure <code>#[serde(rename)]</code> and TS types match</td>
+</tr>
+<tr class="even">
+<td><code>UnknownVariant</code></td>
+<td>Enum variant added in Rust but not in TS</td>
+<td>Add the variant to the TS <code>types.ts</code> discriminated union</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="handle-related-debugging" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="handle-related-debugging"><span class="header-section-number">4.3.3</span> Handle-related debugging</h3>
+<p>The WASM slab allocator (<code>crates/panproto-wasm/src/slab.rs</code>) uses opaque integer handles to reference Rust objects from JavaScript. Common handle issues:</p>
+<ul>
+<li><strong>Invalid handle panic</strong>: The JS side passed a handle that was never allocated. Check for off-by-one errors or stale handles after a <code>free()</code> call.</li>
+<li><strong>Double-free panic</strong>: The JS side called <code>free()</code> twice on the same handle. Add a guard in the TS wrapper to nullify handles after freeing.</li>
+<li><strong>Memory leak</strong>: Handles allocated but never freed. Use the <code>slab_stats()</code> debug API to check the count of live handles.</li>
+</ul>
+</section>
+</section>
+<section id="benchmarking-with-divan" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="benchmarking-with-divan"><span class="header-section-number">4.4</span> Benchmarking with divan</h2>
+<p>Three crates have benchmarks using the <code>divan</code> framework:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GAT engine benchmarks (theory construction, morphism checking, colimit)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Instance benchmarks (W-type construction, restrict, parse)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Migration benchmarks (compile, lift, compose)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="interpreting-output" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="interpreting-output"><span class="header-section-number">4.4.1</span> Interpreting output</h3>
+<p>divan produces output like:</p>
+<pre><code>panproto_gat         fastest       │ slowest       │ median        │ mean
+├─ colimit_small     142.3 ns      │ 289.1 ns      │ 148.7 ns      │ 152.4 ns
+├─ colimit_large     12.41 µs      │ 18.92 µs      │ 13.05 µs      │ 13.28 µs
+╰─ morphism_check    84.21 ns      │ 127.6 ns      │ 88.43 ns      │ 90.12 ns</code></pre>
+<p>Focus on the <strong>median</strong> column. Differences under 5% are noise; investigate anything over 10%.</p>
+</section>
+<section id="ci-regression-checks" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="ci-regression-checks"><span class="header-section-number">4.4.2</span> CI regression checks</h3>
+<p>CI runs benchmarks on every PR and compares against the <code>main</code> branch baseline. If a regression exceeds the threshold (currently 15%), CI reports it as a warning (not a failure). The benchmark data is attached as a PR comment.</p>
+<p>To reproduce a CI benchmark comparison locally:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Baseline on main</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Your branch</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout your-branch</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> <span class="at">--baseline</span> main</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="common-debugging-scenarios" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="common-debugging-scenarios"><span class="header-section-number">4.5</span> Common debugging scenarios</h2>
+<section id="migration-compiles-but-lift-returns-wrong-data" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="migration-compiles-but-lift-returns-wrong-data"><span class="header-section-number">4.5.1</span> Migration compiles but lift returns wrong data</h3>
+<ol type="1">
+<li><strong>Check the surviving set.</strong> Run with <code>RUST_LOG=panproto_inst=debug</code> and look at the <code>compute_surviving_set</code> output. Are all expected nodes present?</li>
+<li><strong>Inspect the vertex remap.</strong> Print the compiled migration’s <code>vertex_remap</code> field. Does every source vertex map to the correct target vertex?</li>
+<li><strong>Trace the lift.</strong> The lift reconstructs source-schema data from a target instance. If it produces wrong values, the resolver functions in the compiled migration may be incorrect.</li>
+</ol>
+</section>
+<section id="existence-check-passes-but-restrict-panics" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="existence-check-passes-but-restrict-panics"><span class="header-section-number">4.5.2</span> Existence check passes but restrict panics</h3>
+<p>The existence check (<code>panproto-mig/src/existence.rs</code>) verifies that a migration <em>can</em> be applied, but it does not run the full restrict pipeline. A panic during restrict usually means:</p>
+<ol type="1">
+<li><strong>Resolver coverage gap.</strong> The compiled migration has a resolver for every edge in the target schema, but one of them returns an invalid handle. Add a test that calls <code>restrict()</code> directly on a minimal instance.</li>
+<li><strong>Fan arity mismatch.</strong> A hyper-edge changed its arity (number of targets), but the fan reconstruction did not account for it. Check <code>reconstruct_fans()</code> with tracing enabled.</li>
+</ol>
+</section>
+<section id="property-test-found-a-failure-but-cannot-reproduce-it" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="property-test-found-a-failure-but-cannot-reproduce-it"><span class="header-section-number">4.5.3</span> Property test found a failure but cannot reproduce it</h3>
+<ol type="1">
+<li><p>Look for the <strong>seed</strong> in the failure output: <code>proptest: seed = 0x1234abcd...</code>.</p></li>
+<li><p>Re-run with that seed:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">PROPTEST_SEED</span><span class="op">=</span>0x1234abcd <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-gat <span class="at">--</span> test_name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>If the test is non-deterministic (it should not be), check for <code>HashMap</code> iteration order sensitivity. panproto uses <code>rustc-hash</code> (<code>FxHashMap</code>) which has a fixed hash seed, so iteration order should be deterministic.</p></li>
+</ol>
+</section>
+<section id="wasm-tests-pass-locally-but-fail-in-ci" class="level3" data-number="4.5.4">
+<h3 data-number="4.5.4" class="anchored" data-anchor-id="wasm-tests-pass-locally-but-fail-in-ci"><span class="header-section-number">4.5.4</span> WASM tests pass locally but fail in CI</h3>
+<ol type="1">
+<li>CI runs WASM tests in headless Chrome. If you are testing locally with Node.js, there may be differences in <code>TextEncoder</code>/<code>TextDecoder</code> behavior.</li>
+<li>Reproduce CI conditions: <code>wasm-pack test --headless --chrome crates/panproto-wasm</code>.</li>
+<li>If headless Chrome is not installed, use <code>--headless --firefox</code> or install Chrome via your system package manager.</li>
+</ol>
+</section>
+<section id="colimit-produces-unexpected-merged-theory" class="level3" data-number="4.5.5">
+<h3 data-number="4.5.5" class="anchored" data-anchor-id="colimit-produces-unexpected-merged-theory"><span class="header-section-number">4.5.5</span> Colimit produces unexpected merged theory</h3>
+<p>When two theories are merged via <code>colimit()</code> and the result has unexpected sorts or operations:</p>
+<ol type="1">
+<li><p><strong>Verify the span.</strong> The colimit is computed over a span: two morphisms from a shared sub-theory. Print both morphisms and confirm that the shared sorts map correctly in each direction.</p></li>
+<li><p><strong>Check equation preservation.</strong> If the merged theory has conflicting equations, <code>colimit()</code> will return an error. But if equations are merely <em>missing</em>, the merged theory may be valid but semantically wrong. Inspect the equations in the output theory.</p></li>
+<li><p><strong>Trace with debug logging:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_gat=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-gat <span class="at">--</span> test_colimit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The debug output shows each sort and operation merge step.</p></li>
+</ol>
+</section>
+<section id="schema-validation-passes-but-normalize-changes-structure" class="level3" data-number="4.5.6">
+<h3 data-number="4.5.6" class="anchored" data-anchor-id="schema-validation-passes-but-normalize-changes-structure"><span class="header-section-number">4.5.6</span> Schema validation passes but normalize changes structure</h3>
+<p>The <code>normalize()</code> function in <code>panproto-schema</code> collapses reference chains and canonicalizes vertex ordering. If your schema looks correct before normalization but wrong after:</p>
+<ol type="1">
+<li><strong>Check for reference cycles.</strong> <code>normalize()</code> follows reference edges to collapse chains. A cycle causes infinite recursion (which Rust will catch as a stack overflow).</li>
+<li><strong>Inspect edge targets.</strong> Print the schema’s edges before and after normalization. Look for edges whose targets changed unexpectedly — this usually means a reference chain was collapsed through an intermediate vertex you did not expect.</li>
+<li><strong>Run validate before and after:</strong> If <code>validate()</code> passes before normalization but fails after, the normalization may have introduced an edge-rule violation. File a bug.</li>
+</ol>
+</section>
+</section>
+<section id="profiling-with-system-tools" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="profiling-with-system-tools"><span class="header-section-number">4.6</span> Profiling with system tools</h2>
+<p>For deeper performance analysis beyond divan benchmarks:</p>
+<section id="cpu-profiling-on-macos" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="cpu-profiling-on-macos"><span class="header-section-number">4.6.1</span> CPU profiling on macOS</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Instruments (Xcode)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">-p</span> panproto-gat <span class="at">--release</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">xcrun</span> xctrace record <span class="at">--template</span> <span class="st">"Time Profiler"</span> <span class="at">--launch</span> <span class="at">--</span> <span class="dt">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  ./target/release/deps/panproto_gat-<span class="pp">*</span>  <span class="co"># adjust binary name</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Using samply</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> install samply</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="ex">samply</span> record cargo bench <span class="at">-p</span> panproto-gat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="memory-profiling" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="memory-profiling"><span class="header-section-number">4.6.2</span> Memory profiling</h3>
+<p>panproto avoids allocator-heavy patterns, but if you suspect a memory issue:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using DHAT (heap profiling via valgrind)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> install cargo-valgrind</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> valgrind <span class="at">--tool</span><span class="op">=</span>dhat <span class="at">-p</span> panproto-inst <span class="at">--</span> test_name</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Or use the built-in allocator stats in tests</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_inst=trace <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-inst <span class="at">--</span> test_large_instance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Look for unexpected <code>Vec</code> growth or <code>bumpalo</code> arena sizes in the trace output.</p>
+</section>
+</section>
+<section id="quick-reference" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="quick-reference"><span class="header-section-number">4.7</span> Quick reference</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Goal</th>
+<th>Tool / Command</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Structured logs</td>
+<td><code>RUST_LOG=panproto_crate=debug cargo nextest run ...</code></td>
+</tr>
+<tr class="even">
+<td>WASM payload inspection</td>
+<td>Hex-dump MessagePack bytes, decode with msgpack tools</td>
+</tr>
+<tr class="odd">
+<td>Handle debugging</td>
+<td><code>slab_stats()</code> API in <code>panproto-wasm</code></td>
+</tr>
+<tr class="even">
+<td>Benchmarks</td>
+<td><code>cargo bench -p panproto-gat</code> (also <code>-inst</code>, <code>-mig</code>)</td>
+</tr>
+<tr class="odd">
+<td>Reproduce property test</td>
+<td><code>PROPTEST_SEED=... cargo nextest run ...</code></td>
+</tr>
+<tr class="even">
+<td>Reproduce CI WASM tests</td>
+<td><code>wasm-pack test --headless --chrome crates/panproto-wasm</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/03-building-testing.html" class="pagination-link" aria-label="Building and Testing">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/05-architecture-overview.html" class="pagination-link" aria-label="Architecture Overview">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Debugging and Profiling {#sec-debugging-profiling}</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>This chapter covers the tools and techniques for diagnosing issues in panproto --- from tracing log output through stepping into the migration pipeline to benchmarking with divan.</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tracing with RUST_LOG</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>panproto uses the <span class="in">`tracing`</span> crate for structured logging. Control verbosity through the <span class="in">`RUST_LOG`</span> environment variable:</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Debug output for a single crate</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_inst=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-inst</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace-level output (very verbose) for the migration engine</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_mig=trace <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-mig</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple crates at different levels</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_gat=info,panproto_mig=debug <span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Everything at debug</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>debug <span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Filtering a single test with tracing</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>Combine <span class="in">`RUST_LOG`</span> with a test filter to get focused output:</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_mig=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-mig <span class="at">--</span> test_lift_roundtrip</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stepping through the W-type restrict pipeline</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>The restrict pipeline in <span class="in">`panproto-inst`</span> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`compute_surviving_set()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`anchor_nodes()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Assigns surviving nodes to their new positions in the target schema. If nodes appear at wrong vertices, the anchor computation is the place to look.</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`contract_ancestors()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**`resolve_edges()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Rewires edges according to the compiled migration's edge remap. If edges point to wrong targets, inspect the resolver.</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`reconstruct_fans()`** in <span class="in">`crates/panproto-inst/src/fan.rs`</span> --- Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`RUST_LOG=panproto_inst=debug`</span> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inspecting WASM boundary data</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>The WASM boundary (<span class="in">`panproto-wasm`</span>) serializes all data as MessagePack via <span class="in">`rmp-serde`</span>. When debugging WASM integration issues, you may need to inspect the raw bytes.</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hex-dump a MessagePack payload</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>In the TypeScript SDK, add a temporary log before deserialization:</span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="in">```typescript</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="co">// In sdk/typescript/src/msgpack.ts</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">'msgpack hex:'</span><span class="op">,</span> <span class="bu">Buffer</span><span class="op">.</span><span class="fu">from</span>(bytes)<span class="op">.</span><span class="fu">toString</span>(<span class="st">'hex'</span>))<span class="op">;</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>Then decode the hex with a MessagePack inspector (e.g., <span class="co">[</span><span class="ot">msgpack.org</span><span class="co">](https://msgpack.org)</span> or the <span class="in">`msgpack-tools`</span> CLI).</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### Common deserialization errors</span></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Error <span class="pp">|</span> Cause <span class="pp">|</span> Fix <span class="pp">|</span></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`InvalidMarkerRead`</span> <span class="pp">|</span> Empty or truncated payload <span class="pp">|</span> Check that the Rust side returned data (not an empty <span class="in">`Vec&lt;u8&gt;`</span>) <span class="pp">|</span></span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`TypeMismatch`</span> <span class="pp">|</span> Schema version skew between Rust and TS <span class="pp">|</span> Rebuild WASM and TS SDK from the same commit <span class="pp">|</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`LengthMismatch`</span> on arrays <span class="pp">|</span> Struct field added/removed on one side <span class="pp">|</span> Ensure <span class="in">`#[serde(rename)]`</span> and TS types match <span class="pp">|</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`UnknownVariant`</span> <span class="pp">|</span> Enum variant added in Rust but not in TS <span class="pp">|</span> Add the variant to the TS <span class="in">`types.ts`</span> discriminated union <span class="pp">|</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### Handle-related debugging</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>The WASM slab allocator (<span class="in">`crates/panproto-wasm/src/slab.rs`</span>) uses opaque integer handles to reference Rust objects from JavaScript. Common handle issues:</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Invalid handle panic**: The JS side passed a handle that was never allocated. Check for off-by-one errors or stale handles after a <span class="in">`free()`</span> call.</span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Double-free panic**: The JS side called <span class="in">`free()`</span> twice on the same handle. Add a guard in the TS wrapper to nullify handles after freeing.</span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Memory leak**: Handles allocated but never freed. Use the <span class="in">`slab_stats()`</span> debug API to check the count of live handles.</span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Benchmarking with divan</span></span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a>Three crates have benchmarks using the <span class="in">`divan`</span> framework:</span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a><span class="co"># GAT engine benchmarks (theory construction, morphism checking, colimit)</span></span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Instance benchmarks (W-type construction, restrict, parse)</span></span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Migration benchmarks (compile, lift, compose)</span></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpreting output</span></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>divan produces output like:</span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a><span class="in">panproto_gat         fastest       │ slowest       │ median        │ mean</span></span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a><span class="in">├─ colimit_small     142.3 ns      │ 289.1 ns      │ 148.7 ns      │ 152.4 ns</span></span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a><span class="in">├─ colimit_large     12.41 µs      │ 18.92 µs      │ 13.05 µs      │ 13.28 µs</span></span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a><span class="in">╰─ morphism_check    84.21 ns      │ 127.6 ns      │ 88.43 ns      │ 90.12 ns</span></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>Focus on the **median** column. Differences under 5% are noise; investigate anything over 10%.</span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### CI regression checks</span></span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>CI runs benchmarks on every PR and compares against the <span class="in">`main`</span> branch baseline. If a regression exceeds the threshold (currently 15%), CI reports it as a warning (not a failure). The benchmark data is attached as a PR comment.</span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a>To reproduce a CI benchmark comparison locally:</span>
+<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Baseline on main</span></span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a><span class="co"># Your branch</span></span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout your-branch</span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> <span class="at">--baseline</span> main</span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common debugging scenarios</span></span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Migration compiles but lift returns wrong data</span></span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check the surviving set.** Run with <span class="in">`RUST_LOG=panproto_inst=debug`</span> and look at the <span class="in">`compute_surviving_set`</span> output. Are all expected nodes present?</span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Inspect the vertex remap.** Print the compiled migration's <span class="in">`vertex_remap`</span> field. Does every source vertex map to the correct target vertex?</span>
+<span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trace the lift.** The lift reconstructs source-schema data from a target instance. If it produces wrong values, the resolver functions in the compiled migration may be incorrect.</span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a><span class="fu">### Existence check passes but restrict panics</span></span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a>The existence check (<span class="in">`panproto-mig/src/existence.rs`</span>) verifies that a migration *can* be applied, but it does not run the full restrict pipeline. A panic during restrict usually means:</span>
+<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Resolver coverage gap.** The compiled migration has a resolver for every edge in the target schema, but one of them returns an invalid handle. Add a test that calls <span class="in">`restrict()`</span> directly on a minimal instance.</span>
+<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Fan arity mismatch.** A hyper-edge changed its arity (number of targets), but the fan reconstruction did not account for it. Check <span class="in">`reconstruct_fans()`</span> with tracing enabled.</span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### Property test found a failure but cannot reproduce it</span></span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Look for the **seed** in the failure output: <span class="in">`proptest: seed = 0x1234abcd...`</span>.</span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Re-run with that seed:</span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>    <span class="in">```bash</span></span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>    <span class="va">PROPTEST_SEED</span><span class="op">=</span>0x1234abcd <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-gat <span class="at">--</span> test_name</span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If the test is non-deterministic (it should not be), check for <span class="in">`HashMap`</span> iteration order sensitivity. panproto uses <span class="in">`rustc-hash`</span> (<span class="in">`FxHashMap`</span>) which has a fixed hash seed, so iteration order should be deterministic.</span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a><span class="fu">### WASM tests pass locally but fail in CI</span></span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>CI runs WASM tests in headless Chrome. If you are testing locally with Node.js, there may be differences in <span class="in">`TextEncoder`</span>/<span class="in">`TextDecoder`</span> behavior.</span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Reproduce CI conditions: <span class="in">`wasm-pack test --headless --chrome crates/panproto-wasm`</span>.</span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If headless Chrome is not installed, use <span class="in">`--headless --firefox`</span> or install Chrome via your system package manager.</span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### Colimit produces unexpected merged theory</span></span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>When two theories are merged via <span class="in">`colimit()`</span> and the result has unexpected sorts or operations:</span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Verify the span.** The colimit is computed over a span: two morphisms from a shared sub-theory. Print both morphisms and confirm that the shared sorts map correctly in each direction.</span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Check equation preservation.** If the merged theory has conflicting equations, <span class="in">`colimit()`</span> will return an error. But if equations are merely *missing*, the merged theory may be valid but semantically wrong. Inspect the equations in the output theory.</span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trace with debug logging:**</span>
+<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a>    <span class="in">```bash</span></span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a>    <span class="va">RUST_LOG</span><span class="op">=</span>panproto_gat=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-gat <span class="at">--</span> test_colimit</span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a>    The debug output shows each sort and operation merge step.</span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema validation passes but normalize changes structure</span></span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a>The <span class="in">`normalize()`</span> function in <span class="in">`panproto-schema`</span> collapses reference chains and canonicalizes vertex ordering. If your schema looks correct before normalization but wrong after:</span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check for reference cycles.** <span class="in">`normalize()`</span> follows reference edges to collapse chains. A cycle causes infinite recursion (which Rust will catch as a stack overflow).</span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Inspect edge targets.** Print the schema's edges before and after normalization. Look for edges whose targets changed unexpectedly --- this usually means a reference chain was collapsed through an intermediate vertex you did not expect.</span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Run validate before and after:** If <span class="in">`validate()`</span> passes before normalization but fails after, the normalization may have introduced an edge-rule violation. File a bug.</span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## Profiling with system tools</span></span>
+<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a>For deeper performance analysis beyond divan benchmarks:</span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### CPU profiling on macOS</span></span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Instruments (Xcode)</span></span>
+<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">-p</span> panproto-gat <span class="at">--release</span></span>
+<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a><span class="ex">xcrun</span> xctrace record <span class="at">--template</span> <span class="st">"Time Profiler"</span> <span class="at">--launch</span> <span class="at">--</span> <span class="dt">\</span></span>
+<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a>  ./target/release/deps/panproto_gat-<span class="pp">*</span>  <span class="co"># adjust binary name</span></span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a><span class="co"># Using samply</span></span>
+<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> install samply</span>
+<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a><span class="ex">samply</span> record cargo bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### Memory profiling</span></span>
+<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a>panproto avoids allocator-heavy patterns, but if you suspect a memory issue:</span>
+<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a><span class="co"># Using DHAT (heap profiling via valgrind)</span></span>
+<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> install cargo-valgrind</span>
+<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> valgrind <span class="at">--tool</span><span class="op">=</span>dhat <span class="at">-p</span> panproto-inst <span class="at">--</span> test_name</span>
+<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a><span class="co"># Or use the built-in allocator stats in tests</span></span>
+<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_inst=trace <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-inst <span class="at">--</span> test_large_instance</span>
+<span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a>Look for unexpected <span class="in">`Vec`</span> growth or <span class="in">`bumpalo`</span> arena sizes in the trace output.</span>
+<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick reference</span></span>
+<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Goal <span class="pp">|</span> Tool / Command <span class="pp">|</span></span>
+<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Structured logs <span class="pp">|</span> <span class="in">`RUST_LOG=panproto_crate=debug cargo nextest run ...`</span> <span class="pp">|</span></span>
+<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> WASM payload inspection <span class="pp">|</span> Hex-dump MessagePack bytes, decode with msgpack tools <span class="pp">|</span></span>
+<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Handle debugging <span class="pp">|</span> <span class="in">`slab_stats()`</span> API in <span class="in">`panproto-wasm`</span> <span class="pp">|</span></span>
+<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Benchmarks <span class="pp">|</span> <span class="in">`cargo bench -p panproto-gat`</span> (also <span class="in">`-inst`</span>, <span class="in">`-mig`</span>) <span class="pp">|</span></span>
+<span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Reproduce property test <span class="pp">|</span> <span class="in">`PROPTEST_SEED=... cargo nextest run ...`</span> <span class="pp">|</span></span>
+<span id="cb11-220"><a href="#cb11-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Reproduce CI WASM tests <span class="pp">|</span> <span class="in">`wasm-pack test --headless --chrome crates/panproto-wasm`</span> <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/04-debugging-profiling.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

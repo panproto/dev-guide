@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Your First Contribution – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/03-building-testing.html" rel="next">
+<link href="../chapters/01-welcome.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-welcome.html">Getting Started</a></li><li class="breadcrumb-item"><a href="../chapters/02-first-contribution.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">2.1</span> Prerequisites</a></li>
+  <li><a href="#step-1-fork-and-clone" id="toc-step-1-fork-and-clone" class="nav-link" data-scroll-target="#step-1-fork-and-clone"><span class="header-section-number">2.2</span> Step 1: Fork and clone</a></li>
+  <li><a href="#step-2-understand-the-workspace" id="toc-step-2-understand-the-workspace" class="nav-link" data-scroll-target="#step-2-understand-the-workspace"><span class="header-section-number">2.3</span> Step 2: Understand the workspace</a></li>
+  <li><a href="#step-3-build-the-workspace" id="toc-step-3-build-the-workspace" class="nav-link" data-scroll-target="#step-3-build-the-workspace"><span class="header-section-number">2.4</span> Step 3: Build the workspace</a></li>
+  <li><a href="#step-4-run-the-test-suite" id="toc-step-4-run-the-test-suite" class="nav-link" data-scroll-target="#step-4-run-the-test-suite"><span class="header-section-number">2.5</span> Step 4: Run the test suite</a></li>
+  <li><a href="#step-5-build-the-wasm-target" id="toc-step-5-build-the-wasm-target" class="nav-link" data-scroll-target="#step-5-build-the-wasm-target"><span class="header-section-number">2.6</span> Step 5: Build the WASM target</a></li>
+  <li><a href="#step-6-build-the-typescript-sdk" id="toc-step-6-build-the-typescript-sdk" class="nav-link" data-scroll-target="#step-6-build-the-typescript-sdk"><span class="header-section-number">2.7</span> Step 6: Build the TypeScript SDK</a></li>
+  <li><a href="#step-7-make-a-change" id="toc-step-7-make-a-change" class="nav-link" data-scroll-target="#step-7-make-a-change"><span class="header-section-number">2.8</span> Step 7: Make a change</a>
+  <ul class="collapse">
+  <li><a href="#locate-the-file" id="toc-locate-the-file" class="nav-link" data-scroll-target="#locate-the-file"><span class="header-section-number">2.8.1</span> Locate the file</a></li>
+  <li><a href="#add-the-constraint-sort" id="toc-add-the-constraint-sort" class="nav-link" data-scroll-target="#add-the-constraint-sort"><span class="header-section-number">2.8.2</span> Add the constraint sort</a></li>
+  <li><a href="#add-a-test" id="toc-add-a-test" class="nav-link" data-scroll-target="#add-a-test"><span class="header-section-number">2.8.3</span> Add a test</a></li>
+  <li><a href="#run-the-relevant-tests" id="toc-run-the-relevant-tests" class="nav-link" data-scroll-target="#run-the-relevant-tests"><span class="header-section-number">2.8.4</span> Run the relevant tests</a></li>
+  </ul></li>
+  <li><a href="#step-8-verify-the-full-suite" id="toc-step-8-verify-the-full-suite" class="nav-link" data-scroll-target="#step-8-verify-the-full-suite"><span class="header-section-number">2.9</span> Step 8: Verify the full suite</a></li>
+  <li><a href="#step-9-commit-and-push" id="toc-step-9-commit-and-push" class="nav-link" data-scroll-target="#step-9-commit-and-push"><span class="header-section-number">2.10</span> Step 9: Commit and push</a></li>
+  <li><a href="#step-10-open-a-pull-request" id="toc-step-10-open-a-pull-request" class="nav-link" data-scroll-target="#step-10-open-a-pull-request"><span class="header-section-number">2.11</span> Step 10: Open a pull request</a></li>
+  <li><a href="#what-happens-next" id="toc-what-happens-next" class="nav-link" data-scroll-target="#what-happens-next"><span class="header-section-number">2.12</span> What happens next</a></li>
+  <li><a href="#the-contribution-lifecycle" id="toc-the-contribution-lifecycle" class="nav-link" data-scroll-target="#the-contribution-lifecycle"><span class="header-section-number">2.13</span> The contribution lifecycle</a></li>
+  <li><a href="#checklist" id="toc-checklist" class="nav-link" data-scroll-target="#checklist"><span class="header-section-number">2.14</span> Checklist</a></li>
+  <li><a href="#types-of-contributions" id="toc-types-of-contributions" class="nav-link" data-scroll-target="#types-of-contributions"><span class="header-section-number">2.15</span> Types of contributions</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">2.16</span> Summary</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/02-first-contribution.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01-welcome.html">Getting Started</a></li><li class="breadcrumb-item"><a href="../chapters/02-first-contribution.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-first-contribution" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter walks you through the entire contribution cycle — from forking the repository to opening a pull request — with a concrete example change.</p>
+<section id="prerequisites" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">2.1</span> Prerequisites</h2>
+<p>Before you begin, install:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Tool</th>
+<th>Minimum version</th>
+<th>Install</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rust</td>
+<td>1.85+ (Edition 2024)</td>
+<td><a href="https://rustup.rs">rustup.rs</a></td>
+</tr>
+<tr class="even">
+<td><code>wasm-pack</code></td>
+<td>latest</td>
+<td><code>cargo install wasm-pack</code></td>
+</tr>
+<tr class="odd">
+<td>Node.js</td>
+<td>22+</td>
+<td><a href="https://nodejs.org">nodejs.org</a></td>
+</tr>
+<tr class="even">
+<td><code>pnpm</code></td>
+<td>latest</td>
+<td><code>corepack enable &amp;&amp; corepack prepare pnpm@latest --activate</code></td>
+</tr>
+<tr class="odd">
+<td><code>cargo-nextest</code></td>
+<td>latest</td>
+<td><code>cargo install cargo-nextest</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="step-1-fork-and-clone" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="step-1-fork-and-clone"><span class="header-section-number">2.2</span> Step 1: Fork and clone</h2>
+<p>Fork <a href="https://github.com/panproto/panproto" class="uri">https://github.com/panproto/panproto</a> on GitHub, then clone your fork:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:YOUR_USERNAME/panproto.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> panproto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="step-2-understand-the-workspace" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="step-2-understand-the-workspace"><span class="header-section-number">2.3</span> Step 2: Understand the workspace</h2>
+<p>The repository is a Cargo workspace. Here is the workspace definition from the root <code>Cargo.toml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="1"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[workspace]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">resolver</span> <span class="op">=</span> <span class="st">"3"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">members</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-gat"</span><span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-schema"</span><span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-inst"</span><span class="op">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-mig"</span><span class="op">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-lens"</span><span class="op">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-check"</span><span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-protocols"</span><span class="op">,</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-core"</span><span class="op">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-wasm"</span><span class="op">,</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"crates/panproto-cli"</span><span class="op">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tests/integration"</span><span class="op">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">[workspace.package]</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="dt">edition</span> <span class="op">=</span> <span class="st">"2024"</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="dt">rust-version</span> <span class="op">=</span> <span class="st">"1.85"</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="dt">license</span> <span class="op">=</span> <span class="st">"MIT"</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="dt">repository</span> <span class="op">=</span> <span class="st">"https://github.com/panproto/panproto"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Every <code>crates/panproto-*</code> directory is an independent crate. The <code>tests/integration</code> crate holds cross-crate integration tests. The TypeScript SDK lives in <code>sdk/typescript/</code>.</p>
+</section>
+<section id="step-3-build-the-workspace" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="step-3-build-the-workspace"><span class="header-section-number">2.4</span> Step 3: Build the workspace</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">--workspace</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This compiles all 10 crates and the integration test crate. The first build downloads dependencies and takes a few minutes; incremental builds are fast.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The workspace uses <code>resolver = "3"</code> (the Rust 2024 edition resolver). Make sure your Rust toolchain is 1.85 or newer: <code>rustup update stable</code>.</p>
+</div>
+</div>
+</section>
+<section id="step-4-run-the-test-suite" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="step-4-run-the-test-suite"><span class="header-section-number">2.5</span> Step 4: Run the test suite</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>All tests should pass on a clean checkout. If any fail, check <a href="../appendices/C-troubleshooting.html" class="quarto-xref"><span>Chapter 22</span></a> for common issues and fixes.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why nextest?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>panproto uses <code>cargo-nextest</code> instead of <code>cargo test</code> for test isolation — each test runs in its own process, preventing shared mutable state from causing flaky results. See <a href="03-building-testing.html" class="quarto-xref"><span>Chapter 3</span></a> for details.</p>
+</div>
+</div>
+</section>
+<section id="step-5-build-the-wasm-target" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="step-5-build-the-wasm-target"><span class="header-section-number">2.6</span> Step 5: Build the WASM target</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">wasm-pack</span> build crates/panproto-wasm <span class="at">--target</span> web</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This compiles <code>panproto-wasm</code> to WebAssembly and generates JavaScript bindings in <code>crates/panproto-wasm/pkg/</code>. If this fails with a missing target error, run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> target add wasm32-unknown-unknown</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="step-6-build-the-typescript-sdk" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="step-6-build-the-typescript-sdk"><span class="header-section-number">2.7</span> Step 6: Build the TypeScript SDK</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sdk/typescript</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> install</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> build</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This compiles the TypeScript sources and runs type checking. The SDK wraps the WASM module and provides the high-level <code>Panproto</code> class.</p>
+</section>
+<section id="step-7-make-a-change" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="step-7-make-a-change"><span class="header-section-number">2.8</span> Step 7: Make a change</h2>
+<p>Now let us make a concrete change: adding a <code>minLength</code> constraint sort to the AT Protocol protocol definition.</p>
+<section id="locate-the-file" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="locate-the-file"><span class="header-section-number">2.8.1</span> Locate the file</h3>
+<p>The AT Protocol protocol is defined in <code>crates/panproto-protocols/src/atproto.rs</code>. Open it and find the section where constraint sorts are registered.</p>
+</section>
+<section id="add-the-constraint-sort" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="add-the-constraint-sort"><span class="header-section-number">2.8.2</span> Add the constraint sort</h3>
+<p>In the <code>build_atproto_protocol()</code> function, you will find a block that registers constraint sorts like <code>maxLength</code>, <code>format</code>, and <code>enum</code>. Add a new entry for <code>minLength</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// In crates/panproto-protocols/src/atproto.rs</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Inside build_atproto_protocol(), in the constraint sorts section:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>builder<span class="op">.</span>add_constraint_sort(<span class="st">"minLength"</span><span class="op">,</span> <span class="op">&amp;</span>[(<span class="st">"value"</span><span class="op">,</span> <span class="st">"integer"</span>)])<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This registers a new constraint sort named <code>"minLength"</code> that takes a single parameter <code>"value"</code> of sort <code>"integer"</code>.</p>
+</section>
+<section id="add-a-test" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="add-a-test"><span class="header-section-number">2.8.3</span> Add a test</h3>
+<p>Add a test in the same file (or in the existing test module) that verifies the new constraint sort is present:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>test<span class="at">]</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> test_atproto_has_min_length_constraint() <span class="op">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol <span class="op">=</span> build_atproto_protocol()<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> theory <span class="op">=</span> protocol<span class="op">.</span>constraint_theory()<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">assert!</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        theory<span class="op">.</span>find_sort(<span class="st">"minLength"</span>)<span class="op">.</span>is_ok()<span class="op">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AT Protocol should have a minLength constraint sort"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="run-the-relevant-tests" class="level3" data-number="2.8.4">
+<h3 data-number="2.8.4" class="anchored" data-anchor-id="run-the-relevant-tests"><span class="header-section-number">2.8.4</span> Run the relevant tests</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-protocols</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you added a constraint that is used by integration tests, also run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-integration</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="step-8-verify-the-full-suite" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="step-8-verify-the-full-suite"><span class="header-section-number">2.9</span> Step 8: Verify the full suite</h2>
+<p>Before committing, run the complete test suite to make sure nothing else broke:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Always run the full suite
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Changes to protocol definitions can affect schema validation, migration compilation, and integration tests. A passing per-crate test does not guarantee the full suite passes.</p>
+</div>
+</div>
+</section>
+<section id="step-9-commit-and-push" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="step-9-commit-and-push"><span class="header-section-number">2.10</span> Step 9: Commit and push</h2>
+<p>panproto uses <a href="https://www.conventionalcommits.org/">Conventional Commits</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feat/atproto-min-length</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add crates/panproto-protocols/src/atproto.rs</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat(protocols): add minLength constraint sort to AT Protocol"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin feat/atproto-min-length</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Common prefixes:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Prefix</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>feat</code></td>
+<td>New feature or capability</td>
+</tr>
+<tr class="even">
+<td><code>fix</code></td>
+<td>Bug fix</td>
+</tr>
+<tr class="odd">
+<td><code>refactor</code></td>
+<td>Code restructuring with no behavior change</td>
+</tr>
+<tr class="even">
+<td><code>test</code></td>
+<td>Adding or updating tests</td>
+</tr>
+<tr class="odd">
+<td><code>docs</code></td>
+<td>Documentation changes</td>
+</tr>
+<tr class="even">
+<td><code>perf</code></td>
+<td>Performance improvement</td>
+</tr>
+<tr class="odd">
+<td><code>chore</code></td>
+<td>Build, CI, dependency updates</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="step-10-open-a-pull-request" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="step-10-open-a-pull-request"><span class="header-section-number">2.11</span> Step 10: Open a pull request</h2>
+<p>Go to your fork on GitHub and open a pull request against <code>main</code>. The PR template will guide you through:</p>
+<ol type="1">
+<li><strong>Description</strong> — what the change does and why.</li>
+<li><strong>Testing</strong> — how you verified it works.</li>
+<li><strong>Breaking changes</strong> — whether any public API changed.</li>
+</ol>
+</section>
+<section id="what-happens-next" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="what-happens-next"><span class="header-section-number">2.12</span> What happens next</h2>
+<p>After you push, CI runs automatically:</p>
+<ol type="1">
+<li><strong>Lint</strong> — <code>cargo clippy --workspace -- -D warnings</code> with pedantic and nursery lints.</li>
+<li><strong>Test</strong> — <code>cargo nextest run --workspace</code> on Linux, macOS, and Windows.</li>
+<li><strong>WASM</strong> — <code>wasm-pack build</code> and <code>wasm-pack test --headless --chrome</code>.</li>
+<li><strong>TypeScript</strong> — <code>pnpm build &amp;&amp; pnpm test</code> in <code>sdk/typescript/</code>.</li>
+<li><strong>Format</strong> — <code>cargo fmt --check</code> and <code>prettier --check</code> for TypeScript.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>CI must pass before a maintainer reviews your PR. If a CI job fails, check the logs — <a href="../appendices/C-troubleshooting.html" class="quarto-xref"><span>Chapter 22</span></a> covers the most common failure modes and how to reproduce them locally.</p>
+</div>
+</div>
+</section>
+<section id="the-contribution-lifecycle" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="the-contribution-lifecycle"><span class="header-section-number">2.13</span> The contribution lifecycle</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-contribution-flow" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-contribution-flow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-contribution-flow">flowchart LR
+    A["Fork"] --&gt; B["Clone"]
+    B --&gt; C["Build\ncargo build --workspace"]
+    C --&gt; D["Test\ncargo nextest run --workspace"]
+    D --&gt; E["Make change"]
+    E --&gt; F["Test again"]
+    F --&gt; G["Commit\n(conventional format)"]
+    G --&gt; H["Push"]
+    H --&gt; I["Open PR"]
+    I --&gt; J["CI runs"]
+    J --&gt; K{"CI passes?"}
+    K --&gt;|yes| L["Code review"]
+    K --&gt;|no| M["Fix issues"]
+    M --&gt; F
+    L --&gt; N{"Approved?"}
+    N --&gt;|yes| O["Merge"]
+    N --&gt;|changes requested| M
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-contribution-flow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: End-to-end contribution workflow
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="checklist" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="checklist"><span class="header-section-number">2.14</span> Checklist</h2>
+<p>Before opening your PR, verify:</p>
+<ul class="task-list">
+<li><label><input type="checkbox"><code>cargo build --workspace</code> succeeds</label></li>
+<li><label><input type="checkbox"><code>cargo nextest run --workspace</code> passes</label></li>
+<li><label><input type="checkbox"><code>cargo clippy --workspace -- -D warnings</code> is clean</label></li>
+<li><label><input type="checkbox"><code>cargo fmt --check</code> passes</label></li>
+<li><label><input type="checkbox"><code>wasm-pack build crates/panproto-wasm --target web</code> succeeds</label></li>
+<li><label><input type="checkbox"><code>cd sdk/typescript &amp;&amp; pnpm build &amp;&amp; pnpm test</code> passes</label></li>
+<li><label><input type="checkbox">Commit message follows conventional format</label></li>
+<li><label><input type="checkbox">PR description explains the <em>what</em> and <em>why</em></label></li>
+</ul>
+</section>
+<section id="types-of-contributions" class="level2" data-number="2.15">
+<h2 data-number="2.15" class="anchored" data-anchor-id="types-of-contributions"><span class="header-section-number">2.15</span> Types of contributions</h2>
+<p>Not sure what to work on? Here are some common contribution types:</p>
+<p><strong>Good first issues.</strong> Look for issues labeled <code>good first issue</code> on the <a href="https://github.com/panproto/panproto/issues">issue tracker</a>. These are scoped, well-described tasks suitable for newcomers.</p>
+<p><strong>Bug fixes.</strong> Reproduce the bug with a test, fix the code, verify the test passes. Use <code>fix(crate): description</code> as the commit prefix.</p>
+<p><strong>New protocol support.</strong> Adding a new schema language means implementing the <code>Protocol</code> trait in <code>panproto-protocols</code>. See chapters 7 and 12 for the details of what a protocol requires.</p>
+<p><strong>Performance improvements.</strong> Run the benchmarks (chapter 4), identify a bottleneck, optimize, and verify with before/after benchmark numbers. Use <code>perf(crate): description</code> as the commit prefix.</p>
+<p><strong>Documentation.</strong> Improvements to rustdoc, this developer guide, or the tutorial are always welcome. Use <code>docs: description</code> as the commit prefix.</p>
+</section>
+<section id="summary" class="level2" data-number="2.16">
+<h2 data-number="2.16" class="anchored" data-anchor-id="summary"><span class="header-section-number">2.16</span> Summary</h2>
+<p>You now know how to:</p>
+<ul>
+<li>Set up the development environment</li>
+<li>Build and test the entire workspace</li>
+<li>Make a change to a protocol definition</li>
+<li>Commit with conventional format and open a PR</li>
+<li>Understand what CI checks run</li>
+</ul>
+<p>The next two chapters cover the build system and debugging tools in more depth. When you are ready to understand the code you are changing, jump to the architecture chapters (Part III).</p>
+<p>For the complete coding conventions and PR expectations, see chapters 16–18.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/01-welcome.html" class="pagination-link" aria-label="Welcome to panproto Development">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/03-building-testing.html" class="pagination-link" aria-label="Building and Testing">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Your First Contribution {#sec-first-contribution}</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>This chapter walks you through the entire contribution cycle --- from forking the repository to opening a pull request --- with a concrete example change.</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>Before you begin, install:</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tool <span class="pp">|</span> Minimum version <span class="pp">|</span> Install <span class="pp">|</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rust <span class="pp">|</span> 1.85+ (Edition 2024) <span class="pp">|</span> <span class="co">[</span><span class="ot">rustup.rs</span><span class="co">](https://rustup.rs)</span> <span class="pp">|</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`wasm-pack`</span> <span class="pp">|</span> latest <span class="pp">|</span> <span class="in">`cargo install wasm-pack`</span> <span class="pp">|</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Node.js <span class="pp">|</span> 22+ <span class="pp">|</span> <span class="co">[</span><span class="ot">nodejs.org</span><span class="co">](https://nodejs.org)</span> <span class="pp">|</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pnpm`</span> <span class="pp">|</span> latest <span class="pp">|</span> <span class="in">`corepack enable &amp;&amp; corepack prepare pnpm@latest --activate`</span> <span class="pp">|</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`cargo-nextest`</span> <span class="pp">|</span> latest <span class="pp">|</span> <span class="in">`cargo install cargo-nextest`</span> <span class="pp">|</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 1: Fork and clone</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>Fork <span class="ot">&lt;https://github.com/panproto/panproto&gt;</span> on GitHub, then clone your fork:</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:YOUR_USERNAME/panproto.git</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> panproto</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 2: Understand the workspace</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>The repository is a Cargo workspace. Here is the workspace definition from the root <span class="in">`Cargo.toml`</span>:</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{.toml include="../../Cargo.toml" start-line=1 end-line=22}</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>Every <span class="in">`crates/panproto-*`</span> directory is an independent crate. The <span class="in">`tests/integration`</span> crate holds cross-crate integration tests. The TypeScript SDK lives in <span class="in">`sdk/typescript/`</span>.</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 3: Build the workspace</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> build <span class="at">--workspace</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>This compiles all 10 crates and the integration test crate. The first build downloads dependencies and takes a few minutes; incremental builds are fast.</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>The workspace uses <span class="in">`resolver = "3"`</span> (the Rust 2024 edition resolver). Make sure your Rust toolchain is 1.85 or newer: <span class="in">`rustup update stable`</span>.</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 4: Run the test suite</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>All tests should pass on a clean checkout. If any fail, check @sec-troubleshooting for common issues and fixes.</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why nextest?</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>panproto uses <span class="in">`cargo-nextest`</span> instead of <span class="in">`cargo test`</span> for test isolation --- each test runs in its own process, preventing shared mutable state from causing flaky results. See @sec-building-testing for details.</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 5: Build the WASM target</span></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="ex">wasm-pack</span> build crates/panproto-wasm <span class="at">--target</span> web</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>This compiles <span class="in">`panproto-wasm`</span> to WebAssembly and generates JavaScript bindings in <span class="in">`crates/panproto-wasm/pkg/`</span>. If this fails with a missing target error, run:</span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a><span class="ex">rustup</span> target add wasm32-unknown-unknown</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 6: Build the TypeScript SDK</span></span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sdk/typescript</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> install</span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a><span class="ex">pnpm</span> build</span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>This compiles the TypeScript sources and runs type checking. The SDK wraps the WASM module and provides the high-level <span class="in">`Panproto`</span> class.</span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 7: Make a change</span></span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a>Now let us make a concrete change: adding a <span class="in">`minLength`</span> constraint sort to the AT Protocol protocol definition.</span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### Locate the file</span></span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>The AT Protocol protocol is defined in <span class="in">`crates/panproto-protocols/src/atproto.rs`</span>. Open it and find the section where constraint sorts are registered.</span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Add the constraint sort</span></span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a>In the <span class="in">`build_atproto_protocol()`</span> function, you will find a block that registers constraint sorts like <span class="in">`maxLength`</span>, <span class="in">`format`</span>, and <span class="in">`enum`</span>. Add a new entry for <span class="in">`minLength`</span>:</span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> In crates<span class="sc">/</span>panproto<span class="sc">-</span>protocols<span class="sc">/</span>src<span class="sc">/</span>atproto.rs</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Inside <span class="fu">build_atproto_protocol</span>(), <span class="cf">in</span> the constraint sorts section<span class="sc">:</span></span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a><span class="fu">builder.add_constraint_sort</span>(<span class="st">"minLength"</span>, <span class="sc">&amp;</span>[(<span class="st">"value"</span>, <span class="st">"integer"</span>)])?;</span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a>This registers a new constraint sort named <span class="in">`"minLength"`</span> that takes a single parameter <span class="in">`"value"`</span> of sort <span class="in">`"integer"`</span>.</span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Add a test</span></span>
+<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a>Add a test in the same file (or in the existing test module) that verifies the new constraint sort is present:</span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a><span class="co">#[test]</span></span>
+<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a>fn <span class="fu">test_atproto_has_min_length_constraint</span>() {</span>
+<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a>    let protocol <span class="ot">=</span> <span class="fu">build_atproto_protocol</span>()<span class="fu">.unwrap</span>();</span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>    let theory <span class="ot">=</span> <span class="fu">protocol.constraint_theory</span>();</span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>    assert<span class="sc">!</span>(</span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theory.find_sort</span>(<span class="st">"minLength"</span>)<span class="fu">.is_ok</span>(),</span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AT Protocol should have a minLength constraint sort"</span></span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>    );</span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### Run the relevant tests</span></span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-protocols</span>
+<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a>If you added a constraint that is used by integration tests, also run:</span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-integration</span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 8: Verify the full suite</span></span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>Before committing, run the complete test suite to make sure nothing else broke:</span>
+<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> nextest run <span class="at">--workspace</span></span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Always run the full suite</span></span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a>Changes to protocol definitions can affect schema validation, migration compilation, and integration tests. A passing per-crate test does not guarantee the full suite passes.</span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 9: Commit and push</span></span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>panproto uses <span class="co">[</span><span class="ot">Conventional Commits</span><span class="co">](https://www.conventionalcommits.org/)</span>:</span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feat/atproto-min-length</span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add crates/panproto-protocols/src/atproto.rs</span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat(protocols): add minLength constraint sort to AT Protocol"</span></span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push origin feat/atproto-min-length</span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>Common prefixes:</span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Prefix <span class="pp">|</span> Use for <span class="pp">|</span></span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`feat`</span> <span class="pp">|</span> New feature or capability <span class="pp">|</span></span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fix`</span> <span class="pp">|</span> Bug fix <span class="pp">|</span></span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`refactor`</span> <span class="pp">|</span> Code restructuring with no behavior change <span class="pp">|</span></span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`test`</span> <span class="pp">|</span> Adding or updating tests <span class="pp">|</span></span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`docs`</span> <span class="pp">|</span> Documentation changes <span class="pp">|</span></span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`perf`</span> <span class="pp">|</span> Performance improvement <span class="pp">|</span></span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`chore`</span> <span class="pp">|</span> Build, CI, dependency updates <span class="pp">|</span></span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 10: Open a pull request</span></span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>Go to your fork on GitHub and open a pull request against <span class="in">`main`</span>. The PR template will guide you through:</span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Description** --- what the change does and why.</span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Testing** --- how you verified it works.</span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Breaking changes** --- whether any public API changed.</span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## What happens next</span></span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>After you push, CI runs automatically:</span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Lint** --- <span class="in">`cargo clippy --workspace -- -D warnings`</span> with pedantic and nursery lints.</span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Test** --- <span class="in">`cargo nextest run --workspace`</span> on Linux, macOS, and Windows.</span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**WASM** --- <span class="in">`wasm-pack build`</span> and <span class="in">`wasm-pack test --headless --chrome`</span>.</span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**TypeScript** --- <span class="in">`pnpm build &amp;&amp; pnpm test`</span> in <span class="in">`sdk/typescript/`</span>.</span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Format** --- <span class="in">`cargo fmt --check`</span> and <span class="in">`prettier --check`</span> for TypeScript.</span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a>CI must pass before a maintainer reviews your PR. If a CI job fails, check the logs --- @sec-troubleshooting covers the most common failure modes and how to reproduce them locally.</span>
+<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a><span class="fu">## The contribution lifecycle</span></span>
+<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a>%%| label: fig-contribution-flow</span>
+<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">End-to-end contribution workflow</span><span class="ot">"</span></span>
+<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">Fork</span><span class="ot">"</span>] --&gt; B[<span class="ot">"</span><span class="st">Clone</span><span class="ot">"</span>]</span>
+<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a>    B --&gt; C[<span class="ot">"</span><span class="st">Build</span><span class="ch">\n</span><span class="st">cargo build --workspace</span><span class="ot">"</span>]</span>
+<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a>    C --&gt; D[<span class="ot">"</span><span class="st">Test</span><span class="ch">\n</span><span class="st">cargo nextest run --workspace</span><span class="ot">"</span>]</span>
+<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a>    D --&gt; E[<span class="ot">"</span><span class="st">Make change</span><span class="ot">"</span>]</span>
+<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a>    E --&gt; F[<span class="ot">"</span><span class="st">Test again</span><span class="ot">"</span>]</span>
+<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a>    F --&gt; G[<span class="ot">"</span><span class="st">Commit</span><span class="ch">\n</span><span class="st">(conventional format)</span><span class="ot">"</span>]</span>
+<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a>    G --&gt; H[<span class="ot">"</span><span class="st">Push</span><span class="ot">"</span>]</span>
+<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a>    H --&gt; I[<span class="ot">"</span><span class="st">Open PR</span><span class="ot">"</span>]</span>
+<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a>    I --&gt; J[<span class="ot">"</span><span class="st">CI runs</span><span class="ot">"</span>]</span>
+<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a>    J --&gt; K{<span class="ot">"</span><span class="st">CI passes?</span><span class="ot">"</span>}</span>
+<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a>    K --&gt;|yes| L[<span class="ot">"</span><span class="st">Code review</span><span class="ot">"</span>]</span>
+<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a>    K --&gt;|<span class="fu">no</span>| M[<span class="ot">"</span><span class="st">Fix issues</span><span class="ot">"</span>]</span>
+<span id="cb14-211"><a href="#cb14-211" aria-hidden="true" tabindex="-1"></a>    M --&gt; F</span>
+<span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a>    L --&gt; N{<span class="ot">"</span><span class="st">Approved?</span><span class="ot">"</span>}</span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a>    N --&gt;|yes| O[<span class="ot">"</span><span class="st">Merge</span><span class="ot">"</span>]</span>
+<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a>    N --&gt;|changes requested| M</span>
+<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Checklist</span></span>
+<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>Before opening your PR, verify:</span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`cargo build --workspace`</span> succeeds</span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`cargo nextest run --workspace`</span> passes</span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`cargo clippy --workspace -- -D warnings`</span> is clean</span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`cargo fmt --check`</span> passes</span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`wasm-pack build crates/panproto-wasm --target web`</span> succeeds</span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> <span class="in">`cd sdk/typescript &amp;&amp; pnpm build &amp;&amp; pnpm test`</span> passes</span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Commit message follows conventional format</span>
+<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> PR description explains the *what* and *why*</span>
+<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Types of contributions</span></span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>Not sure what to work on? Here are some common contribution types:</span>
+<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>**Good first issues.**</span>
+<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a>Look for issues labeled <span class="in">`good first issue`</span> on the <span class="co">[</span><span class="ot">issue tracker</span><span class="co">](https://github.com/panproto/panproto/issues)</span>. These are scoped, well-described tasks suitable for newcomers.</span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a>**Bug fixes.**</span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a>Reproduce the bug with a test, fix the code, verify the test passes. Use <span class="in">`fix(crate): description`</span> as the commit prefix.</span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>**New protocol support.**</span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>Adding a new schema language means implementing the <span class="in">`Protocol`</span> trait in <span class="in">`panproto-protocols`</span>. See chapters 7 and 12 for the details of what a protocol requires.</span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>**Performance improvements.**</span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>Run the benchmarks (chapter 4), identify a bottleneck, optimize, and verify with before/after benchmark numbers. Use <span class="in">`perf(crate): description`</span> as the commit prefix.</span>
+<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>**Documentation.**</span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>Improvements to rustdoc, this developer guide, or the tutorial are always welcome. Use <span class="in">`docs: description`</span> as the commit prefix.</span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>You now know how to:</span>
+<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Set up the development environment</span>
+<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Build and test the entire workspace</span>
+<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Make a change to a protocol definition</span>
+<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Commit with conventional format and open a PR</span>
+<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Understand what CI checks run</span>
+<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-259"><a href="#cb14-259" aria-hidden="true" tabindex="-1"></a>The next two chapters cover the build system and debugging tools in more depth. When you are ready to understand the code you are changing, jump to the architecture chapters (Part III).</span>
+<span id="cb14-260"><a href="#cb14-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a>For the complete coding conventions and PR expectations, see chapters 16--18.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/02-first-contribution.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

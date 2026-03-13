@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; panproto-schema – Schemas and Protocols – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/08-instances-wtype.html" rel="next">
+<link href="../chapters/06-gat-engine.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="neutral">
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/07-schema-protocols.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#schema-elements" id="toc-schema-elements" class="nav-link active" data-scroll-target="#schema-elements"><span class="header-section-number">7.1</span> Schema Elements</a>
+  <ul class="collapse">
+  <li><a href="#vertex" id="toc-vertex" class="nav-link" data-scroll-target="#vertex"><span class="header-section-number">7.1.1</span> Vertex</a></li>
+  <li><a href="#edge" id="toc-edge" class="nav-link" data-scroll-target="#edge"><span class="header-section-number">7.1.2</span> Edge</a></li>
+  <li><a href="#hyperedge" id="toc-hyperedge" class="nav-link" data-scroll-target="#hyperedge"><span class="header-section-number">7.1.3</span> HyperEdge</a></li>
+  <li><a href="#constraint" id="toc-constraint" class="nav-link" data-scroll-target="#constraint"><span class="header-section-number">7.1.4</span> Constraint</a></li>
+  </ul></li>
+  <li><a href="#the-schema-struct" id="toc-the-schema-struct" class="nav-link" data-scroll-target="#the-schema-struct"><span class="header-section-number">7.2</span> The Schema Struct</a>
+  <ul class="collapse">
+  <li><a href="#schema-as-a-gat-model" id="toc-schema-as-a-gat-model" class="nav-link" data-scroll-target="#schema-as-a-gat-model"><span class="header-section-number">7.2.1</span> Schema as a GAT Model</a></li>
+  </ul></li>
+  <li><a href="#protocols" id="toc-protocols" class="nav-link" data-scroll-target="#protocols"><span class="header-section-number">7.3</span> Protocols</a>
+  <ul class="collapse">
+  <li><a href="#edgerule" id="toc-edgerule" class="nav-link" data-scroll-target="#edgerule"><span class="header-section-number">7.3.1</span> EdgeRule</a></li>
+  <li><a href="#protocol-fields" id="toc-protocol-fields" class="nav-link" data-scroll-target="#protocol-fields"><span class="header-section-number">7.3.2</span> Protocol Fields</a></li>
+  <li><a href="#schema-structure-diagram" id="toc-schema-structure-diagram" class="nav-link" data-scroll-target="#schema-structure-diagram"><span class="header-section-number">7.3.3</span> Schema Structure Diagram</a></li>
+  </ul></li>
+  <li><a href="#schemabuilder" id="toc-schemabuilder" class="nav-link" data-scroll-target="#schemabuilder"><span class="header-section-number">7.4</span> SchemaBuilder</a>
+  <ul class="collapse">
+  <li><a href="#validation-pipeline" id="toc-validation-pipeline" class="nav-link" data-scroll-target="#validation-pipeline"><span class="header-section-number">7.4.1</span> Validation Pipeline</a></li>
+  <li><a href="#vertex-validation" id="toc-vertex-validation" class="nav-link" data-scroll-target="#vertex-validation"><span class="header-section-number">7.4.2</span> Vertex Validation</a></li>
+  <li><a href="#edge-validation" id="toc-edge-validation" class="nav-link" data-scroll-target="#edge-validation"><span class="header-section-number">7.4.3</span> Edge Validation</a></li>
+  <li><a href="#build-time-index-computation" id="toc-build-time-index-computation" class="nav-link" data-scroll-target="#build-time-index-computation"><span class="header-section-number">7.4.4</span> Build-Time Index Computation</a></li>
+  </ul></li>
+  <li><a href="#open-vs.-closed-protocols" id="toc-open-vs.-closed-protocols" class="nav-link" data-scroll-target="#open-vs.-closed-protocols"><span class="header-section-number">7.5</span> Open vs.&nbsp;Closed Protocols</a></li>
+  <li><a href="#schema-normalization" id="toc-schema-normalization" class="nav-link" data-scroll-target="#schema-normalization"><span class="header-section-number">7.6</span> Schema Normalization</a></li>
+  <li><a href="#schema-validation" id="toc-schema-validation" class="nav-link" data-scroll-target="#schema-validation"><span class="header-section-number">7.7</span> Schema Validation</a></li>
+  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link" data-scroll-target="#design-rationale"><span class="header-section-number">7.8</span> Design Rationale</a>
+  <ul class="collapse">
+  <li><a href="#why-adjacency-indices-at-build-time" id="toc-why-adjacency-indices-at-build-time" class="nav-link" data-scroll-target="#why-adjacency-indices-at-build-time"><span class="header-section-number">7.8.1</span> Why Adjacency Indices at Build Time</a></li>
+  <li><a href="#why-string-keyed-maps" id="toc-why-string-keyed-maps" class="nav-link" data-scroll-target="#why-string-keyed-maps"><span class="header-section-number">7.8.2</span> Why String-Keyed Maps</a></li>
+  <li><a href="#why-edge-in-adjacency-values" id="toc-why-edge-in-adjacency-values" class="nav-link" data-scroll-target="#why-edge-in-adjacency-values"><span class="header-section-number">7.8.3</span> Why Edge in Adjacency Values</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/07-schema-protocols.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/07-schema-protocols.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-schema-protocols" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><code>panproto-schema</code> is a Level 1 crate that defines the data structures for schema graphs and the protocols that govern their construction. A <em>schema</em> is a model of a protocol’s schema theory GAT: it instantiates the abstract sorts (Vertex, Edge, Constraint, …) with concrete elements that describe a particular data format version. A <em>protocol</em> is the configuration object that says which GATs to use and what well-formedness rules to enforce.</p>
+<p>This chapter covers every major type in the crate and the validation pipeline that ensures schemas are well-formed at construction time.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the user-facing explanation of schemas, see the <a href="https://panproto.github.io/tutorial/chapters/02-the-shape-of-schemas.html">tutorial chapter 2</a>.</p>
+</div>
+</div>
+<section id="schema-elements" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="schema-elements"><span class="header-section-number">7.1</span> Schema Elements</h2>
+<p>A schema is a labeled, directed hypergraph. The four element types – <code>Vertex</code>, <code>Edge</code>, <code>HyperEdge</code>, and <code>Constraint</code> – correspond to sorts in the schema theory GAT. Each element carries enough metadata for the builder to validate it against the protocol’s rules.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// A schema vertex.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">/// Each vertex has a unique `id`, a `kind` drawn from the protocol's</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// recognized vertex kinds, and an optional NSID (namespace identifier).</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> <span class="bu">Hash</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Vertex <span class="op">{</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Unique vertex identifier within the schema.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The vertex kind (e.g., `"record"`, `"object"`, `"string"`).</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Optional namespace identifier (e.g., `"app.bsky.feed.post"`).</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nsid<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// A binary edge between two vertices.</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">/// Edges are directed: they go from `src` to `tgt`. The `kind` determines</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">/// the structural role (e.g., `"prop"`, `"record-schema"`), and `name`</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">/// provides an optional label (e.g., the property name).</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> <span class="bu">Hash</span><span class="op">,</span> <span class="bu">PartialOrd</span><span class="op">,</span> <span class="bu">Ord</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Edge <span class="op">{</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Source vertex ID.</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> src<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Target vertex ID.</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> tgt<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edge kind (e.g., `"prop"`, `"record-schema"`).</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Optional edge label (e.g., a property name like `"text"`).</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">/// A hyper-edge (present only when the schema theory includes `ThHypergraph`).</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">/// Hyper-edges connect multiple vertices via a labeled signature.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> HyperEdge <span class="op">{</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Unique hyper-edge identifier.</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge kind.</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps label names to vertex IDs.</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> signature<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The label that identifies the parent vertex.</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> parent_label<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="co">/// A constraint on a vertex.</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">/// Constraints restrict the values a vertex can hold (e.g., maximum</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">/// string length, format pattern).</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> <span class="bu">PartialOrd</span><span class="op">,</span> <span class="bu">Ord</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Constraint <span class="op">{</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The constraint sort (e.g., `"maxLength"`, `"format"`).</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> sort<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The constraint value (e.g., `"3000"`, `"at-uri"`).</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> value<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="vertex" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="vertex"><span class="header-section-number">7.1.1</span> Vertex</h3>
+<p>Every vertex has a unique <code>id</code>, a <code>kind</code> (drawn from the protocol’s recognized set), and an optional NSID (namespace identifier). The <code>kind</code> field is the discriminator that edge rules use to determine which connections are legal. For example, in the AT Protocol, a vertex of kind <code>"record"</code> can have a <code>"record-schema"</code> edge to a vertex of kind <code>"object"</code>, but not to a vertex of kind <code>"string"</code>.</p>
+</section>
+<section id="edge" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="edge"><span class="header-section-number">7.1.2</span> Edge</h3>
+<p>Binary edges are the workhorses of schema structure. Each edge is directed (<code>src</code> to <code>tgt</code>), has a <code>kind</code> that determines its structural role, and may carry an optional <code>name</code> label. Property edges use the name to encode the field name (e.g., <code>"text"</code>, <code>"createdAt"</code>).</p>
+</section>
+<section id="hyperedge" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="hyperedge"><span class="header-section-number">7.1.3</span> HyperEdge</h3>
+<p>Hyper-edges generalize binary edges to connect multiple vertices via a labeled signature. They appear only in schema theories that include <code>ThHypergraph</code>. Each hyper-edge has a <code>parent_label</code> that identifies which vertex in its signature serves as the parent in the instance tree.</p>
+</section>
+<section id="constraint" class="level3" data-number="7.1.4">
+<h3 data-number="7.1.4" class="anchored" data-anchor-id="constraint"><span class="header-section-number">7.1.4</span> Constraint</h3>
+<p>Constraints restrict the values a vertex can hold. They are typed by a <code>sort</code> (e.g., <code>"maxLength"</code>, <code>"format"</code>) and carry a string <code>value</code>. Constraints are not validated during schema construction – the <code>validate</code> module checks them against the protocol’s <code>constraint_sorts</code> after the schema is built.</p>
+</section>
+</section>
+<section id="the-schema-struct" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="the-schema-struct"><span class="header-section-number">7.2</span> The Schema Struct</h2>
+<p>The <code>Schema</code> struct stores both the raw graph data and precomputed adjacency indices:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="71"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 70;"><span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">/// A schema: a model of the protocol's schema theory.</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">/// Contains both the raw data (vertices, edges, constraints, etc.) and</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">/// precomputed adjacency indices for efficient graph traversal.</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Schema <span class="op">{</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The protocol this schema belongs to.</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> protocol<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertices keyed by their ID.</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertices<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> Vertex<span class="op">&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The adjacency indices (<code>outgoing</code>, <code>incoming</code>, <code>between</code>) are <code>HashMap</code>s from vertex IDs (or vertex-pair tuples) to <code>SmallVec&lt;Edge, N&gt;</code>. Using <code>SmallVec</code> avoids heap allocation for vertices with few neighbors, which is the common case – most schema vertices have between one and four outgoing edges.</p>
+<p>The indices are computed once at build time and never modified. This makes lookups O(1) and supports the fast graph traversals that the migration and validation pipelines require.</p>
+<section id="schema-as-a-gat-model" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="schema-as-a-gat-model"><span class="header-section-number">7.2.1</span> Schema as a GAT Model</h3>
+<p>Mathematically, a <code>Schema</code> is a <em>model</em> (or <em>algebra</em>) of the schema theory GAT. The sorts of the GAT are instantiated as follows:</p>
+<div id="tbl-schema-model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-schema-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.1: How GAT sorts map to Schema fields.
+</figcaption>
+<div aria-describedby="tbl-schema-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>GAT Sort</th>
+<th>Schema field</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vertex</td>
+<td><code>vertices: HashMap&lt;String, Vertex&gt;</code></td>
+</tr>
+<tr class="even">
+<td>Edge</td>
+<td><code>edges: HashMap&lt;Edge, String&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>HyperEdge</td>
+<td><code>hyper_edges: HashMap&lt;String, HyperEdge&gt;</code></td>
+</tr>
+<tr class="even">
+<td>Constraint</td>
+<td><code>constraints: HashMap&lt;String, Vec&lt;Constraint&gt;&gt;</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The operations of the GAT (e.g., <code>src: Edge -&gt; Vertex</code>, <code>tgt: Edge -&gt; Vertex</code>) are implicit in the <code>Edge</code> struct’s <code>src</code> and <code>tgt</code> fields. This is a standard encoding: rather than storing operations as separate function objects, the operation’s result is stored as a field of the input struct.</p>
+</section>
+</section>
+<section id="protocols" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="protocols"><span class="header-section-number">7.3</span> Protocols</h2>
+<p>A <code>Protocol</code> identifies which schema theory and instance theory a data format uses, together with the well-formedness rules that the builder enforces.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 8;"><span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">/// A well-formedness rule for edges of a given kind.</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">/// When `src_kinds` is non-empty, only vertices whose kind appears in the</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">/// list may serve as the source of an edge of this kind. An empty list</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// means any vertex kind is allowed. The same applies to `tgt_kinds`.</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EdgeRule <span class="op">{</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The edge kind this rule governs (e.g., `"prop"`, `"record-schema"`).</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Permitted source vertex kinds (empty = any).</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> src_kinds<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Permitted target vertex kinds (empty = any).</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> tgt_kinds<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// Identifies the schema and instance theories for a data-format protocol,</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">/// together with structural well-formedness rules.</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// Protocols are the Level-1 configuration objects that drive schema</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">/// construction and validation. Each protocol names a schema theory GAT</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">/// and an instance theory GAT (both defined in `panproto-protocols`),</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">/// and supplies edge rules, recognized vertex kinds, and constraint sorts.</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Protocol <span class="op">{</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Human-readable protocol name (e.g., `"atproto"`, `"sql"`).</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Name of the schema theory GAT in the theory registry.</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_theory<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Name of the instance theory GAT in the theory registry.</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> instance_theory<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Well-formedness rules for each edge kind.</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_rules<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>EdgeRule<span class="op">&gt;,</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertex kinds that are considered "object-like" (containers).</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> obj_kinds<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Recognized constraint sorts (e.g., `"maxLength"`, `"format"`).</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> constraint_sorts<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="edgerule" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="edgerule"><span class="header-section-number">7.3.1</span> EdgeRule</h3>
+<p>The <code>EdgeRule</code> struct is the mechanism for encoding well-formedness constraints on schema edges. Each rule governs a specific edge kind and specifies which vertex kinds are permitted as sources and targets. When a list is empty, any vertex kind is allowed in that position.</p>
+<p>This design keeps protocol definitions declarative. Rather than writing procedural validation code, protocol authors declare a table of rules and the builder enforces them uniformly.</p>
+</section>
+<section id="protocol-fields" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="protocol-fields"><span class="header-section-number">7.3.2</span> Protocol Fields</h3>
+<ul>
+<li><code>schema_theory</code> and <code>instance_theory</code> name the GATs in the theory registry. These are the two parameters of the two-parameter architecture described in <a href="05-architecture-overview.html" class="quarto-xref"><span>Chapter 5</span></a>.</li>
+<li><code>edge_rules</code> constrain which edges can connect which vertices.</li>
+<li><code>obj_kinds</code> lists vertex kinds that are considered “object-like” (containers that can have child properties). This is used by the instance parser to decide whether a JSON value should be walked recursively.</li>
+<li><code>constraint_sorts</code> lists the recognized constraint types for post-build validation.</li>
+</ul>
+</section>
+<section id="schema-structure-diagram" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="schema-structure-diagram"><span class="header-section-number">7.3.3</span> Schema Structure Diagram</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-schema-classes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-schema-classes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-schema-classes">classDiagram
+    class Protocol {
+        +String name
+        +String schema_theory
+        +String instance_theory
+        +Vec~EdgeRule~ edge_rules
+        +Vec~String~ obj_kinds
+        +Vec~String~ constraint_sorts
+        +find_edge_rule(kind) Option~EdgeRule~
+        +is_known_vertex_kind(kind) bool
+    }
+
+    class EdgeRule {
+        +String edge_kind
+        +Vec~String~ src_kinds
+        +Vec~String~ tgt_kinds
+    }
+
+    class Schema {
+        +String protocol
+        +HashMap vertices
+        +HashMap edges
+        +HashMap hyper_edges
+        +HashMap constraints
+        +HashMap outgoing
+        +HashMap incoming
+        +HashMap between
+        +vertex(id) Option~Vertex~
+        +outgoing_edges(id) Slice~Edge~
+        +incoming_edges(id) Slice~Edge~
+    }
+
+    class Vertex {
+        +String id
+        +String kind
+        +Option~String~ nsid
+    }
+
+    class Edge {
+        +String src
+        +String tgt
+        +String kind
+        +Option~String~ name
+    }
+
+    Protocol *-- EdgeRule : edge_rules
+    Schema *-- Vertex : vertices
+    Schema *-- Edge : edges
+    Schema ..&gt; Protocol : built against
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-schema-classes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Class diagram showing the relationships between Protocol, Schema, and element types.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="schemabuilder" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="schemabuilder"><span class="header-section-number">7.4</span> SchemaBuilder</h2>
+<p>The <code>SchemaBuilder</code> is the only way to construct a <code>Schema</code>. It enforces a fluent, consume-self API where each method returns <code>Result&lt;Self, SchemaError&gt;</code>, so validation failures are caught immediately and partial construction is impossible.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="17"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 16;"><span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// A builder for incrementally constructing a validated [`Schema`].</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Example</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```ignore</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// let schema = SchemaBuilder::new(&amp;protocol)</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post", "record", Some("app.bsky.feed.post"))?</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post:body", "object", None)?</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">///     .edge("post", "post:body", "record-schema", None)?</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">///     .build()?;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SchemaBuilder <span class="op">{</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    protocol<span class="op">:</span> Protocol<span class="op">,</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    vertices<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> Vertex<span class="op">&gt;,</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;,</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    hyper_edges<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> HyperEdge<span class="op">&gt;,</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    constraints<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Constraint<span class="op">&gt;&gt;,</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    required<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;&gt;,</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    nsids<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    edge_set<span class="op">:</span> FxHashSet<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SchemaBuilder <span class="op">{</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new builder for the given protocol.</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> new(protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>            edges<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            hyper_edges<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>            constraints<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>            required<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>            nsids<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            edge_set<span class="op">:</span> <span class="pp">FxHashSet::</span><span class="kw">default</span>()<span class="op">,</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="validation-pipeline" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="validation-pipeline"><span class="header-section-number">7.4.1</span> Validation Pipeline</h3>
+<p>The builder validates elements incrementally as they are added, then performs a final global check at <code>build()</code> time. The pipeline looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-builder-pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-builder-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-builder-pipeline">flowchart LR
+    A["vertex()"] --&gt; B{"Vertex kind\nin protocol?"}
+    B --&gt;|yes| C{"Duplicate\nID?"}
+    B --&gt;|no| X1["SchemaError::\nUnknownVertexKind"]
+    C --&gt;|no| D["Accept vertex"]
+    C --&gt;|yes| X2["SchemaError::\nDuplicateVertex"]
+
+    E["edge()"] --&gt; F{"src &amp; tgt\nexist?"}
+    F --&gt;|yes| G{"Edge kind\nhas rule?"}
+    F --&gt;|no| X3["SchemaError::\nVertexNotFound"]
+    G --&gt;|yes| H{"src/tgt kinds\nmatch rule?"}
+    G --&gt;|no| X4["SchemaError::\nUnknownEdgeKind"]
+    H --&gt;|yes| I["Accept edge"]
+    H --&gt;|no| X5["SchemaError::\nInvalidEdge*"]
+
+    J["build()"] --&gt; K{"Any\nvertices?"}
+    K --&gt;|yes| L["Compute\nadjacency indices"]
+    K --&gt;|no| X6["SchemaError::\nEmptySchema"]
+    L --&gt; M["Return Schema"]
+
+    style X1 fill:#fdd,stroke:#c33
+    style X2 fill:#fdd,stroke:#c33
+    style X3 fill:#fdd,stroke:#c33
+    style X4 fill:#fdd,stroke:#c33
+    style X5 fill:#fdd,stroke:#c33
+    style X6 fill:#fdd,stroke:#c33
+    style M fill:#dfd,stroke:#3c3
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-builder-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: SchemaBuilder validation pipeline. Each step checks one class of invariant.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="vertex-validation" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="vertex-validation"><span class="header-section-number">7.4.2</span> Vertex Validation</h3>
+<p>When <code>vertex()</code> is called, the builder checks:</p>
+<ol type="1">
+<li><strong>No duplicate ID</strong>: the vertex ID must not already exist in the builder’s vertex map.</li>
+<li><strong>Known kind</strong>: if the protocol defines any edge rules or <code>obj_kinds</code>, the vertex kind must appear somewhere in those declarations. If the protocol is fully open (no rules at all), any kind is accepted.</li>
+</ol>
+</section>
+<section id="edge-validation" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="edge-validation"><span class="header-section-number">7.4.3</span> Edge Validation</h3>
+<p>When <code>edge()</code> is called, the builder checks:</p>
+<ol type="1">
+<li><strong>Endpoints exist</strong>: both <code>src</code> and <code>tgt</code> must be vertex IDs already added to the builder.</li>
+<li><strong>Known edge kind</strong>: if the protocol defines edge rules, there must be a rule for this edge kind.</li>
+<li><strong>Source kind permitted</strong>: if the matching <code>EdgeRule</code> has a non-empty <code>src_kinds</code> list, the source vertex’s kind must appear in it.</li>
+<li><strong>Target kind permitted</strong>: same check for <code>tgt_kinds</code>.</li>
+<li><strong>No duplicate edge</strong>: the <code>(src, tgt, kind, name)</code> tuple must be unique.</li>
+</ol>
+</section>
+<section id="build-time-index-computation" class="level3" data-number="7.4.4">
+<h3 data-number="7.4.4" class="anchored" data-anchor-id="build-time-index-computation"><span class="header-section-number">7.4.4</span> Build-Time Index Computation</h3>
+<p>The <code>build()</code> method iterates over all accepted edges exactly once, populating three indices:</p>
+<ul>
+<li><code>outgoing[src]</code> – all edges leaving a vertex.</li>
+<li><code>incoming[tgt]</code> – all edges arriving at a vertex.</li>
+<li><code>between[(src, tgt)]</code> – all edges between a specific pair.</li>
+</ul>
+<p>These indices use <code>SmallVec&lt;Edge, 4&gt;</code> (or <code>SmallVec&lt;Edge, 2&gt;</code> for <code>between</code>) to avoid heap allocation in the common case. The choice of inline capacity (4 and 2 respectively) is based on profiling of real-world AT Protocol schemas, where the median vertex outdegree is 3.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you are adding a new protocol to <code>panproto-protocols</code>, start by defining the <code>Protocol</code> struct with its edge rules and vertex kinds. The <code>SchemaBuilder</code> will enforce those rules automatically – you do not need to write any custom validation code.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="open-vs.-closed-protocols" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="open-vs.-closed-protocols"><span class="header-section-number">7.5</span> Open vs.&nbsp;Closed Protocols</h2>
+<p>The builder supports both <em>open</em> and <em>closed</em> protocols:</p>
+<ul>
+<li><strong>Closed protocol</strong>: defines <code>obj_kinds</code> and/or <code>edge_rules</code>. Only vertex kinds and edge kinds explicitly mentioned are accepted. This is the default for production protocols like AT Protocol and SQL.</li>
+<li><strong>Open protocol</strong>: has empty <code>obj_kinds</code> and <code>edge_rules</code>. Any vertex kind and any edge kind are accepted without validation. This is useful for testing and for protocols where the set of kinds is not known ahead of time.</li>
+</ul>
+<p>The distinction is handled by a guard clause in the builder: validation is skipped when the protocol has no declarations to validate against.</p>
+</section>
+<section id="schema-normalization" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="schema-normalization"><span class="header-section-number">7.6</span> Schema Normalization</h2>
+<p>The <code>normalize</code> module (in <code>schema/src/normalize.rs</code>) provides canonical ordering of schema elements for deterministic serialization. Normalization sorts vertices by ID, edges by <code>(src, tgt, kind, name)</code>, and constraints by <code>(sort, value)</code>. This ensures that structurally identical schemas produce byte-identical MessagePack output, which is critical for content-addressed storage and migration hash verification.</p>
+</section>
+<section id="schema-validation" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="schema-validation"><span class="header-section-number">7.7</span> Schema Validation</h2>
+<p>Beyond the per-element checks in the builder, the <code>validate</code> module provides post-build validation:</p>
+<ul>
+<li><strong>Constraint sort validation</strong>: checks that every constraint’s <code>sort</code> field appears in the protocol’s <code>constraint_sorts</code> list.</li>
+<li><strong>Connectivity checks</strong>: verifies that the schema graph is connected (every vertex is reachable from some root vertex via edges).</li>
+<li><strong>Required-edge checks</strong>: verifies that vertices which declare required edges actually have those edges in the schema.</li>
+</ul>
+<p>These checks are separated from the builder because they require the complete schema to evaluate. The builder validates local invariants (per-vertex, per-edge); the validator checks global invariants (connectivity, completeness).</p>
+</section>
+<section id="design-rationale" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">7.8</span> Design Rationale</h2>
+<section id="why-adjacency-indices-at-build-time" class="level3" data-number="7.8.1">
+<h3 data-number="7.8.1" class="anchored" data-anchor-id="why-adjacency-indices-at-build-time"><span class="header-section-number">7.8.1</span> Why Adjacency Indices at Build Time</h3>
+<p>Computing adjacency indices eagerly at build time (rather than lazily on first access) is a deliberate trade-off. Schema construction happens once; schema traversal happens many times during migration compilation, instance parsing, and validation. Paying the O(E) index-building cost once eliminates repeated O(E) scans during traversal.</p>
+</section>
+<section id="why-string-keyed-maps" class="level3" data-number="7.8.2">
+<h3 data-number="7.8.2" class="anchored" data-anchor-id="why-string-keyed-maps"><span class="header-section-number">7.8.2</span> Why String-Keyed Maps</h3>
+<p>Vertices, edges, and constraints are identified by <code>String</code> keys rather than integer IDs. This is intentional: string IDs carry semantic meaning (e.g., <code>"post:body.text"</code>) that makes schemas human-readable and debuggable. The performance cost is acceptable because schema sizes are modest (hundreds to low thousands of elements) and all hot-path lookups go through the precomputed <code>HashMap</code> indices.</p>
+</section>
+<section id="why-edge-in-adjacency-values" class="level3" data-number="7.8.3">
+<h3 data-number="7.8.3" class="anchored" data-anchor-id="why-edge-in-adjacency-values"><span class="header-section-number">7.8.3</span> Why Edge in Adjacency Values</h3>
+<p>The adjacency indices store full <code>Edge</code> clones rather than references or indices into a flat edge array. This avoids lifetime complications and makes the adjacency API simple (<code>outgoing_edges</code> returns <code>&amp;[Edge]</code>). The memory cost of edge duplication is offset by the <code>SmallVec</code> inline storage optimization.</p>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/06-gat-engine.html" class="pagination-link" aria-label="panproto-gat -- The GAT Engine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/08-instances-wtype.html" class="pagination-link" aria-label="panproto-inst -- Instances and the W-type Restrict Pipeline">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-schema -- Schemas and Protocols {#sec-schema-protocols}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-schema`</span> is a Level 1 crate that defines the data structures for schema graphs and the protocols that govern their construction. A _schema_ is a model of a protocol's schema theory GAT: it instantiates the abstract sorts (Vertex, Edge, Constraint, ...) with concrete elements that describe a particular data format version. A _protocol_ is the configuration object that says which GATs to use and what well-formedness rules to enforce.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>This chapter covers every major type in the crate and the validation pipeline that ensures schemas are well-formed at construction time.</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>For the user-facing explanation of schemas, see the <span class="co">[</span><span class="ot">tutorial chapter 2</span><span class="co">](https://panproto.github.io/tutorial/chapters/02-the-shape-of-schemas.html)</span>.</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Elements</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>A schema is a labeled, directed hypergraph. The four element types -- <span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`HyperEdge`</span>, and <span class="in">`Constraint`</span> -- correspond to sorts in the schema theory GAT. Each element carries enough metadata for the builder to validate it against the protocol's rules.</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-schema/src/schema.rs" start-line=13 end-line=69}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Vertex</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>Every vertex has a unique <span class="in">`id`</span>, a <span class="in">`kind`</span> (drawn from the protocol's recognized set), and an optional NSID (namespace identifier). The <span class="in">`kind`</span> field is the discriminator that edge rules use to determine which connections are legal. For example, in the AT Protocol, a vertex of kind <span class="in">`"record"`</span> can have a <span class="in">`"record-schema"`</span> edge to a vertex of kind <span class="in">`"object"`</span>, but not to a vertex of kind <span class="in">`"string"`</span>.</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">### Edge</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>Binary edges are the workhorses of schema structure. Each edge is directed (<span class="in">`src`</span> to <span class="in">`tgt`</span>), has a <span class="in">`kind`</span> that determines its structural role, and may carry an optional <span class="in">`name`</span> label. Property edges use the name to encode the field name (e.g., <span class="in">`"text"`</span>, <span class="in">`"createdAt"`</span>).</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">### HyperEdge</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>Hyper-edges generalize binary edges to connect multiple vertices via a labeled signature. They appear only in schema theories that include <span class="in">`ThHypergraph`</span>. Each hyper-edge has a <span class="in">`parent_label`</span> that identifies which vertex in its signature serves as the parent in the instance tree.</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Constraints restrict the values a vertex can hold. They are typed by a <span class="in">`sort`</span> (e.g., <span class="in">`"maxLength"`</span>, <span class="in">`"format"`</span>) and carry a string <span class="in">`value`</span>. Constraints are not validated during schema construction -- the <span class="in">`validate`</span> module checks them against the protocol's <span class="in">`constraint_sorts`</span> after the schema is built.</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Schema Struct</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Schema`</span> struct stores both the raw graph data and precomputed adjacency indices:</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-schema/src/schema.rs" start-line=71 end-line=80}</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>The adjacency indices (<span class="in">`outgoing`</span>, <span class="in">`incoming`</span>, <span class="in">`between`</span>) are <span class="in">`HashMap`</span>s from vertex IDs (or vertex-pair tuples) to <span class="in">`SmallVec&lt;Edge, N&gt;`</span>. Using <span class="in">`SmallVec`</span> avoids heap allocation for vertices with few neighbors, which is the common case -- most schema vertices have between one and four outgoing edges.</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>The indices are computed once at build time and never modified. This makes lookups O(1) and supports the fast graph traversals that the migration and validation pipelines require.</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema as a GAT Model</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>Mathematically, a <span class="in">`Schema`</span> is a _model_ (or _algebra_) of the schema theory GAT. The sorts of the GAT are instantiated as follows:</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> GAT Sort <span class="pp">|</span> Schema field <span class="pp">|</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Vertex <span class="pp">|</span> <span class="in">`vertices: HashMap&lt;String, Vertex&gt;`</span> <span class="pp">|</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edge <span class="pp">|</span> <span class="in">`edges: HashMap&lt;Edge, String&gt;`</span> <span class="pp">|</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> HyperEdge <span class="pp">|</span> <span class="in">`hyper_edges: HashMap&lt;String, HyperEdge&gt;`</span> <span class="pp">|</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint <span class="pp">|</span> <span class="in">`constraints: HashMap&lt;String, Vec&lt;Constraint&gt;&gt;`</span> <span class="pp">|</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>: How GAT sorts map to Schema fields. {#tbl-schema-model}</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>The operations of the GAT (e.g., <span class="in">`src: Edge -&gt; Vertex`</span>, <span class="in">`tgt: Edge -&gt; Vertex`</span>) are implicit in the <span class="in">`Edge`</span> struct's <span class="in">`src`</span> and <span class="in">`tgt`</span> fields. This is a standard encoding: rather than storing operations as separate function objects, the operation's result is stored as a field of the input struct.</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocols</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Protocol`</span> identifies which schema theory and instance theory a data format uses, together with the well-formedness rules that the builder enforces.</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-schema/src/protocol.rs" start-line=9 end-line=45}</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### EdgeRule</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>The <span class="in">`EdgeRule`</span> struct is the mechanism for encoding well-formedness constraints on schema edges. Each rule governs a specific edge kind and specifies which vertex kinds are permitted as sources and targets. When a list is empty, any vertex kind is allowed in that position.</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>This design keeps protocol definitions declarative. Rather than writing procedural validation code, protocol authors declare a table of rules and the builder enforces them uniformly.</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### Protocol Fields</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`schema_theory`</span> and <span class="in">`instance_theory`</span> name the GATs in the theory registry. These are the two parameters of the two-parameter architecture described in @sec-architecture-overview.</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`edge_rules`</span> constrain which edges can connect which vertices.</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`obj_kinds`</span> lists vertex kinds that are considered "object-like" (containers that can have child properties). This is used by the instance parser to decide whether a JSON value should be walked recursively.</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`constraint_sorts`</span> lists the recognized constraint types for post-build validation.</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema Structure Diagram</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>%%| label: fig-schema-classes</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Class diagram showing the relationships between Protocol, Schema, and element types.</span><span class="ot">"</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>classDiagram</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>    class Protocol {</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>        +String schema_theory</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>        +String instance_theory</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>        +Vec~EdgeRule~ edge_rules</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ obj_kinds</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ constraint_sorts</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>        +find_edge_rule(kind) Option~EdgeRule~</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>        +is_known_vertex_kind(kind) bool</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>    class EdgeRule {</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>        +String edge_kind</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ src_kinds</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ tgt_kinds</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>    class Schema {</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>        +String protocol</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>        +HashMap vertices</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>        +HashMap edges</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>        +HashMap hyper_edges</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>        +HashMap constraints</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>        +HashMap outgoing</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>        +HashMap incoming</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>        +HashMap between</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        +vertex(id) Option~Vertex~</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>        +outgoing_edges(id) Slice~Edge~</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>        +incoming_edges(id) Slice~Edge~</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>    class Vertex {</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>        +String id</span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>        +String kind</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>        +Option~String~ nsid</span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>    class Edge {</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>        +String src</span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>        +String tgt</span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>        +String kind</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>        +Option~String~ name</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>    Protocol <span class="wa">*-</span>- EdgeRule : edge_rules</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>    Schema <span class="wa">*-</span>- Vertex : vertices</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>    Schema <span class="wa">*-</span>- Edge : edges</span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>    Schema ..&gt; Protocol : built against</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## SchemaBuilder</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaBuilder`</span> is the only way to construct a <span class="in">`Schema`</span>. It enforces a fluent, consume-self API where each method returns <span class="in">`Result&lt;Self, SchemaError&gt;`</span>, so validation failures are caught immediately and partial construction is impossible.</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-schema/src/builder.rs" start-line=17 end-line=53}</span></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Validation Pipeline</span></span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>The builder validates elements incrementally as they are added, then performs a final global check at <span class="in">`build()`</span> time. The pipeline looks like this:</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>%%| label: fig-builder-pipeline</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">SchemaBuilder validation pipeline. Each step checks one class of invariant.</span><span class="ot">"</span></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    A[<span class="ot">"</span><span class="st">vertex()</span><span class="ot">"</span>] --&gt; B{<span class="ot">"</span><span class="st">Vertex kind</span><span class="ch">\n</span><span class="st">in protocol?</span><span class="ot">"</span>}</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    B --&gt;|yes| C{<span class="ot">"</span><span class="st">Duplicate</span><span class="ch">\n</span><span class="st">ID?</span><span class="ot">"</span>}</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>    B --&gt;|<span class="fu">no</span>| X1[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">UnknownVertexKind</span><span class="ot">"</span>]</span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>    C --&gt;|<span class="fu">no</span>| D[<span class="ot">"</span><span class="st">Accept vertex</span><span class="ot">"</span>]</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>    C --&gt;|yes| X2[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">DuplicateVertex</span><span class="ot">"</span>]</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>    E[<span class="ot">"</span><span class="st">edge()</span><span class="ot">"</span>] --&gt; F{<span class="ot">"</span><span class="st">src &amp; tgt</span><span class="ch">\n</span><span class="st">exist?</span><span class="ot">"</span>}</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>    F --&gt;|yes| G{<span class="ot">"</span><span class="st">Edge kind</span><span class="ch">\n</span><span class="st">has rule?</span><span class="ot">"</span>}</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    F --&gt;|<span class="fu">no</span>| X3[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">VertexNotFound</span><span class="ot">"</span>]</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>    G --&gt;|yes| H{<span class="ot">"</span><span class="st">src/tgt kinds</span><span class="ch">\n</span><span class="st">match rule?</span><span class="ot">"</span>}</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>    G --&gt;|<span class="fu">no</span>| X4[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">UnknownEdgeKind</span><span class="ot">"</span>]</span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>    H --&gt;|yes| I[<span class="ot">"</span><span class="st">Accept edge</span><span class="ot">"</span>]</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    H --&gt;|<span class="fu">no</span>| X5[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">InvalidEdge*</span><span class="ot">"</span>]</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>    J[<span class="ot">"</span><span class="st">build()</span><span class="ot">"</span>] --&gt; K{<span class="ot">"</span><span class="st">Any</span><span class="ch">\n</span><span class="st">vertices?</span><span class="ot">"</span>}</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    K --&gt;|yes| L[<span class="ot">"</span><span class="st">Compute</span><span class="ch">\n</span><span class="st">adjacency indices</span><span class="ot">"</span>]</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>    K --&gt;|<span class="fu">no</span>| X6[<span class="ot">"</span><span class="st">SchemaError::</span><span class="ch">\n</span><span class="st">EmptySchema</span><span class="ot">"</span>]</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>    L --&gt; M[<span class="ot">"</span><span class="st">Return Schema</span><span class="ot">"</span>]</span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>    style X1 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a>    style X2 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>    style X3 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a>    style X4 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a>    style X5 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>    style X6 fill:<span class="co">#fdd,stroke:#c33</span></span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a>    style M fill:<span class="co">#dfd,stroke:#3c3</span></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="fu">### Vertex Validation</span></span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a>When <span class="in">`vertex()`</span> is called, the builder checks:</span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**No duplicate ID**: the vertex ID must not already exist in the builder's vertex map.</span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Known kind**: if the protocol defines any edge rules or <span class="in">`obj_kinds`</span>, the vertex kind must appear somewhere in those declarations. If the protocol is fully open (no rules at all), any kind is accepted.</span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="fu">### Edge Validation</span></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>When <span class="in">`edge()`</span> is called, the builder checks:</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Endpoints exist**: both <span class="in">`src`</span> and <span class="in">`tgt`</span> must be vertex IDs already added to the builder.</span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Known edge kind**: if the protocol defines edge rules, there must be a rule for this edge kind.</span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Source kind permitted**: if the matching <span class="in">`EdgeRule`</span> has a non-empty <span class="in">`src_kinds`</span> list, the source vertex's kind must appear in it.</span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Target kind permitted**: same check for <span class="in">`tgt_kinds`</span>.</span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**No duplicate edge**: the <span class="in">`(src, tgt, kind, name)`</span> tuple must be unique.</span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### Build-Time Index Computation</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>The <span class="in">`build()`</span> method iterates over all accepted edges exactly once, populating three indices:</span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`outgoing[src]`</span> -- all edges leaving a vertex.</span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`incoming[tgt]`</span> -- all edges arriving at a vertex.</span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`between[(src, tgt)]`</span> -- all edges between a specific pair.</span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>These indices use <span class="in">`SmallVec&lt;Edge, 4&gt;`</span> (or <span class="in">`SmallVec&lt;Edge, 2&gt;`</span> for <span class="in">`between`</span>) to avoid heap allocation in the common case. The choice of inline capacity (4 and 2 respectively) is based on profiling of real-world AT Protocol schemas, where the median vertex outdegree is 3.</span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>If you are adding a new protocol to <span class="in">`panproto-protocols`</span>, start by defining the <span class="in">`Protocol`</span> struct with its edge rules and vertex kinds. The <span class="in">`SchemaBuilder`</span> will enforce those rules automatically -- you do not need to write any custom validation code.</span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a><span class="fu">## Open vs. Closed Protocols</span></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>The builder supports both _open_ and _closed_ protocols:</span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Closed protocol**: defines <span class="in">`obj_kinds`</span> and/or <span class="in">`edge_rules`</span>. Only vertex kinds and edge kinds explicitly mentioned are accepted. This is the default for production protocols like AT Protocol and SQL.</span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Open protocol**: has empty <span class="in">`obj_kinds`</span> and <span class="in">`edge_rules`</span>. Any vertex kind and any edge kind are accepted without validation. This is useful for testing and for protocols where the set of kinds is not known ahead of time.</span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>The distinction is handled by a guard clause in the builder: validation is skipped when the protocol has no declarations to validate against.</span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Normalization</span></span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`normalize`</span> module (in <span class="in">`schema/src/normalize.rs`</span>) provides canonical ordering of schema elements for deterministic serialization. Normalization sorts vertices by ID, edges by <span class="in">`(src, tgt, kind, name)`</span>, and constraints by <span class="in">`(sort, value)`</span>. This ensures that structurally identical schemas produce byte-identical MessagePack output, which is critical for content-addressed storage and migration hash verification.</span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Validation</span></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a>Beyond the per-element checks in the builder, the <span class="in">`validate`</span> module provides post-build validation:</span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Constraint sort validation**: checks that every constraint's <span class="in">`sort`</span> field appears in the protocol's <span class="in">`constraint_sorts`</span> list.</span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Connectivity checks**: verifies that the schema graph is connected (every vertex is reachable from some root vertex via edges).</span>
+<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Required-edge checks**: verifies that vertices which declare required edges actually have those edges in the schema.</span>
+<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a>These checks are separated from the builder because they require the complete schema to evaluate. The builder validates local invariants (per-vertex, per-edge); the validator checks global invariants (connectivity, completeness).</span>
+<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
+<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Adjacency Indices at Build Time</span></span>
+<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a>Computing adjacency indices eagerly at build time (rather than lazily on first access) is a deliberate trade-off. Schema construction happens once; schema traversal happens many times during migration compilation, instance parsing, and validation. Paying the O(E) index-building cost once eliminates repeated O(E) scans during traversal.</span>
+<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-243"><a href="#cb5-243" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why String-Keyed Maps</span></span>
+<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a>Vertices, edges, and constraints are identified by <span class="in">`String`</span> keys rather than integer IDs. This is intentional: string IDs carry semantic meaning (e.g., <span class="in">`"post:body.text"`</span>) that makes schemas human-readable and debuggable. The performance cost is acceptable because schema sizes are modest (hundreds to low thousands of elements) and all hot-path lookups go through the precomputed <span class="in">`HashMap`</span> indices.</span>
+<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Edge in Adjacency Values</span></span>
+<span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a>The adjacency indices store full <span class="in">`Edge`</span> clones rather than references or indices into a flat edge array. This avoids lifetime complications and makes the adjacency API simple (<span class="in">`outgoing_edges`</span> returns <span class="in">`&amp;[Edge]`</span>). The memory cost of edge duplication is offset by the <span class="in">`SmallVec`</span> inline storage optimization.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/07-schema-protocols.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

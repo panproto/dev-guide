@@ -632,7 +632,7 @@ div.csl-indent {
 <section id="why-breaking-change-detection-matters" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="why-breaking-change-detection-matters"><span class="header-section-number">11.1</span> Why Breaking Change Detection Matters</h2>
 <p>Schema evolution is routine in long-lived systems. An API adds a field, a database drops a column, a serialization format renames a message. Most of these changes are safe—existing consumers can ignore additions and tolerate relaxed constraints. But some changes are dangerous: removing a field that downstream consumers depend on, tightening a constraint that existing data violates, or changing a field’s type in an incompatible way.</p>
-<p>panproto’s breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <code>panproto check</code> CLI command, and into programmatic workflows via the Rust and TypeScript APIs.</p>
+<p>panproto’s breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <code>schema check</code> CLI command, and into programmatic workflows via the Rust and TypeScript APIs.</p>
 </section>
 <section id="the-detection-pipeline" class="level2" data-number="11.2">
 <h2 data-number="11.2" class="anchored" data-anchor-id="the-detection-pipeline"><span class="header-section-number">11.2</span> The Detection Pipeline</h2>
@@ -907,7 +907,7 @@ Important
 <li>An itemized list of non-breaking changes (if any), with a count header and numbered entries.</li>
 <li>If both lists are empty: <code>"No changes detected."</code></li>
 </ol>
-<p>This is what the <code>panproto check</code> CLI command displays by default.</p>
+<p>This is what the <code>schema check</code> CLI command displays by default.</p>
 </section>
 <section id="json-reports" class="level3" data-number="11.5.2">
 <h3 data-number="11.5.2" class="anchored" data-anchor-id="json-reports"><span class="header-section-number">11.5.2</span> JSON Reports</h3>
@@ -930,7 +930,7 @@ Important
 <ul>
 <li><strong>Before migration</strong>: run <code>diff</code> + <code>classify</code> to determine whether a migration is safe. If the report says “breaking,” the developer knows to provide a migration with resolvers, supply default values, or use a lens with complement tracking.</li>
 <li><strong>With lenses</strong>: the <code>RemoveField</code> combinator in <code>panproto-lens</code> always produces a non-empty complement. The check crate can confirm that the corresponding schema change is indeed breaking, validating that the lens is necessary and correctly scoped.</li>
-<li><strong>In CI</strong>: the <code>panproto check</code> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</li>
+<li><strong>In CI</strong>: the <code>schema check</code> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</li>
 <li><strong>In documentation</strong>: the text report can be included in changelog entries or release notes to communicate the nature of schema changes to downstream consumers.</li>
 </ul>
 </section>
@@ -988,8 +988,8 @@ Non-breaking changes (2):
 </section>
 <section id="integration-with-ci" class="level2" data-number="11.9">
 <h2 data-number="11.9" class="anchored" data-anchor-id="integration-with-ci"><span class="header-section-number">11.9</span> Integration with CI</h2>
-<p>The <code>panproto check</code> CLI command wraps this pipeline for use in CI:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>schema check</code> CLI command wraps this pipeline for use in CI:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Exit codes:</p>
 <ul>
 <li><code>0</code>: fully compatible or backward compatible.</li>
@@ -1609,7 +1609,7 @@ Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>Schema evolution is routine in long-lived systems. An API adds a field, a database drops a column, a serialization format renames a message. Most of these changes are safe---existing consumers can ignore additions and tolerate relaxed constraints. But some changes are dangerous: removing a field that downstream consumers depend on, tightening a constraint that existing data violates, or changing a field's type in an incompatible way.</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>panproto's breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <span class="in">`panproto check`</span> CLI command, and into programmatic workflows via the Rust and TypeScript APIs.</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>panproto's breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <span class="in">`schema check`</span> CLI command, and into programmatic workflows via the Rust and TypeScript APIs.</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Detection Pipeline</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
@@ -1752,7 +1752,7 @@ Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive
 <span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>An itemized list of non-breaking changes (if any), with a count header and numbered entries.</span>
 <span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If both lists are empty: <span class="in">`"No changes detected."`</span></span>
 <span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>This is what the <span class="in">`panproto check`</span> CLI command displays by default.</span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>This is what the <span class="in">`schema check`</span> CLI command displays by default.</span>
 <span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a><span class="fu">### JSON Reports</span></span>
 <span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a></span>
@@ -1774,7 +1774,7 @@ Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive
 <span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Before migration**: run <span class="in">`diff`</span> + <span class="in">`classify`</span> to determine whether a migration is safe. If the report says "breaking," the developer knows to provide a migration with resolvers, supply default values, or use a lens with complement tracking.</span>
 <span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**With lenses**: the <span class="in">`RemoveField`</span> combinator in <span class="in">`panproto-lens`</span> always produces a non-empty complement. The check crate can confirm that the corresponding schema change is indeed breaking, validating that the lens is necessary and correctly scoped.</span>
-<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In CI**: the <span class="in">`panproto check`</span> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In CI**: the <span class="in">`schema check`</span> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</span>
 <span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In documentation**: the text report can be included in changelog entries or release notes to communicate the nature of schema changes to downstream consumers.</span>
 <span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theoretical Foundations</span></span>
@@ -1834,10 +1834,10 @@ Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive
 <span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## Integration with CI</span></span>
 <span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto check`</span> CLI command wraps this pipeline for use in CI:</span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>The <span class="in">`schema check`</span> CLI command wraps this pipeline for use in CI:</span>
 <span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span>
 <span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>Exit codes:</span>

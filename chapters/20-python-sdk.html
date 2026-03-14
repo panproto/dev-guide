@@ -1248,14 +1248,14 @@ Important
 <section id="built-in-protocols" class="level3" data-number="15.7.1">
 <h3 data-number="15.7.1" class="anchored" data-anchor-id="built-in-protocols"><span class="header-section-number">15.7.1</span> Built-in Protocols</h3>
 <p>Five built-in protocol specs are provided as module-level constants: <code>ATPROTO_SPEC</code>, <code>SQL_SPEC</code>, <code>PROTOBUF_SPEC</code>, <code>GRAPHQL_SPEC</code>, and <code>JSON_SCHEMA_SPEC</code>. They are auto-registered on first access via <code>panproto.protocol("atproto")</code>. The <code>BUILTIN_PROTOCOLS</code> mapping provides a name-to-spec lookup table:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-startfrom="278"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 277;"><span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a>BUILTIN_PROTOCOLS: Mapping[<span class="bu">str</span>, ProtocolSpec] <span class="op">=</span> {</span>
-<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a>    <span class="st">"atproto"</span>: ATPROTO_SPEC,</span>
-<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sql"</span>: SQL_SPEC,</span>
-<span id="cb12-281"><a href="#cb12-281" aria-hidden="true" tabindex="-1"></a>    <span class="st">"protobuf"</span>: PROTOBUF_SPEC,</span>
-<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a>    <span class="st">"graphql"</span>: GRAPHQL_SPEC,</span>
-<span id="cb12-283"><a href="#cb12-283" aria-hidden="true" tabindex="-1"></a>    <span class="st">"json-schema"</span>: JSON_SCHEMA_SPEC,</span>
-<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a><span class="co">"""Registry of built-in protocol specs, keyed by protocol name."""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-startfrom="278"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 277;"><span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a>        <span class="co">"maximum"</span>,</span>
+<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a>        <span class="co">"pattern"</span>,</span>
+<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a>        <span class="co">"format"</span>,</span>
+<span id="cb12-281"><a href="#cb12-281" aria-hidden="true" tabindex="-1"></a>        <span class="co">"required"</span>,</span>
+<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb12-283"><a href="#cb12-283" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a><span class="co">"""Built-in JSON Schema protocol specification."""</span></span>
+<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="sec-python-schema" class="level2" data-number="15.8">

@@ -499,6 +499,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -513,19 +525,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -542,7 +554,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -559,19 +571,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
       </ul>
@@ -726,73 +738,73 @@ window.Quarto = {
 <section id="graph-theories" class="level3" data-number="12.2.1">
 <h3 data-number="12.2.1" class="anchored" data-anchor-id="graph-theories"><span class="header-section-number">12.2.1</span> Graph Theories</h3>
 <p>The three graph theories form the foundation for schema representation:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//! Shared component theory definitions.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//! Shared component theory definitions (27 building blocks).</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">//! These are the building-block GATs that protocols compose via colimit</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">//! to form their schema and instance theories. Each function returns</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">//! a standalone [`panproto_gat::Theory`] that can be registered and referenced by name.</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">panproto_gat::</span><span class="op">{</span>Operation<span class="op">,</span> Sort<span class="op">,</span> SortParam<span class="op">,</span> Theory<span class="op">};</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThGraph`: directed graph with `Vertex` and `Edge` sorts.</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">/// Operations: `src : Edge -&gt; Vertex`, `tgt : Edge -&gt; Vertex`.</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThGraph"</span><span class="op">,</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span> <span class="pp">Sort::</span>simple(<span class="st">"Edge"</span>)]<span class="op">,</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"src"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"tgt"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThSimpleGraph`: simple graph (no parallel edges).</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// Same sorts and operations as `ThGraph`, but with an additional</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">/// equation enforcing edge uniqueness by endpoints.</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_simple_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThSimpleGraph"</span><span class="op">,</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span> <span class="pp">Sort::</span>simple(<span class="st">"Edge"</span>)]<span class="op">,</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"src"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"tgt"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThHypergraph`: hypergraph with `Vertex`, `HyperEdge`, and `Label` sorts.</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">/// A hyper-edge connects multiple vertices via labeled positions.</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_hypergraph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThHypergraph"</span><span class="op">,</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"HyperEdge"</span>)<span class="op">,</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Label"</span>)<span class="op">,</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>new(</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>                <span class="st">"incident"</span><span class="op">,</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                <span class="pp">vec!</span>[</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"he"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"HyperEdge"</span><span class="op">.</span>into())<span class="op">,</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"l"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"Label"</span><span class="op">.</span>into())<span class="op">,</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>                ]<span class="op">,</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Vertex"</span><span class="op">,</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>            )<span class="op">,</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"parent_label"</span><span class="op">,</span> <span class="st">"he"</span><span class="op">,</span> <span class="st">"HyperEdge"</span><span class="op">,</span> <span class="st">"Label"</span>)<span class="op">,</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">//! a standalone [`panproto_gat::Theory`] that can be registered and</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">//! referenced by name.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">//! ## Formal invariants</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">//! Every theory satisfies:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">//! 1. **Sort closure**: all sort names referenced in operation inputs/outputs</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">//!    are declared in the theory's sorts list.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">//! 2. **Equation well-typedness**: both sides of every equation have the</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">//!    same output sort under the declared operations.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">//! 3. **No tautological equations**: `lhs ≠ rhs` syntactically for all equations.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">//! ## Inventory</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">//! | # | Theory | Sorts | Eqs | Category |</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">//! |---|--------|-------|-----|----------|</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 1 | ThGraph | 2 | 0 | Schema shape |</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 2 | ThSimpleGraph | 2 | 0 | Schema shape (dependent Edge) |</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 3 | ThHypergraph | 3 | 0 | Schema shape |</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 4 | ThConstraint | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 5 | ThMulti | 3 | 0 | Schema modifier |</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 6 | ThInterface | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 7 | ThWType | 3 | 0 | Instance shape |</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 8 | ThMeta | 3 | 0 | Instance modifier |</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 9 | ThFunctor | 3 | 0 | Instance shape |</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 10 | ThFlat | 3 | 0 | Instance shape |</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 11 | ThOrder | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 12 | ThCoproduct | 3 | 0 | Schema modifier |</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 13 | ThRecursion | 2 | 1 | Schema modifier |</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 14 | ThSpan | 2 | 0 | Schema structure |</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 15 | ThCospan | 2 | 0 | Schema structure |</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 16 | ThPartial | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 17 | ThLinear | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 18 | ThNominal | 2 | 0 | Schema modifier |</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 19 | ThReflexiveGraph | 2 | 2 | Schema shape |</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 20 | ThSymmetricGraph | 2 | 3 | Schema shape |</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 21 | ThPetriNet | 3 | 0 | Schema shape |</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 22 | ThGraphInstance | 5 | 0 | Instance shape |</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 23 | ThAnnotation | 4 | 0 | Instance modifier |</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 24 | ThCausal | 3 | 0 | Instance modifier |</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 25 | ThOperad | 2 | 0 | Schema structure |</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 26 | ThTracedMonoidal | 2 | 0 | Schema structure |</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co">//! | 27 | ThSimplicial | 3 | 0 | Instance structure |</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">panproto_gat::</span><span class="op">{</span>Equation<span class="op">,</span> Operation<span class="op">,</span> Sort<span class="op">,</span> SortParam<span class="op">,</span> Term<span class="op">,</span> Theory<span class="op">};</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co">// ═══════════════════════════════════════════════════════════════════</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co">// Original 10 building blocks (with corrections)</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">// ═══════════════════════════════════════════════════════════════════</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThGraph`: directed graph.</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co">/// Sorts: `Vertex`, `Edge`.</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">/// Ops: `src : Edge → Vertex`, `tgt : Edge → Vertex`.</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThGraph"</span><span class="op">,</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span> <span class="pp">Sort::</span>simple(<span class="st">"Edge"</span>)]<span class="op">,</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"src"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"tgt"</span><span class="op">,</span> <span class="st">"e"</span><span class="op">,</span> <span class="st">"Edge"</span><span class="op">,</span> <span class="st">"Vertex"</span>)<span class="op">,</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong><code>th_graph</code></strong> is the most fundamental building block: a directed graph with <code>Vertex</code> and <code>Edge</code> sorts and <code>src</code>/<code>tgt</code> operations. Nearly every protocol uses this theory as its base, since schemas are fundamentally graphs—vertices represent types or fields, and edges represent relationships between them.</p>
 <p><strong><code>th_simple_graph</code></strong> adds an equation enforcing edge uniqueness by endpoints. This is appropriate for protocols like Protobuf where each field name must be unique within a message—there cannot be two distinct edges with the same source and target.</p>
 <p><strong><code>th_hypergraph</code></strong> introduces multi-arity connections via <code>HyperEdge</code> and <code>Label</code> sorts. A hyper-edge connects multiple vertices through labeled positions, modeling constructs like SQL table definitions (where a table relates multiple columns via labeled positions like “column_name” and “column_type”) and multi-argument function signatures.</p>
@@ -800,21 +812,21 @@ window.Quarto = {
 <section id="constraint-theory" class="level3" data-number="12.2.2">
 <h3 data-number="12.2.2" class="anchored" data-anchor-id="constraint-theory"><span class="header-section-number">12.2.2</span> Constraint Theory</h3>
 <p>The constraint theory demonstrates the dependent sort pattern:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThConstraint`: vertex-attached constraints.</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">/// Adds a dependent sort `Constraint(v: Vertex)` with a `target` operation.</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_constraint() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>        <span class="st">"ThConstraint"</span><span class="op">,</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Vertex"</span>)<span class="op">,</span></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>dependent(<span class="st">"Constraint"</span><span class="op">,</span> <span class="pp">vec!</span>[<span class="pp">SortParam::</span>new(<span class="st">"v"</span><span class="op">,</span> <span class="st">"Vertex"</span>)])<span class="op">,</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[<span class="pp">Operation::</span>unary(<span class="st">"target"</span><span class="op">,</span> <span class="st">"c"</span><span class="op">,</span> <span class="st">"Constraint"</span><span class="op">,</span> <span class="st">"Vertex"</span>)]<span class="op">,</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">/// `ThSimpleGraph`: simple graph (no parallel edges).</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">/// Uses a dependent sort `Edge(s: Vertex, t: Vertex)` to encode edge</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">/// uniqueness structurally: an edge is determined by its endpoints.</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="co">/// This is the formally correct encoding — the conditional property</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="co">/// `src(e1) = src(e2) ∧ tgt(e1) = tgt(e2) → e1 = e2` is not</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co">/// expressible as an unconditional GAT equation, but the dependent</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="co">/// sort achieves the same effect.</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">/// Ops `src` and `tgt` are retained as projections for API compatibility.</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_simple_graph() <span class="op">-&gt;</span> Theory <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>Constraint</code> sort is parameterized by a vertex via <code>SortParam::new("v", "Vertex")</code>. This is a GAT-level encoding of the fact that constraints are attached to specific schema elements. A <code>maxLength</code> constraint on a string field is a different sort instance than a <code>maxLength</code> constraint on a different field, even though they share the same sort name.</p>
 <p>This dependent sort pattern has practical consequences throughout panproto:</p>
 <ul>
@@ -891,7 +903,7 @@ Note
 </section>
 <section id="theory-groups" class="level2" data-number="12.4">
 <h2 data-number="12.4" class="anchored" data-anchor-id="theory-groups"><span class="header-section-number">12.4</span> Theory Groups</h2>
-<p>Protocols cluster into five theory groups based on their schema/instance theory pair. Each group has a corresponding <code>register_*</code> helper function that handles the colimit computation:</p>
+<p>Protocols cluster into six theory groups based on their schema/instance theory pair. Each group has a corresponding <code>register_*</code> helper function that handles the colimit computation:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -1005,7 +1017,7 @@ Tip
 </section>
 <section id="instance-level-presentations-panproto-io" class="level3" data-number="12.6.2">
 <h3 data-number="12.6.2" class="anchored" data-anchor-id="instance-level-presentations-panproto-io"><span class="header-section-number">12.6.2</span> Instance-Level Presentations (<code>panproto-io</code>)</h3>
-<p>The <code>panproto-io</code> crate provides the complementary <strong>instance-level</strong> conversions for all 77 protocols:</p>
+<p>The <code>panproto-io</code> crate provides the complementary <strong>instance-level</strong> conversions for all 76 protocols:</p>
 <ul>
 <li><strong>Parser</strong>: <code>parse_wtype(protocol, schema, &amp;bytes) -&gt; Result&lt;WInstance, ParseInstanceError&gt;</code> converts raw <em>data</em> (an HTML document, a CoNLL-U file, a Protobuf wire message) into a <code>WInstance</code> or <code>FInstance</code> — a model of the protocol’s instance theory <span class="math inline">\(T_P^I\)</span>.</li>
 <li><strong>Emitter</strong>: <code>emit_wtype(protocol, schema, &amp;instance) -&gt; Result&lt;Vec&lt;u8&gt;, EmitInstanceError&gt;</code> converts an instance back to raw format bytes.</li>
@@ -1017,7 +1029,7 @@ Tip
 <p>Together, these two levels of presentation complete the functorial data migration pipeline:</p>
 <pre><code>raw spec ──protocols parse──→ Schema v1 ──mig compile──→ CompiledMigration
 raw data ──io parse──→ Instance v1 ──inst restrict──→ Instance v2 ──io emit──→ raw data</code></pre>
-<p>The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly across all 77 protocols. Both levels support round-trip testing: <code>parse(emit(parse(input)))</code> should produce a structurally equivalent result.</p>
+<p>The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly across all 76 protocols. Both levels support round-trip testing: <code>parse(emit(parse(input)))</code> should produce a structurally equivalent result.</p>
 </section>
 <section id="parsing-strategy" class="level3" data-number="12.6.4">
 <h3 data-number="12.6.4" class="anchored" data-anchor-id="parsing-strategy"><span class="header-section-number">12.6.4</span> Parsing Strategy</h3>
@@ -1164,13 +1176,13 @@ Warning
 <p><strong><code>panproto-protocols</code></strong> (schema-level presentations) provides:</p>
 <ul>
 <li><strong>10 building-block theories</strong> (<code>ThGraph</code>, <code>ThSimpleGraph</code>, <code>ThHypergraph</code>, <code>ThConstraint</code>, <code>ThMulti</code>, <code>ThInterface</code>, <code>ThWType</code>, <code>ThFunctor</code>, <code>ThFlat</code>, <code>ThMeta</code>) that can be composed via colimit.</li>
-<li><strong>5 theory groups</strong> (A through E) covering the structural patterns found across 77 protocols.</li>
+<li><strong>6 theory groups</strong> (A through F) covering the structural patterns found across 76 protocols.</li>
 <li><strong>Schema-level parse/emit</strong>: convert native format specifications (<code>.proto</code>, DDL, SDL) to/from <code>Schema</code>.</li>
 <li><strong>A uniform protocol interface</strong>: every protocol exports <code>protocol()</code>, <code>register_theories()</code>, and for schema-defining protocols, a parser/emitter pair.</li>
 </ul>
 <p><strong><code>panproto-io</code></strong> (instance-level presentations) provides:</p>
 <ul>
-<li><strong>77 protocol codecs</strong> implementing <code>InstanceParser</code> and <code>InstanceEmitter</code> traits.</li>
+<li><strong>76 protocol codecs</strong> implementing <code>InstanceParser</code> and <code>InstanceEmitter</code> traits.</li>
 <li><strong>4 shared pathways</strong>: SIMD JSON (<code>simd-json</code>), zero-copy XML (<code>quick-xml</code>), SIMD HTML (<code>tl</code>), SIMD tabular (<code>memchr</code>) — enabling ~50 protocols to share optimized core parsing infrastructure.</li>
 <li><strong>Format-specific codecs</strong> for HTML (<code>tl</code>), Markdown (<code>pulldown-cmark</code>), and CoNLL-U (custom <code>memchr</code>-based parser).</li>
 <li><strong>A <code>ProtocolRegistry</code></strong> for runtime protocol dispatch by name.</li>
@@ -1777,7 +1789,7 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Groups</span></span>
 <span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>Protocols cluster into five theory groups based on their schema/instance theory pair. Each group has a corresponding <span class="in">`register_*`</span> helper function that handles the colimit computation:</span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>Protocols cluster into six theory groups based on their schema/instance theory pair. Each group has a corresponding <span class="in">`register_*`</span> helper function that handles the colimit computation:</span>
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Group <span class="pp">|</span> Schema Theory <span class="pp">|</span> Instance Theory <span class="pp">|</span> Registration Helper <span class="pp">|</span></span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
@@ -1842,7 +1854,7 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="fu">### Instance-Level Presentations (`panproto-io`)</span></span>
 <span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-io`</span> crate provides the complementary **instance-level** conversions for all 77 protocols:</span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-io`</span> crate provides the complementary **instance-level** conversions for all 76 protocols:</span>
 <span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Parser**: <span class="in">`parse_wtype(protocol, schema, &amp;bytes) -&gt; Result&lt;WInstance, ParseInstanceError&gt;`</span> converts raw _data_ (an HTML document, a CoNLL-U file, a Protobuf wire message) into a <span class="in">`WInstance`</span> or <span class="in">`FInstance`</span> --- a model of the protocol's instance theory $T_P^I$.</span>
 <span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Emitter**: <span class="in">`emit_wtype(protocol, schema, &amp;instance) -&gt; Result&lt;Vec&lt;u8&gt;, EmitInstanceError&gt;`</span> converts an instance back to raw format bytes.</span>
@@ -1858,7 +1870,7 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a><span class="in">raw data ──io parse──→ Instance v1 ──inst restrict──→ Instance v2 ──io emit──→ raw data</span></span>
 <span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly across all 77 protocols. Both levels support round-trip testing: <span class="in">`parse(emit(parse(input)))`</span> should produce a structurally equivalent result.</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly across all 76 protocols. Both levels support round-trip testing: <span class="in">`parse(emit(parse(input)))`</span> should produce a structurally equivalent result.</span>
 <span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### Parsing Strategy</span></span>
 <span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a></span>
@@ -2012,13 +2024,13 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a><span class="er">**</span><span class="st">`</span><span class="at">panproto-protocols</span><span class="st">`</span><span class="sc">**</span> (schema<span class="sc">-</span>level presentations) provides<span class="sc">:</span></span>
 <span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">10</span> building<span class="sc">-</span>block theories<span class="sc">**</span> (<span class="st">`</span><span class="at">ThGraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThSimpleGraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThHypergraph</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThConstraint</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThMulti</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThInterface</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThWType</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThFunctor</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThFlat</span><span class="st">`</span>, <span class="st">`</span><span class="at">ThMeta</span><span class="st">`</span>) that can be composed via colimit.</span>
-<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">5</span> theory groups<span class="sc">**</span> (A through E) covering the structural patterns found across <span class="dv">77</span> protocols.</span>
+<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">6</span> theory groups<span class="sc">**</span> (A through F) covering the structural patterns found across <span class="dv">76</span> protocols.</span>
 <span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>Schema<span class="sc">-</span>level parse<span class="sc">/</span>emit<span class="sc">**</span><span class="er">:</span> convert native format <span class="fu">specifications</span> (<span class="st">`</span><span class="at">.proto</span><span class="st">`</span>, DDL, SDL) to<span class="sc">/</span>from <span class="st">`</span><span class="at">Schema</span><span class="st">`</span>.</span>
 <span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>A uniform protocol interface<span class="sc">**</span><span class="er">:</span> every protocol exports <span class="st">`</span><span class="at">protocol()</span><span class="st">`</span>, <span class="st">`</span><span class="at">register_theories()</span><span class="st">`</span>, and <span class="cf">for</span> schema<span class="sc">-</span>defining protocols, a parser<span class="sc">/</span>emitter pair.</span>
 <span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a><span class="sc">**</span><span class="st">`</span><span class="at">panproto-io</span><span class="st">`</span><span class="sc">**</span> (instance<span class="sc">-</span>level presentations) provides<span class="sc">:</span></span>
 <span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">77</span> protocol codecs<span class="sc">**</span> implementing <span class="st">`</span><span class="at">InstanceParser</span><span class="st">`</span> and <span class="st">`</span><span class="at">InstanceEmitter</span><span class="st">`</span> traits.</span>
+<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">76</span> protocol codecs<span class="sc">**</span> implementing <span class="st">`</span><span class="at">InstanceParser</span><span class="st">`</span> and <span class="st">`</span><span class="at">InstanceEmitter</span><span class="st">`</span> traits.</span>
 <span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span><span class="dv">4</span> shared pathways<span class="sc">**</span><span class="er">:</span> SIMD <span class="fu">JSON</span> (<span class="st">`</span><span class="at">simd-json</span><span class="st">`</span>), zero<span class="sc">-</span>copy <span class="fu">XML</span> (<span class="st">`</span><span class="at">quick-xml</span><span class="st">`</span>), SIMD <span class="fu">HTML</span> (<span class="st">`</span><span class="at">tl</span><span class="st">`</span>), SIMD <span class="fu">tabular</span> (<span class="st">`</span><span class="at">memchr</span><span class="st">`</span>) <span class="sc">---</span> enabling <span class="sc">~</span><span class="dv">50</span> protocols to share optimized core parsing infrastructure.</span>
 <span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>Format<span class="sc">-</span>specific codecs<span class="sc">**</span> <span class="cf">for</span> <span class="fu">HTML</span> (<span class="st">`</span><span class="at">tl</span><span class="st">`</span>), <span class="fu">Markdown</span> (<span class="st">`</span><span class="at">pulldown-cmark</span><span class="st">`</span>), and CoNLL<span class="sc">-</span><span class="fu">U</span> (custom <span class="st">`</span><span class="at">memchr</span><span class="st">`</span><span class="sc">-</span>based parser).</span>
 <span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> <span class="er">**</span>A <span class="st">`</span><span class="at">ProtocolRegistry</span><span class="st">`</span><span class="sc">**</span> <span class="cf">for</span> runtime protocol dispatch by name.</span>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>16&nbsp; panproto-cli — The CLI Tool – panproto: Developer Guide</title>
+<title>18&nbsp; Building-Block Theories – panproto: Developer Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -65,8 +84,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/21-vcs-engine.html" rel="next">
-<link href="../chapters/20-python-sdk.html" rel="prev">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/21-vcs-engine.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -285,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/15-cli.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/22-building-blocks.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -443,7 +462,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></a>
   </div>
 </li>
@@ -455,7 +474,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
@@ -546,27 +565,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#command-structure" id="toc-command-structure" class="nav-link active" data-scroll-target="#command-structure"><span class="header-section-number">16.1</span> Command Structure</a></li>
-  <li><a href="#subcommand-details" id="toc-subcommand-details" class="nav-link" data-scroll-target="#subcommand-details"><span class="header-section-number">16.2</span> Subcommand Details</a>
+  <li><a href="#formal-invariants" id="toc-formal-invariants" class="nav-link active" data-scroll-target="#formal-invariants"><span class="header-section-number">18.1</span> Formal Invariants</a></li>
+  <li><a href="#the-property-to-structure-principle" id="toc-the-property-to-structure-principle" class="nav-link" data-scroll-target="#the-property-to-structure-principle"><span class="header-section-number">18.2</span> The Property-to-Structure Principle</a></li>
+  <li><a href="#theories-with-equations" id="toc-theories-with-equations" class="nav-link" data-scroll-target="#theories-with-equations"><span class="header-section-number">18.3</span> Theories with Equations</a>
   <ul class="collapse">
-  <li><a href="#validate" id="toc-validate" class="nav-link" data-scroll-target="#validate"><span class="header-section-number">16.2.1</span> <code>validate</code></a></li>
-  <li><a href="#check" id="toc-check" class="nav-link" data-scroll-target="#check"><span class="header-section-number">16.2.2</span> <code>check</code></a></li>
-  <li><a href="#diff" id="toc-diff" class="nav-link" data-scroll-target="#diff"><span class="header-section-number">16.2.3</span> <code>diff</code></a></li>
-  <li><a href="#lift" id="toc-lift" class="nav-link" data-scroll-target="#lift"><span class="header-section-number">16.2.4</span> <code>lift</code></a></li>
+  <li><a href="#threcursion-fold-unfold" id="toc-threcursion-fold-unfold" class="nav-link" data-scroll-target="#threcursion-fold-unfold"><span class="header-section-number">18.3.1</span> ThRecursion — Fold-Unfold</a></li>
+  <li><a href="#threflexivegraph-identity-edges" id="toc-threflexivegraph-identity-edges" class="nav-link" data-scroll-target="#threflexivegraph-identity-edges"><span class="header-section-number">18.3.2</span> ThReflexiveGraph — Identity Edges</a></li>
+  <li><a href="#thsymmetricgraph-involution" id="toc-thsymmetricgraph-involution" class="nav-link" data-scroll-target="#thsymmetricgraph-involution"><span class="header-section-number">18.3.3</span> ThSymmetricGraph — Involution</a></li>
+  <li><a href="#thcoproduct-variant-retraction" id="toc-thcoproduct-variant-retraction" class="nav-link" data-scroll-target="#thcoproduct-variant-retraction"><span class="header-section-number">18.3.4</span> ThCoproduct — Variant Retraction</a></li>
+  <li><a href="#thpartial-definedness-witness" id="toc-thpartial-definedness-witness" class="nav-link" data-scroll-target="#thpartial-definedness-witness"><span class="header-section-number">18.3.5</span> ThPartial — Definedness Witness</a></li>
   </ul></li>
-  <li><a href="#error-handling-with-miette" id="toc-error-handling-with-miette" class="nav-link" data-scroll-target="#error-handling-with-miette"><span class="header-section-number">16.3</span> Error Handling with <code>miette</code></a></li>
-  <li><a href="#adding-a-new-subcommand" id="toc-adding-a-new-subcommand" class="nav-link" data-scroll-target="#adding-a-new-subcommand"><span class="header-section-number">16.4</span> Adding a New Subcommand</a></li>
-  <li><a href="#built-in-protocol-resolution" id="toc-built-in-protocol-resolution" class="nav-link" data-scroll-target="#built-in-protocol-resolution"><span class="header-section-number">16.5</span> Built-in Protocol Resolution</a></li>
+  <li><a href="#all-27-theories-complete-list" id="toc-all-27-theories-complete-list" class="nav-link" data-scroll-target="#all-27-theories-complete-list"><span class="header-section-number">18.4</span> All 27 Theories (Complete List)</a>
+  <ul class="collapse">
+  <li><a href="#schema-shapes-6" id="toc-schema-shapes-6" class="nav-link" data-scroll-target="#schema-shapes-6"><span class="header-section-number">18.4.1</span> Schema shapes (6)</a></li>
+  <li><a href="#schema-modifiers-8" id="toc-schema-modifiers-8" class="nav-link" data-scroll-target="#schema-modifiers-8"><span class="header-section-number">18.4.2</span> Schema modifiers (8)</a></li>
+  <li><a href="#schema-structural-4" id="toc-schema-structural-4" class="nav-link" data-scroll-target="#schema-structural-4"><span class="header-section-number">18.4.3</span> Schema structural (4)</a></li>
+  <li><a href="#instance-6" id="toc-instance-6" class="nav-link" data-scroll-target="#instance-6"><span class="header-section-number">18.4.4</span> Instance (6)</a></li>
+  <li><a href="#architectural-3" id="toc-architectural-3" class="nav-link" data-scroll-target="#architectural-3"><span class="header-section-number">18.4.5</span> Architectural (3)</a></li>
+  </ul></li>
+  <li><a href="#theory-groups" id="toc-theory-groups" class="nav-link" data-scroll-target="#theory-groups"><span class="header-section-number">18.5</span> Theory Groups</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/15-cli.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/22-building-blocks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/15-cli.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/22-building-blocks.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-cli" class="quarto-section-identifier"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli — The CLI Tool</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-building-blocks" class="quarto-section-identifier"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -583,189 +610,436 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The <code>panproto-cli</code> crate provides a command-line interface for schema validation, migration checking, structural diffing, and record lifting. It is a thin wrapper around the <code>panproto-core</code> library, designed for scripting, CI pipelines, and quick local experiments.</p>
-<section id="command-structure" class="level2" data-number="16.1">
-<h2 data-number="16.1" class="anchored" data-anchor-id="command-structure"><span class="header-section-number">16.1</span> Command Structure</h2>
-<p>The CLI uses <code>clap</code> derive macros for argument parsing. The top-level <code>Cli</code> struct holds a global <code>--verbose</code> flag and dispatches to one of four subcommands:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="22"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 21;"><span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// The panproto command-line tool for schema migration and version control.</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span>Parser<span class="op">,</span> <span class="bu">Debug</span><span class="at">)]</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>command<span class="at">(</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">"schema"</span><span class="op">,</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    version<span class="op">,</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    about <span class="op">=</span> <span class="st">"Schematic version control — schema migration toolkit based on generalized algebraic theories"</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">)]</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Cli <span class="op">{</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Enable verbose output.</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>arg<span class="at">(</span>short<span class="op">,</span> long<span class="op">,</span> global <span class="op">=</span> <span class="cn">true</span><span class="at">)]</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    verbose<span class="op">:</span> <span class="dt">bool</span><span class="op">,</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The subcommand to execute.</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>command<span class="at">(</span>subcommand<span class="at">)]</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    command<span class="op">:</span> Command<span class="op">,</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">/// Available subcommands.</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span>Subcommand<span class="op">,</span> <span class="bu">Debug</span><span class="at">)]</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> Command <span class="op">{</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -- Schema tools (pre-VCS) --</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Validate a schema against a protocol.</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Validate <span class="op">{</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The protocol name (e.g., "atproto").</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>long<span class="at">)]</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        protocol<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Path to the schema JSON file.</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        schema<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Check existence conditions for a migration between two schemas.</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    Check <span class="op">{</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Path to the source schema JSON file.</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>long<span class="at">)]</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        src<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Path to the target schema JSON file.</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>long<span class="at">)]</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        tgt<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Path to the migration mapping JSON file.</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>long<span class="at">)]</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>        mapping<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -- VCS commands --</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Initialize a new panproto repository.</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    Init <span class="op">{</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Directory to initialize (defaults to current dir).</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>default_value <span class="op">=</span> <span class="st">"."</span><span class="at">)]</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>        path<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Stage a schema for the next commit.</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Add</span> <span class="op">{</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Path to the schema JSON file.</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>        schema<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new commit from staged changes.</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    Commit <span class="op">{</span></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Commit message.</span></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>short<span class="op">,</span> long<span class="at">)]</span></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>        message<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Author name.</span></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>        <span class="at">#[</span>arg<span class="at">(</span>long<span class="op">,</span> default_value <span class="op">=</span> <span class="st">"anonymous"</span><span class="at">)]</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        author<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Each subcommand maps directly to an underlying <code>panproto-core</code> API:</p>
+<p>panproto defines 27 building-block GATs that compose via colimit into protocol-specific schema and instance theories. This chapter provides the formal definitions and type-checking proofs for all equations.</p>
+<section id="formal-invariants" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="formal-invariants"><span class="header-section-number">18.1</span> Formal Invariants</h2>
+<p>Every building-block theory satisfies:</p>
+<ol type="1">
+<li><strong>Sort closure</strong>: every sort name in an operation’s input/output types is declared in the theory’s sorts list.</li>
+<li><strong>Equation well-typedness</strong>: both sides of every equation have the same output sort.</li>
+<li><strong>No tautologies</strong>: <code>lhs ≠ rhs</code> syntactically for all equations.</li>
+</ol>
+</section>
+<section id="the-property-to-structure-principle" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="the-property-to-structure-principle"><span class="header-section-number">18.2</span> The Property-to-Structure Principle</h2>
+<p>Several building blocks use Cartmell’s property-to-structure move <span class="citation" data-cites="cartmell1986">(<a href="#ref-cartmell1986" role="doc-biblioref">Cartmell 1986</a>)</span>: conditional properties (transitivity, injectivity) are encoded as unconditional equations by adding operations and dependent sorts.</p>
+<p>For example, injectivity of coproduct injection is not <code>injection(v1) = injection(v2) → v1 = v2</code> (a conditional equation, not expressible in GATs). Instead, ThCoproduct adds a retraction <code>variant_of : Vertex → Variant</code> with the equation <code>variant_of(injection(v)) = v</code>. The retraction is <em>structure</em>, not a <em>property</em>.</p>
+<p>This separation yields a clean boundary: structural properties (transitivity, injectivity, uniqueness, optionality) belong in GAT sorts+equations; validation properties (cardinality, patterns, ranges) belong in ThConstraint.</p>
+</section>
+<section id="theories-with-equations" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="theories-with-equations"><span class="header-section-number">18.3</span> Theories with Equations</h2>
+<section id="threcursion-fold-unfold" class="level3" data-number="18.3.1">
+<h3 data-number="18.3.1" class="anchored" data-anchor-id="threcursion-fold-unfold"><span class="header-section-number">18.3.1</span> ThRecursion — Fold-Unfold</h3>
+<pre><code>Sorts: Vertex, Mu
+Ops:   fold : Vertex → Mu
+       unfold : Mu → Vertex
+Eq:    unfold(fold(v)) = v</code></pre>
+<p>Type check: <code>fold(v) : Mu</code>, <code>unfold(fold(v)) : Vertex</code>, <code>v : Vertex</code>. Both sides: Vertex. ✓</p>
+<p>This is the isorecursive fold-unfold law. <code>fold</code> is a section of <code>unfold</code>.</p>
+</section>
+<section id="threflexivegraph-identity-edges" class="level3" data-number="18.3.2">
+<h3 data-number="18.3.2" class="anchored" data-anchor-id="threflexivegraph-identity-edges"><span class="header-section-number">18.3.2</span> ThReflexiveGraph — Identity Edges</h3>
+<pre><code>Sorts: Vertex, Edge
+Ops:   id : Vertex → Edge
+       src : Edge → Vertex
+       tgt : Edge → Vertex
+Eqs:   src(id(v)) = v
+       tgt(id(v)) = v</code></pre>
+<p>Type check: <code>id(v) : Edge</code>, <code>src(id(v)) : Vertex</code>, <code>v : Vertex</code>. Both sides: Vertex. ✓</p>
+<p>Without the equations, this is just ThGraph + an extra operation. The equations make the identity edge load-bearing.</p>
+</section>
+<section id="thsymmetricgraph-involution" class="level3" data-number="18.3.3">
+<h3 data-number="18.3.3" class="anchored" data-anchor-id="thsymmetricgraph-involution"><span class="header-section-number">18.3.3</span> ThSymmetricGraph — Involution</h3>
+<pre><code>Sorts: Vertex, Edge
+Ops:   inv : Edge → Edge
+       src : Edge → Vertex
+       tgt : Edge → Vertex
+Eqs:   src(inv(e)) = tgt(e)
+       tgt(inv(e)) = src(e)
+       inv(inv(e)) = e</code></pre>
+<p>Type checks:</p>
+<ul>
+<li><code>src(inv(e)) : Vertex</code>, <code>tgt(e) : Vertex</code> ✓</li>
+<li><code>inv(inv(e)) : Edge</code>, <code>e : Edge</code> ✓</li>
+</ul>
+</section>
+<section id="thcoproduct-variant-retraction" class="level3" data-number="18.3.4">
+<h3 data-number="18.3.4" class="anchored" data-anchor-id="thcoproduct-variant-retraction"><span class="header-section-number">18.3.4</span> ThCoproduct — Variant Retraction</h3>
+<pre><code>Sorts: Vertex, Variant, Tag
+Ops:   injection : Variant → Vertex
+       tag : Variant → Tag
+       variant_of : Vertex → Variant
+Eq:    variant_of(injection(v)) = v</code></pre>
+<p>Type check: <code>injection(v) : Vertex</code>, <code>variant_of(injection(v)) : Variant</code>, <code>v : Variant</code>. Both sides: Variant. ✓</p>
+</section>
+<section id="thpartial-definedness-witness" class="level3" data-number="18.3.5">
+<h3 data-number="18.3.5" class="anchored" data-anchor-id="thpartial-definedness-witness"><span class="header-section-number">18.3.5</span> ThPartial — Definedness Witness</h3>
+<pre><code>Sorts: Vertex, Defined
+Ops:   defined : Vertex → Defined
+       witness : Defined → Vertex
+Eq:    defined(witness(d)) = d</code></pre>
+<p>Type check: <code>witness(d) : Vertex</code>, <code>defined(witness(d)) : Defined</code>, <code>d : Defined</code>. Both sides: Defined. ✓</p>
+</section>
+</section>
+<section id="all-27-theories-complete-list" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="all-27-theories-complete-list"><span class="header-section-number">18.4</span> All 27 Theories (Complete List)</h2>
+<section id="schema-shapes-6" class="level3" data-number="18.4.1">
+<h3 data-number="18.4.1" class="anchored" data-anchor-id="schema-shapes-6"><span class="header-section-number">18.4.1</span> Schema shapes (6)</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 19%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Subcommand</th>
-<th>Core API</th>
-<th>Description</th>
+<th>#</th>
+<th>Name</th>
+<th>Sorts</th>
+<th>Ops</th>
+<th>Eqs</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>validate</code></td>
-<td><code>panproto_core::schema::validate</code></td>
-<td>Validate a schema JSON file against a protocol’s rules</td>
+<td>1</td>
+<td>ThGraph</td>
+<td>Vertex, Edge</td>
+<td>src, tgt</td>
+<td>0</td>
 </tr>
 <tr class="even">
-<td><code>check</code></td>
-<td><code>panproto_core::mig::check_existence</code></td>
-<td>Check existence conditions for a migration mapping</td>
+<td>2</td>
+<td>ThSimpleGraph</td>
+<td>Vertex, Edge(s:V,t:V)</td>
+<td>src, tgt</td>
+<td>0</td>
 </tr>
 <tr class="odd">
-<td><code>diff</code></td>
-<td>Structural comparison</td>
-<td>Report vertex/edge additions, removals, and kind changes</td>
+<td>3</td>
+<td>ThHypergraph</td>
+<td>Vertex, HyperEdge, Label</td>
+<td>incident, parent_label</td>
+<td>0</td>
 </tr>
 <tr class="even">
-<td><code>lift</code></td>
-<td><code>panproto_core::mig::compile</code> + <code>lift_wtype</code></td>
-<td>Apply a migration to a JSON record</td>
+<td>4</td>
+<td>ThReflexiveGraph</td>
+<td>Vertex, Edge</td>
+<td>id, src, tgt</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>ThSymmetricGraph</td>
+<td>Vertex, Edge</td>
+<td>inv, src, tgt</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>ThPetriNet</td>
+<td>Place, Transition, Token</td>
+<td>pre, post, marking</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="subcommand-details" class="level2" data-number="16.2">
-<h2 data-number="16.2" class="anchored" data-anchor-id="subcommand-details"><span class="header-section-number">16.2</span> Subcommand Details</h2>
-<section id="validate" class="level3" data-number="16.2.1">
-<h3 data-number="16.2.1" class="anchored" data-anchor-id="validate"><span class="header-section-number">16.2.1</span> <code>validate</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> validate <span class="at">--protocol</span> atproto schema.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Loads the schema from JSON, resolves the protocol by name (five built-in protocols are supported), and runs protocol-aware validation. Outputs a human-readable list of errors or a success message. Exits with code 1 on validation failure.</p>
+<section id="schema-modifiers-8" class="level3" data-number="18.4.2">
+<h3 data-number="18.4.2" class="anchored" data-anchor-id="schema-modifiers-8"><span class="header-section-number">18.4.2</span> Schema modifiers (8)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Name</th>
+<th>Sorts</th>
+<th>Ops</th>
+<th>Eqs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7</td>
+<td>ThConstraint</td>
+<td>Vertex, Constraint(v:V)</td>
+<td>target</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>ThMulti</td>
+<td>Vertex, Edge, EdgeLabel</td>
+<td>edge_label</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>ThInterface</td>
+<td>Vertex, Interface</td>
+<td>implements</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>ThOrder</td>
+<td>Edge, Position</td>
+<td>edge_position, succ</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>ThCoproduct</td>
+<td>Vertex, Variant, Tag</td>
+<td>injection, tag, variant_of</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>ThRecursion</td>
+<td>Vertex, Mu</td>
+<td>unfold, fold</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>ThPartial</td>
+<td>Vertex, Defined</td>
+<td>defined, witness</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>ThLinear</td>
+<td>Edge, Usage</td>
+<td>use_count</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="check" class="level3" data-number="16.2.2">
-<h3 data-number="16.2.2" class="anchored" data-anchor-id="check"><span class="header-section-number">16.2.2</span> <code>check</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> check <span class="at">--src</span> old-schema.json <span class="at">--tgt</span> new-schema.json <span class="at">--mapping</span> migration.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Loads both schemas and the migration mapping, builds the theory registry from the protocol, and runs <code>mig::check_existence</code>. Outputs the report as human-readable text; with <code>--verbose</code>, also dumps the full JSON report for machine consumption.</p>
+<section id="schema-structural-4" class="level3" data-number="18.4.3">
+<h3 data-number="18.4.3" class="anchored" data-anchor-id="schema-structural-4"><span class="header-section-number">18.4.3</span> Schema structural (4)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Name</th>
+<th>Sorts</th>
+<th>Ops</th>
+<th>Eqs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>ThNominal</td>
+<td>Vertex, Name</td>
+<td>name</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>ThSpan</td>
+<td>Vertex, Span</td>
+<td>span_left, span_right</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>ThCospan</td>
+<td>Vertex, Apex</td>
+<td>inl, inr</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>ThOperad</td>
+<td>Color, MOperation</td>
+<td>arity, op_output</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="diff" class="level3" data-number="16.2.3">
-<h3 data-number="16.2.3" class="anchored" data-anchor-id="diff"><span class="header-section-number">16.2.3</span> <code>diff</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> diff old-schema.json new-schema.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Computes structural differences between two schemas: added/removed vertices, added/removed edges, and kind changes. Sorts output deterministically. If the schemas are identical, prints a single line.</p>
+<section id="instance-6" class="level3" data-number="18.4.4">
+<h3 data-number="18.4.4" class="anchored" data-anchor-id="instance-6"><span class="header-section-number">18.4.4</span> Instance (6)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Name</th>
+<th>Sorts</th>
+<th>Ops</th>
+<th>Eqs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>19</td>
+<td>ThWType</td>
+<td>Node, Arc, Value</td>
+<td>anchor, arc_src, arc_tgt, arc_edge, node_value</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>ThFunctor</td>
+<td>Table, Row, ForeignKey</td>
+<td>table_vertex, fk_src, fk_tgt</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>21</td>
+<td>ThFlat</td>
+<td>Node, Field, Value</td>
+<td>field_node, field_value, node_anchor</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>22</td>
+<td>ThGraphInstance</td>
+<td>IVertex, IEdge, Value, Vertex, Edge</td>
+<td>i_src, i_tgt, iv_anchor, ie_anchor, iv_value</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>23</td>
+<td>ThAnnotation</td>
+<td>Vertex, Annotation, AnnotationKey, Value</td>
+<td>annotated, ann_key, ann_value</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>24</td>
+<td>ThCausal</td>
+<td>Event, Timestamp, Before(e1,e2)</td>
+<td>time, before_refl, before_trans</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="lift" class="level3" data-number="16.2.4">
-<h3 data-number="16.2.4" class="anchored" data-anchor-id="lift"><span class="header-section-number">16.2.4</span> <code>lift</code></h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> lift <span class="at">--migration</span> mapping.json <span class="at">--src-schema</span> old.json <span class="at">--tgt-schema</span> new.json record.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The most complex subcommand. It compiles the migration, parses the input JSON as a W-type instance (auto-detecting the root vertex), applies the migration via <code>lift_wtype</code>, and serializes the result back to pretty-printed JSON on stdout.</p>
+<section id="architectural-3" class="level3" data-number="18.4.5">
+<h3 data-number="18.4.5" class="anchored" data-anchor-id="architectural-3"><span class="header-section-number">18.4.5</span> Architectural (3)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Name</th>
+<th>Sorts</th>
+<th>Ops</th>
+<th>Eqs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>25</td>
+<td>ThTracedMonoidal</td>
+<td>Wire, Box</td>
+<td>trace_in, trace_out, feedback</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>26</td>
+<td>ThSimplicial</td>
+<td>Simplex, Face, Degeneracy</td>
+<td>face_map, degeneracy_map</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>27</td>
+<td>ThMeta</td>
+<td>Node, Discriminator, ExtraField</td>
+<td>discriminator, extra_field</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
-<section id="error-handling-with-miette" class="level2" data-number="16.3">
-<h2 data-number="16.3" class="anchored" data-anchor-id="error-handling-with-miette"><span class="header-section-number">16.3</span> Error Handling with <code>miette</code></h2>
-<p>The CLI uses <code>miette</code> for user-facing error diagnostics. All subcommand handlers return <code>miette::Result&lt;()&gt;</code>, and errors are converted using <code>.into_diagnostic().wrap_err(...)</code> for context-rich messages:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> contents <span class="op">=</span> <span class="pp">std::fs::</span>read_to_string(path)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>into_diagnostic()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>wrap_err_with(<span class="op">||</span> <span class="pp">format!</span>(<span class="st">"failed to read {}"</span><span class="op">,</span> path<span class="op">.</span>display()))<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>miette</code> is used <strong>only</strong> in the CLI crate. Library crates use <code>thiserror</code> for error types. This separation keeps the library crates lightweight and avoids pulling in <code>miette</code>’s formatting dependencies for non-CLI consumers.</p>
-</div>
-</div>
-</section>
-<section id="adding-a-new-subcommand" class="level2" data-number="16.4">
-<h2 data-number="16.4" class="anchored" data-anchor-id="adding-a-new-subcommand"><span class="header-section-number">16.4</span> Adding a New Subcommand</h2>
-<p>To add a new subcommand to the CLI:</p>
-<ol type="1">
-<li><strong>Add a variant</strong> to the <code>Command</code> enum in <code>main.rs</code> with the appropriate <code>clap</code> attributes for arguments</li>
-<li><strong>Implement the handler</strong> as a <code>fn cmd_&lt;name&gt;(...) -&gt; Result&lt;()&gt;</code> function</li>
-<li><strong>Wire it up</strong> in the <code>match cli.command</code> block in <code>main()</code></li>
-<li><strong>Add tests</strong> – the integration test suite in <code>tests/integration/</code> can exercise CLI-accessible functionality through the Rust API directly</li>
-</ol>
-<p>For example, adding a <code>compose</code> subcommand that composes two migration files would require a new <code>Command::Compose</code> variant with <code>--m1</code> and <code>--m2</code> path arguments, a <code>cmd_compose</code> handler that loads both migrations and calls <code>mig::compile</code> + <code>compose_compiled</code>, and a <code>match</code> arm in <code>main()</code>.</p>
-</section>
-<section id="built-in-protocol-resolution" class="level2" data-number="16.5">
-<h2 data-number="16.5" class="anchored" data-anchor-id="built-in-protocol-resolution"><span class="header-section-number">16.5</span> Built-in Protocol Resolution</h2>
-<p>The CLI resolves protocol names to built-in definitions. Supported names:</p>
-<ul>
-<li><code>atproto</code> – AT Protocol (Bluesky)</li>
-<li><code>sql</code> – SQL databases</li>
-<li><code>protobuf</code> – Protocol Buffers</li>
-<li><code>graphql</code> – GraphQL</li>
-<li><code>json-schema</code> / <code>jsonschema</code> – JSON Schema</li>
-</ul>
-<p>Custom protocols are not yet supported via the CLI; use the TypeScript SDK or Rust API directly for custom protocol definitions.</p>
+<section id="theory-groups" class="level2" data-number="18.5">
+<h2 data-number="18.5" class="anchored" data-anchor-id="theory-groups"><span class="header-section-number">18.5</span> Theory Groups</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Schema composition</th>
+<th>Instance</th>
+<th>Protocols</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>colimit(Graph, Constraint, Multi)</td>
+<td>WType</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>colimit(Hypergraph, Constraint)</td>
+<td>Functor</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>colimit(SimpleGraph, Constraint)</td>
+<td>Flat</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>colimit(Graph, Constraint, Multi, Interface)</td>
+<td>WType</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>colimit(Graph, Constraint, Multi)</td>
+<td>colimit(WType, Meta)</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>F</td>
+<td>colimit(Graph, Constraint, Multi)</td>
+<td>GraphInstance</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
 
 
 <!-- -->
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-cartmell1986" class="csl-entry" role="listitem">
+Cartmell, John. 1986. <span>“Generalised Algebraic Theories and Contextual Categories.”</span> <em>Annals of Pure and Applied Logic</em> 32: 209–43. <a href="https://doi.org/10.1016/0168-0072(86)90053-9">https://doi.org/10.1016/0168-0072(86)90053-9</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1235,110 +1509,174 @@ Note
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/20-python-sdk.html" class="pagination-link" aria-label="`panproto` --- The Python SDK">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span>
+      <a href="../chapters/21-vcs-engine.html" class="pagination-link" aria-label="VCS Engine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/21-vcs-engine.html" class="pagination-link" aria-label="VCS Engine">
-        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-cli --- The CLI Tool {#sec-cli}</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-cli`</span> crate provides a command-line interface for schema validation, migration checking, structural diffing, and record lifting. It is a thin wrapper around the <span class="in">`panproto-core`</span> library, designed for scripting, CI pipelines, and quick local experiments.</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Command Structure</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>The CLI uses <span class="in">`clap`</span> derive macros for argument parsing. The top-level <span class="in">`Cli`</span> struct holds a global <span class="in">`--verbose`</span> flag and dispatches to one of four subcommands:</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-cli/src/main.rs" start-line=22 end-line=93}</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>Each subcommand maps directly to an underlying <span class="in">`panproto-core`</span> API:</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Subcommand <span class="pp">|</span> Core API <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`validate`</span> <span class="pp">|</span> <span class="in">`panproto_core::schema::validate`</span> <span class="pp">|</span> Validate a schema JSON file against a protocol's rules <span class="pp">|</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check`</span> <span class="pp">|</span> <span class="in">`panproto_core::mig::check_existence`</span> <span class="pp">|</span> Check existence conditions for a migration mapping <span class="pp">|</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff`</span> <span class="pp">|</span> Structural comparison <span class="pp">|</span> Report vertex/edge additions, removals, and kind changes <span class="pp">|</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift`</span> <span class="pp">|</span> <span class="in">`panproto_core::mig::compile`</span> + <span class="in">`lift_wtype`</span> <span class="pp">|</span> Apply a migration to a JSON record <span class="pp">|</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Subcommand Details</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### `validate`</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> validate <span class="at">--protocol</span> atproto schema.json</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>Loads the schema from JSON, resolves the protocol by name (five built-in protocols are supported), and runs protocol-aware validation. Outputs a human-readable list of errors or a success message. Exits with code 1 on validation failure.</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### `check`</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> check <span class="at">--src</span> old-schema.json <span class="at">--tgt</span> new-schema.json <span class="at">--mapping</span> migration.json</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>Loads both schemas and the migration mapping, builds the theory registry from the protocol, and runs <span class="in">`mig::check_existence`</span>. Outputs the report as human-readable text; with <span class="in">`--verbose`</span>, also dumps the full JSON report for machine consumption.</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### `diff`</span></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> diff old-schema.json new-schema.json</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>Computes structural differences between two schemas: added/removed vertices, added/removed edges, and kind changes. Sorts output deterministically. If the schemas are identical, prints a single line.</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### `lift`</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="ex">panproto</span> lift <span class="at">--migration</span> mapping.json <span class="at">--src-schema</span> old.json <span class="at">--tgt-schema</span> new.json record.json</span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>The most complex subcommand. It compiles the migration, parses the input JSON as a W-type instance (auto-detecting the root vertex), applies the migration via <span class="in">`lift_wtype`</span>, and serializes the result back to pretty-printed JSON on stdout.</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling with `miette`</span></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>The CLI uses <span class="in">`miette`</span> for user-facing error diagnostics. All subcommand handlers return <span class="in">`miette::Result&lt;()&gt;`</span>, and errors are converted using <span class="in">`.into_diagnostic().wrap_err(...)`</span> for context-rich messages:</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>let contents <span class="ot">=</span> std<span class="sc">::</span>fs<span class="sc">::</span><span class="fu">read_to_string</span>(path)</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.into_diagnostic</span>()</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.wrap_err_with</span>(<span class="sc">||</span> format<span class="sc">!</span>(<span class="st">"failed to read {}"</span>, <span class="fu">path.display</span>()))?;</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="in">`miette`</span> is used **only** in the CLI crate. Library crates use <span class="in">`thiserror`</span> for error types. This separation keeps the library crates lightweight and avoids pulling in <span class="in">`miette`</span>'s formatting dependencies for non-CLI consumers.</span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a New Subcommand</span></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>To add a new subcommand to the CLI:</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Add a variant** to the <span class="in">`Command`</span> enum in <span class="in">`main.rs`</span> with the appropriate <span class="in">`clap`</span> attributes for arguments</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Implement the handler** as a <span class="in">`fn cmd_&lt;name&gt;(...) -&gt; Result&lt;()&gt;`</span> function</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Wire it up** in the <span class="in">`match cli.command`</span> block in <span class="in">`main()`</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Add tests** -- the integration test suite in <span class="in">`tests/integration/`</span> can exercise CLI-accessible functionality through the Rust API directly</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>For example, adding a <span class="in">`compose`</span> subcommand that composes two migration files would require a new <span class="in">`Command::Compose`</span> variant with <span class="in">`--m1`</span> and <span class="in">`--m2`</span> path arguments, a <span class="in">`cmd_compose`</span> handler that loads both migrations and calls <span class="in">`mig::compile`</span> + <span class="in">`compose_compiled`</span>, and a <span class="in">`match`</span> arm in <span class="in">`main()`</span>.</span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Built-in Protocol Resolution</span></span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>The CLI resolves protocol names to built-in definitions. Supported names:</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`atproto`</span> -- AT Protocol (Bluesky)</span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`sql`</span> -- SQL databases</span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`protobuf`</span> -- Protocol Buffers</span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`graphql`</span> -- GraphQL</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`json-schema`</span> / <span class="in">`jsonschema`</span> -- JSON Schema</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>Custom protocols are not yet supported via the CLI; use the TypeScript SDK or Rust API directly for custom protocol definitions.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Building-Block Theories {#sec-building-blocks}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>panproto defines 27 building-block GATs that compose via colimit into protocol-specific schema and instance theories. This chapter provides the formal definitions and type-checking proofs for all equations.</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Formal Invariants</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Every building-block theory satisfies:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Sort closure**: every sort name in an operation's input/output types is declared in the theory's sorts list.</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Equation well-typedness**: both sides of every equation have the same output sort.</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**No tautologies**: <span class="in">`lhs ≠ rhs`</span> syntactically for all equations.</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Property-to-Structure Principle</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>Several building blocks use Cartmell's property-to-structure move <span class="co">[</span><span class="ot">@cartmell1986</span><span class="co">]</span>: conditional properties (transitivity, injectivity) are encoded as unconditional equations by adding operations and dependent sorts.</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>For example, injectivity of coproduct injection is not <span class="in">`injection(v1) = injection(v2) → v1 = v2`</span> (a conditional equation, not expressible in GATs). Instead, ThCoproduct adds a retraction <span class="in">`variant_of : Vertex → Variant`</span> with the equation <span class="in">`variant_of(injection(v)) = v`</span>. The retraction is *structure*, not a *property*.</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>This separation yields a clean boundary: structural properties (transitivity, injectivity, uniqueness, optionality) belong in GAT sorts+equations; validation properties (cardinality, patterns, ranges) belong in ThConstraint.</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theories with Equations</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThRecursion — Fold-Unfold</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Mu</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   fold : Vertex → Mu</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="in">       unfold : Mu → Vertex</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    unfold(fold(v)) = v</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`fold(v) : Mu`</span>, <span class="in">`unfold(fold(v)) : Vertex`</span>, <span class="in">`v : Vertex`</span>. Both sides: Vertex. ✓</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>This is the isorecursive fold-unfold law. <span class="in">`fold`</span> is a section of <span class="in">`unfold`</span>.</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThReflexiveGraph — Identity Edges</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Edge</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   id : Vertex → Edge</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="in">       src : Edge → Vertex</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt : Edge → Vertex</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="in">Eqs:   src(id(v)) = v</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt(id(v)) = v</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`id(v) : Edge`</span>, <span class="in">`src(id(v)) : Vertex`</span>, <span class="in">`v : Vertex`</span>. Both sides: Vertex. ✓</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>Without the equations, this is just ThGraph + an extra operation. The equations make the identity edge load-bearing.</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThSymmetricGraph — Involution</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Edge</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   inv : Edge → Edge</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">       src : Edge → Vertex</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt : Edge → Vertex</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="in">Eqs:   src(inv(e)) = tgt(e)</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt(inv(e)) = src(e)</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="in">       inv(inv(e)) = e</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>Type checks:</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`src(inv(e)) : Vertex`</span>, <span class="in">`tgt(e) : Vertex`</span> ✓</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`inv(inv(e)) : Edge`</span>, <span class="in">`e : Edge`</span> ✓</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThCoproduct — Variant Retraction</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Variant, Tag</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   injection : Variant → Vertex</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="in">       tag : Variant → Tag</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="in">       variant_of : Vertex → Variant</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    variant_of(injection(v)) = v</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`injection(v) : Vertex`</span>, <span class="in">`variant_of(injection(v)) : Variant`</span>, <span class="in">`v : Variant`</span>. Both sides: Variant. ✓</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThPartial — Definedness Witness</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Defined</span></span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   defined : Vertex → Defined</span></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="in">       witness : Defined → Vertex</span></span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    defined(witness(d)) = d</span></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`witness(d) : Vertex`</span>, <span class="in">`defined(witness(d)) : Defined`</span>, <span class="in">`d : Defined`</span>. Both sides: Defined. ✓</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## All 27 Theories (Complete List)</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema shapes (6)</span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> ThGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> src, tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> ThSimpleGraph <span class="pp">|</span> Vertex, Edge(s:V,t:V) <span class="pp">|</span> src, tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> ThHypergraph <span class="pp">|</span> Vertex, HyperEdge, Label <span class="pp">|</span> incident, parent_label <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> ThReflexiveGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> id, src, tgt <span class="pp">|</span> 2 <span class="pp">|</span></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> ThSymmetricGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> inv, src, tgt <span class="pp">|</span> 3 <span class="pp">|</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6 <span class="pp">|</span> ThPetriNet <span class="pp">|</span> Place, Transition, Token <span class="pp">|</span> pre, post, marking <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema modifiers (8)</span></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 7 <span class="pp">|</span> ThConstraint <span class="pp">|</span> Vertex, Constraint(v:V) <span class="pp">|</span> target <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8 <span class="pp">|</span> ThMulti <span class="pp">|</span> Vertex, Edge, EdgeLabel <span class="pp">|</span> edge_label <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9 <span class="pp">|</span> ThInterface <span class="pp">|</span> Vertex, Interface <span class="pp">|</span> implements <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> ThOrder <span class="pp">|</span> Edge, Position <span class="pp">|</span> edge_position, succ <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11 <span class="pp">|</span> ThCoproduct <span class="pp">|</span> Vertex, Variant, Tag <span class="pp">|</span> injection, tag, variant_of <span class="pp">|</span> 1 <span class="pp">|</span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12 <span class="pp">|</span> ThRecursion <span class="pp">|</span> Vertex, Mu <span class="pp">|</span> unfold, fold <span class="pp">|</span> 1 <span class="pp">|</span></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13 <span class="pp">|</span> ThPartial <span class="pp">|</span> Vertex, Defined <span class="pp">|</span> defined, witness <span class="pp">|</span> 1 <span class="pp">|</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14 <span class="pp">|</span> ThLinear <span class="pp">|</span> Edge, Usage <span class="pp">|</span> use_count <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema structural (4)</span></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15 <span class="pp">|</span> ThNominal <span class="pp">|</span> Vertex, Name <span class="pp">|</span> name <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16 <span class="pp">|</span> ThSpan <span class="pp">|</span> Vertex, Span <span class="pp">|</span> span_left, span_right <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 17 <span class="pp">|</span> ThCospan <span class="pp">|</span> Vertex, Apex <span class="pp">|</span> inl, inr <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 18 <span class="pp">|</span> ThOperad <span class="pp">|</span> Color, MOperation <span class="pp">|</span> arity, op_output <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### Instance (6)</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 19 <span class="pp">|</span> ThWType <span class="pp">|</span> Node, Arc, Value <span class="pp">|</span> anchor, arc_src, arc_tgt, arc_edge, node_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> ThFunctor <span class="pp">|</span> Table, Row, ForeignKey <span class="pp">|</span> table_vertex, fk_src, fk_tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 21 <span class="pp">|</span> ThFlat <span class="pp">|</span> Node, Field, Value <span class="pp">|</span> field_node, field_value, node_anchor <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 22 <span class="pp">|</span> ThGraphInstance <span class="pp">|</span> IVertex, IEdge, Value, Vertex, Edge <span class="pp">|</span> i_src, i_tgt, iv_anchor, ie_anchor, iv_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 23 <span class="pp">|</span> ThAnnotation <span class="pp">|</span> Vertex, Annotation, AnnotationKey, Value <span class="pp">|</span> annotated, ann_key, ann_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 24 <span class="pp">|</span> ThCausal <span class="pp">|</span> Event, Timestamp, Before(e1,e2) <span class="pp">|</span> time, before_refl, before_trans <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Architectural (3)</span></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 25 <span class="pp">|</span> ThTracedMonoidal <span class="pp">|</span> Wire, Box <span class="pp">|</span> trace_in, trace_out, feedback <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 26 <span class="pp">|</span> ThSimplicial <span class="pp">|</span> Simplex, Face, Degeneracy <span class="pp">|</span> face_map, degeneracy_map <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 27 <span class="pp">|</span> ThMeta <span class="pp">|</span> Node, Discriminator, ExtraField <span class="pp">|</span> discriminator, extra_field <span class="pp">|</span> 0 <span class="pp">|</span></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Groups</span></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Group <span class="pp">|</span> Schema composition <span class="pp">|</span> Instance <span class="pp">|</span> Protocols <span class="pp">|</span></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> WType <span class="pp">|</span> 30 <span class="pp">|</span></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> B <span class="pp">|</span> colimit(Hypergraph, Constraint) <span class="pp">|</span> Functor <span class="pp">|</span> 11 <span class="pp">|</span></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> C <span class="pp">|</span> colimit(SimpleGraph, Constraint) <span class="pp">|</span> Flat <span class="pp">|</span> 9 <span class="pp">|</span></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> D <span class="pp">|</span> colimit(Graph, Constraint, Multi, Interface) <span class="pp">|</span> WType <span class="pp">|</span> 16 <span class="pp">|</span></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> E <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> colimit(WType, Meta) <span class="pp">|</span> 9 <span class="pp">|</span></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> F <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> GraphInstance <span class="pp">|</span> 1 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/15-cli.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/22-building-blocks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -620,7 +620,7 @@ Tip
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protocol specification.</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A built schema.</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    Schema(Schema)<span class="op">,</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    Schema(<span class="dt">Box</span><span class="op">&lt;</span>Schema<span class="op">&gt;</span>)<span class="op">,</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration ready for per-record application.</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration bundled with its source and target schemas,</span></span>
@@ -853,7 +853,7 @@ Note
 <span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
 <span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">?;</span></span>
 <span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(schema)))</span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(<span class="dt">Box</span><span class="pp">::</span>new(schema))))</span>
 <span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="all-ten-entry-points" class="level3" data-number="13.5.3">

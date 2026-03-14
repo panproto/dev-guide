@@ -831,7 +831,23 @@ window.Quarto = {
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_order_compatibility(src<span class="op">,</span> tgt))<span class="op">;</span></span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> theory<span class="op">.</span>find_sort(<span class="st">"Mu"</span>)<span class="op">.</span>is_some() <span class="op">{</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_recursion_compatibility(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_recursion_compatibility(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> theory<span class="op">.</span>find_sort(<span class="st">"Usage"</span>)<span class="op">.</span>is_some() <span class="op">{</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_linearity(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Always check basic morphism validity.</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    errors<span class="op">.</span>extend(check_vertex_map(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    errors<span class="op">.</span>extend(check_edge_map(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>    errors<span class="op">.</span>extend(check_kind_consistency(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    ExistenceReport <span class="op">{</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>        valid<span class="op">:</span> errors<span class="op">.</span>is_empty()<span class="op">,</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>        errors<span class="op">,</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="how-theory-inspection-works" class="level3" data-number="9.3.2">
 <h3 data-number="9.3.2" class="anchored" data-anchor-id="how-theory-inspection-works"><span class="header-section-number">9.3.2</span> How Theory Inspection Works</h3>
@@ -1738,7 +1754,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ExistenceReport`</span> struct carries the validation result, and <span class="in">`check_existence`</span> is the entry point:</span>
 <span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/existence.rs" start-line=17 end-line=78}</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/existence.rs" start-line=17 end-line=94}</span></span>
 <span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Theory Inspection Works</span></span>

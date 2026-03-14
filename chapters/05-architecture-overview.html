@@ -699,7 +699,10 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_io <span class="kw">as</span> io<span class="op">;</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-protocols` for built-in protocol definitions.</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_protocols <span class="kw">as</span> protocols<span class="op">;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_schema <span class="kw">as</span> schema<span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-vcs` for schematic version control.</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_vcs <span class="kw">as</span> vcs<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This means downstream code writes <code>panproto::gat::Theory</code> rather than importing <code>panproto-gat</code> directly. The facade adds no logic of its own.</p>
 </section>
 <section id="crate-dependency-graph" class="level3" data-number="5.1.2">
@@ -1480,7 +1483,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-core`</span> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-core/src/lib.rs" start-line=1 end-line=22}</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-core/src/lib.rs" start-line=1 end-line=26}</span></span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>This means downstream code writes <span class="in">`panproto::gat::Theory`</span> rather than importing <span class="in">`panproto-gat`</span> directly. The facade adds no logic of its own.</span>

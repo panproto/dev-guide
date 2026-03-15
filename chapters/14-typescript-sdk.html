@@ -463,6 +463,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -477,19 +483,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -506,7 +512,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -523,19 +529,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -675,27 +693,27 @@ Tip
 <section id="the-panproto-class" class="level2" data-number="14.2">
 <h2 data-number="14.2" class="anchored" data-anchor-id="the-panproto-class"><span class="header-section-number">14.2</span> The <code>Panproto</code> Class</h2>
 <p><code>Panproto</code> is the main entry point. It loads the WASM module and provides the top-level API:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="54"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 53;"><span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> Panproto <span class="kw">implements</span> Disposable {</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #wasm<span class="op">:</span> WasmModule<span class="op">;</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #protocols<span class="op">:</span> <span class="bu">Map</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Protocol<span class="op">&gt;;</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> <span class="kw">constructor</span>(wasm<span class="op">:</span> WasmModule) {</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span> <span class="op">=</span> wasm<span class="op">;</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">protocols</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="co">/**</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co">   * Initialize the panproto SDK by loading the WASM module.</span></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> </span><span class="cv">input</span><span class="co"> - URL to the wasm-bindgen glue module, or a pre-imported</span></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="co">   *                glue module object (for bundler environments like Vite).</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co">   *                Defaults to the bundled glue module.</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@returns</span><span class="co"> An initialized Panproto instance</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> import('./types.js').WasmError} if WASM loading fails</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co">   */</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>  <span class="kw">static</span> <span class="kw">async</span> <span class="fu">init</span>(input<span class="op">?:</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> WasmGlueModule)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Panproto<span class="op">&gt;</span> {</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> wasm <span class="op">=</span> <span class="cf">await</span> <span class="fu">loadWasm</span>(input)<span class="op">;</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="fu">Panproto</span>(wasm)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="54"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 53;"><span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> <span class="kw">const</span> migration <span class="op">=</span> panproto<span class="op">.</span><span class="fu">migration</span>(oldSchema<span class="op">,</span> newSchema)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span>   <span class="op">.</span><span class="fu">map</span>(<span class="st">'post'</span><span class="op">,</span> <span class="st">'post'</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span>   <span class="op">.</span><span class="fu">compile</span>()<span class="op">;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> <span class="kw">const</span> result <span class="op">=</span> migration<span class="op">.</span><span class="fu">lift</span>(inputRecord)<span class="op">;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> <span class="vs">```</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="vs"> */</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="vs">export class Panproto implements Disposable {</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #wasm: WasmModule;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #protocols: Map&lt;string, Protocol&gt;;</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="vs">  private constructor(wasm: WasmModule) {</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#wasm = wasm;</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#protocols = new Map();</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="vs">  }</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="vs">  /**</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="vs">   * Initialize the panproto SDK by loading the WASM module.</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="vs">   *</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="vs">   * @param input - URL to the wasm-bindgen glue module, or a pre-imported</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="vs">   *                glue module object (for bundler environments like Vite).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Key methods:</p>
 <ul>
 <li><strong><code>init(wasmUrl?)</code></strong> – Async factory. Loads the WASM binary (bundled by default) and returns a ready instance.</li>
@@ -709,11 +727,11 @@ Tip
 <p><code>Panproto</code> implements <code>Disposable</code>. When disposed, it releases all cached protocol handles:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="183"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 182;"><span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>  <span class="co">/**</span></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="co">   * Release all WASM resources held by this instance.</span></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="co">   * Compose two lenses into a single lens.</span></span>
 <span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a><span class="co">   * Disposes all cached protocols. After disposal, this instance</span></span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a><span class="co">   * must not be used.</span></span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a><span class="co">   */</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a><span class="co">   * The resulting lens is equivalent to applying `l1` then `l2`.</span></span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> </span><span class="cv">l1</span><span class="co"> - First lens (applied first)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="protocol" class="level2" data-number="14.3">
 <h2 data-number="14.3" class="anchored" data-anchor-id="protocol"><span class="header-section-number">14.3</span> Protocol</h2>
@@ -739,134 +757,134 @@ Tip
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">;</span></span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM handle. Internal use only. */</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_handle</span>()<span class="op">:</span> WasmHandle {</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The edge rules for this protocol. */</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">edgeRules</span>()<span class="op">:</span> <span class="kw">readonly</span> EdgeRule[] {</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">.</span><span class="at">edgeRules</span><span class="op">;</span></span>
 <span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="co">/**</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">   * Start building a schema within this protocol.</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@returns</span><span class="co"> A new `SchemaBuilder` bound to this protocol</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">   */</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">schema</span>()<span class="op">:</span> SchemaBuilder {</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="fu">SchemaBuilder</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">.</span><span class="at">name</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span>)<span class="op">;</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** Release the WASM-side protocol resource. */</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  [<span class="bu">Symbol</span><span class="op">.</span><span class="at">dispose</span>]()<span class="op">:</span> <span class="dt">void</span> {</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span>[<span class="bu">Symbol</span><span class="op">.</span><span class="at">dispose</span>]()<span class="op">;</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The constraint sorts for this protocol. */</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">constraintSorts</span>()<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[] {</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">.</span><span class="at">constraintSorts</span><span class="op">;</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The object kinds for this protocol. */</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">objectKinds</span>()<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[] {</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">.</span><span class="at">objKinds</span><span class="op">;</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM handle. Internal use only. */</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_handle</span>()<span class="op">:</span> WasmHandle {</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Five built-in protocol specs are provided: <code>ATPROTO_SPEC</code>, <code>SQL_SPEC</code>, <code>PROTOBUF_SPEC</code>, <code>GRAPHQL_SPEC</code>, and <code>JSON_SCHEMA_SPEC</code>. They are auto-registered on first access via <code>panproto.protocol('atproto')</code>.</p>
 </section>
 <section id="schemabuilder-and-builtschema" class="level2" data-number="14.4">
 <h2 data-number="14.4" class="anchored" data-anchor-id="schemabuilder-and-builtschema"><span class="header-section-number">14.4</span> SchemaBuilder and BuiltSchema</h2>
 <p><code>SchemaBuilder</code> is an immutable fluent builder. Each method returns a <strong>new</strong> builder instance, leaving the original unchanged. This makes it safe to branch schema definitions from a common base:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="41"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 40;"><span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> SchemaBuilder {</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #protocolName<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #protocolHandle<span class="op">:</span> WasmHandle<span class="op">;</span></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #wasm<span class="op">:</span> WasmModule<span class="op">;</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #ops<span class="op">:</span> <span class="kw">readonly</span> SchemaOp[]<span class="op">;</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #vertices<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Vertex<span class="op">&gt;;</span></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #hyperEdges<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> HyperEdge<span class="op">&gt;;</span></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #constraints<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Constraint[]<span class="op">&gt;;</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #required<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;;</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(</span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    protocolName<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    protocolHandle<span class="op">:</span> WasmHandle<span class="op">,</span></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    wasm<span class="op">:</span> WasmModule<span class="op">,</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    ops<span class="op">:</span> <span class="kw">readonly</span> SchemaOp[] <span class="op">=</span> []<span class="op">,</span></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    vertices<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Vertex<span class="op">&gt;</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">,</span></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">:</span> <span class="kw">readonly</span> Edge[] <span class="op">=</span> []<span class="op">,</span></span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    hyperEdges<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> HyperEdge<span class="op">&gt;</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">,</span></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    constraints<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Constraint[]<span class="op">&gt;</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">,</span></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    required<span class="op">:</span> ReadonlyMap<span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">,</span></span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  ) {</span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolName</span> <span class="op">=</span> protocolName<span class="op">;</span></span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolHandle</span> <span class="op">=</span> protocolHandle<span class="op">;</span></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span> <span class="op">=</span> wasm<span class="op">;</span></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">ops</span> <span class="op">=</span> ops<span class="op">;</span></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">vertices</span> <span class="op">=</span> vertices<span class="op">;</span></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">edges</span> <span class="op">=</span> edges<span class="op">;</span></span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">hyperEdges</span> <span class="op">=</span> hyperEdges<span class="op">;</span></span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">constraints</span> <span class="op">=</span> constraints<span class="op">;</span></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">required</span> <span class="op">=</span> required<span class="op">;</span></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="41"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 40;"><span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span>   <span class="op">.</span><span class="fu">build</span>()<span class="op">;</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> <span class="vs">```</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="vs"> */</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="vs">export class SchemaBuilder {</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #protocolName: string;</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #protocolHandle: WasmHandle;</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #wasm: WasmModule;</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #ops: readonly SchemaOp[];</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #vertices: ReadonlyMap&lt;string, Vertex&gt;;</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #edges: readonly Edge[];</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #hyperEdges: ReadonlyMap&lt;string, HyperEdge&gt;;</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #constraints: ReadonlyMap&lt;string, readonly Constraint[]&gt;;</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="vs">  readonly #required: ReadonlyMap&lt;string, readonly Edge[]&gt;;</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="vs">  constructor(</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="vs">    protocolName: string,</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="vs">    protocolHandle: WasmHandle,</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="vs">    wasm: WasmModule,</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="vs">    ops: readonly SchemaOp[] = [],</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a><span class="vs">    vertices: ReadonlyMap&lt;string, Vertex&gt; = new Map(),</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="vs">    edges: readonly Edge[] = [],</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="vs">    hyperEdges: ReadonlyMap&lt;string, HyperEdge&gt; = new Map(),</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="vs">    constraints: ReadonlyMap&lt;string, readonly Constraint[]&gt; = new Map(),</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a><span class="vs">    required: ReadonlyMap&lt;string, readonly Edge[]&gt; = new Map(),</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="vs">  ) {</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#protocolName = protocolName;</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#protocolHandle = protocolHandle;</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#wasm = wasm;</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#ops = ops;</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#vertices = vertices;</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#edges = edges;</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="vs">    this.#hyperEdges = hyperEdges;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The builder accumulates <code>SchemaOp</code> objects (matching the Rust <code>BuildOp</code> tagged enum). On <code>.build()</code>, it packs them as MessagePack, sends them to WASM, and wraps the returned handle:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="295"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 294;"><span id="cb5-295"><a href="#cb5-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">build</span>()<span class="op">:</span> BuiltSchema {</span>
-<span id="cb5-296"><a href="#cb5-296" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> opsBytes <span class="op">=</span> <span class="fu">packSchemaOps</span>([<span class="op">...</span><span class="kw">this</span><span class="op">.</span>#<span class="at">ops</span>])<span class="op">;</span></span>
-<span id="cb5-297"><a href="#cb5-297" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> rawHandle <span class="op">=</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">.</span><span class="at">exports</span><span class="op">.</span><span class="fu">build_schema</span>(</span>
-<span id="cb5-298"><a href="#cb5-298" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolHandle</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
-<span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a>      opsBytes<span class="op">,</span></span>
-<span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
-<span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> handle <span class="op">=</span> <span class="fu">createHandle</span>(rawHandle<span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span>)<span class="op">;</span></span>
-<span id="cb5-303"><a href="#cb5-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-304"><a href="#cb5-304" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data<span class="op">:</span> SchemaData <span class="op">=</span> {</span>
-<span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a>      protocol<span class="op">:</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolName</span><span class="op">,</span></span>
-<span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a>      vertices<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">vertices</span>)<span class="op">,</span></span>
-<span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a>      edges<span class="op">:</span> [<span class="op">...</span><span class="kw">this</span><span class="op">.</span>#<span class="at">edges</span>]<span class="op">,</span></span>
-<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a>      hyperEdges<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">hyperEdges</span>)<span class="op">,</span></span>
-<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a>      constraints<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(</span>
-<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">constraints</span><span class="op">.</span><span class="fu">entries</span>())<span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k<span class="op">,</span> [<span class="op">...</span>v]])<span class="op">,</span></span>
-<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
-<span id="cb5-312"><a href="#cb5-312" aria-hidden="true" tabindex="-1"></a>      required<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(</span>
-<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">required</span><span class="op">.</span><span class="fu">entries</span>())<span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k<span class="op">,</span> [<span class="op">...</span>v]])<span class="op">,</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="295"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 294;"><span id="cb5-295"><a href="#cb5-295" aria-hidden="true" tabindex="-1"></a>   <span class="op">*</span> @returns The validated<span class="op">,</span> built schema</span>
+<span id="cb5-296"><a href="#cb5-296" aria-hidden="true" tabindex="-1"></a>   <span class="op">*</span> @throws {@link SchemaValidationError} <span class="cf">if</span> the schema is invalid</span>
+<span id="cb5-297"><a href="#cb5-297" aria-hidden="true" tabindex="-1"></a>   <span class="op">*</span><span class="ss">/</span></span>
+<span id="cb5-298"><a href="#cb5-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">build</span>()<span class="op">:</span> BuiltSchema {</span>
+<span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> opsBytes <span class="op">=</span> <span class="fu">packSchemaOps</span>([<span class="op">...</span><span class="kw">this</span><span class="op">.</span>#<span class="at">ops</span>])<span class="op">;</span></span>
+<span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> rawHandle <span class="op">=</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">.</span><span class="at">exports</span><span class="op">.</span><span class="fu">build_schema</span>(</span>
+<span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolHandle</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a>      opsBytes<span class="op">,</span></span>
+<span id="cb5-303"><a href="#cb5-303" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb5-304"><a href="#cb5-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> handle <span class="op">=</span> <span class="fu">createHandle</span>(rawHandle<span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span>)<span class="op">;</span></span>
+<span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data<span class="op">:</span> SchemaData <span class="op">=</span> {</span>
+<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a>      protocol<span class="op">:</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">protocolName</span><span class="op">,</span></span>
+<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a>      vertices<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">vertices</span>)<span class="op">,</span></span>
+<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a>      edges<span class="op">:</span> [<span class="op">...</span><span class="kw">this</span><span class="op">.</span>#<span class="at">edges</span>]<span class="op">,</span></span>
+<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a>      hyperEdges<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">hyperEdges</span>)<span class="op">,</span></span>
+<span id="cb5-312"><a href="#cb5-312" aria-hidden="true" tabindex="-1"></a>      constraints<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(</span>
+<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">constraints</span><span class="op">.</span><span class="fu">entries</span>())<span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k<span class="op">,</span> [<span class="op">...</span>v]])<span class="op">,</span></span>
 <span id="cb5-314"><a href="#cb5-314" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
-<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a>      variants<span class="op">:</span> {}<span class="op">,</span></span>
-<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a>      orderings<span class="op">:</span> {}<span class="op">,</span></span>
-<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a>      recursionPoints<span class="op">:</span> {}<span class="op">,</span></span>
-<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a>      usageModes<span class="op">:</span> {}<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a>      required<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(</span>
+<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">required</span><span class="op">.</span><span class="fu">entries</span>())<span class="op">.</span><span class="fu">map</span>(([k<span class="op">,</span> v]) <span class="kw">=&gt;</span> [k<span class="op">,</span> [<span class="op">...</span>v]])<span class="op">,</span></span>
+<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a>      )<span class="op">,</span></span>
+<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a>      variants<span class="op">:</span> {}<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>BuiltSchema</code> is the validated result. It holds both a WASM handle (for passing to migration functions) and a local <code>SchemaData</code> snapshot (for introspection without crossing the WASM boundary):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="326"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 325;"><span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a><span class="co"> * A validated, built schema with a WASM-side handle.</span></span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a><span class="co"> * Implements `Disposable` for automatic cleanup of the WASM resource.</span></span>
-<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> BuiltSchema <span class="kw">implements</span> Disposable {</span>
-<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #handle<span class="op">:</span> WasmHandle<span class="op">;</span></span>
-<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #data<span class="op">:</span> SchemaData<span class="op">;</span></span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #wasm<span class="op">:</span> WasmModule<span class="op">;</span></span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(handle<span class="op">:</span> WasmHandle<span class="op">,</span> data<span class="op">:</span> SchemaData<span class="op">,</span> wasm<span class="op">:</span> WasmModule) {</span>
-<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span> <span class="op">=</span> handle<span class="op">;</span></span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span> <span class="op">=</span> data<span class="op">;</span></span>
-<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span> <span class="op">=</span> wasm<span class="op">;</span></span>
-<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM handle for this schema. Internal use only. */</span></span>
-<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_handle</span>()<span class="op">:</span> WasmHandle {</span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
-<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM module reference. Internal use only. */</span></span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_wasm</span>()<span class="op">:</span> WasmModule {</span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">;</span></span>
-<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The schema data (vertices, edges, constraints, etc.). */</span></span>
-<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">data</span>()<span class="op">:</span> SchemaData {</span>
-<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">;</span></span>
-<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The protocol name this schema belongs to. */</span></span>
-<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">protocol</span>()<span class="op">:</span> <span class="dt">string</span> {</span>
-<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">.</span><span class="at">protocol</span><span class="op">;</span></span>
-<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** All vertices in the schema. */</span></span>
-<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">vertices</span>()<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Vertex<span class="op">&gt;&gt;</span> {</span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">.</span><span class="at">vertices</span><span class="op">;</span></span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** All edges in the schema. */</span></span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">edges</span>()<span class="op">:</span> <span class="kw">readonly</span> Edge[] {</span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">.</span><span class="at">edges</span><span class="op">;</span></span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="326"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 325;"><span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">new</span> <span class="fu">BuiltSchema</span>(handle<span class="op">,</span> data<span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span>)<span class="op">;</span></span>
+<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a><span class="co"> * A validated, built schema with a WASM-side handle.</span></span>
+<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a><span class="co"> * Implements `Disposable` for automatic cleanup of the WASM resource.</span></span>
+<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> BuiltSchema <span class="kw">implements</span> Disposable {</span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #handle<span class="op">:</span> WasmHandle<span class="op">;</span></span>
+<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #data<span class="op">:</span> SchemaData<span class="op">;</span></span>
+<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #wasm<span class="op">:</span> WasmModule<span class="op">;</span></span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(handle<span class="op">:</span> WasmHandle<span class="op">,</span> data<span class="op">:</span> SchemaData<span class="op">,</span> wasm<span class="op">:</span> WasmModule) {</span>
+<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span> <span class="op">=</span> handle<span class="op">;</span></span>
+<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span> <span class="op">=</span> data<span class="op">;</span></span>
+<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span> <span class="op">=</span> wasm<span class="op">;</span></span>
+<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM handle for this schema. Internal use only. */</span></span>
+<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_handle</span>()<span class="op">:</span> WasmHandle {</span>
+<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
+<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM module reference. Internal use only. */</span></span>
+<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_wasm</span>()<span class="op">:</span> WasmModule {</span>
+<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">;</span></span>
+<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The schema data (vertices, edges, constraints, etc.). */</span></span>
+<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">data</span>()<span class="op">:</span> SchemaData {</span>
+<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">;</span></span>
+<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The protocol name this schema belongs to. */</span></span>
+<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">protocol</span>()<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">.</span><span class="at">protocol</span><span class="op">;</span></span>
+<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** All vertices in the schema. */</span></span>
+<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">vertices</span>()<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> Vertex<span class="op">&gt;&gt;</span> {</span>
+<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">data</span><span class="op">.</span><span class="at">vertices</span><span class="op">;</span></span>
+<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** All edges in the schema. */</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="migrationbuilder-and-compiledmigration" class="level2" data-number="14.5">
 <h2 data-number="14.5" class="anchored" data-anchor-id="migrationbuilder-and-compiledmigration"><span class="header-section-number">14.5</span> MigrationBuilder and CompiledMigration</h2>
@@ -916,54 +934,54 @@ Tip
 <span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
 <span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>compile()</code> method packs the mapping and sends it to the <code>compile_migration</code> WASM entry point. The result is a <code>CompiledMigration</code> with three data-path methods:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-startfrom="181"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 180;"><span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="co"> * A compiled migration that can efficiently transform records via WASM.</span></span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="co"> * Implements `Disposable` for automatic cleanup of the WASM resource.</span></span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> CompiledMigration <span class="kw">implements</span> Disposable {</span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #handle<span class="op">:</span> WasmHandle<span class="op">;</span></span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #wasm<span class="op">:</span> WasmModule<span class="op">;</span></span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #spec<span class="op">:</span> MigrationSpec<span class="op">;</span></span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(handle<span class="op">:</span> WasmHandle<span class="op">,</span> wasm<span class="op">:</span> WasmModule<span class="op">,</span> spec<span class="op">:</span> MigrationSpec) {</span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span> <span class="op">=</span> handle<span class="op">;</span></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span> <span class="op">=</span> wasm<span class="op">;</span></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span> <span class="op">=</span> spec<span class="op">;</span></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The WASM handle for this migration. Internal use only. */</span></span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">_handle</span>()<span class="op">:</span> WasmHandle {</span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The migration specification used to build this migration. */</span></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">spec</span>()<span class="op">:</span> MigrationSpec {</span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">spec</span><span class="op">;</span></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>  <span class="co">/**</span></span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a><span class="co">   * Transform a record using this migration (forward direction).</span></span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="co">   * This is the hot path: data goes through WASM as MessagePack bytes</span></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="co">   * with no intermediate JS-heap allocation.</span></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> </span><span class="cv">record</span><span class="co"> - The input record to transform</span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@returns</span><span class="co"> The transformed record</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> WasmError} if the WASM call fails</span></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="co">   */</span></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lift</span>(record<span class="op">:</span> <span class="dt">unknown</span>)<span class="op">:</span> LiftResult {</span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> inputBytes <span class="op">=</span> <span class="fu">packToWasm</span>(record)<span class="op">;</span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> outputBytes <span class="op">=</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">.</span><span class="at">exports</span><span class="op">.</span><span class="fu">lift_record</span>(</span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>        inputBytes<span class="op">,</span></span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>      )<span class="op">;</span></span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> data <span class="op">=</span> <span class="fu">unpackFromWasm</span>(outputBytes)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-startfrom="181"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 180;"><span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>  <span class="co">/**</span></span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="co">   * Compile the migration for fast per-record application.</span></span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="co">   * Sends the migration specification to WASM for compilation.</span></span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="co">   * The resulting `CompiledMigration` can be used to transform records.</span></span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="co">   *</span></span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@returns</span><span class="co"> A compiled migration ready for record transformation</span></span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="co">   * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> MigrationError} if compilation fails</span></span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="co">   */</span></span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile</span>()<span class="op">:</span> CompiledMigration {</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> edgeMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span>#<span class="at">edgeMap</span><span class="op">.</span><span class="fu">map</span>(([src<span class="op">,</span> tgt]) <span class="kw">=&gt;</span> [</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>        { src<span class="op">:</span> src<span class="op">.</span><span class="at">src</span><span class="op">,</span> tgt<span class="op">:</span> src<span class="op">.</span><span class="at">tgt</span><span class="op">,</span> kind<span class="op">:</span> src<span class="op">.</span><span class="at">kind</span><span class="op">,</span> name<span class="op">:</span> src<span class="op">.</span><span class="at">name</span> <span class="op">??</span> <span class="dt">null</span> }<span class="op">,</span></span>
+<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>        { src<span class="op">:</span> tgt<span class="op">.</span><span class="at">src</span><span class="op">,</span> tgt<span class="op">:</span> tgt<span class="op">.</span><span class="at">tgt</span><span class="op">,</span> kind<span class="op">:</span> tgt<span class="op">.</span><span class="at">kind</span><span class="op">,</span> name<span class="op">:</span> tgt<span class="op">.</span><span class="at">name</span> <span class="op">??</span> <span class="dt">null</span> }<span class="op">,</span></span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>      ] <span class="im">as</span> <span class="kw">const</span>)<span class="op">,</span></span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> resolver <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>(</span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span>#<span class="at">resolvers</span><span class="op">.</span><span class="fu">map</span>(([[s<span class="op">,</span> t]<span class="op">,</span> e]) <span class="kw">=&gt;</span> [</span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>        [s<span class="op">,</span> t] <span class="im">as</span> <span class="kw">const</span><span class="op">,</span></span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>        { src<span class="op">:</span> e<span class="op">.</span><span class="at">src</span><span class="op">,</span> tgt<span class="op">:</span> e<span class="op">.</span><span class="at">tgt</span><span class="op">,</span> kind<span class="op">:</span> e<span class="op">.</span><span class="at">kind</span><span class="op">,</span> name<span class="op">:</span> e<span class="op">.</span><span class="at">name</span> <span class="op">??</span> <span class="dt">null</span> }<span class="op">,</span></span>
+<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>      ] <span class="im">as</span> <span class="kw">const</span>)<span class="op">,</span></span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> mapping <span class="op">=</span> <span class="fu">packMigrationMapping</span>({</span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>      vertex_map<span class="op">:</span> <span class="bu">Object</span><span class="op">.</span><span class="fu">fromEntries</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">vertexMap</span>)<span class="op">,</span></span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>      edge_map<span class="op">:</span> edgeMap<span class="op">,</span></span>
+<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>      hyper_edge_map<span class="op">:</span> {}<span class="op">,</span></span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>      label_map<span class="op">:</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">,</span></span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>      resolver<span class="op">,</span></span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> rawHandle <span class="op">=</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">.</span><span class="at">exports</span><span class="op">.</span><span class="fu">compile_migration</span>(</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span>#<span class="at">src</span><span class="op">.</span><span class="at">_handle</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span>#<span class="at">tgt</span><span class="op">.</span><span class="at">_handle</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>        mapping<span class="op">,</span></span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>      )<span class="op">;</span></span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> handle <span class="op">=</span> <span class="fu">createHandle</span>(rawHandle<span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span>)<span class="op">;</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">new</span> <span class="fu">CompiledMigration</span>(handle<span class="op">,</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">wasm</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="fu">toSpec</span>())<span class="op">;</span></span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">catch</span> (error) {</span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">MigrationError</span>(</span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>        <span class="vs">`Failed to compile migration: </span><span class="sc">${</span>error <span class="kw">instanceof</span> <span class="bu">Error</span> <span class="op">?</span> error<span class="op">.</span><span class="at">message</span> <span class="op">:</span> <span class="bu">String</span>(error)<span class="sc">}</span><span class="vs">`</span><span class="op">,</span></span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>        { cause<span class="op">:</span> error }<span class="op">,</span></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>      )<span class="op">;</span></span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong><code>lift(record)</code></strong> – Forward-only transformation. The hot path: data goes through WASM as MessagePack bytes with no intermediate JS-heap allocation.</li>
 <li><strong><code>get(record)</code></strong> – Bidirectional get: extract a projected view and an opaque complement.</li>
@@ -986,45 +1004,45 @@ Note
 <section id="wasmhandle-and-resource-safety" class="level2" data-number="14.6">
 <h2 data-number="14.6" class="anchored" data-anchor-id="wasmhandle-and-resource-safety"><span class="header-section-number">14.6</span> WasmHandle and Resource Safety</h2>
 <p>Every WASM-side resource is wrapped in a <code>WasmHandle</code>, which implements <code>Disposable</code> for use with the <code>using</code> declaration:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="78"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 77;"><span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> memory<span class="op">:</span> WebAssembly<span class="op">.</span><span class="at">Memory</span> <span class="op">=</span> initOutput<span class="op">.</span><span class="at">memory</span><span class="op">;</span></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>memory) {</span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">WasmError</span>(<span class="st">'WASM module missing memory export'</span>)<span class="op">;</span></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { exports<span class="op">,</span> memory }<span class="op">;</span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> (error) {</span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (error <span class="kw">instanceof</span> WasmError) <span class="cf">throw</span> error<span class="op">;</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">WasmError</span>(</span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>      <span class="vs">`Failed to load WASM module: </span><span class="sc">${</span>error <span class="kw">instanceof</span> <span class="bu">Error</span> <span class="op">?</span> error<span class="op">.</span><span class="at">message</span> <span class="op">:</span> <span class="bu">String</span>(error)<span class="sc">}</span><span class="vs">`</span><span class="op">,</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>      { cause<span class="op">:</span> error }<span class="op">,</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle registry — prevents resource leaks</span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a><span class="co">/** Weak reference registry for leaked handle detection. */</span></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> leakedHandleRegistry <span class="op">=</span> <span class="kw">new</span> <span class="bu">FinalizationRegistry</span><span class="op">&lt;</span>CleanupInfo<span class="op">&gt;</span>((info) <span class="kw">=&gt;</span> {</span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Safety net: if a disposable wrapper is GC'd without being disposed,</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>  <span class="co">// free the underlying WASM handle.</span></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>    info<span class="op">.</span><span class="fu">freeHandle</span>(info<span class="op">.</span><span class="at">handle</span>)<span class="op">;</span></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>    <span class="co">// WASM module may already be torn down; swallow.</span></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> CleanupInfo {</span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> handle<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a><span class="co"> * A disposable wrapper around a WASM handle.</span></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="78"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 77;"><span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="co"> * Load the panproto WASM module.</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="co"> * Accepts either:</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A URL to the wasm-bindgen `.js` glue module (loaded via dynamic import)</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A pre-imported wasm-bindgen glue module object (for bundler environments like Vite)</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">input</span><span class="co"> - URL string, URL object, or pre-imported glue module.</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"> *                Defaults to the bundled glue module URL.</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> The initialized WASM module</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> WasmError} if loading or instantiation fails</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">loadWasm</span>(input<span class="op">?:</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> WasmGlueModule)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>WasmModule<span class="op">&gt;</span> {</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> glue<span class="op">:</span> WasmGlueModule<span class="op">;</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input <span class="op">===</span> <span class="st">'object'</span> <span class="op">&amp;&amp;</span> <span class="st">'default'</span> <span class="kw">in</span> input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input<span class="op">.</span><span class="at">default</span> <span class="op">===</span> <span class="st">'function'</span>) {</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Pre-imported glue module — used in bundler environments (Vite, webpack)</span></span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> input<span class="op">;</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Dynamic import from URL</span></span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> url <span class="op">=</span> (input <span class="im">as</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> <span class="dt">undefined</span>) <span class="op">??</span> DEFAULT_GLUE_URL<span class="op">;</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(<span class="co">/* @vite-ignore */</span> <span class="bu">String</span>(url))<span class="op">;</span></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> initOutput <span class="op">=</span> <span class="cf">await</span> glue<span class="op">.</span><span class="fu">default</span>()<span class="op">;</span></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> exports<span class="op">:</span> WasmExports <span class="op">=</span> {</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>      define_protocol<span class="op">:</span> glue<span class="op">.</span><span class="at">define_protocol</span><span class="op">,</span></span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>      build_schema<span class="op">:</span> glue<span class="op">.</span><span class="at">build_schema</span><span class="op">,</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>      check_existence<span class="op">:</span> glue<span class="op">.</span><span class="at">check_existence</span><span class="op">,</span></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>      compile_migration<span class="op">:</span> glue<span class="op">.</span><span class="at">compile_migration</span><span class="op">,</span></span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>      lift_record<span class="op">:</span> glue<span class="op">.</span><span class="at">lift_record</span><span class="op">,</span></span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>      get_record<span class="op">:</span> glue<span class="op">.</span><span class="at">get_record</span><span class="op">,</span></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>      put_record<span class="op">:</span> glue<span class="op">.</span><span class="at">put_record</span><span class="op">,</span></span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>      compose_migrations<span class="op">:</span> glue<span class="op">.</span><span class="at">compose_migrations</span><span class="op">,</span></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>      diff_schemas<span class="op">:</span> glue<span class="op">.</span><span class="at">diff_schemas</span><span class="op">,</span></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>      free_handle<span class="op">:</span> glue<span class="op">.</span><span class="at">free_handle</span><span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Two layers of safety prevent handle leaks:</p>
 <ol type="1">
 <li><strong><code>Symbol.dispose</code></strong> – Explicit cleanup. Called automatically by <code>using</code> or manually by the consumer.</li>
@@ -1092,93 +1110,93 @@ Important
 <section id="lens-combinators" class="level2" data-number="14.8">
 <h2 data-number="14.8" class="anchored" data-anchor-id="lens-combinators"><span class="header-section-number">14.8</span> Lens Combinators</h2>
 <p>The <code>lens.ts</code> module provides Cambria-style combinators for composing schema transformations declaratively. Each combinator is a plain data object describing a transformation step:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="66"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 65;"><span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> AddFieldCombinator</span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> RemoveFieldCombinator</span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> WrapInObjectCombinator</span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> HoistFieldCombinator</span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> CoerceTypeCombinator</span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> ComposeCombinator<span class="op">;</span></span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="66"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 65;"><span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> first<span class="op">:</span> Combinator<span class="op">;</span></span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> second<span class="op">:</span> Combinator<span class="op">;</span></span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a><span class="co">/** A lens combinator (Cambria-style). */</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a><span class="im">export type</span> Combinator <span class="op">=</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> RenameFieldCombinator</span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>  <span class="op">|</span> AddFieldCombinator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Seven combinator constructors are provided:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-startfrom="86"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 85;"><span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create an add-field combinator.</span></span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">name</span><span class="co"> - The field name to add</span></span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vertexKind</span><span class="co"> - The vertex kind for the new field</span></span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">defaultValue</span><span class="co"> - The default value for the field</span></span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> An add-field combinator</span></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">addField</span>(name<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> vertexKind<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> defaultValue<span class="op">:</span> <span class="dt">unknown</span>)<span class="op">:</span> AddFieldCombinator {</span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'add-field'</span><span class="op">,</span> name<span class="op">,</span> vertexKind<span class="op">,</span> <span class="cf">default</span><span class="op">:</span> defaultValue }<span class="op">;</span></span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a remove-field combinator.</span></span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">name</span><span class="co"> - The field name to remove</span></span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A remove-field combinator</span></span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">removeField</span>(name<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> RemoveFieldCombinator {</span>
-<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'remove-field'</span><span class="op">,</span> name }<span class="op">;</span></span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a wrap-in-object combinator.</span></span>
-<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">fieldName</span><span class="co"> - The field name for the wrapper object</span></span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A wrap-in-object combinator</span></span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">wrapInObject</span>(fieldName<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> WrapInObjectCombinator {</span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'wrap-in-object'</span><span class="op">,</span> fieldName }<span class="op">;</span></span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a hoist-field combinator.</span></span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">host</span><span class="co"> - The host vertex to hoist into</span></span>
-<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">field</span><span class="co"> - The nested field to hoist</span></span>
-<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A hoist-field combinator</span></span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">hoistField</span>(host<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> field<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> HoistFieldCombinator {</span>
-<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'hoist-field'</span><span class="op">,</span> host<span class="op">,</span> field }<span class="op">;</span></span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a coerce-type combinator.</span></span>
-<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">fromKind</span><span class="co"> - The source type kind</span></span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">toKind</span><span class="co"> - The target type kind</span></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A coerce-type combinator</span></span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">coerceType</span>(fromKind<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> toKind<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> CoerceTypeCombinator {</span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'coerce-type'</span><span class="op">,</span> fromKind<span class="op">,</span> toKind }<span class="op">;</span></span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="co"> * Compose two combinators sequentially.</span></span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">first</span><span class="co"> - The combinator applied first</span></span>
-<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">second</span><span class="co"> - The combinator applied second</span></span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A composed combinator</span></span>
-<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">compose</span>(first<span class="op">:</span> Combinator<span class="op">,</span> second<span class="op">:</span> Combinator)<span class="op">:</span> ComposeCombinator {</span>
-<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'compose'</span><span class="op">,</span> first<span class="op">,</span> second }<span class="op">;</span></span>
-<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a><span class="co"> * Compose a chain of combinators left-to-right.</span></span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">combinators</span><span class="co"> - The combinators to compose (at least one required)</span></span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> The composed combinator</span></span>
-<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">If</span><span class="co"> the combinators array is empty</span></span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">pipeline</span>(combinators<span class="op">:</span> <span class="kw">readonly</span> [Combinator<span class="op">,</span> <span class="op">...</span>Combinator[]])<span class="op">:</span> Combinator {</span>
-<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [first<span class="op">,</span> <span class="op">...</span>rest] <span class="op">=</span> combinators<span class="op">;</span></span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rest<span class="op">.</span><span class="fu">reduce</span><span class="op">&lt;</span>Combinator<span class="op">&gt;</span>((acc<span class="op">,</span> c) <span class="kw">=&gt;</span> <span class="fu">compose</span>(acc<span class="op">,</span> c)<span class="op">,</span> first)<span class="op">;</span></span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-startfrom="86"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 85;"><span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> @param oldName <span class="op">-</span> The current field name</span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> @param newName <span class="op">-</span> The desired field name</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span> @returns A rename<span class="op">-</span>field combinator</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a> <span class="op">*</span><span class="ss">/</span></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">renameField</span>(oldName<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> newName<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> RenameFieldCombinator {</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'rename-field'</span><span class="op">,</span> old<span class="op">:</span> oldName<span class="op">,</span> <span class="kw">new</span><span class="op">:</span> newName }<span class="op">;</span></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create an add-field combinator.</span></span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">name</span><span class="co"> - The field name to add</span></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vertexKind</span><span class="co"> - The vertex kind for the new field</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">defaultValue</span><span class="co"> - The default value for the field</span></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> An add-field combinator</span></span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">addField</span>(name<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> vertexKind<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> defaultValue<span class="op">:</span> <span class="dt">unknown</span>)<span class="op">:</span> AddFieldCombinator {</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'add-field'</span><span class="op">,</span> name<span class="op">,</span> vertexKind<span class="op">,</span> <span class="cf">default</span><span class="op">:</span> defaultValue }<span class="op">;</span></span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a remove-field combinator.</span></span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">name</span><span class="co"> - The field name to remove</span></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A remove-field combinator</span></span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">removeField</span>(name<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> RemoveFieldCombinator {</span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'remove-field'</span><span class="op">,</span> name }<span class="op">;</span></span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a wrap-in-object combinator.</span></span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">fieldName</span><span class="co"> - The field name for the wrapper object</span></span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A wrap-in-object combinator</span></span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">wrapInObject</span>(fieldName<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> WrapInObjectCombinator {</span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'wrap-in-object'</span><span class="op">,</span> fieldName }<span class="op">;</span></span>
+<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a hoist-field combinator.</span></span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">host</span><span class="co"> - The host vertex to hoist into</span></span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">field</span><span class="co"> - The nested field to hoist</span></span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A hoist-field combinator</span></span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">hoistField</span>(host<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> field<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> HoistFieldCombinator {</span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'hoist-field'</span><span class="op">,</span> host<span class="op">,</span> field }<span class="op">;</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a><span class="co"> * Create a coerce-type combinator.</span></span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">fromKind</span><span class="co"> - The source type kind</span></span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">toKind</span><span class="co"> - The target type kind</span></span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A coerce-type combinator</span></span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">coerceType</span>(fromKind<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> toKind<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> CoerceTypeCombinator {</span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'coerce-type'</span><span class="op">,</span> fromKind<span class="op">,</span> toKind }<span class="op">;</span></span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a><span class="co"> * Compose two combinators sequentially.</span></span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">first</span><span class="co"> - The combinator applied first</span></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">second</span><span class="co"> - The combinator applied second</span></span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> A composed combinator</span></span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">compose</span>(first<span class="op">:</span> Combinator<span class="op">,</span> second<span class="op">:</span> Combinator)<span class="op">:</span> ComposeCombinator {</span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { type<span class="op">:</span> <span class="st">'compose'</span><span class="op">,</span> first<span class="op">,</span> second }<span class="op">;</span></span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a><span class="co"> * Compose a chain of combinators left-to-right.</span></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">combinators</span><span class="co"> - The combinators to compose (at least one required)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong><code>renameField(old, new)</code></strong> – Rename a field.</li>
 <li><strong><code>addField(name, kind, default)</code></strong> – Add a field with a default value.</li>
@@ -1219,47 +1237,47 @@ Important
 <h2 data-number="14.10" class="anchored" data-anchor-id="error-hierarchy"><span class="header-section-number">14.10</span> Error Hierarchy</h2>
 <p>The SDK defines a four-class error hierarchy, all extending <code>PanprotoError</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-startfrom="212"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 211;"><span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a><span class="co">// WASM module interface</span></span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a><span class="co">// Full Diff / Compatibility (panproto-check)</span></span>
 <span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
 <span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="co">/** The raw WASM module interface (10 entry points). */</span></span>
-<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> WasmExports {</span>
-<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">define_protocol</span>(spec<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>  <span class="fu">build_schema</span>(proto<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> ops<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">check_existence</span>(proto<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> src<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> tgt<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> mapping<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">;</span></span>
-<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compile_migration</span>(src<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> tgt<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> mapping<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lift_record</span>(migration<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> record<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">;</span></span>
-<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_record</span>(migration<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> record<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">;</span></span>
-<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a>  <span class="fu">put_record</span>(migration<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> view<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">,</span> complement<span class="op">:</span> <span class="bu">Uint8Array</span>)<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">;</span></span>
-<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compose_migrations</span>(m1<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> m2<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diff_schemas</span>(s1<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> s2<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="bu">Uint8Array</span><span class="op">;</span></span>
-<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">free_handle</span>(handle<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="dt">void</span><span class="op">;</span></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="co">/** A kind change on a vertex. */</span></span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> KindChange {</span>
+<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> vertexId<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a><span class="co">/** A constraint change on a vertex. */</span></span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintChange {</span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> sort<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
 <span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a><span class="co">/** WASM module wrapper including exports and memory. */</span></span>
-<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> WasmModule {</span>
-<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> exports<span class="op">:</span> WasmExports<span class="op">;</span></span>
-<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> memory<span class="op">:</span> WebAssembly<span class="op">.</span><span class="at">Memory</span><span class="op">;</span></span>
-<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a><span class="co">// Errors</span></span>
-<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a><span class="co">/** Base error class for all panproto errors. */</span></span>
-<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> PanprotoError <span class="kw">extends</span> <span class="bu">Error</span> {</span>
-<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a>  override <span class="kw">readonly</span> name<span class="op">:</span> <span class="dt">string</span> <span class="op">=</span> <span class="st">'PanprotoError'</span><span class="op">;</span></span>
-<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(message<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> options<span class="op">?:</span> ErrorOptions) {</span>
-<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(message<span class="op">,</span> options)<span class="op">;</span></span>
-<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a><span class="co">/** Error from WASM boundary. */</span></span>
-<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> WasmError <span class="kw">extends</span> PanprotoError {</span>
-<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>  override <span class="kw">readonly</span> name <span class="op">=</span> <span class="st">'WasmError'</span><span class="op">;</span></span>
-<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a><span class="co">/** Constraint diff for a single vertex. */</span></span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintDiff {</span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
+<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
+<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changed<span class="op">:</span> <span class="kw">readonly</span> ConstraintChange[]<span class="op">;</span></span>
+<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a><span class="co">/** Full schema diff with 20+ change categories. */</span></span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> FullSchemaDiff {</span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> kind_changes<span class="op">:</span> <span class="kw">readonly</span> KindChange[]<span class="op">;</span></span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_constraints<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> ConstraintDiff<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">unknown</span><span class="op">&gt;</span>[]<span class="op">;</span></span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_nsids<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">&gt;&gt;;</span></span>
+<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_nsids<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changed_nsids<span class="op">:</span> <span class="kw">readonly</span> [<span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">,</span> <span class="dt">string</span>][]<span class="op">;</span></span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_variants<span class="op">:</span> <span class="kw">readonly</span> Variant[]<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong><code>PanprotoError</code></strong> – Base class for all panproto errors.</li>
 <li><strong><code>WasmError</code></strong> – Errors from the WASM boundary (load failures, call failures, disposed handles).</li>

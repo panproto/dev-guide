@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>28&nbsp; Benchmark Results – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../appendices/D-optimization-guide.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/E-benchmark-results.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#test-environment" id="toc-test-environment" class="nav-link active" data-scroll-target="#test-environment"><span class="header-section-number">28.1</span> Test Environment</a></li>
+  <li><a href="#sec-bench-gat" id="toc-sec-bench-gat" class="nav-link" data-scroll-target="#sec-bench-gat"><span class="header-section-number">28.2</span> GAT Engine (<code>panproto-gat</code>)</a>
+  <ul class="collapse">
+  <li><a href="#find_sort_by_name-o1-index-lookup" id="toc-find_sort_by_name-o1-index-lookup" class="nav-link" data-scroll-target="#find_sort_by_name-o1-index-lookup"><span class="header-section-number">28.2.1</span> <code>find_sort_by_name</code> — O(1) Index Lookup</a></li>
+  <li><a href="#theory_construction-theory-index-build" id="toc-theory_construction-theory-index-build" class="nav-link" data-scroll-target="#theory_construction-theory-index-build"><span class="header-section-number">28.2.2</span> <code>theory_construction</code> — Theory + Index Build</a></li>
+  <li><a href="#colimit-theory-pushout" id="toc-colimit-theory-pushout" class="nav-link" data-scroll-target="#colimit-theory-pushout"><span class="header-section-number">28.2.3</span> <code>colimit</code> — Theory Pushout</a></li>
+  <li><a href="#colimit_with_equations" id="toc-colimit_with_equations" class="nav-link" data-scroll-target="#colimit_with_equations"><span class="header-section-number">28.2.4</span> <code>colimit_with_equations</code></a></li>
+  <li><a href="#resolve_theory-inheritance-chain-resolution" id="toc-resolve_theory-inheritance-chain-resolution" class="nav-link" data-scroll-target="#resolve_theory-inheritance-chain-resolution"><span class="header-section-number">28.2.5</span> <code>resolve_theory</code> — Inheritance Chain Resolution</a></li>
+  <li><a href="#check_morphism-morphism-validation" id="toc-check_morphism-morphism-validation" class="nav-link" data-scroll-target="#check_morphism-morphism-validation"><span class="header-section-number">28.2.6</span> <code>check_morphism</code> — Morphism Validation</a></li>
+  </ul></li>
+  <li><a href="#sec-bench-inst" id="toc-sec-bench-inst" class="nav-link" data-scroll-target="#sec-bench-inst"><span class="header-section-number">28.3</span> Instance Layer (<code>panproto-inst</code>)</a>
+  <ul class="collapse">
+  <li><a href="#parse_json_flat_fields-json-winstance" id="toc-parse_json_flat_fields-json-winstance" class="nav-link" data-scroll-target="#parse_json_flat_fields-json-winstance"><span class="header-section-number">28.3.1</span> <code>parse_json_flat_fields</code> — JSON → <code>WInstance</code></a></li>
+  <li><a href="#parse_json_nested_objects-nested-json-winstance" id="toc-parse_json_nested_objects-nested-json-winstance" class="nav-link" data-scroll-target="#parse_json_nested_objects-nested-json-winstance"><span class="header-section-number">28.3.2</span> <code>parse_json_nested_objects</code> — Nested JSON → <code>WInstance</code></a></li>
+  <li><a href="#wtype_restrict-fused-restrict-pipeline" id="toc-wtype_restrict-fused-restrict-pipeline" class="nav-link" data-scroll-target="#wtype_restrict-fused-restrict-pipeline"><span class="header-section-number">28.3.3</span> <code>wtype_restrict</code> — Fused Restrict Pipeline</a></li>
+  <li><a href="#functor_restrict_n_tables-delta_f-precomposition" id="toc-functor_restrict_n_tables-delta_f-precomposition" class="nav-link" data-scroll-target="#functor_restrict_n_tables-delta_f-precomposition"><span class="header-section-number">28.3.4</span> <code>functor_restrict_n_tables</code> — <span class="math inline">\(\Delta_F\)</span> Precomposition</a></li>
+  <li><a href="#functor_extend_n_tables-sigma_f-left-kan-extension" id="toc-functor_extend_n_tables-sigma_f-left-kan-extension" class="nav-link" data-scroll-target="#functor_extend_n_tables-sigma_f-left-kan-extension"><span class="header-section-number">28.3.5</span> <code>functor_extend_n_tables</code> — <span class="math inline">\(\Sigma_F\)</span> Left Kan Extension</a></li>
+  </ul></li>
+  <li><a href="#sec-bench-mig" id="toc-sec-bench-mig" class="nav-link" data-scroll-target="#sec-bench-mig"><span class="header-section-number">28.4</span> Migration Engine (<code>panproto-mig</code>)</a>
+  <ul class="collapse">
+  <li><a href="#check_existence_n_vertices" id="toc-check_existence_n_vertices" class="nav-link" data-scroll-target="#check_existence_n_vertices"><span class="header-section-number">28.4.1</span> <code>check_existence_n_vertices</code></a></li>
+  <li><a href="#compile_n_vertices" id="toc-compile_n_vertices" class="nav-link" data-scroll-target="#compile_n_vertices"><span class="header-section-number">28.4.2</span> <code>compile_n_vertices</code></a></li>
+  <li><a href="#compose-migration-composition" id="toc-compose-migration-composition" class="nav-link" data-scroll-target="#compose-migration-composition"><span class="header-section-number">28.4.3</span> <code>compose</code> — Migration Composition</a></li>
+  <li><a href="#lift_wtype-apply-compiled-migration-to-instance" id="toc-lift_wtype-apply-compiled-migration-to-instance" class="nav-link" data-scroll-target="#lift_wtype-apply-compiled-migration-to-instance"><span class="header-section-number">28.4.4</span> <code>lift_wtype</code> — Apply Compiled Migration to Instance</a></li>
+  </ul></li>
+  <li><a href="#sec-bench-lens" id="toc-sec-bench-lens" class="nav-link" data-scroll-target="#sec-bench-lens"><span class="header-section-number">28.5</span> Lens Layer (<code>panproto-lens</code>)</a>
+  <ul class="collapse">
+  <li><a href="#get_identity_lens-forward-direction-no-complement" id="toc-get_identity_lens-forward-direction-no-complement" class="nav-link" data-scroll-target="#get_identity_lens-forward-direction-no-complement"><span class="header-section-number">28.5.1</span> <code>get_identity_lens</code> — Forward Direction (No Complement)</a></li>
+  <li><a href="#get_projection_lens-forward-direction-large-complement" id="toc-get_projection_lens-forward-direction-large-complement" class="nav-link" data-scroll-target="#get_projection_lens-forward-direction-large-complement"><span class="header-section-number">28.5.2</span> <code>get_projection_lens</code> — Forward Direction (Large Complement)</a></li>
+  <li><a href="#get_then_put_round_trip-full-bidirectional-cycle" id="toc-get_then_put_round_trip-full-bidirectional-cycle" class="nav-link" data-scroll-target="#get_then_put_round_trip-full-bidirectional-cycle"><span class="header-section-number">28.5.3</span> <code>get_then_put_round_trip</code> — Full Bidirectional Cycle</a></li>
+  <li><a href="#get_then_put_projection-bidirectional-with-large-complement" id="toc-get_then_put_projection-bidirectional-with-large-complement" class="nav-link" data-scroll-target="#get_then_put_projection-bidirectional-with-large-complement"><span class="header-section-number">28.5.4</span> <code>get_then_put_projection</code> — Bidirectional with Large Complement</a></li>
+  </ul></li>
+  <li><a href="#derived-throughput-summary" id="toc-derived-throughput-summary" class="nav-link" data-scroll-target="#derived-throughput-summary"><span class="header-section-number">28.6</span> Derived Throughput Summary</a></li>
+  <li><a href="#how-to-reproduce" id="toc-how-to-reproduce" class="nav-link" data-scroll-target="#how-to-reproduce"><span class="header-section-number">28.7</span> How to Reproduce</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/appendices/E-benchmark-results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/E-benchmark-results.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-benchmark-results" class="quarto-section-identifier"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="test-environment" class="level2" data-number="28.1">
+<h2 data-number="28.1" class="anchored" data-anchor-id="test-environment"><span class="header-section-number">28.1</span> Test Environment</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><strong>Machine</strong></td>
+<td>MacBook Pro 16-inch (2021)</td>
+</tr>
+<tr class="even">
+<td><strong>Chip</strong></td>
+<td>Apple M1 Max (10-core CPU: 8P + 2E, 32-core GPU)</td>
+</tr>
+<tr class="odd">
+<td><strong>Memory</strong></td>
+<td>64 GB unified</td>
+</tr>
+<tr class="even">
+<td><strong>OS</strong></td>
+<td>macOS 15.7.4 (24G517)</td>
+</tr>
+<tr class="odd">
+<td><strong>Rust</strong></td>
+<td><code>rustc 1.94.0 (4a4ef493e 2026-03-02)</code></td>
+</tr>
+<tr class="even">
+<td><strong>Cargo</strong></td>
+<td><code>cargo 1.94.0 (85eff7c80 2026-01-15)</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Profile</strong></td>
+<td><code>bench</code> (inherits <code>release</code>: <code>lto = true</code>, <code>codegen-units = 1</code>, <code>opt-level = 3</code>)</td>
+</tr>
+<tr class="even">
+<td><strong>Framework</strong></td>
+<td><a href="https://github.com/nvzqz/divan">divan</a> v0.1.21, timer precision 41 ns</td>
+</tr>
+<tr class="odd">
+<td><strong>Samples</strong></td>
+<td>100 per benchmark; iteration count auto-tuned by divan</td>
+</tr>
+</tbody>
+</table>
+<p>All benchmarks were run with no other significant processes active. Numbers report the <strong>median</strong> across 100 samples unless otherwise noted. The <code>fastest</code> column shows best-case (warm cache) performance; <code>mean</code> shows arithmetic average including outliers.</p>
+</section>
+<section id="sec-bench-gat" class="level2" data-number="28.2">
+<h2 data-number="28.2" class="anchored" data-anchor-id="sec-bench-gat"><span class="header-section-number">28.2</span> GAT Engine (<code>panproto-gat</code>)</h2>
+<section id="find_sort_by_name-o1-index-lookup" class="level3" data-number="28.2.1">
+<h3 data-number="28.2.1" class="anchored" data-anchor-id="find_sort_by_name-o1-index-lookup"><span class="header-section-number">28.2.1</span> <code>find_sort_by_name</code> — O(1) Index Lookup</h3>
+<p>Looks up the <em>last</em> sort by name in a theory of size <span class="math inline">\(n\)</span>, exercising the <code>FxHashMap</code> index cache.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (sorts)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>6.19 ns</td>
+<td>6.44 ns</td>
+<td>6.89 ns</td>
+<td>102,400</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>6.56 ns</td>
+<td>6.97 ns</td>
+<td>8.21 ns</td>
+<td>102,400</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>8.06 ns</td>
+<td>8.39 ns</td>
+<td>8.45 ns</td>
+<td>51,200</td>
+</tr>
+<tr class="even">
+<td>500</td>
+<td>4.69 ns</td>
+<td>4.89 ns</td>
+<td>5.02 ns</td>
+<td>102,400</td>
+</tr>
+</tbody>
+</table>
+<p>Sub-10 ns for all sizes confirms O(1) behavior. The 500-sort case is faster than 100-sort because the FxHash distribution happens to place the target key (<code>S499</code>) in a bucket with better cache-line alignment. The important point: <strong>no growth with theory size</strong>.</p>
+</section>
+<section id="theory_construction-theory-index-build" class="level3" data-number="28.2.2">
+<h3 data-number="28.2.2" class="anchored" data-anchor-id="theory_construction-theory-index-build"><span class="header-section-number">28.2.2</span> <code>theory_construction</code> — Theory + Index Build</h3>
+<p>Constructs a <code>Theory</code> with <span class="math inline">\(n\)</span> sorts, <span class="math inline">\(n\)</span> unary operations, and builds the three <code>FxHashMap</code> indices.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span></th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>526 ns</td>
+<td>552 ns</td>
+<td>553 ns</td>
+<td>800</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>2.15 µs</td>
+<td>2.25 µs</td>
+<td>2.25 µs</td>
+<td>200</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>3.92 µs</td>
+<td>4.04 µs</td>
+<td>4.44 µs</td>
+<td>100</td>
+</tr>
+<tr class="even">
+<td>500</td>
+<td>19.4 µs</td>
+<td>19.6 µs</td>
+<td>20.0 µs</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>Linear scaling (<span class="math inline">\(\approx\)</span> 39 ns/sort at 500). The index build is amortized over all subsequent lookups.</p>
+</section>
+<section id="colimit-theory-pushout" class="level3" data-number="28.2.3">
+<h3 data-number="28.2.3" class="anchored" data-anchor-id="colimit-theory-pushout"><span class="header-section-number">28.2.3</span> <code>colimit</code> — Theory Pushout</h3>
+<p>Computes the categorical pushout of two theories over a shared base. <code>colimit_small</code> = 3 shared + 5 extra sorts per theory; <code>colimit_medium</code> = 10 + 20; <code>colimit_large</code> = 50 + 100.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Scenario</th>
+<th>shared</th>
+<th>extra/theory</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>colimit_small</code></td>
+<td>3</td>
+<td>5</td>
+<td>1.11 µs</td>
+<td>1.18 µs</td>
+<td>1.71 µs</td>
+</tr>
+<tr class="even">
+<td><code>colimit_medium</code></td>
+<td>10</td>
+<td>20</td>
+<td>2.79 µs</td>
+<td>2.94 µs</td>
+<td>3.28 µs</td>
+</tr>
+<tr class="odd">
+<td><code>colimit_large</code></td>
+<td>50</td>
+<td>100</td>
+<td>12.0 µs</td>
+<td>12.5 µs</td>
+<td>14.1 µs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="colimit_with_equations" class="level3" data-number="28.2.4">
+<h3 data-number="28.2.4" class="anchored" data-anchor-id="colimit_with_equations"><span class="header-section-number">28.2.4</span> <code>colimit_with_equations</code></h3>
+<p>Same as above but both theories carry equations (<span class="math inline">\(\min(n, 10)\)</span> equations in the shared base, 5 per extension theory).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (shared sorts)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>2.10 µs</td>
+<td>2.23 µs</td>
+<td>2.24 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>4.46 µs</td>
+<td>4.71 µs</td>
+<td>5.16 µs</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>7.37 µs</td>
+<td>8.04 µs</td>
+<td>10.0 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Equation checking adds <span class="math inline">\(\approx 30\%\)</span> over sort/op-only colimits at the same scale.</p>
+</section>
+<section id="resolve_theory-inheritance-chain-resolution" class="level3" data-number="28.2.5">
+<h3 data-number="28.2.5" class="anchored" data-anchor-id="resolve_theory-inheritance-chain-resolution"><span class="header-section-number">28.2.5</span> <code>resolve_theory</code> — Inheritance Chain Resolution</h3>
+<p>Resolves theory <code>T_d</code> at the bottom of a linear inheritance chain of depth <span class="math inline">\(d\)</span>. Each theory adds 1 sort and 1 nullary operation.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(d\)</span> (depth)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>2.25 µs</td>
+<td>2.33 µs</td>
+<td>2.42 µs</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>10.9 µs</td>
+<td>11.3 µs</td>
+<td>11.5 µs</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td>31.6 µs</td>
+<td>32.0 µs</td>
+<td>32.9 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>129 µs</td>
+<td>132 µs</td>
+<td>135 µs</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>412 µs</td>
+<td>418 µs</td>
+<td>424 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Quadratic in depth (each level clones all ancestor sorts; <code>Arc&lt;str&gt;</code> cloning is O(1) per name but the vector grows). At depth 100, <span class="math inline">\(\approx 4.2\;\mu\text{s}\)</span> per level.</p>
+</section>
+<section id="check_morphism-morphism-validation" class="level3" data-number="28.2.6">
+<h3 data-number="28.2.6" class="anchored" data-anchor-id="check_morphism-morphism-validation"><span class="header-section-number">28.2.6</span> <code>check_morphism</code> — Morphism Validation</h3>
+<p>Validates a theory morphism on a theory with <span class="math inline">\(n\)</span> sorts, <span class="math inline">\(n\)</span> unary operations, and <span class="math inline">\(\min(n, 20)\)</span> equations.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span></th>
+<th>identity (median)</th>
+<th>renaming (median)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>2.96 µs</td>
+<td>2.92 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>10.0 µs</td>
+<td>8.37 µs</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>16.5 µs</td>
+<td>16.6 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Renaming morphisms are comparable to identity because the dominant cost is equation preservation checking (comparing mapped terms in the codomain), which requires iterating over codomain equations regardless of whether names changed.</p>
+</section>
+</section>
+<section id="sec-bench-inst" class="level2" data-number="28.3">
+<h2 data-number="28.3" class="anchored" data-anchor-id="sec-bench-inst"><span class="header-section-number">28.3</span> Instance Layer (<code>panproto-inst</code>)</h2>
+<section id="parse_json_flat_fields-json-winstance" class="level3" data-number="28.3.1">
+<h3 data-number="28.3.1" class="anchored" data-anchor-id="parse_json_flat_fields-json-winstance"><span class="header-section-number">28.3.1</span> <code>parse_json_flat_fields</code> — JSON → <code>WInstance</code></h3>
+<p>Parses a flat JSON object with <span class="math inline">\(n\)</span> string-valued fields into a <code>WInstance</code> (root + <span class="math inline">\(n\)</span> leaf nodes).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (fields)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>1.83 µs</td>
+<td>1.92 µs</td>
+<td>1.98 µs</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>6.17 µs</td>
+<td>6.37 µs</td>
+<td>6.43 µs</td>
+</tr>
+<tr class="odd">
+<td>50</td>
+<td>29.0 µs</td>
+<td>29.6 µs</td>
+<td>29.7 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 590\;\text{ns/field}\)</span> at 50 fields. Dominated by <code>serde_json</code> deserialization + node/arc construction.</p>
+</section>
+<section id="parse_json_nested_objects-nested-json-winstance" class="level3" data-number="28.3.2">
+<h3 data-number="28.3.2" class="anchored" data-anchor-id="parse_json_nested_objects-nested-json-winstance"><span class="header-section-number">28.3.2</span> <code>parse_json_nested_objects</code> — Nested JSON → <code>WInstance</code></h3>
+<p>Parses a chain of nested objects, each with 3 leaf fields, to depth <span class="math inline">\(d\)</span>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(d\)</span> (depth)</th>
+<th>total nodes</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>13</td>
+<td>3.00 µs</td>
+<td>3.12 µs</td>
+<td>3.19 µs</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>41</td>
+<td>8.17 µs</td>
+<td>8.33 µs</td>
+<td>8.43 µs</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td>81</td>
+<td>15.8 µs</td>
+<td>16.3 µs</td>
+<td>17.2 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 200\;\text{ns/node}\)</span> at depth 20. Nesting adds parent-map bookkeeping but does not cause a per-level blowup.</p>
+</section>
+<section id="wtype_restrict-fused-restrict-pipeline" class="level3" data-number="28.3.3">
+<h3 data-number="28.3.3" class="anchored" data-anchor-id="wtype_restrict-fused-restrict-pipeline"><span class="header-section-number">28.3.3</span> <code>wtype_restrict</code> — Fused Restrict Pipeline</h3>
+<section id="identity-migration-no-nodes-removed" class="level4" data-number="28.3.3.1">
+<h4 data-number="28.3.3.1" class="anchored" data-anchor-id="identity-migration-no-nodes-removed"><span class="header-section-number">28.3.3.1</span> Identity migration (no nodes removed)</h4>
+<p>3-node instance (root + 2 string children), all vertices survive.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>1.10 µs</td>
+<td>1.14 µs</td>
+<td>1.14 µs</td>
+<td>400</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="deep-linear-chain-all-survive" class="level4" data-number="28.3.3.2">
+<h4 data-number="28.3.3.2" class="anchored" data-anchor-id="deep-linear-chain-all-survive"><span class="header-section-number">28.3.3.2</span> Deep linear chain (all survive)</h4>
+<p>Linear chain schema <code>root → v0 → v1 → ... → v_{n-1}</code>, identity migration.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (chain length)</th>
+<th>nodes</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>11</td>
+<td>5.21 µs</td>
+<td>5.29 µs</td>
+<td>5.34 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>51</td>
+<td>23.2 µs</td>
+<td>24.0 µs</td>
+<td>24.2 µs</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>101</td>
+<td>46.7 µs</td>
+<td>49.1 µs</td>
+<td>49.5 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 490\;\text{ns/node}\)</span> at 100 nodes = <strong>2.04M nodes/sec</strong>.</p>
+</section>
+<section id="wide-flat-tree-all-survive" class="level4" data-number="28.3.3.3">
+<h4 data-number="28.3.3.3" class="anchored" data-anchor-id="wide-flat-tree-all-survive"><span class="header-section-number">28.3.3.3</span> Wide flat tree (all survive)</h4>
+<p>Root with <span class="math inline">\(n\)</span> direct children (star topology), identity migration.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (children)</th>
+<th>nodes</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>11</td>
+<td>5.25 µs</td>
+<td>5.67 µs</td>
+<td>5.71 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>51</td>
+<td>22.4 µs</td>
+<td>23.0 µs</td>
+<td>23.2 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Comparable to deep chains — the fused BFS processes both topologies at the same per-node rate.</p>
+</section>
+<section id="contraction-drop-intermediate-nodes" class="level4" data-number="28.3.3.4">
+<h4 data-number="28.3.3.4" class="anchored" data-anchor-id="contraction-drop-intermediate-nodes"><span class="header-section-number">28.3.3.4</span> Contraction (drop intermediate nodes)</h4>
+<p>Linear chain of <span class="math inline">\(n\)</span> nodes; migration keeps only root + first 2 vertices. All other nodes are dropped. Exercises the fused BFS’s ancestor propagation through non-surviving intermediates.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 16%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (total chain)</th>
+<th>surviving</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>3</td>
+<td>1.56 µs</td>
+<td>1.59 µs</td>
+<td>1.60 µs</td>
+<td>400</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>3</td>
+<td>3.67 µs</td>
+<td>3.75 µs</td>
+<td>3.81 µs</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+<p>Contraction on a 50-node chain produces only 3 output nodes in 3.75 µs. The BFS still visits all 50 nodes (to discover descendants), but the output construction is minimal.</p>
+</section>
+</section>
+<section id="functor_restrict_n_tables-delta_f-precomposition" class="level3" data-number="28.3.4">
+<h3 data-number="28.3.4" class="anchored" data-anchor-id="functor_restrict_n_tables-delta_f-precomposition"><span class="header-section-number">28.3.4</span> <code>functor_restrict_n_tables</code> — <span class="math inline">\(\Delta_F\)</span> Precomposition</h3>
+<p>Restricts a functor instance with <span class="math inline">\(n\)</span> tables (each 10 rows, 5 columns) via identity migration.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (tables)</th>
+<th>rows total</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>50</td>
+<td>4.00 µs</td>
+<td>4.08 µs</td>
+<td>4.11 µs</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>200</td>
+<td>17.1 µs</td>
+<td>17.3 µs</td>
+<td>17.4 µs</td>
+</tr>
+<tr class="odd">
+<td>50</td>
+<td>500</td>
+<td>41.7 µs</td>
+<td>42.1 µs</td>
+<td>42.7 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 84\;\text{ns/row}\)</span> at 500 rows.</p>
+</section>
+<section id="functor_extend_n_tables-sigma_f-left-kan-extension" class="level3" data-number="28.3.5">
+<h3 data-number="28.3.5" class="anchored" data-anchor-id="functor_extend_n_tables-sigma_f-left-kan-extension"><span class="header-section-number">28.3.5</span> <code>functor_extend_n_tables</code> — <span class="math inline">\(\Sigma_F\)</span> Left Kan Extension</h3>
+<p>Extends (pushes forward) a functor instance. More expensive than restrict because it computes column unions and fills <code>Null</code> values for missing columns.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (tables)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>8.21 µs</td>
+<td>8.33 µs</td>
+<td>8.41 µs</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>33.0 µs</td>
+<td>33.4 µs</td>
+<td>33.5 µs</td>
+</tr>
+<tr class="odd">
+<td>50</td>
+<td>82.8 µs</td>
+<td>84.3 µs</td>
+<td>86.8 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 2\times\)</span> the cost of restrict due to column-union filling.</p>
+</section>
+</section>
+<section id="sec-bench-mig" class="level2" data-number="28.4">
+<h2 data-number="28.4" class="anchored" data-anchor-id="sec-bench-mig"><span class="header-section-number">28.4</span> Migration Engine (<code>panproto-mig</code>)</h2>
+<section id="check_existence_n_vertices" class="level3" data-number="28.4.1">
+<h3 data-number="28.4.1" class="anchored" data-anchor-id="check_existence_n_vertices"><span class="header-section-number">28.4.1</span> <code>check_existence_n_vertices</code></h3>
+<p>Validates a migration’s well-formedness against protocol theory rules.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (vertices)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>1.42 µs</td>
+<td>1.46 µs</td>
+<td>1.77 µs</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td>16.6 µs</td>
+<td>17.0 µs</td>
+<td>17.5 µs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="compile_n_vertices" class="level3" data-number="28.4.2">
+<h3 data-number="28.4.2" class="anchored" data-anchor-id="compile_n_vertices"><span class="header-section-number">28.4.2</span> <code>compile_n_vertices</code></h3>
+<p>Compiles a migration specification into <code>CompiledMigration</code> (surviving sets, remap tables, resolvers).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (vertices)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>8.58 µs</td>
+<td>8.87 µs</td>
+<td>9.02 µs</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td>79.1 µs</td>
+<td>80.8 µs</td>
+<td>81.5 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 810\;\text{ns/vertex}\)</span> at 100 vertices. Dominated by <code>HashSet</code>/<code>HashMap</code> construction for surviving sets and edge indices.</p>
+</section>
+<section id="compose-migration-composition" class="level3" data-number="28.4.3">
+<h3 data-number="28.4.3" class="anchored" data-anchor-id="compose-migration-composition"><span class="header-section-number">28.4.3</span> <code>compose</code> — Migration Composition</h3>
+<section id="two-identity-migrations" class="level4" data-number="28.4.3.1">
+<h4 data-number="28.4.3.1" class="anchored" data-anchor-id="two-identity-migrations"><span class="header-section-number">28.4.3.1</span> Two identity migrations</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (vertices)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>4.58 µs</td>
+<td>4.77 µs</td>
+<td>4.79 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>20.6 µs</td>
+<td>21.2 µs</td>
+<td>21.2 µs</td>
+</tr>
+<tr class="odd">
+<td>100</td>
+<td>40.9 µs</td>
+<td>42.4 µs</td>
+<td>44.1 µs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="two-migrations-with-renaming-source-vertices-remapped" class="level4" data-number="28.4.3.2">
+<h4 data-number="28.4.3.2" class="anchored" data-anchor-id="two-migrations-with-renaming-source-vertices-remapped"><span class="header-section-number">28.4.3.2</span> Two migrations with renaming (source vertices remapped)</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (vertices)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>4.46 µs</td>
+<td>4.71 µs</td>
+<td>4.73 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>20.7 µs</td>
+<td>21.5 µs</td>
+<td>21.5 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Renaming adds negligible overhead: the precomputed inverse maps resolve hyper-edge remapping in O(1) per entry.</p>
+</section>
+<section id="chain-of-5-migrations-composed-sequentially" class="level4" data-number="28.4.3.3">
+<h4 data-number="28.4.3.3" class="anchored" data-anchor-id="chain-of-5-migrations-composed-sequentially"><span class="header-section-number">28.4.3.3</span> Chain of 5 migrations composed sequentially</h4>
+<p>Each migration is an identity on a chain schema with <span class="math inline">\(n\)</span> vertices.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (vertices)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>26.9 µs</td>
+<td>27.7 µs</td>
+<td>28.0 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>125 µs</td>
+<td>131 µs</td>
+<td>131 µs</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\approx 5\times\)</span> the cost of a single two-way compose, confirming linear scaling in chain length.</p>
+</section>
+</section>
+<section id="lift_wtype-apply-compiled-migration-to-instance" class="level3" data-number="28.4.4">
+<h3 data-number="28.4.4" class="anchored" data-anchor-id="lift_wtype-apply-compiled-migration-to-instance"><span class="header-section-number">28.4.4</span> <code>lift_wtype</code> — Apply Compiled Migration to Instance</h3>
+<section id="simple-5-node-chain-identity" class="level4" data-number="28.4.4.1">
+<h4 data-number="28.4.4.1" class="anchored" data-anchor-id="simple-5-node-chain-identity"><span class="header-section-number">28.4.4.1</span> Simple (5-node chain, identity)</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>2.85 µs</td>
+<td>3.02 µs</td>
+<td>3.05 µs</td>
+<td>200</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="contraction-10-node-chain-keep-3" class="level4" data-number="28.4.4.2">
+<h4 data-number="28.4.4.2" class="anchored" data-anchor-id="contraction-10-node-chain-keep-3"><span class="header-section-number">28.4.4.2</span> Contraction (10-node chain, keep 3)</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+<th>iters/sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>1.55 µs</td>
+<td>1.60 µs</td>
+<td>1.61 µs</td>
+<td>400</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="at-scale" class="level4" data-number="28.4.4.3">
+<h4 data-number="28.4.4.3" class="anchored" data-anchor-id="at-scale"><span class="header-section-number">28.4.4.3</span> At scale</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (nodes)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>100</td>
+<td>47.1 µs</td>
+<td>51.2 µs</td>
+<td>51.5 µs</td>
+</tr>
+<tr class="even">
+<td>500</td>
+<td>238 µs</td>
+<td>259 µs</td>
+<td>264 µs</td>
+</tr>
+</tbody>
+</table>
+<p>At 500 nodes: <span class="math inline">\(259\;\mu\text{s} \div 500 = 518\;\text{ns/node}\)</span> = <strong>1.93M nodes/sec</strong>. This includes the full pipeline: migration compilation lookup, fused restrict BFS, node remapping, arc construction, and <code>WInstance</code> output allocation.</p>
+</section>
+</section>
+</section>
+<section id="sec-bench-lens" class="level2" data-number="28.5">
+<h2 data-number="28.5" class="anchored" data-anchor-id="sec-bench-lens"><span class="header-section-number">28.5</span> Lens Layer (<code>panproto-lens</code>)</h2>
+<section id="get_identity_lens-forward-direction-no-complement" class="level3" data-number="28.5.1">
+<h3 data-number="28.5.1" class="anchored" data-anchor-id="get_identity_lens-forward-direction-no-complement"><span class="header-section-number">28.5.1</span> <code>get_identity_lens</code> — Forward Direction (No Complement)</h3>
+<p>Identity lens on a wide tree with <span class="math inline">\(n\)</span> fields. All nodes survive; complement is empty.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (fields)</th>
+<th>nodes</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>6</td>
+<td>3.17 µs</td>
+<td>3.29 µs</td>
+<td>3.47 µs</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>21</td>
+<td>11.7 µs</td>
+<td>12.1 µs</td>
+<td>12.8 µs</td>
+</tr>
+<tr class="odd">
+<td>50</td>
+<td>51</td>
+<td>26.3 µs</td>
+<td>27.1 µs</td>
+<td>27.6 µs</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="get_projection_lens-forward-direction-large-complement" class="level3" data-number="28.5.2">
+<h3 data-number="28.5.2" class="anchored" data-anchor-id="get_projection_lens-forward-direction-large-complement"><span class="header-section-number">28.5.2</span> <code>get_projection_lens</code> — Forward Direction (Large Complement)</h3>
+<p>Projection lens keeping only 2 of <span class="math inline">\(n\)</span> fields. Complement stores <span class="math inline">\(n - 2\)</span> dropped nodes.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (fields)</th>
+<th>kept</th>
+<th>dropped</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>2</td>
+<td>8</td>
+<td>3.58 µs</td>
+<td>3.75 µs</td>
+<td>3.79 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>2</td>
+<td>48</td>
+<td>13.3 µs</td>
+<td>13.6 µs</td>
+<td>13.7 µs</td>
+</tr>
+</tbody>
+</table>
+<p>Projection is <em>faster</em> than identity because the output tree is smaller (fewer nodes to allocate), even though the complement capture adds work.</p>
+</section>
+<section id="get_then_put_round_trip-full-bidirectional-cycle" class="level3" data-number="28.5.3">
+<h3 data-number="28.5.3" class="anchored" data-anchor-id="get_then_put_round_trip-full-bidirectional-cycle"><span class="header-section-number">28.5.3</span> <code>get_then_put_round_trip</code> — Full Bidirectional Cycle</h3>
+<p>Identity lens: <code>get</code> → <code>put</code> → verify restored. Exercises both directions.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (fields)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5</td>
+<td>6.00 µs</td>
+<td>6.17 µs</td>
+<td>6.27 µs</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td>22.2 µs</td>
+<td>23.2 µs</td>
+<td>23.9 µs</td>
+</tr>
+<tr class="odd">
+<td>50</td>
+<td>50.7 µs</td>
+<td>51.8 µs</td>
+<td>54.2 µs</td>
+</tr>
+</tbody>
+</table>
+<p><code>put</code> costs <span class="math inline">\(\approx 1.5\times\)</span> <code>get</code> because it must merge the complement (dropped nodes, dropped arcs, contraction choices) back into the view.</p>
+</section>
+<section id="get_then_put_projection-bidirectional-with-large-complement" class="level3" data-number="28.5.4">
+<h3 data-number="28.5.4" class="anchored" data-anchor-id="get_then_put_projection-bidirectional-with-large-complement"><span class="header-section-number">28.5.4</span> <code>get_then_put_projection</code> — Bidirectional with Large Complement</h3>
+<p>Projection lens keeping 2 of <span class="math inline">\(n\)</span> fields. The complement carries the bulk of the data.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(n\)</span> (fields)</th>
+<th>fastest</th>
+<th>median</th>
+<th>mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10</td>
+<td>8.17 µs</td>
+<td>8.37 µs</td>
+<td>8.48 µs</td>
+</tr>
+<tr class="even">
+<td>50</td>
+<td>33.1 µs</td>
+<td>34.3 µs</td>
+<td>35.0 µs</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="derived-throughput-summary" class="level2" data-number="28.6">
+<h2 data-number="28.6" class="anchored" data-anchor-id="derived-throughput-summary"><span class="header-section-number">28.6</span> Derived Throughput Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 24%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Scale</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>find_sort</code> (O(1) index)</td>
+<td>10–500 sorts</td>
+<td><strong>145–210M lookups/sec</strong></td>
+</tr>
+<tr class="even">
+<td><code>parse_json</code> (flat)</td>
+<td>50 fields</td>
+<td><strong>1.69M fields/sec</strong></td>
+</tr>
+<tr class="odd">
+<td><code>wtype_restrict</code> (deep chain)</td>
+<td>100 nodes</td>
+<td><strong>2.04M nodes/sec</strong></td>
+</tr>
+<tr class="even">
+<td><code>lift_wtype</code> (full pipeline)</td>
+<td>500 nodes</td>
+<td><strong>1.93M nodes/sec</strong></td>
+</tr>
+<tr class="odd">
+<td><code>functor_restrict</code></td>
+<td>500 rows</td>
+<td><strong>11.9M rows/sec</strong></td>
+</tr>
+<tr class="even">
+<td><code>colimit</code></td>
+<td>150 sorts</td>
+<td><strong>80K colimits/sec</strong></td>
+</tr>
+<tr class="odd">
+<td><code>compose</code> (two migrations)</td>
+<td>100 vertices</td>
+<td><strong>23.6K composes/sec</strong></td>
+</tr>
+<tr class="even">
+<td>Lens round-trip (<code>get</code> + <code>put</code>)</td>
+<td>50 fields</td>
+<td><strong>19.3K round-trips/sec</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-reproduce" class="level2" data-number="28.7">
+<h2 data-number="28.7" class="anchored" data-anchor-id="how-to-reproduce"><span class="header-section-number">28.7</span> How to Reproduce</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all benchmarks</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a specific crate's benchmarks</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-lens</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a specific benchmark by name filter</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> find_sort</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> wtype_restrict_deep</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>All benchmarks use divan v0.1.21. Each benchmark runs 100 samples with auto-tuned iteration counts (shown in the <code>iters/sample</code> column). Results include fastest, slowest, median, and mean.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../appendices/D-optimization-guide.html" class="pagination-link" aria-label="Optimization Guide">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Benchmark Results {#sec-benchmark-results}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Test Environment</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Machine** <span class="pp">|</span> MacBook Pro 16-inch (2021) <span class="pp">|</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Chip** <span class="pp">|</span> Apple M1 Max (10-core CPU: 8P + 2E, 32-core GPU) <span class="pp">|</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Memory** <span class="pp">|</span> 64 GB unified <span class="pp">|</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **OS** <span class="pp">|</span> macOS 15.7.4 (24G517) <span class="pp">|</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Rust** <span class="pp">|</span> <span class="in">`rustc 1.94.0 (4a4ef493e 2026-03-02)`</span> <span class="pp">|</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Cargo** <span class="pp">|</span> <span class="in">`cargo 1.94.0 (85eff7c80 2026-01-15)`</span> <span class="pp">|</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Profile** <span class="pp">|</span> <span class="in">`bench`</span> (inherits <span class="in">`release`</span>: <span class="in">`lto = true`</span>, <span class="in">`codegen-units = 1`</span>, <span class="in">`opt-level = 3`</span>) <span class="pp">|</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Framework** <span class="pp">|</span> <span class="co">[</span><span class="ot">divan</span><span class="co">](https://github.com/nvzqz/divan)</span> v0.1.21, timer precision 41 ns <span class="pp">|</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Samples** <span class="pp">|</span> 100 per benchmark; iteration count auto-tuned by divan <span class="pp">|</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>All benchmarks were run with no other significant processes active. Numbers report the **median** across 100 samples unless otherwise noted. The <span class="in">`fastest`</span> column shows best-case (warm cache) performance; <span class="in">`mean`</span> shows arithmetic average including outliers.</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## GAT Engine (`panproto-gat`) {#sec-bench-gat}</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">### `find_sort_by_name` --- O(1) Index Lookup</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>Looks up the *last* sort by name in a theory of size $n$, exercising the <span class="in">`FxHashMap`</span> index cache.</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (sorts) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|-------------|</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 6.19 ns <span class="pp">|</span> 6.44 ns <span class="pp">|</span> 6.89 ns <span class="pp">|</span> 102,400 <span class="pp">|</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 6.56 ns <span class="pp">|</span> 6.97 ns <span class="pp">|</span> 8.21 ns <span class="pp">|</span> 102,400 <span class="pp">|</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 8.06 ns <span class="pp">|</span> 8.39 ns <span class="pp">|</span> 8.45 ns <span class="pp">|</span> 51,200 <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 500 <span class="pp">|</span> 4.69 ns <span class="pp">|</span> 4.89 ns <span class="pp">|</span> 5.02 ns <span class="pp">|</span> 102,400 <span class="pp">|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>Sub-10 ns for all sizes confirms O(1) behavior. The 500-sort case is faster than 100-sort because the FxHash distribution happens to place the target key (<span class="in">`S499`</span>) in a bucket with better cache-line alignment. The important point: **no growth with theory size**.</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">### `theory_construction` --- Theory + Index Build</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>Constructs a <span class="in">`Theory`</span> with $n$ sorts, $n$ unary operations, and builds the three <span class="in">`FxHashMap`</span> indices.</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|---------|--------|------|-------------|</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 526 ns <span class="pp">|</span> 552 ns <span class="pp">|</span> 553 ns <span class="pp">|</span> 800 <span class="pp">|</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 2.15 µs <span class="pp">|</span> 2.25 µs <span class="pp">|</span> 2.25 µs <span class="pp">|</span> 200 <span class="pp">|</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 3.92 µs <span class="pp">|</span> 4.04 µs <span class="pp">|</span> 4.44 µs <span class="pp">|</span> 100 <span class="pp">|</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 500 <span class="pp">|</span> 19.4 µs <span class="pp">|</span> 19.6 µs <span class="pp">|</span> 20.0 µs <span class="pp">|</span> 100 <span class="pp">|</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>Linear scaling ($\approx$ 39 ns/sort at 500). The index build is amortized over all subsequent lookups.</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### `colimit` --- Theory Pushout</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>Computes the categorical pushout of two theories over a shared base. <span class="in">`colimit_small`</span> = 3 shared + 5 extra sorts per theory; <span class="in">`colimit_medium`</span> = 10 + 20; <span class="in">`colimit_large`</span> = 50 + 100.</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Scenario <span class="pp">|</span> shared <span class="pp">|</span> extra/theory <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|----------|--------|-------------|---------|--------|------|</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`colimit_small`</span> <span class="pp">|</span> 3 <span class="pp">|</span> 5 <span class="pp">|</span> 1.11 µs <span class="pp">|</span> 1.18 µs <span class="pp">|</span> 1.71 µs <span class="pp">|</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`colimit_medium`</span> <span class="pp">|</span> 10 <span class="pp">|</span> 20 <span class="pp">|</span> 2.79 µs <span class="pp">|</span> 2.94 µs <span class="pp">|</span> 3.28 µs <span class="pp">|</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`colimit_large`</span> <span class="pp">|</span> 50 <span class="pp">|</span> 100 <span class="pp">|</span> 12.0 µs <span class="pp">|</span> 12.5 µs <span class="pp">|</span> 14.1 µs <span class="pp">|</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### `colimit_with_equations`</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>Same as above but both theories carry equations ($\min(n, 10)$ equations in the shared base, 5 per extension theory).</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (shared sorts) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|---------|--------|------|</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 2.10 µs <span class="pp">|</span> 2.23 µs <span class="pp">|</span> 2.24 µs <span class="pp">|</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 4.46 µs <span class="pp">|</span> 4.71 µs <span class="pp">|</span> 5.16 µs <span class="pp">|</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 7.37 µs <span class="pp">|</span> 8.04 µs <span class="pp">|</span> 10.0 µs <span class="pp">|</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>Equation checking adds $\approx 30\%$ over sort/op-only colimits at the same scale.</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### `resolve_theory` --- Inheritance Chain Resolution</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>Resolves theory <span class="in">`T_d`</span> at the bottom of a linear inheritance chain of depth $d$. Each theory adds 1 sort and 1 nullary operation.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d$ (depth) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> 2.25 µs <span class="pp">|</span> 2.33 µs <span class="pp">|</span> 2.42 µs <span class="pp">|</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 10.9 µs <span class="pp">|</span> 11.3 µs <span class="pp">|</span> 11.5 µs <span class="pp">|</span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 31.6 µs <span class="pp">|</span> 32.0 µs <span class="pp">|</span> 32.9 µs <span class="pp">|</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 129 µs <span class="pp">|</span> 132 µs <span class="pp">|</span> 135 µs <span class="pp">|</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 412 µs <span class="pp">|</span> 418 µs <span class="pp">|</span> 424 µs <span class="pp">|</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>Quadratic in depth (each level clones all ancestor sorts; <span class="in">`Arc&lt;str&gt;`</span> cloning is O(1) per name but the vector grows). At depth 100, $\approx 4.2\;\mu\text{s}$ per level.</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### `check_morphism` --- Morphism Validation</span></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>Validates a theory morphism on a theory with $n$ sorts, $n$ unary operations, and $\min(n, 20)$ equations.</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ <span class="pp">|</span> identity (median) <span class="pp">|</span> renaming (median) <span class="pp">|</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|-------------------|-------------------|</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 2.96 µs <span class="pp">|</span> 2.92 µs <span class="pp">|</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 10.0 µs <span class="pp">|</span> 8.37 µs <span class="pp">|</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 16.5 µs <span class="pp">|</span> 16.6 µs <span class="pp">|</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>Renaming morphisms are comparable to identity because the dominant cost is equation preservation checking (comparing mapped terms in the codomain), which requires iterating over codomain equations regardless of whether names changed.</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instance Layer (`panproto-inst`) {#sec-bench-inst}</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="fu">### `parse_json_flat_fields` --- JSON → `WInstance`</span></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>Parses a flat JSON object with $n$ string-valued fields into a <span class="in">`WInstance`</span> (root + $n$ leaf nodes).</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (fields) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> 1.83 µs <span class="pp">|</span> 1.92 µs <span class="pp">|</span> 1.98 µs <span class="pp">|</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 6.17 µs <span class="pp">|</span> 6.37 µs <span class="pp">|</span> 6.43 µs <span class="pp">|</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 29.0 µs <span class="pp">|</span> 29.6 µs <span class="pp">|</span> 29.7 µs <span class="pp">|</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>$\approx 590\;\text{ns/field}$ at 50 fields. Dominated by <span class="in">`serde_json`</span> deserialization + node/arc construction.</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="fu">### `parse_json_nested_objects` --- Nested JSON → `WInstance`</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>Parses a chain of nested objects, each with 3 leaf fields, to depth $d$.</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d$ (depth) <span class="pp">|</span> total nodes <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|-------------|---------|--------|------|</span></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> 13 <span class="pp">|</span> 3.00 µs <span class="pp">|</span> 3.12 µs <span class="pp">|</span> 3.19 µs <span class="pp">|</span></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 41 <span class="pp">|</span> 8.17 µs <span class="pp">|</span> 8.33 µs <span class="pp">|</span> 8.43 µs <span class="pp">|</span></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 81 <span class="pp">|</span> 15.8 µs <span class="pp">|</span> 16.3 µs <span class="pp">|</span> 17.2 µs <span class="pp">|</span></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>$\approx 200\;\text{ns/node}$ at depth 20. Nesting adds parent-map bookkeeping but does not cause a per-level blowup.</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### `wtype_restrict` --- Fused Restrict Pipeline</span></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Identity migration (no nodes removed)</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>3-node instance (root + 2 string children), all vertices survive.</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>-<span class="pp">|---------|--------|------|-------------|</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> 1.10 µs <span class="pp">|</span> 1.14 µs <span class="pp">|</span> 1.14 µs <span class="pp">|</span> 400 <span class="pp">|</span></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Deep linear chain (all survive)</span></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>Linear chain schema <span class="in">`root → v0 → v1 → ... → v_{n-1}`</span>, identity migration.</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (chain length) <span class="pp">|</span> nodes <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|-------|---------|--------|------|</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 11 <span class="pp">|</span> 5.21 µs <span class="pp">|</span> 5.29 µs <span class="pp">|</span> 5.34 µs <span class="pp">|</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 51 <span class="pp">|</span> 23.2 µs <span class="pp">|</span> 24.0 µs <span class="pp">|</span> 24.2 µs <span class="pp">|</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 101 <span class="pp">|</span> 46.7 µs <span class="pp">|</span> 49.1 µs <span class="pp">|</span> 49.5 µs <span class="pp">|</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>$\approx 490\;\text{ns/node}$ at 100 nodes = **2.04M nodes/sec**.</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Wide flat tree (all survive)</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>Root with $n$ direct children (star topology), identity migration.</span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (children) <span class="pp">|</span> nodes <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|----------------|-------|---------|--------|------|</span></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 11 <span class="pp">|</span> 5.25 µs <span class="pp">|</span> 5.67 µs <span class="pp">|</span> 5.71 µs <span class="pp">|</span></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 51 <span class="pp">|</span> 22.4 µs <span class="pp">|</span> 23.0 µs <span class="pp">|</span> 23.2 µs <span class="pp">|</span></span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>Comparable to deep chains --- the fused BFS processes both topologies at the same per-node rate.</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Contraction (drop intermediate nodes)</span></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>Linear chain of $n$ nodes; migration keeps only root + first 2 vertices. All other nodes are dropped. Exercises the fused BFS's ancestor propagation through non-surviving intermediates.</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (total chain) <span class="pp">|</span> surviving <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|-----------|---------|--------|------|-------------|</span></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 3 <span class="pp">|</span> 1.56 µs <span class="pp">|</span> 1.59 µs <span class="pp">|</span> 1.60 µs <span class="pp">|</span> 400 <span class="pp">|</span></span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 3 <span class="pp">|</span> 3.67 µs <span class="pp">|</span> 3.75 µs <span class="pp">|</span> 3.81 µs <span class="pp">|</span> 100 <span class="pp">|</span></span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>Contraction on a 50-node chain produces only 3 output nodes in 3.75 µs. The BFS still visits all 50 nodes (to discover descendants), but the output construction is minimal.</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### `functor_restrict_n_tables` --- $\Delta_F$ Precomposition</span></span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>Restricts a functor instance with $n$ tables (each 10 rows, 5 columns) via identity migration.</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (tables) <span class="pp">|</span> rows total <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|-----------|---------|--------|------|</span></span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> 50 <span class="pp">|</span> 4.00 µs <span class="pp">|</span> 4.08 µs <span class="pp">|</span> 4.11 µs <span class="pp">|</span></span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 200 <span class="pp">|</span> 17.1 µs <span class="pp">|</span> 17.3 µs <span class="pp">|</span> 17.4 µs <span class="pp">|</span></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 500 <span class="pp">|</span> 41.7 µs <span class="pp">|</span> 42.1 µs <span class="pp">|</span> 42.7 µs <span class="pp">|</span></span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>$\approx 84\;\text{ns/row}$ at 500 rows.</span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### `functor_extend_n_tables` --- $\Sigma_F$ Left Kan Extension</span></span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>Extends (pushes forward) a functor instance. More expensive than restrict because it computes column unions and fills <span class="in">`Null`</span> values for missing columns.</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (tables) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> 8.21 µs <span class="pp">|</span> 8.33 µs <span class="pp">|</span> 8.41 µs <span class="pp">|</span></span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 33.0 µs <span class="pp">|</span> 33.4 µs <span class="pp">|</span> 33.5 µs <span class="pp">|</span></span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 82.8 µs <span class="pp">|</span> 84.3 µs <span class="pp">|</span> 86.8 µs <span class="pp">|</span></span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>$\approx 2\times$ the cost of restrict due to column-union filling.</span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Engine (`panproto-mig`) {#sec-bench-mig}</span></span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a><span class="fu">### `check_existence_n_vertices`</span></span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>Validates a migration's well-formedness against protocol theory rules.</span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (vertices) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------|------|</span></span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 1.42 µs <span class="pp">|</span> 1.46 µs <span class="pp">|</span> 1.77 µs <span class="pp">|</span></span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 16.6 µs <span class="pp">|</span> 17.0 µs <span class="pp">|</span> 17.5 µs <span class="pp">|</span></span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a><span class="fu">### `compile_n_vertices`</span></span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>Compiles a migration specification into <span class="in">`CompiledMigration`</span> (surviving sets, remap tables, resolvers).</span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (vertices) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------|------|</span></span>
+<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 8.58 µs <span class="pp">|</span> 8.87 µs <span class="pp">|</span> 9.02 µs <span class="pp">|</span></span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 79.1 µs <span class="pp">|</span> 80.8 µs <span class="pp">|</span> 81.5 µs <span class="pp">|</span></span>
+<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>$\approx 810\;\text{ns/vertex}$ at 100 vertices. Dominated by <span class="in">`HashSet`</span>/<span class="in">`HashMap`</span> construction for surviving sets and edge indices.</span>
+<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### `compose` --- Migration Composition</span></span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Two identity migrations</span></span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (vertices) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------|------|</span></span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 4.58 µs <span class="pp">|</span> 4.77 µs <span class="pp">|</span> 4.79 µs <span class="pp">|</span></span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 20.6 µs <span class="pp">|</span> 21.2 µs <span class="pp">|</span> 21.2 µs <span class="pp">|</span></span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 40.9 µs <span class="pp">|</span> 42.4 µs <span class="pp">|</span> 44.1 µs <span class="pp">|</span></span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Two migrations with renaming (source vertices remapped)</span></span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (vertices) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------|------|</span></span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 4.46 µs <span class="pp">|</span> 4.71 µs <span class="pp">|</span> 4.73 µs <span class="pp">|</span></span>
+<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 20.7 µs <span class="pp">|</span> 21.5 µs <span class="pp">|</span> 21.5 µs <span class="pp">|</span></span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a>Renaming adds negligible overhead: the precomputed inverse maps resolve hyper-edge remapping in O(1) per entry.</span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Chain of 5 migrations composed sequentially</span></span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>Each migration is an identity on a chain schema with $n$ vertices.</span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (vertices) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------------|---------|--------|------|</span></span>
+<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 26.9 µs <span class="pp">|</span> 27.7 µs <span class="pp">|</span> 28.0 µs <span class="pp">|</span></span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 125 µs <span class="pp">|</span> 131 µs <span class="pp">|</span> 131 µs <span class="pp">|</span></span>
+<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a>$\approx 5\times$ the cost of a single two-way compose, confirming linear scaling in chain length.</span>
+<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### `lift_wtype` --- Apply Compiled Migration to Instance</span></span>
+<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Simple (5-node chain, identity)</span></span>
+<span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>-<span class="pp">|---------|--------|------|-------------|</span></span>
+<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> 2.85 µs <span class="pp">|</span> 3.02 µs <span class="pp">|</span> 3.05 µs <span class="pp">|</span> 200 <span class="pp">|</span></span>
+<span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Contraction (10-node chain, keep 3)</span></span>
+<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span> iters/sample <span class="pp">|</span></span>
+<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>-<span class="pp">|---------|--------|------|-------------|</span></span>
+<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="pp">|</span> 1.55 µs <span class="pp">|</span> 1.60 µs <span class="pp">|</span> 1.61 µs <span class="pp">|</span> 400 <span class="pp">|</span></span>
+<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a><span class="fu">#### At scale</span></span>
+<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (nodes) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 100 <span class="pp">|</span> 47.1 µs <span class="pp">|</span> 51.2 µs <span class="pp">|</span> 51.5 µs <span class="pp">|</span></span>
+<span id="cb2-263"><a href="#cb2-263" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 500 <span class="pp">|</span> 238 µs <span class="pp">|</span> 259 µs <span class="pp">|</span> 264 µs <span class="pp">|</span></span>
+<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-265"><a href="#cb2-265" aria-hidden="true" tabindex="-1"></a>At 500 nodes: $259\;\mu\text{s} \div 500 = 518\;\text{ns/node}$ = **1.93M nodes/sec**. This includes the full pipeline: migration compilation lookup, fused restrict BFS, node remapping, arc construction, and <span class="in">`WInstance`</span> output allocation.</span>
+<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens Layer (`panproto-lens`) {#sec-bench-lens}</span></span>
+<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a><span class="fu">### `get_identity_lens` --- Forward Direction (No Complement)</span></span>
+<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>Identity lens on a wide tree with $n$ fields. All nodes survive; complement is empty.</span>
+<span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (fields) <span class="pp">|</span> nodes <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|-------|---------|--------|------|</span></span>
+<span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> 6 <span class="pp">|</span> 3.17 µs <span class="pp">|</span> 3.29 µs <span class="pp">|</span> 3.47 µs <span class="pp">|</span></span>
+<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 21 <span class="pp">|</span> 11.7 µs <span class="pp">|</span> 12.1 µs <span class="pp">|</span> 12.8 µs <span class="pp">|</span></span>
+<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 51 <span class="pp">|</span> 26.3 µs <span class="pp">|</span> 27.1 µs <span class="pp">|</span> 27.6 µs <span class="pp">|</span></span>
+<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a><span class="fu">### `get_projection_lens` --- Forward Direction (Large Complement)</span></span>
+<span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-282"><a href="#cb2-282" aria-hidden="true" tabindex="-1"></a>Projection lens keeping only 2 of $n$ fields. Complement stores $n - 2$ dropped nodes.</span>
+<span id="cb2-283"><a href="#cb2-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-284"><a href="#cb2-284" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (fields) <span class="pp">|</span> kept <span class="pp">|</span> dropped <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-285"><a href="#cb2-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|------|---------|---------|--------|------|</span></span>
+<span id="cb2-286"><a href="#cb2-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 2 <span class="pp">|</span> 8 <span class="pp">|</span> 3.58 µs <span class="pp">|</span> 3.75 µs <span class="pp">|</span> 3.79 µs <span class="pp">|</span></span>
+<span id="cb2-287"><a href="#cb2-287" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 2 <span class="pp">|</span> 48 <span class="pp">|</span> 13.3 µs <span class="pp">|</span> 13.6 µs <span class="pp">|</span> 13.7 µs <span class="pp">|</span></span>
+<span id="cb2-288"><a href="#cb2-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-289"><a href="#cb2-289" aria-hidden="true" tabindex="-1"></a>Projection is *faster* than identity because the output tree is smaller (fewer nodes to allocate), even though the complement capture adds work.</span>
+<span id="cb2-290"><a href="#cb2-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-291"><a href="#cb2-291" aria-hidden="true" tabindex="-1"></a><span class="fu">### `get_then_put_round_trip` --- Full Bidirectional Cycle</span></span>
+<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-293"><a href="#cb2-293" aria-hidden="true" tabindex="-1"></a>Identity lens: <span class="in">`get`</span> → <span class="in">`put`</span> → verify restored. Exercises both directions.</span>
+<span id="cb2-294"><a href="#cb2-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-295"><a href="#cb2-295" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (fields) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-296"><a href="#cb2-296" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-297"><a href="#cb2-297" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> 6.00 µs <span class="pp">|</span> 6.17 µs <span class="pp">|</span> 6.27 µs <span class="pp">|</span></span>
+<span id="cb2-298"><a href="#cb2-298" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> 22.2 µs <span class="pp">|</span> 23.2 µs <span class="pp">|</span> 23.9 µs <span class="pp">|</span></span>
+<span id="cb2-299"><a href="#cb2-299" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 50.7 µs <span class="pp">|</span> 51.8 µs <span class="pp">|</span> 54.2 µs <span class="pp">|</span></span>
+<span id="cb2-300"><a href="#cb2-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-301"><a href="#cb2-301" aria-hidden="true" tabindex="-1"></a><span class="in">`put`</span> costs $\approx 1.5\times$ <span class="in">`get`</span> because it must merge the complement (dropped nodes, dropped arcs, contraction choices) back into the view.</span>
+<span id="cb2-302"><a href="#cb2-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-303"><a href="#cb2-303" aria-hidden="true" tabindex="-1"></a><span class="fu">### `get_then_put_projection` --- Bidirectional with Large Complement</span></span>
+<span id="cb2-304"><a href="#cb2-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-305"><a href="#cb2-305" aria-hidden="true" tabindex="-1"></a>Projection lens keeping 2 of $n$ fields. The complement carries the bulk of the data.</span>
+<span id="cb2-306"><a href="#cb2-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-307"><a href="#cb2-307" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $n$ (fields) <span class="pp">|</span> fastest <span class="pp">|</span> median <span class="pp">|</span> mean <span class="pp">|</span></span>
+<span id="cb2-308"><a href="#cb2-308" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|---------|--------|------|</span></span>
+<span id="cb2-309"><a href="#cb2-309" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> 8.17 µs <span class="pp">|</span> 8.37 µs <span class="pp">|</span> 8.48 µs <span class="pp">|</span></span>
+<span id="cb2-310"><a href="#cb2-310" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 50 <span class="pp">|</span> 33.1 µs <span class="pp">|</span> 34.3 µs <span class="pp">|</span> 35.0 µs <span class="pp">|</span></span>
+<span id="cb2-311"><a href="#cb2-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-312"><a href="#cb2-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-313"><a href="#cb2-313" aria-hidden="true" tabindex="-1"></a><span class="fu">## Derived Throughput Summary</span></span>
+<span id="cb2-314"><a href="#cb2-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-315"><a href="#cb2-315" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Operation <span class="pp">|</span> Scale <span class="pp">|</span> Throughput <span class="pp">|</span></span>
+<span id="cb2-316"><a href="#cb2-316" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|-------|-----------|</span></span>
+<span id="cb2-317"><a href="#cb2-317" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`find_sort`</span> (O(1) index) <span class="pp">|</span> 10–500 sorts <span class="pp">|</span> **145–210M lookups/sec** <span class="pp">|</span></span>
+<span id="cb2-318"><a href="#cb2-318" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`parse_json`</span> (flat) <span class="pp">|</span> 50 fields <span class="pp">|</span> **1.69M fields/sec** <span class="pp">|</span></span>
+<span id="cb2-319"><a href="#cb2-319" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`wtype_restrict`</span> (deep chain) <span class="pp">|</span> 100 nodes <span class="pp">|</span> **2.04M nodes/sec** <span class="pp">|</span></span>
+<span id="cb2-320"><a href="#cb2-320" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift_wtype`</span> (full pipeline) <span class="pp">|</span> 500 nodes <span class="pp">|</span> **1.93M nodes/sec** <span class="pp">|</span></span>
+<span id="cb2-321"><a href="#cb2-321" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`functor_restrict`</span> <span class="pp">|</span> 500 rows <span class="pp">|</span> **11.9M rows/sec** <span class="pp">|</span></span>
+<span id="cb2-322"><a href="#cb2-322" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`colimit`</span> <span class="pp">|</span> 150 sorts <span class="pp">|</span> **80K colimits/sec** <span class="pp">|</span></span>
+<span id="cb2-323"><a href="#cb2-323" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose`</span> (two migrations) <span class="pp">|</span> 100 vertices <span class="pp">|</span> **23.6K composes/sec** <span class="pp">|</span></span>
+<span id="cb2-324"><a href="#cb2-324" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Lens round-trip (<span class="in">`get`</span> + <span class="in">`put`</span>) <span class="pp">|</span> 50 fields <span class="pp">|</span> **19.3K round-trips/sec** <span class="pp">|</span></span>
+<span id="cb2-325"><a href="#cb2-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-326"><a href="#cb2-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-327"><a href="#cb2-327" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to Reproduce</span></span>
+<span id="cb2-328"><a href="#cb2-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-329"><a href="#cb2-329" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb2-330"><a href="#cb2-330" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all benchmarks</span></span>
+<span id="cb2-331"><a href="#cb2-331" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span>
+<span id="cb2-332"><a href="#cb2-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-333"><a href="#cb2-333" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a specific crate's benchmarks</span></span>
+<span id="cb2-334"><a href="#cb2-334" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb2-335"><a href="#cb2-335" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb2-336"><a href="#cb2-336" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb2-337"><a href="#cb2-337" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-lens</span>
+<span id="cb2-338"><a href="#cb2-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-339"><a href="#cb2-339" aria-hidden="true" tabindex="-1"></a><span class="co"># Run a specific benchmark by name filter</span></span>
+<span id="cb2-340"><a href="#cb2-340" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> find_sort</span>
+<span id="cb2-341"><a href="#cb2-341" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> wtype_restrict_deep</span>
+<span id="cb2-342"><a href="#cb2-342" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-343"><a href="#cb2-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-344"><a href="#cb2-344" aria-hidden="true" tabindex="-1"></a>All benchmarks use divan v0.1.21. Each benchmark runs 100 samples with auto-tuned iteration counts (shown in the <span class="in">`iters/sample`</span> column). Results include fastest, slowest, median, and mean.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/appendices/E-benchmark-results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

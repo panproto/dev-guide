@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>18&nbsp; Building-Block Theories – panproto: Developer Guide</title>
+<title>19&nbsp; Naming, Identity, and the Morphism Tower – panproto: Developer Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,8 +84,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/23-naming-identity.html" rel="next">
-<link href="../chapters/21-vcs-engine.html" rel="prev">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/22-building-blocks.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -304,7 +304,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/22-building-blocks.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/23-naming-identity.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -474,13 +474,13 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
   </div>
 </li>
@@ -583,35 +583,29 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#formal-invariants" id="toc-formal-invariants" class="nav-link active" data-scroll-target="#formal-invariants"><span class="header-section-number">18.1</span> Formal Invariants</a></li>
-  <li><a href="#the-property-to-structure-principle" id="toc-the-property-to-structure-principle" class="nav-link" data-scroll-target="#the-property-to-structure-principle"><span class="header-section-number">18.2</span> The Property-to-Structure Principle</a></li>
-  <li><a href="#theories-with-equations" id="toc-theories-with-equations" class="nav-link" data-scroll-target="#theories-with-equations"><span class="header-section-number">18.3</span> Theories with Equations</a>
+  <li><a href="#the-ident-abstraction" id="toc-the-ident-abstraction" class="nav-link active" data-scroll-target="#the-ident-abstraction"><span class="header-section-number">19.1</span> The <code>Ident</code> Abstraction</a></li>
+  <li><a href="#the-name-type" id="toc-the-name-type" class="nav-link" data-scroll-target="#the-name-type"><span class="header-section-number">19.2</span> The <code>Name</code> Type</a></li>
+  <li><a href="#namesite-and-siterename" id="toc-namesite-and-siterename" class="nav-link" data-scroll-target="#namesite-and-siterename"><span class="header-section-number">19.3</span> <code>NameSite</code> and <code>SiteRename</code></a></li>
+  <li><a href="#theorymorphism.induce_schema_renames" id="toc-theorymorphism.induce_schema_renames" class="nav-link" data-scroll-target="#theorymorphism.induce_schema_renames"><span class="header-section-number">19.4</span> <code>TheoryMorphism.induce_schema_renames()</code></a></li>
+  <li><a href="#schemamorphism" id="toc-schemamorphism" class="nav-link" data-scroll-target="#schemamorphism"><span class="header-section-number">19.5</span> <code>SchemaMorphism</code></a></li>
+  <li><a href="#the-cascade-module" id="toc-the-cascade-module" class="nav-link" data-scroll-target="#the-cascade-module"><span class="header-section-number">19.6</span> The Cascade Module</a></li>
+  <li><a href="#new-combinators" id="toc-new-combinators" class="nav-link" data-scroll-target="#new-combinators"><span class="header-section-number">19.7</span> New Combinators</a></li>
+  <li><a href="#vcs-rename-detection" id="toc-vcs-rename-detection" class="nav-link" data-scroll-target="#vcs-rename-detection"><span class="header-section-number">19.8</span> VCS Rename Detection</a>
   <ul class="collapse">
-  <li><a href="#threcursion-fold-unfold" id="toc-threcursion-fold-unfold" class="nav-link" data-scroll-target="#threcursion-fold-unfold"><span class="header-section-number">18.3.1</span> ThRecursion — Fold-Unfold</a></li>
-  <li><a href="#threflexivegraph-identity-edges" id="toc-threflexivegraph-identity-edges" class="nav-link" data-scroll-target="#threflexivegraph-identity-edges"><span class="header-section-number">18.3.2</span> ThReflexiveGraph — Identity Edges</a></li>
-  <li><a href="#thsymmetricgraph-involution" id="toc-thsymmetricgraph-involution" class="nav-link" data-scroll-target="#thsymmetricgraph-involution"><span class="header-section-number">18.3.3</span> ThSymmetricGraph — Involution</a></li>
-  <li><a href="#thcoproduct-variant-retraction" id="toc-thcoproduct-variant-retraction" class="nav-link" data-scroll-target="#thcoproduct-variant-retraction"><span class="header-section-number">18.3.4</span> ThCoproduct — Variant Retraction</a></li>
-  <li><a href="#thpartial-definedness-witness" id="toc-thpartial-definedness-witness" class="nav-link" data-scroll-target="#thpartial-definedness-witness"><span class="header-section-number">18.3.5</span> ThPartial — Definedness Witness</a></li>
+  <li><a href="#algorithm" id="toc-algorithm" class="nav-link" data-scroll-target="#algorithm"><span class="header-section-number">19.8.1</span> Algorithm</a></li>
+  <li><a href="#integration" id="toc-integration" class="nav-link" data-scroll-target="#integration"><span class="header-section-number">19.8.2</span> Integration</a></li>
   </ul></li>
-  <li><a href="#all-27-theories-complete-list" id="toc-all-27-theories-complete-list" class="nav-link" data-scroll-target="#all-27-theories-complete-list"><span class="header-section-number">18.4</span> All 27 Theories (Complete List)</a>
-  <ul class="collapse">
-  <li><a href="#schema-shapes-6" id="toc-schema-shapes-6" class="nav-link" data-scroll-target="#schema-shapes-6"><span class="header-section-number">18.4.1</span> Schema shapes (6)</a></li>
-  <li><a href="#schema-modifiers-8" id="toc-schema-modifiers-8" class="nav-link" data-scroll-target="#schema-modifiers-8"><span class="header-section-number">18.4.2</span> Schema modifiers (8)</a></li>
-  <li><a href="#schema-structural-4" id="toc-schema-structural-4" class="nav-link" data-scroll-target="#schema-structural-4"><span class="header-section-number">18.4.3</span> Schema structural (4)</a></li>
-  <li><a href="#instance-6" id="toc-instance-6" class="nav-link" data-scroll-target="#instance-6"><span class="header-section-number">18.4.4</span> Instance (6)</a></li>
-  <li><a href="#architectural-3" id="toc-architectural-3" class="nav-link" data-scroll-target="#architectural-3"><span class="header-section-number">18.4.5</span> Architectural (3)</a></li>
-  </ul></li>
-  <li><a href="#theory-groups" id="toc-theory-groups" class="nav-link" data-scroll-target="#theory-groups"><span class="header-section-number">18.5</span> Theory Groups</a></li>
+  <li><a href="#migration-path-string-name" id="toc-migration-path-string-name" class="nav-link" data-scroll-target="#migration-path-string-name"><span class="header-section-number">19.9</span> Migration Path: <code>String</code> → <code>Name</code></a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/22-building-blocks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/23-naming-identity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/22-building-blocks.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/23-naming-identity.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-building-blocks" class="quarto-section-identifier"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-naming-identity" class="quarto-section-identifier"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -628,434 +622,186 @@ div.csl-indent {
 </header>
 
 
-<p>panproto defines 27 building-block GATs that compose via colimit into protocol-specific schema and instance theories. This chapter provides the formal definitions and type-checking proofs for all equations.</p>
-<section id="formal-invariants" class="level2" data-number="18.1">
-<h2 data-number="18.1" class="anchored" data-anchor-id="formal-invariants"><span class="header-section-number">18.1</span> Formal Invariants</h2>
-<p>Every building-block theory satisfies:</p>
+<p>This chapter covers the <code>panproto-gat</code> identifier abstraction, the unified naming layer, the morphism tower that cascades theory-level renames into data migrations, and the VCS rename detection heuristic.</p>
+<p>For the user-facing introduction to naming, see the <a href="@sec-naming">tutorial chapter on naming</a>.</p>
+<section id="the-ident-abstraction" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="the-ident-abstraction"><span class="header-section-number">19.1</span> The <code>Ident</code> Abstraction</h2>
+<p><strong>File</strong>: <code>crates/panproto-gat/src/ident.rs</code></p>
+<p>The <code>Ident</code> type separates stable identity from display name, following <code>GATlab</code> <span class="citation" data-cites="lynch2024">(<a href="#ref-lynch2024" role="doc-biblioref">Lynch et al. 2024</a>)</span>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Ident <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> scope<span class="op">:</span> ScopeTag<span class="op">,</span>   <span class="co">// which theory/schema this belongs to</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> index<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span>        <span class="co">// positional index within scope</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span>    <span class="co">// human-readable display name</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>PartialEq</code> and <code>Hash</code> use only <code>(scope, index)</code>, making comparisons O(1) regardless of name length. Renaming an identifier (via <code>ident.renamed("new_name")</code>) does not change its identity, so <code>HashMap&lt;Ident, _&gt;</code> entries survive renames without rehashing.</p>
+<p><code>ScopeTag</code> is a monotonically increasing <code>u32</code> assigned via <code>ScopeTag::fresh()</code>. Each <code>Theory</code> or <code>SchemaBuilder</code> gets a unique scope at construction time. <code>ScopeTag::LEGACY</code> (scope 0) is used for deserializing old-format data via <code>Ident::from_legacy()</code>.</p>
+</section>
+<section id="the-name-type" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="the-name-type"><span class="header-section-number">19.2</span> The <code>Name</code> Type</h2>
+<p><strong>File</strong>: <code>crates/panproto-gat/src/ident.rs</code></p>
+<p><code>Name</code> wraps <code>Arc&lt;str&gt;</code> with a pointer-equality fast path:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Name(<span class="kw">pub</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Equality checks use <code>Arc::ptr_eq</code> first (single pointer comparison), falling back to string comparison only on pointer mismatch. In the restrict hot path, both sides typically originate from the same schema construction, so the fast path hits frequently.</p>
+<p>Key trait implementations: - <code>Deref&lt;Target=str&gt;</code> and <code>Borrow&lt;str&gt;</code>: <code>HashMap&lt;Name, V&gt;::get("string_literal")</code> works - <code>From&lt;String&gt;</code>, <code>From&lt;&amp;str&gt;</code>: zero-friction conversion from string types - <code>Default</code>: empty string - <code>serde::Serialize/Deserialize</code>: transparent (serializes as a plain string)</p>
+<p><strong>Performance impact on <code>wtype_restrict</code></strong>: - <code>surviving_verts.contains(&amp;node.anchor)</code>: same hash cost, gains <code>Arc::ptr_eq</code> fast path on equality - <code>node.anchor.clone()</code>: <code>Arc::clone</code> (atomic refcount bump) instead of heap allocation</p>
+</section>
+<section id="namesite-and-siterename" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="namesite-and-siterename"><span class="header-section-number">19.3</span> <code>NameSite</code> and <code>SiteRename</code></h2>
+<p><strong>File</strong>: <code>crates/panproto-gat/src/ident.rs</code></p>
+<p>All 9 naming sites in panproto are unified under the <code>NameSite</code> enum:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> NameSite <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    EdgeLabel<span class="op">,</span> VertexId<span class="op">,</span> VertexKind<span class="op">,</span> EdgeKind<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    Nsid<span class="op">,</span> ConstraintSort<span class="op">,</span> InstanceAnchor<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    TheoryName<span class="op">,</span> SortName<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>SiteRename { site, old, new }</code> is a site-qualified rename operation. These are stored in <code>SchemaMorphism</code> provenance and <code>CommitObject</code> rename metadata.</p>
+</section>
+<section id="theorymorphism.induce_schema_renames" class="level2" data-number="19.4">
+<h2 data-number="19.4" class="anchored" data-anchor-id="theorymorphism.induce_schema_renames"><span class="header-section-number">19.4</span> <code>TheoryMorphism.induce_schema_renames()</code></h2>
+<p><strong>File</strong>: <code>crates/panproto-gat/src/morphism.rs</code></p>
+<p>A theory morphism <code>F: T1 → T2</code> with <code>sort_map</code> and <code>op_map</code> induces schema-level renames:</p>
+<ul>
+<li>Each <code>sort_map</code> entry where <code>old ≠ new</code> becomes a <code>NameSite::VertexKind</code> rename</li>
+<li>Each <code>op_map</code> entry where <code>old ≠ new</code> becomes a <code>NameSite::EdgeKind</code> rename</li>
+</ul>
+<p>This is analogous to <code>GATlab</code>’s <code>SimpleTheoryMap</code>, which maps type and term constructors between theories while preserving structural equivalence.</p>
+</section>
+<section id="schemamorphism" class="level2" data-number="19.5">
+<h2 data-number="19.5" class="anchored" data-anchor-id="schemamorphism"><span class="header-section-number">19.5</span> <code>SchemaMorphism</code></h2>
+<p><strong>File</strong>: <code>crates/panproto-schema/src/morphism.rs</code></p>
+<p>An explicit schema morphism (functor F: S → T):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SchemaMorphism <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> src_protocol<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> tgt_protocol<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> renames<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>SiteRename<span class="op">&gt;,</span>  <span class="co">// provenance</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Composition via <code>m1.compose(&amp;m2)</code> chains vertex/edge maps and concatenates renames. This makes the category structure of schema transformations explicit, enabling transitive composition of cross-protocol translations.</p>
+</section>
+<section id="the-cascade-module" class="level2" data-number="19.6">
+<h2 data-number="19.6" class="anchored" data-anchor-id="the-cascade-module"><span class="header-section-number">19.6</span> The Cascade Module</h2>
+<p><strong>File</strong>: <code>crates/panproto-mig/src/cascade.rs</code></p>
+<p>The morphism tower connects three levels:</p>
+<pre><code>Theory morphism  ──induce_schema_morphism──→  Schema morphism
+                                                    │
+                                          induce_data_migration
+                                                    │
+                                                    ▼
+                                            CompiledMigration</code></pre>
+<ul>
+<li><code>induce_schema_morphism(theory_morph, src_schema)</code>: Applies sort/op renames to produce a <code>SchemaMorphism</code></li>
+<li><code>induce_data_migration(schema_morph, tgt_schema)</code>: Lowers to <code>CompiledMigration</code> for the restrict pipeline</li>
+<li><code>induce_migration_from_theory(theory_morph, src, tgt)</code>: Convenience function chaining both</li>
+</ul>
+<p>This implements the functorial action from <span class="citation" data-cites="spivak2012">Spivak (<a href="#ref-spivak2012" role="doc-biblioref">2012</a>)</span>: a schema morphism F induces the pullback functor <code>Δ_F</code> on instances.</p>
+</section>
+<section id="new-combinators" class="level2" data-number="19.7">
+<h2 data-number="19.7" class="anchored" data-anchor-id="new-combinators"><span class="header-section-number">19.7</span> New Combinators</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/combinators.rs</code></p>
+<p>Seven new combinator variants complement the original six:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 17%">
+<col style="width: 31%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Combinator</th>
+<th>Site</th>
+<th>Lossless?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>RenameVertex</code></td>
+<td><code>VertexId</code></td>
+<td>Yes</td>
+<td>Cascades to edges, constraints, variants</td>
+</tr>
+<tr class="even">
+<td><code>RenameKind</code></td>
+<td><code>VertexKind</code></td>
+<td>Yes</td>
+<td>Fine-grained (single vertex)</td>
+</tr>
+<tr class="odd">
+<td><code>RenameEdgeKind</code></td>
+<td><code>EdgeKind</code></td>
+<td>Yes</td>
+<td>All edges with matching kind</td>
+</tr>
+<tr class="even">
+<td><code>RenameNsid</code></td>
+<td><code>Nsid</code></td>
+<td>Yes</td>
+<td>Single vertex</td>
+</tr>
+<tr class="odd">
+<td><code>RenameConstraintSort</code></td>
+<td><code>ConstraintSort</code></td>
+<td>Yes</td>
+<td>All constraints</td>
+</tr>
+<tr class="even">
+<td><code>ApplyTheoryMorphism</code></td>
+<td>Multiple</td>
+<td>Yes</td>
+<td>Top of the morphism tower</td>
+</tr>
+<tr class="odd">
+<td><code>Rename</code></td>
+<td>Any</td>
+<td>Yes</td>
+<td>Unified dispatcher</td>
+</tr>
+</tbody>
+</table>
+<p>Each combinator has a corresponding <code>apply_*</code> function and <code>build_compiled_migration</code> arm. All are lossless (empty complement), so the lens laws hold trivially.</p>
+</section>
+<section id="vcs-rename-detection" class="level2" data-number="19.8">
+<h2 data-number="19.8" class="anchored" data-anchor-id="vcs-rename-detection"><span class="header-section-number">19.8</span> VCS Rename Detection</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/rename_detect.rs</code></p>
+<section id="algorithm" class="level3" data-number="19.8.1">
+<h3 data-number="19.8.1" class="anchored" data-anchor-id="algorithm"><span class="header-section-number">19.8.1</span> Algorithm</h3>
+<p>When comparing old and new schemas:</p>
 <ol type="1">
-<li><strong>Sort closure</strong>: every sort name in an operation’s input/output types is declared in the theory’s sorts list.</li>
-<li><strong>Equation well-typedness</strong>: both sides of every equation have the same output sort.</li>
-<li><strong>No tautologies</strong>: <code>lhs ≠ rhs</code> syntactically for all equations.</li>
+<li>Collect removed vertices (in old, not in new) and added vertices (in new, not in old)</li>
+<li>For each (removed, added) pair, compute structural similarity score:
+<ul>
+<li>Same vertex kind: +0.3</li>
+<li>Same outgoing edge names: +0.3</li>
+<li>Same incoming edge names: +0.2</li>
+<li>Edit distance of names ≤ 3: +0.2</li>
+</ul></li>
+<li>Greedy bipartite matching: take highest-scoring pairs first</li>
+<li>Return pairs ≥ threshold (default 0.5)</li>
 </ol>
 </section>
-<section id="the-property-to-structure-principle" class="level2" data-number="18.2">
-<h2 data-number="18.2" class="anchored" data-anchor-id="the-property-to-structure-principle"><span class="header-section-number">18.2</span> The Property-to-Structure Principle</h2>
-<p>Several building blocks use Cartmell’s property-to-structure move <span class="citation" data-cites="cartmell1986">(<a href="#ref-cartmell1986" role="doc-biblioref">Cartmell 1986</a>)</span>: conditional properties (transitivity, injectivity) are encoded as unconditional equations by adding operations and dependent sorts.</p>
-<p>For example, injectivity of coproduct injection is not <code>injection(v1) = injection(v2) → v1 = v2</code> (a conditional equation, not expressible in GATs). Instead, ThCoproduct adds a retraction <code>variant_of : Vertex → Variant</code> with the equation <code>variant_of(injection(v)) = v</code>. The retraction is <em>structure</em>, not a <em>property</em>.</p>
-<p>This separation yields a clean boundary: structural properties (transitivity, injectivity, uniqueness, optionality) belong in GAT sorts+equations; validation properties (cardinality, patterns, ranges) belong in ThConstraint.</p>
-</section>
-<section id="theories-with-equations" class="level2" data-number="18.3">
-<h2 data-number="18.3" class="anchored" data-anchor-id="theories-with-equations"><span class="header-section-number">18.3</span> Theories with Equations</h2>
-<section id="threcursion-fold-unfold" class="level3" data-number="18.3.1">
-<h3 data-number="18.3.1" class="anchored" data-anchor-id="threcursion-fold-unfold"><span class="header-section-number">18.3.1</span> ThRecursion — Fold-Unfold</h3>
-<pre><code>Sorts: Vertex, Mu
-Ops:   fold : Vertex → Mu
-       unfold : Mu → Vertex
-Eq:    unfold(fold(v)) = v</code></pre>
-<p>Type check: <code>fold(v) : Mu</code>, <code>unfold(fold(v)) : Vertex</code>, <code>v : Vertex</code>. Both sides: Vertex. ✓</p>
-<p>This is the isorecursive fold-unfold law. <code>fold</code> is a section of <code>unfold</code>.</p>
-</section>
-<section id="threflexivegraph-identity-edges" class="level3" data-number="18.3.2">
-<h3 data-number="18.3.2" class="anchored" data-anchor-id="threflexivegraph-identity-edges"><span class="header-section-number">18.3.2</span> ThReflexiveGraph — Identity Edges</h3>
-<pre><code>Sorts: Vertex, Edge
-Ops:   id : Vertex → Edge
-       src : Edge → Vertex
-       tgt : Edge → Vertex
-Eqs:   src(id(v)) = v
-       tgt(id(v)) = v</code></pre>
-<p>Type check: <code>id(v) : Edge</code>, <code>src(id(v)) : Vertex</code>, <code>v : Vertex</code>. Both sides: Vertex. ✓</p>
-<p>Without the equations, this is just ThGraph + an extra operation. The equations make the identity edge load-bearing.</p>
-</section>
-<section id="thsymmetricgraph-involution" class="level3" data-number="18.3.3">
-<h3 data-number="18.3.3" class="anchored" data-anchor-id="thsymmetricgraph-involution"><span class="header-section-number">18.3.3</span> ThSymmetricGraph — Involution</h3>
-<pre><code>Sorts: Vertex, Edge
-Ops:   inv : Edge → Edge
-       src : Edge → Vertex
-       tgt : Edge → Vertex
-Eqs:   src(inv(e)) = tgt(e)
-       tgt(inv(e)) = src(e)
-       inv(inv(e)) = e</code></pre>
-<p>Type checks:</p>
-<ul>
-<li><code>src(inv(e)) : Vertex</code>, <code>tgt(e) : Vertex</code> ✓</li>
-<li><code>inv(inv(e)) : Edge</code>, <code>e : Edge</code> ✓</li>
-</ul>
-</section>
-<section id="thcoproduct-variant-retraction" class="level3" data-number="18.3.4">
-<h3 data-number="18.3.4" class="anchored" data-anchor-id="thcoproduct-variant-retraction"><span class="header-section-number">18.3.4</span> ThCoproduct — Variant Retraction</h3>
-<pre><code>Sorts: Vertex, Variant, Tag
-Ops:   injection : Variant → Vertex
-       tag : Variant → Tag
-       variant_of : Vertex → Variant
-Eq:    variant_of(injection(v)) = v</code></pre>
-<p>Type check: <code>injection(v) : Vertex</code>, <code>variant_of(injection(v)) : Variant</code>, <code>v : Variant</code>. Both sides: Variant. ✓</p>
-</section>
-<section id="thpartial-definedness-witness" class="level3" data-number="18.3.5">
-<h3 data-number="18.3.5" class="anchored" data-anchor-id="thpartial-definedness-witness"><span class="header-section-number">18.3.5</span> ThPartial — Definedness Witness</h3>
-<pre><code>Sorts: Vertex, Defined
-Ops:   defined : Vertex → Defined
-       witness : Defined → Vertex
-Eq:    defined(witness(d)) = d</code></pre>
-<p>Type check: <code>witness(d) : Vertex</code>, <code>defined(witness(d)) : Defined</code>, <code>d : Defined</code>. Both sides: Defined. ✓</p>
+<section id="integration" class="level3" data-number="19.8.2">
+<h3 data-number="19.8.2" class="anchored" data-anchor-id="integration"><span class="header-section-number">19.8.2</span> Integration</h3>
+<p>Detected renames are stored in <code>CommitObject.renames</code> as <code>Vec&lt;SiteRename&gt;</code>. The <code>schema diff --detect-renames</code> CLI command exposes rename detection.</p>
 </section>
 </section>
-<section id="all-27-theories-complete-list" class="level2" data-number="18.4">
-<h2 data-number="18.4" class="anchored" data-anchor-id="all-27-theories-complete-list"><span class="header-section-number">18.4</span> All 27 Theories (Complete List)</h2>
-<section id="schema-shapes-6" class="level3" data-number="18.4.1">
-<h3 data-number="18.4.1" class="anchored" data-anchor-id="schema-shapes-6"><span class="header-section-number">18.4.1</span> Schema shapes (6)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 19%">
-<col style="width: 19%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Name</th>
-<th>Sorts</th>
-<th>Ops</th>
-<th>Eqs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>ThGraph</td>
-<td>Vertex, Edge</td>
-<td>src, tgt</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>ThSimpleGraph</td>
-<td>Vertex, Edge(s:V,t:V)</td>
-<td>src, tgt</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>ThHypergraph</td>
-<td>Vertex, HyperEdge, Label</td>
-<td>incident, parent_label</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>ThReflexiveGraph</td>
-<td>Vertex, Edge</td>
-<td>id, src, tgt</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>ThSymmetricGraph</td>
-<td>Vertex, Edge</td>
-<td>inv, src, tgt</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>ThPetriNet</td>
-<td>Place, Transition, Token</td>
-<td>pre, post, marking</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="schema-modifiers-8" class="level3" data-number="18.4.2">
-<h3 data-number="18.4.2" class="anchored" data-anchor-id="schema-modifiers-8"><span class="header-section-number">18.4.2</span> Schema modifiers (8)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 19%">
-<col style="width: 19%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Name</th>
-<th>Sorts</th>
-<th>Ops</th>
-<th>Eqs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>7</td>
-<td>ThConstraint</td>
-<td>Vertex, Constraint(v:V)</td>
-<td>target</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>ThMulti</td>
-<td>Vertex, Edge, EdgeLabel</td>
-<td>edge_label</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td>ThInterface</td>
-<td>Vertex, Interface</td>
-<td>implements</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td>ThOrder</td>
-<td>Edge, Position</td>
-<td>edge_position, succ</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td>ThCoproduct</td>
-<td>Vertex, Variant, Tag</td>
-<td>injection, tag, variant_of</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td>ThRecursion</td>
-<td>Vertex, Mu</td>
-<td>unfold, fold</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td>ThPartial</td>
-<td>Vertex, Defined</td>
-<td>defined, witness</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>14</td>
-<td>ThLinear</td>
-<td>Edge, Usage</td>
-<td>use_count</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="schema-structural-4" class="level3" data-number="18.4.3">
-<h3 data-number="18.4.3" class="anchored" data-anchor-id="schema-structural-4"><span class="header-section-number">18.4.3</span> Schema structural (4)</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Name</th>
-<th>Sorts</th>
-<th>Ops</th>
-<th>Eqs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>15</td>
-<td>ThNominal</td>
-<td>Vertex, Name</td>
-<td>name</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>16</td>
-<td>ThSpan</td>
-<td>Vertex, Span</td>
-<td>span_left, span_right</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>17</td>
-<td>ThCospan</td>
-<td>Vertex, Apex</td>
-<td>inl, inr</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>18</td>
-<td>ThOperad</td>
-<td>Color, MOperation</td>
-<td>arity, op_output</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="instance-6" class="level3" data-number="18.4.4">
-<h3 data-number="18.4.4" class="anchored" data-anchor-id="instance-6"><span class="header-section-number">18.4.4</span> Instance (6)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 19%">
-<col style="width: 19%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Name</th>
-<th>Sorts</th>
-<th>Ops</th>
-<th>Eqs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>19</td>
-<td>ThWType</td>
-<td>Node, Arc, Value</td>
-<td>anchor, arc_src, arc_tgt, arc_edge, node_value</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>20</td>
-<td>ThFunctor</td>
-<td>Table, Row, ForeignKey</td>
-<td>table_vertex, fk_src, fk_tgt</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>21</td>
-<td>ThFlat</td>
-<td>Node, Field, Value</td>
-<td>field_node, field_value, node_anchor</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>22</td>
-<td>ThGraphInstance</td>
-<td>IVertex, IEdge, Value, Vertex, Edge</td>
-<td>i_src, i_tgt, iv_anchor, ie_anchor, iv_value</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>23</td>
-<td>ThAnnotation</td>
-<td>Vertex, Annotation, AnnotationKey, Value</td>
-<td>annotated, ann_key, ann_value</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>24</td>
-<td>ThCausal</td>
-<td>Event, Timestamp, Before(e1,e2)</td>
-<td>time, before_refl, before_trans</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="architectural-3" class="level3" data-number="18.4.5">
-<h3 data-number="18.4.5" class="anchored" data-anchor-id="architectural-3"><span class="header-section-number">18.4.5</span> Architectural (3)</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 19%">
-<col style="width: 19%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>#</th>
-<th>Name</th>
-<th>Sorts</th>
-<th>Ops</th>
-<th>Eqs</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>25</td>
-<td>ThTracedMonoidal</td>
-<td>Wire, Box</td>
-<td>trace_in, trace_out, feedback</td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>26</td>
-<td>ThSimplicial</td>
-<td>Simplex, Face, Degeneracy</td>
-<td>face_map, degeneracy_map</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>27</td>
-<td>ThMeta</td>
-<td>Node, Discriminator, ExtraField</td>
-<td>discriminator, extra_field</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-<section id="theory-groups" class="level2" data-number="18.5">
-<h2 data-number="18.5" class="anchored" data-anchor-id="theory-groups"><span class="header-section-number">18.5</span> Theory Groups</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Group</th>
-<th>Schema composition</th>
-<th>Instance</th>
-<th>Protocols</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>A</td>
-<td>colimit(Graph, Constraint, Multi)</td>
-<td>WType</td>
-<td>30</td>
-</tr>
-<tr class="even">
-<td>B</td>
-<td>colimit(Hypergraph, Constraint)</td>
-<td>Functor</td>
-<td>11</td>
-</tr>
-<tr class="odd">
-<td>C</td>
-<td>colimit(SimpleGraph, Constraint)</td>
-<td>Flat</td>
-<td>9</td>
-</tr>
-<tr class="even">
-<td>D</td>
-<td>colimit(Graph, Constraint, Multi, Interface)</td>
-<td>WType</td>
-<td>16</td>
-</tr>
-<tr class="odd">
-<td>E</td>
-<td>colimit(Graph, Constraint, Multi)</td>
-<td>colimit(WType, Meta)</td>
-<td>9</td>
-</tr>
-<tr class="even">
-<td>F</td>
-<td>colimit(Graph, Constraint, Multi)</td>
-<td>GraphInstance</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
+<section id="migration-path-string-name" class="level2" data-number="19.9">
+<h2 data-number="19.9" class="anchored" data-anchor-id="migration-path-string-name"><span class="header-section-number">19.9</span> Migration Path: <code>String</code> → <code>Name</code></h2>
+<p>The core types (<code>Vertex</code>, <code>Edge</code>, <code>Schema</code>, <code>Node</code>, <code>CompiledMigration</code>, <code>Migration</code>) use <code>Name</code> for all identifier and label fields. <code>Constraint.value</code> and <code>Schema.protocol</code> remain <code>String</code> since they are literal data, not identifiers.</p>
+<p>The <code>SchemaBuilder</code> API still accepts <code>&amp;str</code> parameters, converting to <code>Name</code> internally. Protocol parsers required no changes.</p>
+<p><strong>Performance</strong>: Benchmarks show no regression from the <code>String</code> → <code>Name</code> migration. The <code>Arc::clone</code> fast path eliminates heap allocations in the restrict pipeline’s inner loop.</p>
 
 
 <!-- -->
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-cartmell1986" class="csl-entry" role="listitem">
-Cartmell, John. 1986. <span>“Generalised Algebraic Theories and Contextual Categories.”</span> <em>Annals of Pure and Applied Logic</em> 32: 209–43. <a href="https://doi.org/10.1016/0168-0072(86)90053-9">https://doi.org/10.1016/0168-0072(86)90053-9</a>.
+<div id="ref-lynch2024" class="csl-entry" role="listitem">
+Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<span>GATlab</span>: Modeling and Programming with Generalized Algebraic Theories.”</span> <em>arXiv Preprint arXiv:2404.04837</em>, ahead of print. <a href="https://doi.org/10.48550/arXiv.2404.04837">https://doi.org/10.48550/arXiv.2404.04837</a>.
+</div>
+<div id="ref-spivak2012" class="csl-entry" role="listitem">
+Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Information and Computation</em> 217: 31–51. <a href="https://doi.org/10.1016/j.ic.2012.05.001">https://doi.org/10.1016/j.ic.2012.05.001</a>.
 </div>
 </div>
 </section>
@@ -1527,174 +1273,179 @@ Cartmell, John. 1986. <span>“Generalised Algebraic Theories and Contextual Cat
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/21-vcs-engine.html" class="pagination-link" aria-label="VCS Engine">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span>
+      <a href="../chapters/22-building-blocks.html" class="pagination-link" aria-label="Building-Block Theories">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/23-naming-identity.html" class="pagination-link" aria-label="Naming, Identity, and the Morphism Tower">
-        <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Building-Block Theories {#sec-building-blocks}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Naming, Identity, and the Morphism Tower {#sec-naming-identity}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>panproto defines 27 building-block GATs that compose via colimit into protocol-specific schema and instance theories. This chapter provides the formal definitions and type-checking proofs for all equations.</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>This chapter covers the <span class="in">`panproto-gat`</span> identifier abstraction, the unified naming layer, the morphism tower that cascades theory-level renames into data migrations, and the VCS rename detection heuristic.</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Formal Invariants</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to naming, see the <span class="co">[</span><span class="ot">tutorial chapter on naming</span><span class="co">](@sec-naming)</span>.</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Every building-block theory satisfies:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `Ident` Abstraction</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Sort closure**: every sort name in an operation's input/output types is declared in the theory's sorts list.</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Equation well-typedness**: both sides of every equation have the same output sort.</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**No tautologies**: <span class="in">`lhs ≠ rhs`</span> syntactically for all equations.</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-gat/src/ident.rs`</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Ident`</span> type separates stable identity from display name, following <span class="in">`GATlab`</span> <span class="co">[</span><span class="ot">@lynch2024</span><span class="co">]</span>:</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Property-to-Structure Principle</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>Several building blocks use Cartmell's property-to-structure move <span class="co">[</span><span class="ot">@cartmell1986</span><span class="co">]</span>: conditional properties (transitivity, injectivity) are encoded as unconditional equations by adding operations and dependent sorts.</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>For example, injectivity of coproduct injection is not <span class="in">`injection(v1) = injection(v2) → v1 = v2`</span> (a conditional equation, not expressible in GATs). Instead, ThCoproduct adds a retraction <span class="in">`variant_of : Vertex → Variant`</span> with the equation <span class="in">`variant_of(injection(v)) = v`</span>. The retraction is *structure*, not a *property*.</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>This separation yields a clean boundary: structural properties (transitivity, injectivity, uniqueness, optionality) belong in GAT sorts+equations; validation properties (cardinality, patterns, ranges) belong in ThConstraint.</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>pub struct Ident {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    pub scope<span class="sc">:</span> ScopeTag,   <span class="sc">/</span><span class="er">/</span> which theory<span class="sc">/</span>schema this belongs to</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    pub index<span class="sc">:</span> u32,        <span class="sc">/</span><span class="er">/</span> positional index within scope</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    pub name<span class="sc">:</span> Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>,    <span class="sc">/</span><span class="er">/</span> human<span class="sc">-</span>readable display name</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theories with Equations</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">`PartialEq`</span> and <span class="in">`Hash`</span> use only <span class="in">`(scope, index)`</span>, making comparisons O(1) regardless of name length. Renaming an identifier (via <span class="in">`ident.renamed("new_name")`</span>) does not change its identity, so <span class="in">`HashMap&lt;Ident, _&gt;`</span> entries survive renames without rehashing.</span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThRecursion — Fold-Unfold</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="in">`ScopeTag`</span> is a monotonically increasing <span class="in">`u32`</span> assigned via <span class="in">`ScopeTag::fresh()`</span>. Each <span class="in">`Theory`</span> or <span class="in">`SchemaBuilder`</span> gets a unique scope at construction time. <span class="in">`ScopeTag::LEGACY`</span> (scope 0) is used for deserializing old-format data via <span class="in">`Ident::from_legacy()`</span>.</span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Mu</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   fold : Vertex → Mu</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="in">       unfold : Mu → Vertex</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    unfold(fold(v)) = v</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`fold(v) : Mu`</span>, <span class="in">`unfold(fold(v)) : Vertex`</span>, <span class="in">`v : Vertex`</span>. Both sides: Vertex. ✓</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>This is the isorecursive fold-unfold law. <span class="in">`fold`</span> is a section of <span class="in">`unfold`</span>.</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThReflexiveGraph — Identity Edges</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Edge</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   id : Vertex → Edge</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="in">       src : Edge → Vertex</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt : Edge → Vertex</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="in">Eqs:   src(id(v)) = v</span></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt(id(v)) = v</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `Name` Type</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-gat/src/ident.rs`</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">`Name`</span> wraps <span class="in">`Arc&lt;str&gt;`</span> with a pointer-equality fast path:</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>pub struct <span class="fu">Name</span>(pub Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>);</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>Equality checks use <span class="in">`Arc::ptr_eq`</span> first (single pointer comparison), falling back to string comparison only on pointer mismatch. In the restrict hot path, both sides typically originate from the same schema construction, so the fast path hits frequently.</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>Key trait implementations:</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Deref&lt;Target=str&gt;`</span> and <span class="in">`Borrow&lt;str&gt;`</span>: <span class="in">`HashMap&lt;Name, V&gt;::get("string_literal")`</span> works</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`From&lt;String&gt;`</span>, <span class="in">`From&lt;&amp;str&gt;`</span>: zero-friction conversion from string types</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Default`</span>: empty string</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`serde::Serialize/Deserialize`</span>: transparent (serializes as a plain string)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>**Performance impact on `wtype_restrict`**:</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`surviving_verts.contains(&amp;node.anchor)`</span>: same hash cost, gains <span class="in">`Arc::ptr_eq`</span> fast path on equality</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`node.anchor.clone()`</span>: <span class="in">`Arc::clone`</span> (atomic refcount bump) instead of heap allocation</span>
 <span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`id(v) : Edge`</span>, <span class="in">`src(id(v)) : Vertex`</span>, <span class="in">`v : Vertex`</span>. Both sides: Vertex. ✓</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## `NameSite` and `SiteRename`</span></span>
 <span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>Without the equations, this is just ThGraph + an extra operation. The equations make the identity edge load-bearing.</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-gat/src/ident.rs`</span></span>
 <span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThSymmetricGraph — Involution</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>All 9 naming sites in panproto are unified under the <span class="in">`NameSite`</span> enum:</span>
 <span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Edge</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   inv : Edge → Edge</span></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">       src : Edge → Vertex</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt : Edge → Vertex</span></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="in">Eqs:   src(inv(e)) = tgt(e)</span></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="in">       tgt(inv(e)) = src(e)</span></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="in">       inv(inv(e)) = e</span></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>pub enum NameSite {</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    EdgeLabel, VertexId, VertexKind, EdgeKind,</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    Nsid, ConstraintSort, InstanceAnchor,</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    TheoryName, SortName,</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="in">`SiteRename { site, old, new }`</span> is a site-qualified rename operation. These are stored in <span class="in">`SchemaMorphism`</span> provenance and <span class="in">`CommitObject`</span> rename metadata.</span>
 <span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>Type checks:</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## `TheoryMorphism.induce_schema_renames()`</span></span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`src(inv(e)) : Vertex`</span>, <span class="in">`tgt(e) : Vertex`</span> ✓</span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`inv(inv(e)) : Edge`</span>, <span class="in">`e : Edge`</span> ✓</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThCoproduct — Variant Retraction</span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Variant, Tag</span></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   injection : Variant → Vertex</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="in">       tag : Variant → Tag</span></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="in">       variant_of : Vertex → Variant</span></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    variant_of(injection(v)) = v</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-gat/src/morphism.rs`</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>A theory morphism <span class="in">`F: T1 → T2`</span> with <span class="in">`sort_map`</span> and <span class="in">`op_map`</span> induces schema-level renames:</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Each <span class="in">`sort_map`</span> entry where <span class="in">`old ≠ new`</span> becomes a <span class="in">`NameSite::VertexKind`</span> rename</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Each <span class="in">`op_map`</span> entry where <span class="in">`old ≠ new`</span> becomes a <span class="in">`NameSite::EdgeKind`</span> rename</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>This is analogous to <span class="in">`GATlab`</span>'s <span class="in">`SimpleTheoryMap`</span>, which maps type and term constructors between theories while preserving structural equivalence.</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## `SchemaMorphism`</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-schema/src/morphism.rs`</span></span>
 <span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`injection(v) : Vertex`</span>, <span class="in">`variant_of(injection(v)) : Variant`</span>, <span class="in">`v : Variant`</span>. Both sides: Variant. ✓</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>An explicit schema morphism (functor F: S → T):</span>
 <span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### ThPartial — Definedness Witness</span></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="in">Sorts: Vertex, Defined</span></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="in">Ops:   defined : Vertex → Defined</span></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="in">       witness : Defined → Vertex</span></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="in">Eq:    defined(witness(d)) = d</span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>Type check: <span class="in">`witness(d) : Vertex`</span>, <span class="in">`defined(witness(d)) : Defined`</span>, <span class="in">`d : Defined`</span>. Both sides: Defined. ✓</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>pub struct SchemaMorphism {</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>    pub name<span class="sc">:</span> String,</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>    pub src_protocol<span class="sc">:</span> String,</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>    pub tgt_protocol<span class="sc">:</span> String,</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>    pub vertex_map<span class="sc">:</span> HashMap<span class="sc">&lt;</span>Name, Name<span class="sc">&gt;</span>,</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>    pub edge_map<span class="sc">:</span> HashMap<span class="sc">&lt;</span>Edge, Edge<span class="sc">&gt;</span>,</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>    pub renames<span class="sc">:</span> Vec<span class="sc">&lt;</span>SiteRename<span class="sc">&gt;</span>,  <span class="sc">/</span><span class="er">/</span> provenance</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## All 27 Theories (Complete List)</span></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>Composition via <span class="in">`m1.compose(&amp;m2)`</span> chains vertex/edge maps and concatenates renames. This makes the category structure of schema transformations explicit, enabling transitive composition of cross-protocol translations.</span>
 <span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema shapes (6)</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Cascade Module</span></span>
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> ThGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> src, tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> ThSimpleGraph <span class="pp">|</span> Vertex, Edge(s:V,t:V) <span class="pp">|</span> src, tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> ThHypergraph <span class="pp">|</span> Vertex, HyperEdge, Label <span class="pp">|</span> incident, parent_label <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> ThReflexiveGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> id, src, tgt <span class="pp">|</span> 2 <span class="pp">|</span></span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> ThSymmetricGraph <span class="pp">|</span> Vertex, Edge <span class="pp">|</span> inv, src, tgt <span class="pp">|</span> 3 <span class="pp">|</span></span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6 <span class="pp">|</span> ThPetriNet <span class="pp">|</span> Place, Transition, Token <span class="pp">|</span> pre, post, marking <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema modifiers (8)</span></span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 7 <span class="pp">|</span> ThConstraint <span class="pp">|</span> Vertex, Constraint(v:V) <span class="pp">|</span> target <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8 <span class="pp">|</span> ThMulti <span class="pp">|</span> Vertex, Edge, EdgeLabel <span class="pp">|</span> edge_label <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9 <span class="pp">|</span> ThInterface <span class="pp">|</span> Vertex, Interface <span class="pp">|</span> implements <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10 <span class="pp">|</span> ThOrder <span class="pp">|</span> Edge, Position <span class="pp">|</span> edge_position, succ <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 11 <span class="pp">|</span> ThCoproduct <span class="pp">|</span> Vertex, Variant, Tag <span class="pp">|</span> injection, tag, variant_of <span class="pp">|</span> 1 <span class="pp">|</span></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 12 <span class="pp">|</span> ThRecursion <span class="pp">|</span> Vertex, Mu <span class="pp">|</span> unfold, fold <span class="pp">|</span> 1 <span class="pp">|</span></span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 13 <span class="pp">|</span> ThPartial <span class="pp">|</span> Vertex, Defined <span class="pp">|</span> defined, witness <span class="pp">|</span> 1 <span class="pp">|</span></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14 <span class="pp">|</span> ThLinear <span class="pp">|</span> Edge, Usage <span class="pp">|</span> use_count <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema structural (4)</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 15 <span class="pp">|</span> ThNominal <span class="pp">|</span> Vertex, Name <span class="pp">|</span> name <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 16 <span class="pp">|</span> ThSpan <span class="pp">|</span> Vertex, Span <span class="pp">|</span> span_left, span_right <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 17 <span class="pp">|</span> ThCospan <span class="pp">|</span> Vertex, Apex <span class="pp">|</span> inl, inr <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 18 <span class="pp">|</span> ThOperad <span class="pp">|</span> Color, MOperation <span class="pp">|</span> arity, op_output <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### Instance (6)</span></span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 19 <span class="pp">|</span> ThWType <span class="pp">|</span> Node, Arc, Value <span class="pp">|</span> anchor, arc_src, arc_tgt, arc_edge, node_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> ThFunctor <span class="pp">|</span> Table, Row, ForeignKey <span class="pp">|</span> table_vertex, fk_src, fk_tgt <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 21 <span class="pp">|</span> ThFlat <span class="pp">|</span> Node, Field, Value <span class="pp">|</span> field_node, field_value, node_anchor <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 22 <span class="pp">|</span> ThGraphInstance <span class="pp">|</span> IVertex, IEdge, Value, Vertex, Edge <span class="pp">|</span> i_src, i_tgt, iv_anchor, ie_anchor, iv_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 23 <span class="pp">|</span> ThAnnotation <span class="pp">|</span> Vertex, Annotation, AnnotationKey, Value <span class="pp">|</span> annotated, ann_key, ann_value <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 24 <span class="pp">|</span> ThCausal <span class="pp">|</span> Event, Timestamp, Before(e1,e2) <span class="pp">|</span> time, before_refl, before_trans <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Architectural (3)</span></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> # <span class="pp">|</span> Name <span class="pp">|</span> Sorts <span class="pp">|</span> Ops <span class="pp">|</span> Eqs <span class="pp">|</span></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|------|-------|-----|-----|</span></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 25 <span class="pp">|</span> ThTracedMonoidal <span class="pp">|</span> Wire, Box <span class="pp">|</span> trace_in, trace_out, feedback <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 26 <span class="pp">|</span> ThSimplicial <span class="pp">|</span> Simplex, Face, Degeneracy <span class="pp">|</span> face_map, degeneracy_map <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 27 <span class="pp">|</span> ThMeta <span class="pp">|</span> Node, Discriminator, ExtraField <span class="pp">|</span> discriminator, extra_field <span class="pp">|</span> 0 <span class="pp">|</span></span>
-<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Groups</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Group <span class="pp">|</span> Schema composition <span class="pp">|</span> Instance <span class="pp">|</span> Protocols <span class="pp">|</span></span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> WType <span class="pp">|</span> 30 <span class="pp">|</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> B <span class="pp">|</span> colimit(Hypergraph, Constraint) <span class="pp">|</span> Functor <span class="pp">|</span> 11 <span class="pp">|</span></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> C <span class="pp">|</span> colimit(SimpleGraph, Constraint) <span class="pp">|</span> Flat <span class="pp">|</span> 9 <span class="pp">|</span></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> D <span class="pp">|</span> colimit(Graph, Constraint, Multi, Interface) <span class="pp">|</span> WType <span class="pp">|</span> 16 <span class="pp">|</span></span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> E <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> colimit(WType, Meta) <span class="pp">|</span> 9 <span class="pp">|</span></span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> F <span class="pp">|</span> colimit(Graph, Constraint, Multi) <span class="pp">|</span> GraphInstance <span class="pp">|</span> 1 <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-mig/src/cascade.rs`</span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>The morphism tower connects three levels:</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="in">Theory morphism  ──induce_schema_morphism──→  Schema morphism</span></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="in">                                                    │</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="in">                                          induce_data_migration</span></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="in">                                                    │</span></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="in">                                                    ▼</span></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="in">                                            CompiledMigration</span></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`induce_schema_morphism(theory_morph, src_schema)`</span>: Applies sort/op renames to produce a <span class="in">`SchemaMorphism`</span></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`induce_data_migration(schema_morph, tgt_schema)`</span>: Lowers to <span class="in">`CompiledMigration`</span> for the restrict pipeline</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`induce_migration_from_theory(theory_morph, src, tgt)`</span>: Convenience function chaining both</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>This implements the functorial action from @spivak2012: a schema morphism F induces the pullback functor <span class="in">`Δ_F`</span> on instances.</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## New Combinators</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/combinators.rs`</span></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>Seven new combinator variants complement the original six:</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Combinator <span class="pp">|</span> Site <span class="pp">|</span> Lossless? <span class="pp">|</span> Notes <span class="pp">|</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|------|-----------|-------|</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameVertex`</span> <span class="pp">|</span> <span class="in">`VertexId`</span> <span class="pp">|</span> Yes <span class="pp">|</span> Cascades to edges, constraints, variants <span class="pp">|</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameKind`</span> <span class="pp">|</span> <span class="in">`VertexKind`</span> <span class="pp">|</span> Yes <span class="pp">|</span> Fine-grained (single vertex) <span class="pp">|</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameEdgeKind`</span> <span class="pp">|</span> <span class="in">`EdgeKind`</span> <span class="pp">|</span> Yes <span class="pp">|</span> All edges with matching kind <span class="pp">|</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameNsid`</span> <span class="pp">|</span> <span class="in">`Nsid`</span> <span class="pp">|</span> Yes <span class="pp">|</span> Single vertex <span class="pp">|</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameConstraintSort`</span> <span class="pp">|</span> <span class="in">`ConstraintSort`</span> <span class="pp">|</span> Yes <span class="pp">|</span> All constraints <span class="pp">|</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ApplyTheoryMorphism`</span> <span class="pp">|</span> Multiple <span class="pp">|</span> Yes <span class="pp">|</span> Top of the morphism tower <span class="pp">|</span></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Rename`</span> <span class="pp">|</span> Any <span class="pp">|</span> Yes <span class="pp">|</span> Unified dispatcher <span class="pp">|</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>Each combinator has a corresponding <span class="in">`apply_*`</span> function and <span class="in">`build_compiled_migration`</span> arm. All are lossless (empty complement), so the lens laws hold trivially.</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS Rename Detection</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/rename_detect.rs`</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="fu">### Algorithm</span></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>When comparing old and new schemas:</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Collect removed vertices (in old, not in new) and added vertices (in new, not in old)</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each (removed, added) pair, compute structural similarity score:</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same vertex kind: +0.3</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same outgoing edge names: +0.3</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same incoming edge names: +0.2</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Edit distance of names ≤ 3: +0.2</span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Greedy bipartite matching: take highest-scoring pairs first</span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Return pairs ≥ threshold (default 0.5)</span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="fu">### Integration</span></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a>Detected renames are stored in <span class="in">`CommitObject.renames`</span> as <span class="in">`Vec&lt;SiteRename&gt;`</span>. The <span class="in">`schema diff --detect-renames`</span> CLI command exposes rename detection.</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Path: `String` → `Name`</span></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>The core types (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Schema`</span>, <span class="in">`Node`</span>, <span class="in">`CompiledMigration`</span>, <span class="in">`Migration`</span>) use <span class="in">`Name`</span> for all identifier and label fields. <span class="in">`Constraint.value`</span> and <span class="in">`Schema.protocol`</span> remain <span class="in">`String`</span> since they are literal data, not identifiers.</span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaBuilder`</span> API still accepts <span class="in">`&amp;str`</span> parameters, converting to <span class="in">`Name`</span> internally. Protocol parsers required no changes.</span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>**Performance**: Benchmarks show no regression from the <span class="in">`String`</span> → <span class="in">`Name`</span> migration. The <span class="in">`Arc::clone`</span> fast path eliminates heap allocations in the restrict pipeline's inner loop.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/22-building-blocks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/23-naming-identity.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

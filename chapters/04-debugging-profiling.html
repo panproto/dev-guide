@@ -459,6 +459,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -473,19 +479,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -502,7 +508,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -519,19 +525,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -634,11 +652,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="4.2" class="anchored" data-anchor-id="stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</h2>
 <p>The restrict pipeline in <code>panproto-inst</code> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</p>
 <ol type="1">
-<li><p><strong><code>compute_surviving_set()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</p></li>
-<li><p><strong><code>anchor_nodes()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Assigns surviving nodes to their new positions in the target schema. If nodes appear at wrong vertices, the anchor computation is the place to look.</p></li>
-<li><p><strong><code>contract_ancestors()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</p></li>
-<li><p><strong><code>resolve_edges()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Rewires edges according to the compiled migration’s edge remap. If edges point to wrong targets, inspect the resolver.</p></li>
-<li><p><strong><code>reconstruct_fans()</code></strong> in <code>crates/panproto-inst/src/fan.rs</code> — Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</p></li>
+<li><p><strong><code>anchor_surviving()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</p></li>
+<li><p><strong><code>reachable_from_root()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — BFS from root through anchor-surviving nodes. If nodes appear unreachable despite surviving, the reachability check is the place to look.</p></li>
+<li><p><strong><code>ancestor_contraction()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</p></li>
+<li><p><strong><code>resolve_edge()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Rewires edges according to the compiled migration’s edge remap. If edges point to wrong targets, inspect the resolver.</p></li>
+<li><p><strong><code>reconstruct_fans()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</p></li>
 </ol>
 <p>Set <code>RUST_LOG=panproto_inst=debug</code> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</p>
 </section>
@@ -739,7 +757,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="migration-compiles-but-lift-returns-wrong-data" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="migration-compiles-but-lift-returns-wrong-data"><span class="header-section-number">4.5.1</span> Migration compiles but lift returns wrong data</h3>
 <ol type="1">
-<li><strong>Check the surviving set.</strong> Run with <code>RUST_LOG=panproto_inst=debug</code> and look at the <code>compute_surviving_set</code> output. Are all expected nodes present?</li>
+<li><strong>Check the surviving set.</strong> Run with <code>RUST_LOG=panproto_inst=debug</code> and look at the <code>anchor_surviving</code> output. Are all expected nodes present?</li>
 <li><strong>Inspect the vertex remap.</strong> Print the compiled migration’s <code>vertex_remap</code> field. Does every source vertex map to the correct target vertex?</li>
 <li><strong>Trace the lift.</strong> The lift reconstructs source-schema data from a target instance. If it produces wrong values, the resolver functions in the compiled migration may be incorrect.</li>
 </ol>
@@ -1375,15 +1393,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>The restrict pipeline in <span class="in">`panproto-inst`</span> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`compute_surviving_set()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`anchor_surviving()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</span>
 <span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`anchor_nodes()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Assigns surviving nodes to their new positions in the target schema. If nodes appear at wrong vertices, the anchor computation is the place to look.</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`reachable_from_root()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- BFS from root through anchor-surviving nodes. If nodes appear unreachable despite surviving, the reachability check is the place to look.</span>
 <span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`contract_ancestors()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`ancestor_contraction()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</span>
 <span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**`resolve_edges()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Rewires edges according to the compiled migration's edge remap. If edges point to wrong targets, inspect the resolver.</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**`resolve_edge()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Rewires edges according to the compiled migration's edge remap. If edges point to wrong targets, inspect the resolver.</span>
 <span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`reconstruct_fans()`** in <span class="in">`crates/panproto-inst/src/fan.rs`</span> --- Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`reconstruct_fans()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</span>
 <span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`RUST_LOG=panproto_inst=debug`</span> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</span>
 <span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>
@@ -1467,7 +1485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Migration compiles but lift returns wrong data</span></span>
 <span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check the surviving set.** Run with <span class="in">`RUST_LOG=panproto_inst=debug`</span> and look at the <span class="in">`compute_surviving_set`</span> output. Are all expected nodes present?</span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Check the surviving set.** Run with <span class="in">`RUST_LOG=panproto_inst=debug`</span> and look at the <span class="in">`anchor_surviving`</span> output. Are all expected nodes present?</span>
 <span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Inspect the vertex remap.** Print the compiled migration's <span class="in">`vertex_remap`</span> field. Does every source vertex map to the correct target vertex?</span>
 <span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trace the lift.** The lift reconstructs source-schema data from a target instance. If it produces wrong values, the resolver functions in the compiled migration may be incorrect.</span>
 <span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a></span>

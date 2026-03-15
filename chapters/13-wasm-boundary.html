@@ -463,6 +463,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -477,19 +483,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -506,7 +512,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -523,19 +529,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -615,72 +633,77 @@ Tip
 <section id="the-resource-enum-and-slab-allocator" class="level2" data-number="13.2">
 <h2 data-number="13.2" class="anchored" data-anchor-id="the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The Resource Enum and Slab Allocator</h2>
 <p>All WASM-side resources are stored in a thread-local <code>Vec&lt;Option&lt;Resource&gt;&gt;</code>. Each resource is one of four variants:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="15"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 14;"><span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">/// A resource stored in the slab.</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Resource <span class="op">{</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protocol specification.</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A built schema.</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    Schema(<span class="dt">Box</span><span class="op">&lt;</span>Schema<span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration ready for per-record application.</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration bundled with its source and target schemas,</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// needed for lens put operations and accurate schema reconstruction.</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    MigrationWithSchemas <span class="op">{</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The compiled migration.</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The source schema (pre-migration).</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        src_schema<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The target schema (post-migration).</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        tgt_schema<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="pp">thread_local!</span> <span class="op">{</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">static</span> SLAB<span class="op">:</span> RefCell<span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span>Resource<span class="op">&gt;&gt;&gt;</span> <span class="op">=</span> <span class="kw">const</span> <span class="op">{</span> <span class="pp">RefCell::</span>new(<span class="dt">Vec</span><span class="pp">::</span>new()) <span class="op">};</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">/// Allocate a resource in the slab and return its handle.</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>cast_possible_truncation<span class="at">)]</span> <span class="co">// Handles are u32; exceeding 4B resources is not realistic.</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> alloc(resource<span class="op">:</span> Resource) <span class="op">-&gt;</span> <span class="dt">u32</span> <span class="op">{</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    SLAB<span class="op">.</span>with_borrow_mut(<span class="op">|</span>slab<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Try to reuse a freed slot.</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i<span class="op">,</span> slot) <span class="kw">in</span> slab<span class="op">.</span>iter_mut()<span class="op">.</span>enumerate() <span class="op">{</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> slot<span class="op">.</span>is_none() <span class="op">{</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>slot <span class="op">=</span> <span class="cn">Some</span>(resource)<span class="op">;</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> i <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        <span class="co">// No free slot; push a new one.</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> handle <span class="op">=</span> slab<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        slab<span class="op">.</span>push(<span class="cn">Some</span>(resource))<span class="op">;</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        handle</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="15"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 14;"><span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">wasm_bindgen::</span>JsError<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::error::</span>WasmError<span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// A resource stored in the slab.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// Schemas are stored behind `Arc` so that `MigrationWithSchemas`</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// can share ownership without deep-cloning on every `lift_record`</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// or `get_record` call.</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Resource <span class="op">{</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protocol specification.</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A built schema.</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    Schema(Arc<span class="op">&lt;</span>Schema<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration ready for per-record application.</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration bundled with its source and target schemas,</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// needed for lens put operations and accurate schema reconstruction.</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    MigrationWithSchemas <span class="op">{</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The compiled migration.</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The source schema (pre-migration).</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        src_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The target schema (post-migration).</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        tgt_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// An I/O protocol registry with all 77 protocol codecs.</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    IoRegistry(<span class="dt">Box</span><span class="op">&lt;</span>ProtocolRegistry<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A GAT theory.</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    Theory(<span class="dt">Box</span><span class="op">&lt;</span>Theory<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A VCS in-memory repository.</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    VcsRepo(<span class="dt">Box</span><span class="op">&lt;</span>MemStore<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="pp">thread_local!</span> <span class="op">{</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">static</span> SLAB<span class="op">:</span> RefCell<span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span>Resource<span class="op">&gt;&gt;&gt;</span> <span class="op">=</span> <span class="kw">const</span> <span class="op">{</span> <span class="pp">RefCell::</span>new(<span class="dt">Vec</span><span class="pp">::</span>new()) <span class="op">};</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">/// Allocate a resource in the slab and return its handle.</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>cast_possible_truncation<span class="at">)]</span> <span class="co">// Handles are u32; exceeding 4B resources is not realistic.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> alloc(resource<span class="op">:</span> Resource) <span class="op">-&gt;</span> <span class="dt">u32</span> <span class="op">{</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    SLAB<span class="op">.</span>with_borrow_mut(<span class="op">|</span>slab<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Try to reuse a freed slot.</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i<span class="op">,</span> slot) <span class="kw">in</span> slab<span class="op">.</span>iter_mut()<span class="op">.</span>enumerate() <span class="op">{</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> slot<span class="op">.</span>is_none() <span class="op">{</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>slot <span class="op">=</span> <span class="cn">Some</span>(resource)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>Resource</code> enum captures the three fundamental types (protocol, schema, compiled migration) plus a fourth variant (<code>MigrationWithSchemas</code>) that bundles a compiled migration with its source and target schemas – needed for lens <code>get</code>/<code>put</code> operations.</p>
 <p>The <code>alloc</code> function scans for a freed slot before appending, so handle values are reused. Handles are <code>u32</code> indices, which means the slab can hold up to 4 billion simultaneous resources – more than sufficient for any realistic workload.</p>
 </section>
 <section id="the-with_resource-pattern" class="level2" data-number="13.3">
 <h2 data-number="13.3" class="anchored" data-anchor-id="the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> Pattern</h2>
 <p>Accessing a resource requires borrowing the thread-local slab. The <code>with_resource</code> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="57"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 56;"><span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">/// Access a resource by handle, returning an error if the handle is</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co">/// invalid or the slot is empty.</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="co">/// The callback `f` receives a reference to the resource. The borrow</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">/// is released when the callback returns, so the reference must not</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">/// escape.</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> with_resource<span class="op">&lt;</span>T<span class="op">&gt;</span>(</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    handle<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    f<span class="op">:</span> <span class="kw">impl</span> <span class="bu">FnOnce</span>(<span class="op">&amp;</span>Resource) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> WasmError<span class="op">&gt;,</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    SLAB<span class="op">.</span>with_borrow(<span class="op">|</span>slab<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> idx <span class="op">=</span> handle <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> resource <span class="op">=</span> slab</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>get(idx)</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>and_then(<span class="dt">Option</span><span class="pp">::</span>as_ref)</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>ok_or(<span class="pp">WasmError::</span>InvalidHandle <span class="op">{</span> handle <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>        f(resource)<span class="op">.</span>map_err(<span class="bu">Into</span><span class="pp">::</span>into)</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="62"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 61;"><span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">// No free slot; push a new one.</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> handle <span class="op">=</span> slab<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        slab<span class="op">.</span>push(<span class="cn">Some</span>(resource))<span class="op">;</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>        handle</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">/// Access a resource by handle, returning an error if the handle is</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">/// invalid or the slot is empty.</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">/// The callback `f` receives a reference to the resource. The borrow</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">/// is released when the callback returns, so the reference must not</span></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="co">/// escape.</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> with_resource<span class="op">&lt;</span>T<span class="op">&gt;</span>(</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    handle<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    f<span class="op">:</span> <span class="kw">impl</span> <span class="bu">FnOnce</span>(<span class="op">&amp;</span>Resource) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> WasmError<span class="op">&gt;,</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <code>RefCell</code> rules). The callback-based API makes it structurally impossible.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -699,63 +722,63 @@ Note
 <section id="the-buildop-tagged-enum" class="level2" data-number="13.4">
 <h2 data-number="13.4" class="anchored" data-anchor-id="the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>BuildOp</code> Tagged Enum</h2>
 <p>Schema construction operations are sent from JS as a MessagePack-encoded <code>Vec&lt;BuildOp&gt;</code>. The <code>BuildOp</code> enum uses serde’s internally-tagged representation (<code>#[serde(tag = "op")]</code>), so each operation is a flat object with an <code>op</code> discriminant:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="23"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 22;"><span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// A serializable builder operation for constructing schemas.</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>serde<span class="at">(</span>tag <span class="op">=</span> <span class="st">"op"</span><span class="at">)]</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> BuildOp <span class="op">{</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a vertex.</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"vertex"</span><span class="at">)]</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    Vertex <span class="op">{</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex identifier.</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex kind.</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Optional NSID.</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        nsid<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a binary edge.</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"edge"</span><span class="at">)]</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    Edge <span class="op">{</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Source vertex ID.</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        src<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Target vertex ID.</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        tgt<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Edge kind.</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Optional edge label.</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a constraint.</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"constraint"</span><span class="at">)]</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    Constraint <span class="op">{</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex ID.</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        vertex<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Constraint sort.</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Constraint value.</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        value<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a hyper-edge connecting multiple vertices via labeled positions.</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"hyper_edge"</span><span class="at">)]</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    HyperEdge <span class="op">{</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Hyper-edge identifier.</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Hyper-edge kind.</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Maps label names to vertex IDs.</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        signature<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The label that identifies the parent vertex.</span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        parent<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Declare required edges for a vertex.</span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"required"</span><span class="at">)]</span></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    Required <span class="op">{</span></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The vertex that owns the requirement.</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>        vertex<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The edges that are required.</span></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="pp">panproto_core::schema::</span>Edge<span class="op">&gt;,</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="23"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 22;"><span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::error::</span>WasmError<span class="op">;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::slab::</span><span class="op">{</span><span class="kw">self</span><span class="op">,</span> Resource<span class="op">};</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// A serializable builder operation for constructing schemas.</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>serde<span class="at">(</span>tag <span class="op">=</span> <span class="st">"op"</span><span class="at">)]</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> BuildOp <span class="op">{</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a vertex.</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"vertex"</span><span class="at">)]</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    Vertex <span class="op">{</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex identifier.</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex kind.</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Optional NSID.</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        nsid<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a binary edge.</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"edge"</span><span class="at">)]</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    Edge <span class="op">{</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Source vertex ID.</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        src<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Target vertex ID.</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        tgt<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Edge kind.</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Optional edge label.</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a constraint.</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"constraint"</span><span class="at">)]</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    Constraint <span class="op">{</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Vertex ID.</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        vertex<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Constraint sort.</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Constraint value.</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>        value<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a hyper-edge connecting multiple vertices via labeled positions.</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"hyper_edge"</span><span class="at">)]</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    HyperEdge <span class="op">{</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Hyper-edge identifier.</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        id<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Hyper-edge kind.</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Maps label names to vertex IDs.</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        signature<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The label that identifies the parent vertex.</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        parent<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Declare required edges for a vertex.</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>rename <span class="op">=</span> <span class="st">"required"</span><span class="at">)]</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    Required <span class="op">{</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The vertex that owns the requirement.</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        vertex<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The edges that are required.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The five variants (<code>Vertex</code>, <code>Edge</code>, <code>Constraint</code>, <code>HyperEdge</code>, <code>Required</code>) mirror the <code>SchemaBuilder</code> methods in <code>panproto-schema</code>. The TypeScript SDK constructs these as plain objects and encodes them with <code>@msgpack/msgpack</code>.</p>
 </section>
 <section id="entry-points" class="level2" data-number="13.5">
@@ -763,98 +786,98 @@ Note
 <section id="define_protocol" class="level3" data-number="13.5.1">
 <h3 data-number="13.5.1" class="anchored" data-anchor-id="define_protocol"><span class="header-section-number">13.5.1</span> <code>define_protocol</code></h3>
 <p>Registers a protocol specification and returns a handle:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="81"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 80;"><span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="co">/// Register a protocol specification and return a handle.</span></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `spec` bytes are MessagePack-encoded `Protocol` data.</span></span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `JsError` if deserialization fails.</span></span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> define_protocol(spec<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol<span class="op">:</span> <span class="pp">panproto_core::schema::</span>Protocol <span class="op">=</span></span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>        <span class="pp">rmp_serde::</span>from_slice(spec)<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>DeserializationFailed <span class="op">{</span></span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Protocol(protocol)))</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="81"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 80;"><span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co">/// Register a protocol specification and return a handle.</span></span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `spec` bytes are MessagePack-encoded `Protocol` data.</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `JsError` if deserialization fails.</span></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> define_protocol(spec<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol<span class="op">:</span> <span class="pp">panproto_core::schema::</span>Protocol <span class="op">=</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        <span class="pp">rmp_serde::</span>from_slice(spec)<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>DeserializationFailed <span class="op">{</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The pattern is representative of all entry points: deserialize MessagePack input with <code>rmp_serde::from_slice</code>, perform the operation, allocate the result in the slab, and return the handle.</p>
 </section>
 <section id="build_schema" class="level3" data-number="13.5.2">
 <h3 data-number="13.5.2" class="anchored" data-anchor-id="build_schema"><span class="header-section-number">13.5.2</span> <code>build_schema</code></h3>
 <p>The most complex entry point. It takes a protocol handle and a <code>Vec&lt;BuildOp&gt;</code>, replays the operations through <code>SchemaBuilder</code>, and returns a schema handle:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="97"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 96;"><span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a><span class="co">/// Build a schema from a protocol handle and `MessagePack`-encoded</span></span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="co">/// builder operations.</span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `ops` bytes are a `MessagePack`-encoded `Vec&lt;BuildOp&gt;`.</span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `JsError` if the protocol handle is invalid, ops cannot</span></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="co">/// be deserialized, or schema building fails.</span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> build_schema(proto<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> ops<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol <span class="op">=</span> <span class="pp">slab::</span>with_resource(proto<span class="op">,</span> <span class="op">|</span>r<span class="op">|</span> <span class="cn">Ok</span>(<span class="pp">slab::</span>as_protocol(r)<span class="op">?.</span>clone()))<span class="op">?;</span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> operations<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>BuildOp<span class="op">&gt;</span> <span class="op">=</span></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>        <span class="pp">rmp_serde::</span>from_slice(ops)<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>DeserializationFailed <span class="op">{</span></span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> builder <span class="op">=</span> <span class="pp">SchemaBuilder::</span>new(<span class="op">&amp;</span>protocol)<span class="op">;</span></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> op <span class="kw">in</span> operations <span class="op">{</span></span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> op <span class="op">{</span></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Vertex <span class="op">{</span> id<span class="op">,</span> kind<span class="op">,</span> nsid <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>vertex(<span class="op">&amp;</span>id<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> nsid<span class="op">.</span>as_deref())<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Edge <span class="op">{</span></span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>                src<span class="op">,</span></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>                tgt<span class="op">,</span></span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>                kind<span class="op">,</span></span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>                name<span class="op">,</span></span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>edge(<span class="op">&amp;</span>src<span class="op">,</span> <span class="op">&amp;</span>tgt<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> name<span class="op">.</span>as_deref())</span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Constraint <span class="op">{</span></span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>                vertex<span class="op">,</span></span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>                sort<span class="op">,</span></span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>                value<span class="op">,</span></span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>constraint(<span class="op">&amp;</span>vertex<span class="op">,</span> <span class="op">&amp;</span>sort<span class="op">,</span> <span class="op">&amp;</span>value)<span class="op">;</span></span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>HyperEdge <span class="op">{</span></span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>                id<span class="op">,</span></span>
-<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>                kind<span class="op">,</span></span>
-<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>                signature<span class="op">,</span></span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">,</span></span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder</span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>hyper_edge(<span class="op">&amp;</span>id<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> signature<span class="op">,</span> <span class="op">&amp;</span>parent)</span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Required <span class="op">{</span> vertex<span class="op">,</span> edges <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>required(<span class="op">&amp;</span>vertex<span class="op">,</span> edges)<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="97"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 96;"><span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Protocol(protocol)))</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co">/// Build a schema from a protocol handle and `MessagePack`-encoded</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co">/// builder operations.</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `ops` bytes are a `MessagePack`-encoded `Vec&lt;BuildOp&gt;`.</span></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `JsError` if the protocol handle is invalid, ops cannot</span></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="co">/// be deserialized, or schema building fails.</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> build_schema(proto<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span> ops<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol <span class="op">=</span> <span class="pp">slab::</span>with_resource(proto<span class="op">,</span> <span class="op">|</span>r<span class="op">|</span> <span class="cn">Ok</span>(<span class="pp">slab::</span>as_protocol(r)<span class="op">?.</span>clone()))<span class="op">?;</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> operations<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>BuildOp<span class="op">&gt;</span> <span class="op">=</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>        <span class="pp">rmp_serde::</span>from_slice(ops)<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>DeserializationFailed <span class="op">{</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> builder <span class="op">=</span> <span class="pp">SchemaBuilder::</span>new(<span class="op">&amp;</span>protocol)<span class="op">;</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> op <span class="kw">in</span> operations <span class="op">{</span></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> op <span class="op">{</span></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Vertex <span class="op">{</span> id<span class="op">,</span> kind<span class="op">,</span> nsid <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>vertex(<span class="op">&amp;</span>id<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> nsid<span class="op">.</span>as_deref())<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Edge <span class="op">{</span></span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>                src<span class="op">,</span></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>                tgt<span class="op">,</span></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>                kind<span class="op">,</span></span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>                name<span class="op">,</span></span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>edge(<span class="op">&amp;</span>src<span class="op">,</span> <span class="op">&amp;</span>tgt<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> name<span class="op">.</span>as_deref())</span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Constraint <span class="op">{</span></span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>                vertex<span class="op">,</span></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>                sort<span class="op">,</span></span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>                value<span class="op">,</span></span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>constraint(<span class="op">&amp;</span>vertex<span class="op">,</span> <span class="op">&amp;</span>sort<span class="op">,</span> <span class="op">&amp;</span>value)<span class="op">;</span></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>HyperEdge <span class="op">{</span></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>                id<span class="op">,</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>                kind<span class="op">,</span></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>                signature<span class="op">,</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">,</span></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>hyper_edge(<span class="op">&amp;</span>id<span class="op">,</span> <span class="op">&amp;</span>kind<span class="op">,</span> signature<span class="op">,</span> <span class="op">&amp;</span>parent)</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>                        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>                    <span class="op">}</span>)<span class="op">?;</span></span>
 <span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> schema <span class="op">=</span> builder<span class="op">.</span>build()<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">?;</span></span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(<span class="dt">Box</span><span class="pp">::</span>new(schema))))</span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>            <span class="pp">BuildOp::</span>Required <span class="op">{</span> vertex<span class="op">,</span> edges <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>                builder <span class="op">=</span> builder<span class="op">.</span>required(<span class="op">&amp;</span>vertex<span class="op">,</span> edges)<span class="op">;</span></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> schema <span class="op">=</span> builder<span class="op">.</span>build()<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="all-ten-entry-points" class="level3" data-number="13.5.3">
 <h3 data-number="13.5.3" class="anchored" data-anchor-id="all-ten-entry-points"><span class="header-section-number">13.5.3</span> All Ten Entry Points</h3>
@@ -1533,7 +1556,7 @@ Tip
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>All WASM-side resources are stored in a thread-local <span class="in">`Vec&lt;Option&lt;Resource&gt;&gt;`</span>. Each resource is one of four variants:</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=15 end-line=55}</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=15 end-line=60}</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Resource`</span> enum captures the three fundamental types (protocol, schema, compiled migration) plus a fourth variant (<span class="in">`MigrationWithSchemas`</span>) that bundles a compiled migration with its source and target schemas -- needed for lens <span class="in">`get`</span>/<span class="in">`put`</span> operations.</span>
@@ -1544,7 +1567,7 @@ Tip
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>Accessing a resource requires borrowing the thread-local slab. The <span class="in">`with_resource`</span> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=57 end-line=75}</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=62 end-line=80}</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <span class="in">`RefCell`</span> rules). The callback-based API makes it structurally impossible.</span>

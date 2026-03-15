@@ -482,6 +482,12 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -496,19 +502,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -525,7 +531,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -542,19 +548,31 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -651,25 +669,25 @@ Note
 <section id="compiledmigration" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="compiledmigration"><span class="header-section-number">8.2</span> CompiledMigration</h2>
 <p>The <code>CompiledMigration</code> struct is the bridge between <code>panproto-mig</code> (which compiles migration specifications) and <code>panproto-inst</code> (which executes them). It contains all the information the restrict pipeline needs to project an instance from the source schema to the target schema.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="24"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 23;"><span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// A compiled migration specification (minimal version for panproto-inst).</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// The full `CompiledMigration` lives in `panproto-mig`. This type provides</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// the subset of fields that `wtype_restrict` and `functor_restrict` need.</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CompiledMigration <span class="op">{</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertices that survive the migration.</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> surviving_verts<span class="op">:</span> HashSet<span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edges that survive the migration.</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> surviving_edges<span class="op">:</span> HashSet<span class="op">&lt;</span>Edge<span class="op">&gt;,</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertex remapping: source vertex ID to target vertex ID.</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertex_remap<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edge remapping: source edge to target edge.</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_remap<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Binary contraction resolver: (`src_anchor`, `tgt_anchor`) to resolved edge.</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span>)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge contraction resolver.</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_resolver<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> (<span class="dt">String</span><span class="op">,</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="29"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 28;"><span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">/// A compiled migration specification (minimal version for panproto-inst).</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">/// The full `CompiledMigration` lives in `panproto-mig`. This type provides</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">/// the subset of fields that `wtype_restrict` and `functor_restrict` need.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CompiledMigration <span class="op">{</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertices that survive the migration.</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> surviving_verts<span class="op">:</span> HashSet<span class="op">&lt;</span>Name<span class="op">&gt;,</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edges that survive the migration.</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> surviving_edges<span class="op">:</span> HashSet<span class="op">&lt;</span>Edge<span class="op">&gt;,</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Vertex remapping: source vertex ID to target vertex ID.</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertex_remap<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edge remapping: source edge to target edge.</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_remap<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Binary contraction resolver: (`src_anchor`, `tgt_anchor`) to resolved edge.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge contraction resolver.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> (Name<span class="op">,</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span>)<span class="op">&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The fields serve distinct roles in the pipeline:</p>
 <ul>
 <li><code>surviving_verts</code> and <code>surviving_edges</code> drive Step 1 (anchor survival).</li>
@@ -695,28 +713,28 @@ Important
 <section id="winstance" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="winstance"><span class="header-section-number">8.3</span> WInstance</h2>
 <p>A <code>WInstance</code> is a tree-shaped data instance conforming to a schema. Nodes are keyed by numeric IDs, connected by arcs that carry the schema edge they correspond to.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="44"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 43;"><span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">/// A W-type instance: tree-shaped data conforming to a schema.</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">/// Nodes are anchored to schema vertices, connected by arcs that</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">/// correspond to schema edges. The tree is rooted at `root`.</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">/// Precomputed `parent_map` and `children_map` enable fast traversal.</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> WInstance <span class="op">{</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// All nodes keyed by their numeric ID.</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nodes<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> Node<span class="op">&gt;,</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Arcs: (`parent_id`, `child_id`, `schema_edge`).</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> arcs<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">,</span> Edge)<span class="op">&gt;,</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge fans.</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> fans<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Fan<span class="op">&gt;,</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Root node ID.</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> root<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Schema vertex that the root node is anchored to.</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_root<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Precomputed parent map: `child_id` -&gt; `parent_id`.</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> parent_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;,</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Precomputed children map: `parent_id` -&gt; child IDs.</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> children_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> SmallVec<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dv">4</span><span class="op">&gt;&gt;,</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="49"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">/// A W-type instance: tree-shaped data conforming to a schema.</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">/// Nodes are anchored to schema vertices, connected by arcs that</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">/// correspond to schema edges. The tree is rooted at `root`.</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">/// Precomputed `parent_map` and `children_map` enable fast traversal.</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> WInstance <span class="op">{</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// All nodes keyed by their numeric ID.</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nodes<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> Node<span class="op">&gt;,</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Arcs: (`parent_id`, `child_id`, `schema_edge`).</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> arcs<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">,</span> Edge)<span class="op">&gt;,</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge fans.</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> fans<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Fan<span class="op">&gt;,</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Root node ID.</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> root<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Schema vertex that the root node is anchored to.</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_root<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Precomputed parent map: `child_id` -&gt; `parent_id`.</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> parent_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Precomputed children map: `parent_id` -&gt; child IDs.</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> children_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> SmallVec<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dv">4</span><span class="op">&gt;&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="node-structure" class="level3" data-number="8.3.1">
 <h3 data-number="8.3.1" class="anchored" data-anchor-id="node-structure"><span class="header-section-number">8.3.1</span> Node Structure</h3>
 <p>Each <code>Node</code> (defined in <code>inst/src/metadata.rs</code>) carries:</p>
@@ -782,52 +800,43 @@ Figure&nbsp;8.1: The 5-step wtype_restrict pipeline. Each step filters or transf
 <section id="step-1-signature-restriction-anchor_surviving" class="level3" data-number="8.4.1">
 <h3 data-number="8.4.1" class="anchored" data-anchor-id="step-1-signature-restriction-anchor_surviving"><span class="header-section-number">8.4.1</span> Step 1: Signature Restriction (anchor_surviving)</h3>
 <p>The first step selects the subset of instance nodes whose schema anchor vertex is retained by the migration. This is a pure filter: if a node’s <code>anchor</code> is in <code>CompiledMigration::surviving_verts</code>, it is a candidate; otherwise it is dropped.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="127"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 126;"><span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a><span class="co">/// Keep nodes whose anchor vertex is in the surviving vertex set.</span></span>
-<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="co">/// This is the first step of the restrict pipeline: it selects the</span></span>
-<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a><span class="co">/// subset of instance nodes whose schema anchor is retained by the</span></span>
-<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="co">/// migration.</span></span>
-<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> anchor_surviving(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> surviving_verts<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>    instance</span>
-<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>nodes</span>
-<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>iter()</span>
-<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>filter(<span class="op">|</span>(_<span class="op">,</span> node)<span class="op">|</span> surviving_verts<span class="op">.</span>contains(<span class="op">&amp;</span>node<span class="op">.</span>anchor))</span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(<span class="op">&amp;</span>id<span class="op">,</span> _)<span class="op">|</span> id)</span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="139"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 138;"><span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a><span class="co">/// Keep nodes whose anchor vertex is in the surviving vertex set.</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> anchor_surviving(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> surviving_verts<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span>Name<span class="op">&gt;</span>) <span class="op">-&gt;</span> HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>    instance</span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>nodes</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>iter()</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>filter(<span class="op">|</span>(_<span class="op">,</span> node)<span class="op">|</span> surviving_verts<span class="op">.</span>contains(<span class="op">&amp;</span>node<span class="op">.</span>anchor))</span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>(<span class="op">&amp;</span>id<span class="op">,</span> _)<span class="op">|</span> id)</span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>collect()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After this step, some surviving nodes may be orphaned (their parent was dropped) or disconnected (reachable only through dropped intermediaries). Steps 2 and 3 handle these cases.</p>
 </section>
 <section id="step-2-reachability-bfs-reachable_from_root" class="level3" data-number="8.4.2">
 <h3 data-number="8.4.2" class="anchored" data-anchor-id="step-2-reachability-bfs-reachable_from_root"><span class="header-section-number">8.4.2</span> Step 2: Reachability BFS (reachable_from_root)</h3>
 <p>Not all anchor-surviving nodes are necessarily reachable from the root. Step 2 performs a breadth-first search starting from the root (if it survived Step 1) through children that are also in the candidate set.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="148"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 147;"><span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a><span class="co">/// BFS from the root through anchor-surviving nodes.</span></span>
-<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a><span class="co">/// Starting from the root (if it is in `candidates`), traverse children</span></span>
-<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a><span class="co">/// that are also in `candidates`. Returns the set of reachable node IDs.</span></span>
-<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> reachable_from_root(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> candidates<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> reachable <span class="op">=</span> <span class="pp">HashSet::</span>new()<span class="op">;</span></span>
-<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>candidates<span class="op">.</span>contains(<span class="op">&amp;</span>instance<span class="op">.</span>root) <span class="op">{</span></span>
-<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> reachable<span class="op">;</span></span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> queue <span class="op">=</span> <span class="pp">VecDeque::</span>new()<span class="op">;</span></span>
-<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a>    queue<span class="op">.</span>push_back(instance<span class="op">.</span>root)<span class="op">;</span></span>
-<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>    reachable<span class="op">.</span>insert(instance<span class="op">.</span>root)<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="154"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 153;"><span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="co">/// BFS from the root through anchor-surviving nodes.</span></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> reachable_from_root(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> candidates<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> reachable <span class="op">=</span> <span class="pp">HashSet::</span>new()<span class="op">;</span></span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">!</span>candidates<span class="op">.</span>contains(<span class="op">&amp;</span>instance<span class="op">.</span>root) <span class="op">{</span></span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> reachable<span class="op">;</span></span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="kw">let</span> <span class="cn">Some</span>(current) <span class="op">=</span> queue<span class="op">.</span>pop_front() <span class="op">{</span></span>
-<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">&amp;</span>child <span class="kw">in</span> instance<span class="op">.</span>children(current) <span class="op">{</span></span>
-<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> candidates<span class="op">.</span>contains(<span class="op">&amp;</span>child) <span class="op">&amp;&amp;</span> reachable<span class="op">.</span>insert(child) <span class="op">{</span></span>
-<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a>                queue<span class="op">.</span>push_back(child)<span class="op">;</span></span>
-<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>    reachable</span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> queue <span class="op">=</span> <span class="pp">VecDeque::</span>new()<span class="op">;</span></span>
+<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a>    queue<span class="op">.</span>push_back(instance<span class="op">.</span>root)<span class="op">;</span></span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>    reachable<span class="op">.</span>insert(instance<span class="op">.</span>root)<span class="op">;</span></span>
+<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="kw">let</span> <span class="cn">Some</span>(current) <span class="op">=</span> queue<span class="op">.</span>pop_front() <span class="op">{</span></span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">&amp;</span>child <span class="kw">in</span> instance<span class="op">.</span>children(current) <span class="op">{</span></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> candidates<span class="op">.</span>contains(<span class="op">&amp;</span>child) <span class="op">&amp;&amp;</span> reachable<span class="op">.</span>insert(child) <span class="op">{</span></span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>                queue<span class="op">.</span>push_back(child)<span class="op">;</span></span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>    reachable</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the root itself does not survive anchor restriction, the entire instance is pruned and <code>wtype_restrict</code> returns <code>RestrictError::RootPruned</code>. This is a hard failure – an instance without a root is not a valid W-type.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -846,37 +855,50 @@ Note
 <section id="step-3-ancestor-contraction-ancestor_contraction" class="level3" data-number="8.4.3">
 <h3 data-number="8.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: Ancestor Contraction (ancestor_contraction)</h3>
 <p>When intermediate nodes are pruned, their children need to be re-attached to the nearest surviving ancestor. Step 3 walks up the parent chain for each surviving non-root node to find that ancestor.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="177"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 176;"><span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="co">/// For each surviving non-root node, find its nearest surviving ancestor.</span></span>
-<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="co">/// When intermediate nodes are pruned, children must be re-attached to</span></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a><span class="co">/// the nearest surviving ancestor. This function walks up the parent</span></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a><span class="co">/// chain for each surviving node to find that ancestor.</span></span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> ancestor_contraction(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> surviving<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> ancestors <span class="op">=</span> <span class="pp">HashMap::</span>new()<span class="op">;</span></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">&amp;</span>node_id <span class="kw">in</span> surviving <span class="op">{</span></span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node_id <span class="op">==</span> instance<span class="op">.</span>root <span class="op">{</span></span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Walk up to find nearest surviving ancestor, with visited set to guard against cycles</span></span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> current <span class="op">=</span> node_id<span class="op">;</span></span>
-<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> visited <span class="op">=</span> <span class="pp">HashSet::</span>new()<span class="op">;</span></span>
-<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>        visited<span class="op">.</span>insert(node_id)<span class="op">;</span></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="kw">let</span> <span class="cn">Some</span>(parent) <span class="op">=</span> instance<span class="op">.</span>parent(current) <span class="op">{</span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">!</span>visited<span class="op">.</span>insert(parent) <span class="op">{</span></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Cycle detected — stop walking</span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> surviving<span class="op">.</span>contains(<span class="op">&amp;</span>parent) <span class="op">{</span></span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>                ancestors<span class="op">.</span>insert(node_id<span class="op">,</span> parent)<span class="op">;</span></span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> parent<span class="op">;</span></span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>    ancestors</span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="188"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 187;"><span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> ancestor_contraction(instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span> surviving<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> cache<span class="op">:</span> FxHashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="pp">FxHashMap::</span><span class="kw">default</span>()<span class="op">;</span></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> ancestors <span class="op">=</span> <span class="pp">HashMap::</span>new()<span class="op">;</span></span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">&amp;</span>node_id <span class="kw">in</span> surviving <span class="op">{</span></span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> node_id <span class="op">==</span> instance<span class="op">.</span>root <span class="op">{</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Check cache first</span></span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(<span class="op">&amp;</span>cached) <span class="op">=</span> cache<span class="op">.</span>get(<span class="op">&amp;</span>node_id) <span class="op">{</span></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>            ancestors<span class="op">.</span>insert(node_id<span class="op">,</span> cached)<span class="op">;</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Walk the parent chain, recording the path for compression</span></span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> path <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> current <span class="op">=</span> node_id<span class="op">;</span></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> <span class="kw">mut</span> found_ancestor <span class="op">=</span> <span class="cn">None</span><span class="op">;</span></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="kw">let</span> <span class="cn">Some</span>(parent) <span class="op">=</span> instance<span class="op">.</span>parent(current) <span class="op">{</span></span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(<span class="op">&amp;</span>cached) <span class="op">=</span> cache<span class="op">.</span>get(<span class="op">&amp;</span>parent) <span class="op">{</span></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>                found_ancestor <span class="op">=</span> <span class="cn">Some</span>(cached)<span class="op">;</span></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> surviving<span class="op">.</span>contains(<span class="op">&amp;</span>parent) <span class="op">{</span></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>                found_ancestor <span class="op">=</span> <span class="cn">Some</span>(parent)<span class="op">;</span></span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>            path<span class="op">.</span>push(parent)<span class="op">;</span></span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> parent<span class="op">;</span></span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Path compression: cache the ancestor for all nodes on the path</span></span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(ancestor) <span class="op">=</span> found_ancestor <span class="op">{</span></span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a>            ancestors<span class="op">.</span>insert(node_id<span class="op">,</span> ancestor)<span class="op">;</span></span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>            cache<span class="op">.</span>insert(node_id<span class="op">,</span> ancestor)<span class="op">;</span></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">&amp;</span>intermediate <span class="kw">in</span> <span class="op">&amp;</span>path <span class="op">{</span></span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>                cache<span class="op">.</span>insert(intermediate<span class="op">,</span> ancestor)<span class="op">;</span></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>    ancestors</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The result is a map from each surviving node to its nearest surviving ancestor. This map drives the arc construction in Step 4: instead of the original <code>(parent, child)</code> arc, the restricted instance will have a <code>(ancestor, child)</code> arc.</p>
 <p>The function includes cycle detection as a safety measure. In a well-formed W-type instance, cycles in the parent chain cannot occur (the tree invariant forbids them), but the guard prevents infinite loops if an invalid instance is passed in.</p>
 </section>
@@ -888,116 +910,90 @@ Note
 <li>Falling back to a unique-edge heuristic: if there is exactly one edge between the ancestor’s and child’s remapped anchor vertices in the target schema, use it.</li>
 <li>Failing with <code>RestrictError::AmbiguousEdge</code> if multiple edges exist and no resolver entry was provided.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="212"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 211;"><span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a><span class="co">/// Resolve the edge for a contracted arc in the target schema.</span></span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a><span class="co">/// Given a (source, target) vertex pair in the target schema, find the</span></span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a><span class="co">/// unique edge. Consults the resolver first (for ambiguous cases), then</span></span>
-<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="co">/// falls back to the unique-edge heuristic.</span></span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `RestrictError::NoEdgeFound` if no edge exists, or</span></span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="co">/// `RestrictError::AmbiguousEdge` if multiple edges exist without</span></span>
-<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="co">/// a resolver entry.</span></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> resolve_edge(</span>
-<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>    resolver<span class="op">:</span> <span class="op">&amp;</span>HashMap<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span>)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a>    src_v<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>    tgt_v<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Edge<span class="op">,</span> RestrictError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Check resolver first</span></span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> key <span class="op">=</span> (src_v<span class="op">.</span>to_string()<span class="op">,</span> tgt_v<span class="op">.</span>to_string())<span class="op">;</span></span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(edge) <span class="op">=</span> resolver<span class="op">.</span>get(<span class="op">&amp;</span>key) <span class="op">{</span></span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="cn">Ok</span>(edge<span class="op">.</span>clone())<span class="op">;</span></span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Fall back to unique-edge lookup</span></span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> candidates <span class="op">=</span> tgt_schema<span class="op">.</span>edges_between(src_v<span class="op">,</span> tgt_v)<span class="op">;</span></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> candidates<span class="op">.</span>len() <span class="op">{</span></span>
-<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span> <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">RestrictError::</span>NoEdgeFound <span class="op">{</span></span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>            src<span class="op">:</span> src_v<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>            tgt<span class="op">:</span> tgt_v<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">,</span></span>
-<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(candidates[<span class="dv">0</span>]<span class="op">.</span>clone())<span class="op">,</span></span>
-<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">RestrictError::</span>AmbiguousEdge <span class="op">{</span></span>
-<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>            src<span class="op">:</span> src_v<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>            tgt<span class="op">:</span> tgt_v<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>            count<span class="op">:</span> n<span class="op">,</span></span>
-<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">,</span></span>
-<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="247"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 246;"><span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a><span class="co">/// a resolver entry.</span></span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> resolve_edge(</span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>    resolver<span class="op">:</span> <span class="op">&amp;</span>HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>    src_v<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>    tgt_v<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Edge<span class="op">,</span> RestrictError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Check resolver — avoid allocation by scanning for matching key</span></span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ((k_src<span class="op">,</span> k_tgt)<span class="op">,</span> edge) <span class="kw">in</span> resolver <span class="op">{</span></span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k_src <span class="op">==</span> src_v <span class="op">&amp;&amp;</span> k_tgt <span class="op">==</span> tgt_v <span class="op">{</span></span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">Ok</span>(edge<span class="op">.</span>clone())<span class="op">;</span></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Fall back to unique-edge lookup</span></span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> candidates <span class="op">=</span> tgt_schema<span class="op">.</span>edges_between(src_v<span class="op">,</span> tgt_v)<span class="op">;</span></span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>    <span class="cf">match</span> candidates<span class="op">.</span>len() <span class="op">{</span></span>
+<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a>        <span class="dv">0</span> <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">RestrictError::</span>NoEdgeFound <span class="op">{</span></span>
+<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>            src<span class="op">:</span> src_v<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>            tgt<span class="op">:</span> tgt_v<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">,</span></span>
+<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(candidates[<span class="dv">0</span>]<span class="op">.</span>clone())<span class="op">,</span></span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=&gt;</span> <span class="cn">Err</span>(<span class="pp">RestrictError::</span>AmbiguousEdge <span class="op">{</span></span>
+<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>            src<span class="op">:</span> src_v<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>            tgt<span class="op">:</span> tgt_v<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>            count<span class="op">:</span> n<span class="op">,</span></span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">,</span></span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The resolver is populated during migration compilation by <code>panproto-mig</code>. In practice, ambiguity is rare – most vertex pairs in a schema are connected by at most one edge. When it does occur (e.g., a vertex has both a <code>"prop"</code> and a <code>"ref"</code> edge to the same target), the migration specification must include an explicit resolution.</p>
 </section>
 <section id="step-5-fan-reconstruction-reconstruct_fans" class="level3" data-number="8.4.5">
 <h3 data-number="8.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction-reconstruct_fans"><span class="header-section-number">8.4.5</span> Step 5: Fan Reconstruction (reconstruct_fans)</h3>
 <p>For schemas that use hyper-edges, the final step rebuilds the hyper-edge fans. A <em>fan</em> is an instance-level manifestation of a hyper-edge: it connects a parent node to multiple child nodes via labeled slots.</p>
 <p>When some children of a fan are pruned, the fan must be rebuilt with only the surviving children. If the <code>hyper_resolver</code> provides a mapping, the fan is remapped to a new hyper-edge ID with relabeled slots. Otherwise, the original fan is kept with its surviving children.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="256"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 255;"><span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a><span class="co">/// Reconstruct fans after restriction.</span></span>
-<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a><span class="co">/// For hyper-edge schemas, fans whose children are partially pruned</span></span>
-<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a><span class="co">/// need to be rebuilt with only the surviving children. If the</span></span>
-<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a><span class="co">/// hyper-resolver provides a mapping, use it; otherwise, build a</span></span>
-<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a><span class="co">/// reduced fan from the surviving children.</span></span>
-<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns `RestrictError::FanReconstructionFailed` if a fan cannot</span></span>
-<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a><span class="co">/// be validly reconstructed.</span></span>
-<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> reconstruct_fans(</span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>    instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
-<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>    surviving<span class="op">:</span> <span class="op">&amp;</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;,</span></span>
-<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>    _ancestors<span class="op">:</span> <span class="op">&amp;</span>HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;,</span></span>
-<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>    migration<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
-<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>    _tgt_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
-<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>Fan<span class="op">&gt;,</span> RestrictError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> result <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
-<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fan <span class="kw">in</span> <span class="op">&amp;</span>instance<span class="op">.</span>fans <span class="op">{</span></span>
-<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Check if the parent survives</span></span>
-<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">!</span>surviving<span class="op">.</span>contains(<span class="op">&amp;</span>fan<span class="op">.</span>parent) <span class="op">{</span></span>
-<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Collect surviving children</span></span>
-<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> surviving_children<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;</span> <span class="op">=</span> fan</span>
-<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>children</span>
-<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>iter()</span>
-<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>filter(<span class="op">|</span>(_<span class="op">,</span> node_id)<span class="op">|</span> surviving<span class="op">.</span>contains(node_id))</span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map(<span class="op">|</span>(label<span class="op">,</span> node_id)<span class="op">|</span> (label<span class="op">.</span>clone()<span class="op">,</span> <span class="op">*</span>node_id))</span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>collect()<span class="op">;</span></span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> surviving_children<span class="op">.</span>is_empty() <span class="op">{</span></span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Check if the hyper-resolver has a mapping for this fan</span></span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>((new_he_id<span class="op">,</span> label_map)) <span class="op">=</span> migration<span class="op">.</span>hyper_resolver<span class="op">.</span>get(<span class="op">&amp;</span>fan<span class="op">.</span>hyper_edge_id) <span class="op">{</span></span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> new_children <span class="op">=</span> <span class="pp">HashMap::</span>new()<span class="op">;</span></span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (old_label<span class="op">,</span> <span class="op">&amp;</span>node_id) <span class="kw">in</span> <span class="op">&amp;</span>surviving_children <span class="op">{</span></span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> new_label <span class="op">=</span> label_map</span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>get(old_label)</span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>cloned()</span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>unwrap_or_else(<span class="op">||</span> old_label<span class="op">.</span>clone())<span class="op">;</span></span>
-<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>                new_children<span class="op">.</span>insert(new_label<span class="op">,</span> node_id)<span class="op">;</span></span>
-<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>            result<span class="op">.</span>push(Fan <span class="op">{</span></span>
-<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>                hyper_edge_id<span class="op">:</span> new_he_id<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">:</span> fan<span class="op">.</span>parent<span class="op">,</span></span>
-<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>                children<span class="op">:</span> new_children<span class="op">,</span></span>
-<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Keep original fan with surviving children only</span></span>
-<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>            result<span class="op">.</span>push(Fan <span class="op">{</span></span>
-<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>                hyper_edge_id<span class="op">:</span> fan<span class="op">.</span>hyper_edge_id<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">:</span> fan<span class="op">.</span>parent<span class="op">,</span></span>
-<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>                children<span class="op">:</span> surviving_children<span class="op">,</span></span>
-<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(result)</span>
-<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="286"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 285;"><span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a><span class="co">/// be validly reconstructed.</span></span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> reconstruct_fans(</span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>    instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>    surviving<span class="op">:</span> <span class="op">&amp;</span>FxHashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>    _ancestors<span class="op">:</span> <span class="op">&amp;</span>FxHashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>    migration<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>    _tgt_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>Fan<span class="op">&gt;,</span> RestrictError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> result <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fan <span class="kw">in</span> <span class="op">&amp;</span>instance<span class="op">.</span>fans <span class="op">{</span></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">!</span>surviving<span class="op">.</span>contains(<span class="op">&amp;</span>fan<span class="op">.</span>parent) <span class="op">{</span></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> surviving_children<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">u32</span><span class="op">&gt;</span> <span class="op">=</span> fan</span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>children</span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>iter()</span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>filter(<span class="op">|</span>(_<span class="op">,</span> node_id)<span class="op">|</span> surviving<span class="op">.</span>contains(node_id))</span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map(<span class="op">|</span>(label<span class="op">,</span> node_id)<span class="op">|</span> (label<span class="op">.</span>clone()<span class="op">,</span> <span class="op">*</span>node_id))</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>collect()<span class="op">;</span></span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> surviving_children<span class="op">.</span>is_empty() <span class="op">{</span></span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>((new_he_id<span class="op">,</span> label_map)) <span class="op">=</span></span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>            migration<span class="op">.</span>hyper_resolver<span class="op">.</span>get(fan<span class="op">.</span>hyper_edge_id<span class="op">.</span>as_str())</span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>        <span class="op">{</span></span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>            <span class="kw">let</span> <span class="kw">mut</span> new_children <span class="op">=</span> <span class="pp">HashMap::</span>new()<span class="op">;</span></span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (old_label<span class="op">,</span> <span class="op">&amp;</span>node_id) <span class="kw">in</span> <span class="op">&amp;</span>surviving_children <span class="op">{</span></span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> new_label <span class="op">=</span> label_map</span>
+<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>get(old_label<span class="op">.</span>as_str())</span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>                    <span class="op">.</span>map_or_else(<span class="op">||</span> old_label<span class="op">.</span>clone()<span class="op">,</span> <span class="pp">std::string::</span><span class="bu">ToString</span><span class="pp">::</span>to_string)<span class="op">;</span></span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>                new_children<span class="op">.</span>insert(new_label<span class="op">,</span> node_id)<span class="op">;</span></span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a>            result<span class="op">.</span>push(Fan <span class="op">{</span></span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>                hyper_edge_id<span class="op">:</span> new_he_id<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">:</span> fan<span class="op">.</span>parent<span class="op">,</span></span>
+<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a>                children<span class="op">:</span> new_children<span class="op">,</span></span>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>            result<span class="op">.</span>push(Fan <span class="op">{</span></span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>                hyper_edge_id<span class="op">:</span> fan<span class="op">.</span>hyper_edge_id<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>                parent<span class="op">:</span> fan<span class="op">.</span>parent<span class="op">,</span></span>
+<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>                children<span class="op">:</span> surviving_children<span class="op">,</span></span>
+<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Fans whose parent was pruned are dropped entirely. Fans with no surviving children are also dropped.</p>
 </section>
 </section>
@@ -1696,7 +1692,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`CompiledMigration`</span> struct is the bridge between <span class="in">`panproto-mig`</span> (which compiles migration specifications) and <span class="in">`panproto-inst`</span> (which executes them). It contains all the information the restrict pipeline needs to project an instance from the source schema to the target schema.</span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=24 end-line=42}</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=29 end-line=47}</span></span>
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>The fields serve distinct roles in the pipeline:</span>
@@ -1715,7 +1711,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>A <span class="in">`WInstance`</span> is a tree-shaped data instance conforming to a schema. Nodes are keyed by numeric IDs, connected by arcs that carry the schema edge they correspond to.</span>
 <span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=44 end-line=65}</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=49 end-line=70}</span></span>
 <span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### Node Structure</span></span>
@@ -1763,7 +1759,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>The first step selects the subset of instance nodes whose schema anchor vertex is retained by the migration. This is a pure filter: if a node's <span class="in">`anchor`</span> is in <span class="in">`CompiledMigration::surviving_verts`</span>, it is a candidate; otherwise it is dropped.</span>
 <span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=127 end-line=142}</span></span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=139 end-line=148}</span></span>
 <span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>After this step, some surviving nodes may be orphaned (their parent was dropped) or disconnected (reachable only through dropped intermediaries). Steps 2 and 3 handle these cases.</span>
@@ -1772,7 +1768,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>Not all anchor-surviving nodes are necessarily reachable from the root. Step 2 performs a breadth-first search starting from the root (if it survived Step 1) through children that are also in the candidate set.</span>
 <span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=148 end-line=172}</span></span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=154 end-line=175}</span></span>
 <span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>If the root itself does not survive anchor restriction, the entire instance is pruned and <span class="in">`wtype_restrict`</span> returns <span class="in">`RestrictError::RootPruned`</span>. This is a hard failure -- an instance without a root is not a valid W-type.</span>
@@ -1785,7 +1781,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>When intermediate nodes are pruned, their children need to be re-attached to the nearest surviving ancestor. Step 3 walks up the parent chain for each surviving non-root node to find that ancestor.</span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=177 end-line=207}</span></span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=188 end-line=231}</span></span>
 <span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>The result is a map from each surviving node to its nearest surviving ancestor. This map drives the arc construction in Step 4: instead of the original <span class="in">`(parent, child)`</span> arc, the restricted instance will have a <span class="in">`(ancestor, child)`</span> arc.</span>
@@ -1800,7 +1796,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Falling back to a unique-edge heuristic: if there is exactly one edge between the ancestor's and child's remapped anchor vertices in the target schema, use it.</span>
 <span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Failing with <span class="in">`RestrictError::AmbiguousEdge`</span> if multiple edges exist and no resolver entry was provided.</span>
 <span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=212 end-line=250}</span></span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=247 end-line=274}</span></span>
 <span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>The resolver is populated during migration compilation by <span class="in">`panproto-mig`</span>. In practice, ambiguity is rare -- most vertex pairs in a schema are connected by at most one edge. When it does occur (e.g., a vertex has both a <span class="in">`"prop"`</span> and a <span class="in">`"ref"`</span> edge to the same target), the migration specification must include an explicit resolution.</span>
@@ -1811,7 +1807,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a>When some children of a fan are pruned, the fan must be rebuilt with only the surviving children. If the <span class="in">`hyper_resolver`</span> provides a mapping, the fan is remapped to a new hyper-edge ID with relabeled slots. Otherwise, the original fan is kept with its surviving children.</span>
 <span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=256 end-line=320}</span></span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=286 end-line=335}</span></span>
 <span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>Fans whose parent was pruned are dropped entirely. Fans with no surviving children are also dropped.</span>

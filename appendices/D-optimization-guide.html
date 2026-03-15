@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>27&nbsp; Optimization Guide – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../appendices/E-benchmark-results.html" rel="next">
+<link href="../appendices/C-troubleshooting.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/D-optimization-guide.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">27.1</span> Overview</a></li>
+  <li><a href="#sec-opt-index-cache" id="toc-sec-opt-index-cache" class="nav-link" data-scroll-target="#sec-opt-index-cache"><span class="header-section-number">27.2</span> Theory Index Cache</a></li>
+  <li><a href="#sec-opt-arc-str" id="toc-sec-opt-arc-str" class="nav-link" data-scroll-target="#sec-opt-arc-str"><span class="header-section-number">27.3</span> Arc&lt;str&gt; for Zero-Cost Cloning</a></li>
+  <li><a href="#sec-opt-fxhash" id="toc-sec-opt-fxhash" class="nav-link" data-scroll-target="#sec-opt-fxhash"><span class="header-section-number">27.4</span> FxHash in Hot Paths</a></li>
+  <li><a href="#sec-opt-path-compression" id="toc-sec-opt-path-compression" class="nav-link" data-scroll-target="#sec-opt-path-compression"><span class="header-section-number">27.5</span> Path Compression in Ancestor Contraction</a></li>
+  <li><a href="#sec-opt-fused-pipeline" id="toc-sec-opt-fused-pipeline" class="nav-link" data-scroll-target="#sec-opt-fused-pipeline"><span class="header-section-number">27.6</span> Fused Restrict Pipeline</a></li>
+  <li><a href="#sec-opt-inverse-map" id="toc-sec-opt-inverse-map" class="nav-link" data-scroll-target="#sec-opt-inverse-map"><span class="header-section-number">27.7</span> Inverse Map Precomputation</a></li>
+  <li><a href="#sec-opt-arc-schema" id="toc-sec-opt-arc-schema" class="nav-link" data-scroll-target="#sec-opt-arc-schema"><span class="header-section-number">27.8</span> WASM Boundary: Arc&lt;Schema&gt;</a></li>
+  <li><a href="#sec-opt-wasm-optlevel" id="toc-sec-opt-wasm-optlevel" class="nav-link" data-scroll-target="#sec-opt-wasm-optlevel"><span class="header-section-number">27.9</span> WASM opt-level = 3</a></li>
+  <li><a href="#sec-benchmarking" id="toc-sec-benchmarking" class="nav-link" data-scroll-target="#sec-benchmarking"><span class="header-section-number">27.10</span> Benchmarking Guide</a>
+  <ul class="collapse">
+  <li><a href="#running-benchmarks" id="toc-running-benchmarks" class="nav-link" data-scroll-target="#running-benchmarks"><span class="header-section-number">27.10.1</span> Running benchmarks</a></li>
+  <li><a href="#interpreting-divan-output" id="toc-interpreting-divan-output" class="nav-link" data-scroll-target="#interpreting-divan-output"><span class="header-section-number">27.10.2</span> Interpreting divan output</a></li>
+  <li><a href="#adding-a-new-benchmark" id="toc-adding-a-new-benchmark" class="nav-link" data-scroll-target="#adding-a-new-benchmark"><span class="header-section-number">27.10.3</span> Adding a new benchmark</a></li>
+  <li><a href="#comparing-branches" id="toc-comparing-branches" class="nav-link" data-scroll-target="#comparing-branches"><span class="header-section-number">27.10.4</span> Comparing branches</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/appendices/D-optimization-guide.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/D-optimization-guide.html"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-optimization-guide" class="quarto-section-identifier"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This appendix documents the performance optimizations in panproto: why they exist, how they work, and how to measure their impact. If you are adding new code to a hot path, read this first.</p>
+<section id="overview" class="level2" data-number="27.1">
+<h2 data-number="27.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">27.1</span> Overview</h2>
+<p>panproto is a compiler library. Its restrict pipeline targets over 1 million records per second in WASM, and the native target should be significantly faster. The optimizations fall into three categories:</p>
+<ol type="1">
+<li><strong>Algorithmic</strong> — fusing pipeline passes, precomputing inverse maps, path compression.</li>
+<li><strong>Data representation</strong> — <code>Arc&lt;str&gt;</code> for zero-cost cloning, <code>FxHash</code> for faster hashing.</li>
+<li><strong>Build configuration</strong> — WASM <code>opt-level = 3</code>, LTO, codegen-units.</li>
+</ol>
+<p>Every optimization preserves correctness. Formal proofs are provided in <a href="https://panproto.github.io/tutorial/appendices/E-formal-proofs.html">Appendix E of the tutorial</a>.</p>
+</section>
+<section id="sec-opt-index-cache" class="level2" data-number="27.2">
+<h2 data-number="27.2" class="anchored" data-anchor-id="sec-opt-index-cache"><span class="header-section-number">27.2</span> Theory Index Cache</h2>
+<p><strong>Location:</strong> <code>crates/panproto-gat/src/theory.rs</code>, in <code>Theory::new()</code> and <code>Theory::extending()</code>.</p>
+<p><strong>Problem:</strong> <code>find_sort(name)</code> and <code>find_op(name)</code> are called frequently during morphism checking, colimit computation, and migration compilation. The naive implementation scans a <code>Vec&lt;Sort&gt;</code> linearly.</p>
+<p><strong>Solution:</strong> A <code>HashMap&lt;Arc&lt;str&gt;, usize&gt;</code> index from names to vector positions is built once during <code>Theory</code> construction. Lookups become <span class="math inline">\(O(1)\)</span> amortized instead of <span class="math inline">\(O(n)\)</span>.</p>
+<p><strong>Why it is safe:</strong> <code>Theory</code> is immutable after construction. The index is a deterministic function of the sort vector, so it cannot become stale.</p>
+<p><strong>Performance characteristics:</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Without cache</th>
+<th>With cache</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>find_sort(name)</code></td>
+<td><span class="math inline">\(O(n)\)</span></td>
+<td><span class="math inline">\(O(1)\)</span> amortized</td>
+</tr>
+<tr class="even">
+<td><code>Theory::new()</code></td>
+<td><span class="math inline">\(O(n)\)</span></td>
+<td><span class="math inline">\(O(n)\)</span> (index build)</td>
+</tr>
+<tr class="odd">
+<td>Memory overhead</td>
+<td>None</td>
+<td>One <code>HashMap</code> (~48 bytes + entries)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-opt-arc-str" class="level2" data-number="27.3">
+<h2 data-number="27.3" class="anchored" data-anchor-id="sec-opt-arc-str"><span class="header-section-number">27.3</span> Arc&lt;str&gt; for Zero-Cost Cloning</h2>
+<p><strong>Location:</strong> All crates. Sort names, operation names, edge labels, vertex labels, and other string identifiers are <code>Arc&lt;str&gt;</code> throughout.</p>
+<p><strong>Problem:</strong> String-heavy data structures (theories, schemas, instances) are cloned frequently—during morphism construction, colimit computation, migration compilation, and WASM boundary crossings. With <code>String</code>, every clone copies the entire string buffer.</p>
+<p><strong>Solution:</strong> <code>Arc&lt;str&gt;</code> wraps the string data in an atomically reference-counted pointer. Cloning increments a counter (<span class="math inline">\(O(1)\)</span>) instead of allocating and copying (<span class="math inline">\(O(n)\)</span> in string length).</p>
+<p><strong>Migration path from String:</strong> If you introduce a new struct with string fields:</p>
+<ol type="1">
+<li>Use <code>Arc&lt;str&gt;</code> for any field that will be cloned, hashed, or compared by value.</li>
+<li>Accept <code>impl Into&lt;Arc&lt;str&gt;&gt;</code> in constructors so callers can pass <code>&amp;str</code>, <code>String</code>, or <code>Arc&lt;str&gt;</code>.</li>
+<li>Use <code>.as_ref()</code> or <code>&amp;*name</code> to get a <code>&amp;str</code> when needed.</li>
+</ol>
+<p><strong>Semantic equivalence:</strong> <code>Arc&lt;str&gt;</code> delegates <code>Eq</code>, <code>Hash</code>, <code>Ord</code>, <code>Serialize</code>, and <code>Deserialize</code> to the inner <code>str</code>. It is a drop-in replacement for <code>String</code> in all trait-dependent contexts.</p>
+</section>
+<section id="sec-opt-fxhash" class="level2" data-number="27.4">
+<h2 data-number="27.4" class="anchored" data-anchor-id="sec-opt-fxhash"><span class="header-section-number">27.4</span> FxHash in Hot Paths</h2>
+<p><strong>Location:</strong> <code>panproto-gat</code>, <code>panproto-schema</code>, <code>panproto-inst</code>, <code>panproto-mig</code>, <code>panproto-lens</code>. Used via <code>rustc_hash::FxHashMap</code> and <code>rustc_hash::FxHashSet</code>.</p>
+<p><strong>Problem:</strong> The default Rust hasher (<code>SipHash</code>) is designed for HashDoS resistance, which adds overhead for small, non-adversarial keys. Internal hash maps keyed by sort names, vertex IDs, or edge IDs do not face adversarial inputs.</p>
+<p><strong>Solution:</strong> <code>FxHash</code> is a non-cryptographic hash function optimized for small keys. It is 2–5x faster than <code>SipHash</code> for keys under 16 bytes.</p>
+<p><strong>Where standard HashMap is still appropriate:</strong></p>
+<ul>
+<li><strong>Serialization boundaries:</strong> Any map that is serialized to MessagePack, JSON, or another format must use <code>BTreeMap</code> for deterministic key ordering (not <code>FxHashMap</code>, whose iteration order is unstable).</li>
+<li><strong>Public API surfaces:</strong> If a <code>HashMap</code> is exposed in a public type signature, prefer the standard hasher to avoid leaking the <code>rustc-hash</code> dependency.</li>
+<li><strong>WASM bridge:</strong> Maps crossing the WASM boundary use <code>BTreeMap</code> for deterministic round-trips.</li>
+</ul>
+<p><strong>Rule of thumb:</strong> Use <code>FxHashMap</code>/<code>FxHashSet</code> for internal, short-lived maps in hot paths. Use <code>BTreeMap</code> at serialization boundaries. Use <code>HashMap</code> (default hasher) if the map is exposed publicly and performance is not critical.</p>
+</section>
+<section id="sec-opt-path-compression" class="level2" data-number="27.5">
+<h2 data-number="27.5" class="anchored" data-anchor-id="sec-opt-path-compression"><span class="header-section-number">27.5</span> Path Compression in Ancestor Contraction</h2>
+<p><strong>Location:</strong> <code>crates/panproto-inst/src/wtype.rs</code>, in <code>ancestor_contraction()</code>.</p>
+<p><strong>Problem:</strong> Step 3 of the restrict pipeline walks each surviving node up the instance tree to find its nearest surviving ancestor. In the worst case (a deeply nested schema with many pruned intermediate nodes), each walk is <span class="math inline">\(O(d)\)</span> where <span class="math inline">\(d\)</span> is the tree depth. With <span class="math inline">\(n\)</span> surviving nodes, total cost is <span class="math inline">\(O(n \cdot d)\)</span>.</p>
+<p><strong>Solution:</strong> Path compression, borrowed from the union-find data structure <span class="citation" data-cites="tarjan1975">(<a href="#ref-tarjan1975" role="doc-biblioref">Tarjan 1975</a>)</span>. After finding the nearest surviving ancestor for a node, cache the result. Also update all intermediate nodes on the walk to point directly to the answer.</p>
+<p><strong>Algorithm sketch:</strong></p>
+<pre><code>fn find_ancestor(node, cache, surviving, parent):
+    if node in cache:
+        return cache[node]
+
+    chain = []
+    current = parent(node)
+    while current not in surviving:
+        chain.push(current)
+        current = parent(current)
+
+    // current is the nearest surviving ancestor
+    for p in chain:
+        cache[p] = current
+    cache[node] = current
+    return current</code></pre>
+<p><strong>Amortized complexity:</strong> Each node’s pointer is compressed at most once. Total work across all calls is <span class="math inline">\(O(|V|)\)</span>, giving <span class="math inline">\(O(1)\)</span> amortized per query after the first pass. This is safe because both the tree structure and the surviving set are immutable during the contraction phase.</p>
+</section>
+<section id="sec-opt-fused-pipeline" class="level2" data-number="27.6">
+<h2 data-number="27.6" class="anchored" data-anchor-id="sec-opt-fused-pipeline"><span class="header-section-number">27.6</span> Fused Restrict Pipeline</h2>
+<p><strong>Location:</strong> <code>crates/panproto-inst/src/wtype.rs</code>, in <code>wtype_restrict()</code>.</p>
+<p><strong>Problem:</strong> The five-step restrict pipeline (anchor check, reachability BFS, ancestor contraction, edge resolution, fan reconstruction) requires five passes over the instance tree. Each pass has good cache locality on its own, but the repeated traversal has a cost.</p>
+<p><strong>Solution:</strong> Steps 1–4 are fused into a single BFS pass. The BFS carries the nearest surviving ancestor as metadata on the frontier, so ancestor contraction happens inline. Edge resolution is performed immediately when a surviving node is emitted. Fan reconstruction remains a separate pass because it operates on a different data structure (fans, not tree nodes).</p>
+<p><strong>How it works:</strong></p>
+<ol type="1">
+<li>Enqueue the root with ancestor = root.</li>
+<li>Dequeue a node. Check whether its anchor survives the migration (step 1).</li>
+<li>If it survives and was reached through a surviving path (step 2): emit it to the output tree, resolve its edge label (step 4), and set it as the “current ancestor” for its children.</li>
+<li>If it does not survive: propagate the parent’s ancestor annotation to its children (step 3).</li>
+<li>Enqueue children and repeat.</li>
+</ol>
+<p><strong>Why individual step functions are retained:</strong> The unfused step functions serve as the reference implementation. Integration tests run both the fused and sequential versions on every test case and assert identical output. This provides ongoing regression protection for the fused optimization.</p>
+</section>
+<section id="sec-opt-inverse-map" class="level2" data-number="27.7">
+<h2 data-number="27.7" class="anchored" data-anchor-id="sec-opt-inverse-map"><span class="header-section-number">27.7</span> Inverse Map Precomputation</h2>
+<p><strong>Location:</strong> <code>crates/panproto-mig/src/compose.rs</code>.</p>
+<p><strong>Problem:</strong> Composing two migrations <span class="math inline">\(m_1: S_2 \to S_1\)</span> and <span class="math inline">\(m_2: S_3 \to S_2\)</span> requires mapping vertices and edges through <span class="math inline">\(m_1\)</span>’s vertex/edge maps. A naive implementation scans <span class="math inline">\(m_1\)</span>’s maps for each vertex in <span class="math inline">\(m_2\)</span>, giving <span class="math inline">\(O(|V_1| \cdot |V_2|)\)</span> total cost.</p>
+<p><strong>Solution:</strong> Precompute the inverse map <span class="math inline">\(m_1^{-1}\)</span> (from target positions to source positions) once in <span class="math inline">\(O(|V_1|)\)</span>, then use it for <span class="math inline">\(O(1)\)</span> lookups during composition. Total cost drops to <span class="math inline">\(O(|V_1| + |V_2|)\)</span>.</p>
+</section>
+<section id="sec-opt-arc-schema" class="level2" data-number="27.8">
+<h2 data-number="27.8" class="anchored" data-anchor-id="sec-opt-arc-schema"><span class="header-section-number">27.8</span> WASM Boundary: Arc&lt;Schema&gt;</h2>
+<p><strong>Location:</strong> <code>crates/panproto-wasm/src/slab.rs</code>.</p>
+<p><strong>Problem:</strong> The WASM slab allocator stores schemas, migrations, and instances. Multiple migrations may reference the same schema. Without sharing, each migration would hold its own copy, wasting memory in the constrained WASM heap.</p>
+<p><strong>Solution:</strong> Schemas are stored as <code>Arc&lt;Schema&gt;</code> in the slab. When a migration is compiled against a schema, it receives a clone of the <code>Arc</code> (reference count increment), not a deep copy. The schema is deallocated only when all references are dropped.</p>
+<p>This is especially important for the TypeScript SDK, where a single <code>Panproto</code> instance may hold dozens of schemas and migrations simultaneously.</p>
+</section>
+<section id="sec-opt-wasm-optlevel" class="level2" data-number="27.9">
+<h2 data-number="27.9" class="anchored" data-anchor-id="sec-opt-wasm-optlevel"><span class="header-section-number">27.9</span> WASM opt-level = 3</h2>
+<p><strong>Location:</strong> Workspace <code>Cargo.toml</code>, in the <code>[profile.release]</code> section.</p>
+<p><strong>Problem:</strong> The default <code>opt-level</code> for release builds is <code>3</code>, but WASM builds sometimes use <code>opt-level = "s"</code> or <code>"z"</code> to minimize binary size. For a compiler library, execution speed matters more than download size.</p>
+<p><strong>Decision:</strong> panproto uses <code>opt-level = 3</code> for WASM release builds, prioritizing compute speed over binary size. The rationale:</p>
+<ul>
+<li>panproto is a compiler library, not a UI widget. Users load it once and run many migrations.</li>
+<li>The binary size difference between <code>opt-level = 3</code> and <code>opt-level = "s"</code> is roughly 15–20% for panproto.</li>
+<li>The performance difference on the restrict hot path is 20–40% in benchmarks.</li>
+</ul>
+<p>LTO (<code>lto = true</code>) and single codegen unit (<code>codegen-units = 1</code>) are also enabled to maximize cross-crate inlining.</p>
+</section>
+<section id="sec-benchmarking" class="level2" data-number="27.10">
+<h2 data-number="27.10" class="anchored" data-anchor-id="sec-benchmarking"><span class="header-section-number">27.10</span> Benchmarking Guide</h2>
+<section id="running-benchmarks" class="level3" data-number="27.10.1">
+<h3 data-number="27.10.1" class="anchored" data-anchor-id="running-benchmarks"><span class="header-section-number">27.10.1</span> Running benchmarks</h3>
+<p>panproto uses <a href="https://github.com/nvzqz/divan">divan</a> for benchmarks. Each crate with benchmarks has a <code>benches/</code> directory.</p>
+<p>Run all benchmarks:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run benchmarks for a specific crate:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-io</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run a specific benchmark by name:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> colimit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="interpreting-divan-output" class="level3" data-number="27.10.2">
+<h3 data-number="27.10.2" class="anchored" data-anchor-id="interpreting-divan-output"><span class="header-section-number">27.10.2</span> Interpreting divan output</h3>
+<p>divan reports:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fastest</code></td>
+<td>The fastest observed iteration time</td>
+</tr>
+<tr class="even">
+<td><code>median</code></td>
+<td>The median iteration time (most representative)</td>
+</tr>
+<tr class="odd">
+<td><code>mean</code></td>
+<td>The arithmetic mean (sensitive to outliers)</td>
+</tr>
+<tr class="even">
+<td><code>samples</code></td>
+<td>Number of samples collected</td>
+</tr>
+<tr class="odd">
+<td><code>iters</code></td>
+<td>Number of iterations per sample</td>
+</tr>
+</tbody>
+</table>
+<p>Focus on the <strong>median</strong> for comparing before/after. If the median improves but the fastest does not, the optimization reduced variance (also valuable). If the fastest improves but the median does not, the optimization helped only in the best case (less valuable).</p>
+</section>
+<section id="adding-a-new-benchmark" class="level3" data-number="27.10.3">
+<h3 data-number="27.10.3" class="anchored" data-anchor-id="adding-a-new-benchmark"><span class="header-section-number">27.10.3</span> Adding a new benchmark</h3>
+<ol type="1">
+<li><p>Add a function in the appropriate <code>benches/*.rs</code> file:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span><span class="pp">divan::</span>bench<span class="at">]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> my_new_benchmark(bencher<span class="op">:</span> <span class="pp">divan::</span>Bencher) <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Setup (not timed)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> input <span class="op">=</span> setup_input()<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    bencher<span class="op">.</span>bench_local(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Timed section</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        my_function(<span class="op">&amp;</span>input)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>For parameterized benchmarks, use <code>#[divan::bench(args = [...])]</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span><span class="pp">divan::</span>bench<span class="at">(</span>args <span class="op">=</span> [<span class="dv">10</span><span class="op">,</span> <span class="dv">100</span><span class="op">,</span> <span class="dv">1000</span><span class="op">,</span> <span class="dv">10_000</span><span class="at">]</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> restrict_n_nodes(bencher<span class="op">:</span> <span class="pp">divan::</span>Bencher<span class="op">,</span> n<span class="op">:</span> <span class="dt">usize</span>) <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> (instance<span class="op">,</span> migration) <span class="op">=</span> build_test_case(n)<span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    bencher<span class="op">.</span>bench_local(<span class="op">||</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        wtype_restrict(<span class="op">&amp;</span>instance<span class="op">,</span> <span class="op">&amp;</span>migration)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Run the new benchmark to verify it works:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> my_new_benchmark</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+</section>
+<section id="comparing-branches" class="level3" data-number="27.10.4">
+<h3 data-number="27.10.4" class="anchored" data-anchor-id="comparing-branches"><span class="header-section-number">27.10.4</span> Comparing branches</h3>
+<p>To compare performance before and after a change:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On main branch</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># On your feature branch</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> feature</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare (requires critcmp: cargo install critcmp)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">critcmp</span> main feature</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>divan does not natively support <code>--save-baseline</code> / <code>critcmp</code> in the same way as Criterion. For divan, the simplest approach is to run benchmarks on each branch and compare the terminal output manually, or pipe the output to files and diff them.</p>
+</div>
+</div>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-tarjan1975" class="csl-entry" role="listitem">
+Tarjan, Robert Endre. 1975. <span>“Efficiency of a Good but Not Linear Set Union Algorithm.”</span> <em>Journal of the ACM</em> 22 (2): 215–25. <a href="https://doi.org/10.1145/321879.321884">https://doi.org/10.1145/321879.321884</a>.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.github\.io\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../appendices/C-troubleshooting.html" class="pagination-link" aria-label="Troubleshooting FAQ">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../appendices/E-benchmark-results.html" class="pagination-link" aria-label="Benchmark Results">
+        <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Optimization Guide {#sec-optimization-guide}</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>This appendix documents the performance optimizations in panproto: why they exist, how they work, and how to measure their impact. If you are adding new code to a hot path, read this first.</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>panproto is a compiler library. Its restrict pipeline targets over 1 million records per second in WASM, and the native target should be significantly faster. The optimizations fall into three categories:</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Algorithmic** --- fusing pipeline passes, precomputing inverse maps, path compression.</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Data representation** --- <span class="in">`Arc&lt;str&gt;`</span> for zero-cost cloning, <span class="in">`FxHash`</span> for faster hashing.</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Build configuration** --- WASM <span class="in">`opt-level = 3`</span>, LTO, codegen-units.</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>Every optimization preserves correctness. Formal proofs are provided in <span class="co">[</span><span class="ot">Appendix E of the tutorial</span><span class="co">](https://panproto.github.io/tutorial/appendices/E-formal-proofs.html)</span>.</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Index Cache {#sec-opt-index-cache}</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-gat/src/theory.rs`</span>, in <span class="in">`Theory::new()`</span> and <span class="in">`Theory::extending()`</span>.</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>**Problem:** <span class="in">`find_sort(name)`</span> and <span class="in">`find_op(name)`</span> are called frequently during morphism checking, colimit computation, and migration compilation. The naive implementation scans a <span class="in">`Vec&lt;Sort&gt;`</span> linearly.</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>**Solution:** A <span class="in">`HashMap&lt;Arc&lt;str&gt;, usize&gt;`</span> index from names to vector positions is built once during <span class="in">`Theory`</span> construction. Lookups become $O(1)$ amortized instead of $O(n)$.</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>**Why it is safe:** <span class="in">`Theory`</span> is immutable after construction. The index is a deterministic function of the sort vector, so it cannot become stale.</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>**Performance characteristics:**</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Operation <span class="pp">|</span> Without cache <span class="pp">|</span> With cache <span class="pp">|</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`find_sort(name)`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(1)$ amortized <span class="pp">|</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Theory::new()`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(n)$ (index build) <span class="pp">|</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Memory overhead <span class="pp">|</span> None <span class="pp">|</span> One <span class="in">`HashMap`</span> (~48 bytes + entries) <span class="pp">|</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Arc\&lt;str\&gt; for Zero-Cost Cloning {#sec-opt-arc-str}</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>**Location:** All crates. Sort names, operation names, edge labels, vertex labels, and other string identifiers are <span class="in">`Arc&lt;str&gt;`</span> throughout.</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>**Problem:** String-heavy data structures (theories, schemas, instances) are cloned frequently---during morphism construction, colimit computation, migration compilation, and WASM boundary crossings. With <span class="in">`String`</span>, every clone copies the entire string buffer.</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`Arc&lt;str&gt;`</span> wraps the string data in an atomically reference-counted pointer. Cloning increments a counter ($O(1)$) instead of allocating and copying ($O(n)$ in string length).</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>**Migration path from String:** If you introduce a new struct with string fields:</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Use <span class="in">`Arc&lt;str&gt;`</span> for any field that will be cloned, hashed, or compared by value.</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Accept <span class="in">`impl Into&lt;Arc&lt;str&gt;&gt;`</span> in constructors so callers can pass <span class="in">`&amp;str`</span>, <span class="in">`String`</span>, or <span class="in">`Arc&lt;str&gt;`</span>.</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use <span class="in">`.as_ref()`</span> or <span class="in">`&amp;*name`</span> to get a <span class="in">`&amp;str`</span> when needed.</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>**Semantic equivalence:** <span class="in">`Arc&lt;str&gt;`</span> delegates <span class="in">`Eq`</span>, <span class="in">`Hash`</span>, <span class="in">`Ord`</span>, <span class="in">`Serialize`</span>, and <span class="in">`Deserialize`</span> to the inner <span class="in">`str`</span>. It is a drop-in replacement for <span class="in">`String`</span> in all trait-dependent contexts.</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## FxHash in Hot Paths {#sec-opt-fxhash}</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`panproto-gat`</span>, <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span>, <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>. Used via <span class="in">`rustc_hash::FxHashMap`</span> and <span class="in">`rustc_hash::FxHashSet`</span>.</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>**Problem:** The default Rust hasher (<span class="in">`SipHash`</span>) is designed for HashDoS resistance, which adds overhead for small, non-adversarial keys. Internal hash maps keyed by sort names, vertex IDs, or edge IDs do not face adversarial inputs.</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`FxHash`</span> is a non-cryptographic hash function optimized for small keys. It is 2--5x faster than <span class="in">`SipHash`</span> for keys under 16 bytes.</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>**Where standard HashMap is still appropriate:**</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Serialization boundaries:** Any map that is serialized to MessagePack, JSON, or another format must use <span class="in">`BTreeMap`</span> for deterministic key ordering (not <span class="in">`FxHashMap`</span>, whose iteration order is unstable).</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Public API surfaces:** If a <span class="in">`HashMap`</span> is exposed in a public type signature, prefer the standard hasher to avoid leaking the <span class="in">`rustc-hash`</span> dependency.</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WASM bridge:** Maps crossing the WASM boundary use <span class="in">`BTreeMap`</span> for deterministic round-trips.</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>**Rule of thumb:** Use <span class="in">`FxHashMap`</span>/<span class="in">`FxHashSet`</span> for internal, short-lived maps in hot paths. Use <span class="in">`BTreeMap`</span> at serialization boundaries. Use <span class="in">`HashMap`</span> (default hasher) if the map is exposed publicly and performance is not critical.</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Path Compression in Ancestor Contraction {#sec-opt-path-compression}</span></span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`ancestor_contraction()`</span>.</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>**Problem:** Step 3 of the restrict pipeline walks each surviving node up the instance tree to find its nearest surviving ancestor. In the worst case (a deeply nested schema with many pruned intermediate nodes), each walk is $O(d)$ where $d$ is the tree depth. With $n$ surviving nodes, total cost is $O(n \cdot d)$.</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>**Solution:** Path compression, borrowed from the union-find data structure <span class="co">[</span><span class="ot">@tarjan1975</span><span class="co">]</span>. After finding the nearest surviving ancestor for a node, cache the result. Also update all intermediate nodes on the walk to point directly to the answer.</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>**Algorithm sketch:**</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="in">fn find_ancestor(node, cache, surviving, parent):</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="in">    if node in cache:</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="in">        return cache[node]</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="in">    chain = []</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="in">    current = parent(node)</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="in">    while current not in surviving:</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="in">        chain.push(current)</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="in">        current = parent(current)</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="in">    // current is the nearest surviving ancestor</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="in">    for p in chain:</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="in">        cache[p] = current</span></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="in">    cache[node] = current</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="in">    return current</span></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>**Amortized complexity:** Each node's pointer is compressed at most once. Total work across all calls is $O(|V|)$, giving $O(1)$ amortized per query after the first pass. This is safe because both the tree structure and the surviving set are immutable during the contraction phase.</span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fused Restrict Pipeline {#sec-opt-fused-pipeline}</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`wtype_restrict()`</span>.</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>**Problem:** The five-step restrict pipeline (anchor check, reachability BFS, ancestor contraction, edge resolution, fan reconstruction) requires five passes over the instance tree. Each pass has good cache locality on its own, but the repeated traversal has a cost.</span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>**Solution:** Steps 1--4 are fused into a single BFS pass. The BFS carries the nearest surviving ancestor as metadata on the frontier, so ancestor contraction happens inline. Edge resolution is performed immediately when a surviving node is emitted. Fan reconstruction remains a separate pass because it operates on a different data structure (fans, not tree nodes).</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>**How it works:**</span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Enqueue the root with ancestor = root.</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Dequeue a node. Check whether its anchor survives the migration (step 1).</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If it survives and was reached through a surviving path (step 2): emit it to the output tree, resolve its edge label (step 4), and set it as the "current ancestor" for its children.</span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If it does not survive: propagate the parent's ancestor annotation to its children (step 3).</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Enqueue children and repeat.</span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>**Why individual step functions are retained:** The unfused step functions serve as the reference implementation. Integration tests run both the fused and sequential versions on every test case and assert identical output. This provides ongoing regression protection for the fused optimization.</span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inverse Map Precomputation {#sec-opt-inverse-map}</span></span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-mig/src/compose.rs`</span>.</span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>**Problem:** Composing two migrations $m_1: S_2 \to S_1$ and $m_2: S_3 \to S_2$ requires mapping vertices and edges through $m_1$'s vertex/edge maps. A naive implementation scans $m_1$'s maps for each vertex in $m_2$, giving $O(|V_1| \cdot |V_2|)$ total cost.</span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>**Solution:** Precompute the inverse map $m_1^{-1}$ (from target positions to source positions) once in $O(|V_1|)$, then use it for $O(1)$ lookups during composition. Total cost drops to $O(|V_1| + |V_2|)$.</span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Boundary: Arc\&lt;Schema\&gt; {#sec-opt-arc-schema}</span></span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-wasm/src/slab.rs`</span>.</span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>**Problem:** The WASM slab allocator stores schemas, migrations, and instances. Multiple migrations may reference the same schema. Without sharing, each migration would hold its own copy, wasting memory in the constrained WASM heap.</span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>**Solution:** Schemas are stored as <span class="in">`Arc&lt;Schema&gt;`</span> in the slab. When a migration is compiled against a schema, it receives a clone of the <span class="in">`Arc`</span> (reference count increment), not a deep copy. The schema is deallocated only when all references are dropped.</span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>This is especially important for the TypeScript SDK, where a single <span class="in">`Panproto`</span> instance may hold dozens of schemas and migrations simultaneously.</span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM opt-level = 3 {#sec-opt-wasm-optlevel}</span></span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>**Location:** Workspace <span class="in">`Cargo.toml`</span>, in the <span class="in">`[profile.release]`</span> section.</span>
+<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a>**Problem:** The default <span class="in">`opt-level`</span> for release builds is <span class="in">`3`</span>, but WASM builds sometimes use <span class="in">`opt-level = "s"`</span> or <span class="in">`"z"`</span> to minimize binary size. For a compiler library, execution speed matters more than download size.</span>
+<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>**Decision:** panproto uses <span class="in">`opt-level = 3`</span> for WASM release builds, prioritizing compute speed over binary size. The rationale:</span>
+<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>panproto is a compiler library, not a UI widget. Users load it once and run many migrations.</span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The binary size difference between <span class="in">`opt-level = 3`</span> and <span class="in">`opt-level = "s"`</span> is roughly 15--20% for panproto.</span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The performance difference on the restrict hot path is 20--40% in benchmarks.</span>
+<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a>LTO (<span class="in">`lto = true`</span>) and single codegen unit (<span class="in">`codegen-units = 1`</span>) are also enabled to maximize cross-crate inlining.</span>
+<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Benchmarking Guide {#sec-benchmarking}</span></span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running benchmarks</span></span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>panproto uses <span class="co">[</span><span class="ot">divan</span><span class="co">](https://github.com/nvzqz/divan)</span> for benchmarks. Each crate with benchmarks has a <span class="in">`benches/`</span> directory.</span>
+<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>Run all benchmarks:</span>
+<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span>
+<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>Run benchmarks for a specific crate:</span>
+<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-io</span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>Run a specific benchmark by name:</span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> colimit</span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpreting divan output</span></span>
+<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>divan reports:</span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column <span class="pp">|</span> Meaning <span class="pp">|</span></span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fastest`</span> <span class="pp">|</span> The fastest observed iteration time <span class="pp">|</span></span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`median`</span> <span class="pp">|</span> The median iteration time (most representative) <span class="pp">|</span></span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean`</span> <span class="pp">|</span> The arithmetic mean (sensitive to outliers) <span class="pp">|</span></span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`samples`</span> <span class="pp">|</span> Number of samples collected <span class="pp">|</span></span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`iters`</span> <span class="pp">|</span> Number of iterations per sample <span class="pp">|</span></span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>Focus on the **median** for comparing before/after. If the median improves but the fastest does not, the optimization reduced variance (also valuable). If the fastest improves but the median does not, the optimization helped only in the best case (less valuable).</span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a><span class="fu">### Adding a new benchmark</span></span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add a function in the appropriate <span class="in">`benches/*.rs`</span> file:</span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench]</span></span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">my_new_benchmark</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher) {</span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a>        <span class="sc">/</span><span class="er">/</span> <span class="fu">Setup</span> (not timed)</span>
+<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>        let input <span class="ot">=</span> <span class="fu">setup_input</span>();</span>
+<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>            <span class="sc">/</span><span class="er">/</span> Timed section</span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>            <span class="fu">my_function</span>(<span class="sc">&amp;</span>input)</span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For parameterized benchmarks, use <span class="in">`#[divan::bench(args = [...])]`</span>:</span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench(args = [10, 100, 1000, 10_000])]</span></span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">restrict_n_nodes</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher, n<span class="sc">:</span> usize) {</span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>        <span class="fu">let</span> (instance, migration) <span class="ot">=</span> <span class="fu">build_test_case</span>(n);</span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>            <span class="fu">wtype_restrict</span>(<span class="sc">&amp;</span>instance, <span class="sc">&amp;</span>migration)</span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Run the new benchmark to verify it works:</span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>    <span class="in">```bash</span></span>
+<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> my_new_benchmark</span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="fu">### Comparing branches</span></span>
+<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>To compare performance before and after a change:</span>
+<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a><span class="co"># On main branch</span></span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a><span class="co"># On your feature branch</span></span>
+<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> feature</span>
+<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare (requires critcmp: cargo install critcmp)</span></span>
+<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a><span class="ex">critcmp</span> main feature</span>
+<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>divan does not natively support <span class="in">`--save-baseline`</span> / <span class="in">`critcmp`</span> in the same way as Criterion. For divan, the simplest approach is to run benchmarks on each branch and compare the terminal output manually, or pipe the output to files and diff them.</span>
+<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/appendices/D-optimization-guide.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

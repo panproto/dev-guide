@@ -511,6 +511,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -525,19 +531,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -554,7 +560,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -571,19 +577,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -661,28 +679,28 @@ window.Quarto = {
 <section id="the-migration-struct" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="the-migration-struct"><span class="header-section-number">9.1</span> The Migration Struct</h2>
 <p>A <code>Migration</code> describes a mapping between two schemas. It encodes the graph morphism (vertex and edge maps), hyper-edge maps for protocols with multi-arity relations, and resolvers for disambiguation when intermediate vertices are contracted.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// A migration specification: maps between two schemas.</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">/// The vertex and edge maps define the core graph morphism. The resolver</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// and hyper-resolver handle contraction ambiguities that arise when</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// intermediate vertices are dropped.</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Migration <span class="op">{</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source vertex IDs to target vertex IDs.</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source edges to target edges.</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source hyper-edge IDs to target hyper-edge IDs.</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps (hyper-edge ID, label) pairs to new labels.</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> label_map<span class="op">:</span> HashMap<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span>)<span class="op">,</span> <span class="dt">String</span><span class="op">&gt;,</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Binary contraction resolver: `(src_vertex, tgt_vertex)` -&gt; resolved edge.</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span>)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge contraction resolver: maps `(hyper_edge_id, labels)` to</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `(target_hyper_edge_id, label_remap)`.</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>type_complexity<span class="at">)]</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;</span>)<span class="op">,</span> (<span class="dt">String</span><span class="op">,</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">/// A migration specification: maps between two schemas.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// The vertex and edge maps define the core graph morphism. The resolver</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// and hyper-resolver handle contraction ambiguities that arise when</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// intermediate vertices are dropped.</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Migration <span class="op">{</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source vertex IDs to target vertex IDs.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source edges to target edges.</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec"</span><span class="at">)]</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps source hyper-edge IDs to target hyper-edge IDs.</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Maps (hyper-edge ID, label) pairs to new labels.</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec"</span><span class="at">)]</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> label_map<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Binary contraction resolver: `(src_vertex, tgt_vertex)` -&gt; resolved edge.</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec"</span><span class="at">)]</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> Edge<span class="op">&gt;,</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Hyper-edge contraction resolver: maps `(hyper_edge_id, labels)` to</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The six fields break down into three logical groups:</p>
 <p><strong>Core morphism.</strong> The <code>vertex_map</code> and <code>edge_map</code> fields define the fundamental graph morphism from source schema to target schema. Every source vertex that should survive in the target gets an entry in <code>vertex_map</code>; vertices absent from the map are dropped. Similarly, <code>edge_map</code> records how source edges correspond to target edges.</p>
 <p><strong>Hyper-edge morphism.</strong> The <code>hyper_edge_map</code> and <code>label_map</code> fields handle protocols whose schema theories include the <code>HyperEdge</code> sort (Group B protocols such as SQL, Parquet, and Cassandra). A hyper-edge connects multiple vertices via labeled positions, so the mapping must track both the hyper-edge identity and the label assignments.</p>
@@ -690,38 +708,38 @@ window.Quarto = {
 <section id="identity-and-empty-migrations" class="level3" data-number="9.1.1">
 <h3 data-number="9.1.1" class="anchored" data-anchor-id="identity-and-empty-migrations"><span class="header-section-number">9.1.1</span> Identity and Empty Migrations</h3>
 <p>Two constructors cover the common base cases: an identity migration that maps everything to itself, and an empty migration with no mappings at all.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="36"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 35;"><span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Migration <span class="op">{</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an identity migration for the given schema vertex and edge sets.</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Every vertex maps to itself and every edge maps to itself.</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> identity(vertices<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">String</span>]<span class="op">,</span> edges<span class="op">:</span> <span class="op">&amp;</span>[Edge]) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">String</span><span class="op">&gt;</span> <span class="op">=</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>v<span class="op">|</span> (v<span class="op">.</span>clone()<span class="op">,</span> v<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;</span> <span class="op">=</span> edges<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>e<span class="op">|</span> (e<span class="op">.</span>clone()<span class="op">,</span> e<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">,</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">,</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>            resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            hyper_resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty migration (no mappings).</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>            resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            hyper_resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="36"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 35;"><span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>type_complexity<span class="at">)]</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec"</span><span class="at">)]</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Name<span class="op">&gt;</span>)<span class="op">,</span> (Name<span class="op">,</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Migration <span class="op">{</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an identity migration for the given schema vertex and edge sets.</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Every vertex maps to itself and every edge maps to itself.</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> identity(vertices<span class="op">:</span> <span class="op">&amp;</span>[Name]<span class="op">,</span> edges<span class="op">:</span> <span class="op">&amp;</span>[Edge]) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span> <span class="op">=</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>v<span class="op">|</span> (v<span class="op">.</span>clone()<span class="op">,</span> v<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;</span> <span class="op">=</span> edges<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>e<span class="op">|</span> (e<span class="op">.</span>clone()<span class="op">,</span> e<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">,</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">,</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            hyper_resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty migration (no mappings).</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>Migration::identity</code> is the starting point for incremental migration construction—begin with identity and then override specific entries to express the desired transformation. It also serves as the unit element for composition: composing any migration with the identity yields the original migration.</p>
 <p><code>Migration::empty</code> serves as the zero element when building migrations programmatically. It is primarily useful in test scaffolding or when constructing migrations from combinators where the initial state has no mappings.</p>
 </section>

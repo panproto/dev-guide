@@ -1103,7 +1103,7 @@ Tip
 <li>A <code>RenameField</code> combinator produces an empty complement. The breaking change detector will see the rename as a vertex removal + vertex addition, classifying the removal as breaking. To avoid this, use the migration engine’s rename support instead.</li>
 <li>A <code>CoerceType</code> combinator may or may not be breaking depending on the kinds involved. The breaking change detector classifies all kind changes as breaking, which aligns with the conservative interpretation.</li>
 </ul>
-<p>This interplay means you can use <code>panproto-check</code> to validate whether a lens is necessary: if the compatibility report says “fully compatible,” a lens is unnecessary (a migration suffices). If it says “breaking,” a lens with complement tracking is the appropriate tool.</p>
+<p>In practice, you can use <code>panproto-check</code> to decide whether a lens is necessary: if the compatibility report says “fully compatible,” a migration suffices. If it says “breaking,” a lens with complement tracking is the appropriate tool.</p>
 </section>
 <section id="error-handling" class="level2" data-number="10.12">
 <h2 data-number="10.12" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">10.12</span> Error Handling</h2>
@@ -1988,7 +1988,7 @@ Johnson, Michael, and Robert Rosebrugh. 2013. <span>“Delta Lenses and Opfibrat
 <span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A <span class="in">`RenameField`</span> combinator produces an empty complement. The breaking change detector will see the rename as a vertex removal + vertex addition, classifying the removal as breaking. To avoid this, use the migration engine's rename support instead.</span>
 <span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A <span class="in">`CoerceType`</span> combinator may or may not be breaking depending on the kinds involved. The breaking change detector classifies all kind changes as breaking, which aligns with the conservative interpretation.</span>
 <span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a>This interplay means you can use <span class="in">`panproto-check`</span> to validate whether a lens is necessary: if the compatibility report says "fully compatible," a lens is unnecessary (a migration suffices). If it says "breaking," a lens with complement tracking is the appropriate tool.</span>
+<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a>In practice, you can use <span class="in">`panproto-check`</span> to decide whether a lens is necessary: if the compatibility report says "fully compatible," a migration suffices. If it says "breaking," a lens with complement tracking is the appropriate tool.</span>
 <span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
 <span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a></span>

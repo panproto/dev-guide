@@ -1,123 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://panproto.github.io/dev-guide/index.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/index.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/01-welcome.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/01-welcome.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/02-first-contribution.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/02-first-contribution.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/03-building-testing.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/03-building-testing.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/04-debugging-profiling.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/04-debugging-profiling.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/05-architecture-overview.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/05-architecture-overview.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/06-gat-engine.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/06-gat-engine.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/07-schema-protocols.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/07-schema-protocols.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/08-instances-wtype.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/08-instances-wtype.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/09-migration-engine.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/09-migration-engine.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/10-lenses.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/10-lenses.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/11-breaking-changes.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/11-breaking-changes.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/12-protocols.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/12-protocols.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/13-wasm-boundary.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/13-wasm-boundary.html</loc>
+    <lastmod>2026-03-16T14:52:42.405Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/14-typescript-sdk.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/14-typescript-sdk.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/20-python-sdk.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/20-python-sdk.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/15-cli.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/15-cli.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/21-vcs-engine.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/21-vcs-engine.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/22-building-blocks.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/22-building-blocks.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/23-naming-identity.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/23-naming-identity.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/24-auto-morphisms.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/24-auto-morphisms.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/16-conventions.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/16-conventions.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/17-testing.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/17-testing.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/18-pr-workflow.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/18-pr-workflow.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/chapters/19-release.html</loc>
-    <lastmod>2026-03-16T14:31:45.304Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/chapters/19-release.html</loc>
+    <lastmod>2026-03-16T14:52:42.406Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/appendices/A-glossary.html</loc>
-    <lastmod>2026-03-16T14:31:45.302Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/appendices/A-glossary.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/appendices/B-source-code-map.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/appendices/B-source-code-map.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/appendices/C-troubleshooting.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/appendices/C-troubleshooting.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/appendices/D-optimization-guide.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/appendices/D-optimization-guide.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
   <url>
-    <loc>https://panproto.github.io/dev-guide/appendices/E-benchmark-results.html</loc>
-    <lastmod>2026-03-16T14:31:45.303Z</lastmod>
+    <loc>https://panproto.dev/dev-guide/appendices/E-benchmark-results.html</loc>
+    <lastmod>2026-03-16T14:52:42.404Z</lastmod>
   </url>
 </urlset>

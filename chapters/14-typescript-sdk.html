@@ -1010,45 +1010,45 @@ Note
 <section id="wasmhandle-and-resource-safety" class="level2" data-number="14.6">
 <h2 data-number="14.6" class="anchored" data-anchor-id="wasmhandle-and-resource-safety"><span class="header-section-number">14.6</span> WasmHandle and Resource Safety</h2>
 <p>Every WASM-side resource is wrapped in a <code>WasmHandle</code>, which implements <code>Disposable</code> for use with the <code>using</code> declaration:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="78"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 77;"><span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="co"> * Load the panproto WASM module.</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="co"> * Accepts either:</span></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A URL to the wasm-bindgen `.js` glue module (loaded via dynamic import)</span></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A pre-imported wasm-bindgen glue module object (for bundler environments like Vite)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="78"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 77;"><span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  vcs_stash<span class="op">:</span> WasmExports[<span class="st">'vcs_stash'</span>]<span class="op">;</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  vcs_stash_pop<span class="op">:</span> WasmExports[<span class="st">'vcs_stash_pop'</span>]<span class="op">;</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  vcs_blame<span class="op">:</span> WasmExports[<span class="st">'vcs_blame'</span>]<span class="op">;</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co"> * Load the panproto WASM module.</span></span>
 <span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">input</span><span class="co"> - URL string, URL object, or pre-imported glue module.</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"> *                Defaults to the bundled glue module URL.</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> The initialized WASM module</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> WasmError} if loading or instantiation fails</span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">loadWasm</span>(input<span class="op">?:</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> WasmGlueModule)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>WasmModule<span class="op">&gt;</span> {</span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> glue<span class="op">:</span> WasmGlueModule<span class="op">;</span></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input <span class="op">===</span> <span class="st">'object'</span> <span class="op">&amp;&amp;</span> <span class="st">'default'</span> <span class="kw">in</span> input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input<span class="op">.</span><span class="at">default</span> <span class="op">===</span> <span class="st">'function'</span>) {</span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Pre-imported glue module — used in bundler environments (Vite, webpack)</span></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> input<span class="op">;</span></span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Dynamic import from URL</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> url <span class="op">=</span> (input <span class="im">as</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> <span class="dt">undefined</span>) <span class="op">??</span> DEFAULT_GLUE_URL<span class="op">;</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(<span class="co">/* @vite-ignore */</span> <span class="bu">String</span>(url))<span class="op">;</span></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> initOutput <span class="op">=</span> <span class="cf">await</span> glue<span class="op">.</span><span class="fu">default</span>()<span class="op">;</span></span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> exports<span class="op">:</span> WasmExports <span class="op">=</span> {</span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>      define_protocol<span class="op">:</span> glue<span class="op">.</span><span class="at">define_protocol</span><span class="op">,</span></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>      build_schema<span class="op">:</span> glue<span class="op">.</span><span class="at">build_schema</span><span class="op">,</span></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>      check_existence<span class="op">:</span> glue<span class="op">.</span><span class="at">check_existence</span><span class="op">,</span></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>      compile_migration<span class="op">:</span> glue<span class="op">.</span><span class="at">compile_migration</span><span class="op">,</span></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>      lift_record<span class="op">:</span> glue<span class="op">.</span><span class="at">lift_record</span><span class="op">,</span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>      get_record<span class="op">:</span> glue<span class="op">.</span><span class="at">get_record</span><span class="op">,</span></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>      put_record<span class="op">:</span> glue<span class="op">.</span><span class="at">put_record</span><span class="op">,</span></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>      compose_migrations<span class="op">:</span> glue<span class="op">.</span><span class="at">compose_migrations</span><span class="op">,</span></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>      diff_schemas<span class="op">:</span> glue<span class="op">.</span><span class="at">diff_schemas</span><span class="op">,</span></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>      free_handle<span class="op">:</span> glue<span class="op">.</span><span class="at">free_handle</span><span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co"> * Accepts either:</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A URL to the wasm-bindgen `.js` glue module (loaded via dynamic import)</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co"> * - A pre-imported wasm-bindgen glue module object (for bundler environments like Vite)</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">input</span><span class="co"> - URL string, URL object, or pre-imported glue module.</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="co"> *                Defaults to the bundled glue module URL.</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> The initialized WASM module</span></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@throws</span><span class="co"> </span><span class="cv">{@link</span><span class="co"> WasmError} if loading or instantiation fails</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">loadWasm</span>(input<span class="op">?:</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> WasmGlueModule)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>WasmModule<span class="op">&gt;</span> {</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> glue<span class="op">:</span> WasmGlueModule<span class="op">;</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input <span class="op">===</span> <span class="st">'object'</span> <span class="op">&amp;&amp;</span> <span class="st">'default'</span> <span class="kw">in</span> input <span class="op">&amp;&amp;</span> <span class="kw">typeof</span> input<span class="op">.</span><span class="at">default</span> <span class="op">===</span> <span class="st">'function'</span>) {</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Pre-imported glue module — used in bundler environments (Vite, webpack)</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> input<span class="op">;</span></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Dynamic import from URL</span></span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> url <span class="op">=</span> (input <span class="im">as</span> <span class="dt">string</span> <span class="op">|</span> URL <span class="op">|</span> <span class="dt">undefined</span>) <span class="op">??</span> DEFAULT_GLUE_URL<span class="op">;</span></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>      glue <span class="op">=</span> <span class="cf">await</span> <span class="im">import</span>(<span class="co">/* @vite-ignore */</span> <span class="bu">String</span>(url))<span class="op">;</span></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> initOutput <span class="op">=</span> <span class="cf">await</span> glue<span class="op">.</span><span class="fu">default</span>()<span class="op">;</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> exports<span class="op">:</span> WasmExports <span class="op">=</span> {</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>      define_protocol<span class="op">:</span> glue<span class="op">.</span><span class="at">define_protocol</span><span class="op">,</span></span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>      build_schema<span class="op">:</span> glue<span class="op">.</span><span class="at">build_schema</span><span class="op">,</span></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>      check_existence<span class="op">:</span> glue<span class="op">.</span><span class="at">check_existence</span><span class="op">,</span></span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>      compile_migration<span class="op">:</span> glue<span class="op">.</span><span class="at">compile_migration</span><span class="op">,</span></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>      lift_record<span class="op">:</span> glue<span class="op">.</span><span class="at">lift_record</span><span class="op">,</span></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>      get_record<span class="op">:</span> glue<span class="op">.</span><span class="at">get_record</span><span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Two layers of safety prevent handle leaks:</p>
 <ol type="1">
 <li><strong><code>Symbol.dispose</code></strong> – Explicit cleanup. Called automatically by <code>using</code> or manually by the consumer.</li>
@@ -1103,8 +1103,8 @@ Important
 <span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@returns</span><span class="co"> MessagePack-encoded bytes</span></span>
 <span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
 <span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">packMigrationMapping</span>(mapping<span class="op">:</span> MigrationMapping)<span class="op">:</span> <span class="bu">Uint8Array</span> {</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">encode</span>(mapping)<span class="op">;</span></span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">// The Rust Migration struct uses `map_as_vec` for fields with non-string keys,</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">// which deserializes from a sequence of [key, value] pairs, not a map.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong><code>packToWasm(value)</code></strong> – Encode any JS value to MessagePack bytes for a WASM entry point.</li>
 <li><strong><code>unpackFromWasm&lt;T&gt;(bytes)</code></strong> – Decode MessagePack bytes from WASM into a typed JS value.</li>
@@ -1225,65 +1225,65 @@ Important
 <li><strong><code>ExistenceReport</code></strong>, <strong><code>ExistenceError</code></strong> – Existence checking results</li>
 <li><strong><code>DiffReport</code></strong>, <strong><code>SchemaChange</code></strong>, <strong><code>Compatibility</code></strong> – Schema diff results</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-startfrom="187"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 186;"><span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a><span class="co">/** Schema diff report. */</span></span>
-<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> DiffReport {</span>
-<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> compatibility<span class="op">:</span> Compatibility<span class="op">;</span></span>
-<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changes<span class="op">:</span> <span class="kw">readonly</span> SchemaChange[]<span class="op">;</span></span>
-<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a><span class="co">// Existence checking</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-startfrom="187"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 186;"><span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a><span class="im">export type</span> Compatibility <span class="op">=</span> <span class="st">'fully-compatible'</span> <span class="op">|</span> <span class="st">'backward-compatible'</span> <span class="op">|</span> <span class="st">'breaking'</span><span class="op">;</span></span>
+<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a><span class="co">/** Schema diff report. */</span></span>
+<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> DiffReport {</span>
+<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> compatibility<span class="op">:</span> Compatibility<span class="op">;</span></span>
+<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changes<span class="op">:</span> <span class="kw">readonly</span> SchemaChange[]<span class="op">;</span></span>
+<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a><span class="co">/** A structured existence error. */</span></span>
-<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ExistenceError {</span>
-<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> kind<span class="op">:</span> <span class="st">'edge-missing'</span> <span class="op">|</span> <span class="st">'kind-inconsistency'</span> <span class="op">|</span> <span class="st">'label-inconsistency'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a><span class="co">// Existence checking</span></span>
+<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a><span class="co">/** A structured existence error. */</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="error-hierarchy" class="level2" data-number="14.10">
 <h2 data-number="14.10" class="anchored" data-anchor-id="error-hierarchy"><span class="header-section-number">14.10</span> Error Hierarchy</h2>
 <p>The SDK defines a four-class error hierarchy, all extending <code>PanprotoError</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-startfrom="212"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 211;"><span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a><span class="co">// Full Diff / Compatibility (panproto-check)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-startfrom="212"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 211;"><span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="co">/** A kind change on a vertex. */</span></span>
-<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> KindChange {</span>
-<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> vertexId<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a><span class="co">/** A constraint change on a vertex. */</span></span>
-<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintChange {</span>
-<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> sort<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
-<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a><span class="co">/** Constraint diff for a single vertex. */</span></span>
-<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintDiff {</span>
-<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
-<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
-<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changed<span class="op">:</span> <span class="kw">readonly</span> ConstraintChange[]<span class="op">;</span></span>
-<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a><span class="co">/** Full schema diff with 20+ change categories. */</span></span>
-<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> FullSchemaDiff {</span>
-<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> kind_changes<span class="op">:</span> <span class="kw">readonly</span> KindChange[]<span class="op">;</span></span>
-<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
-<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
-<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_constraints<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> ConstraintDiff<span class="op">&gt;&gt;;</span></span>
-<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">unknown</span><span class="op">&gt;</span>[]<span class="op">;</span></span>
-<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
-<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
-<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_nsids<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">&gt;&gt;;</span></span>
-<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_nsids<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
-<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changed_nsids<span class="op">:</span> <span class="kw">readonly</span> [<span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">,</span> <span class="dt">string</span>][]<span class="op">;</span></span>
-<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_variants<span class="op">:</span> <span class="kw">readonly</span> Variant[]<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a><span class="co">// Full Diff / Compatibility (panproto-check)</span></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a><span class="co">/** A kind change on a vertex. */</span></span>
+<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> KindChange {</span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> vertexId<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newKind<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a><span class="co">/** A constraint change on a vertex. */</span></span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintChange {</span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> sort<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> oldValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> newValue<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a><span class="co">/** Constraint diff for a single vertex. */</span></span>
+<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> ConstraintDiff {</span>
+<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
+<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed<span class="op">:</span> <span class="kw">readonly</span> Constraint[]<span class="op">;</span></span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> changed<span class="op">:</span> <span class="kw">readonly</span> ConstraintChange[]<span class="op">;</span></span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a><span class="co">/** Full schema diff with 20+ change categories. */</span></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">interface</span> FullSchemaDiff {</span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_vertices<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> kind_changes<span class="op">:</span> <span class="kw">readonly</span> KindChange[]<span class="op">;</span></span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
+<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_edges<span class="op">:</span> <span class="kw">readonly</span> Edge[]<span class="op">;</span></span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_constraints<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> ConstraintDiff<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> modified_hyper_edges<span class="op">:</span> <span class="kw">readonly</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">unknown</span><span class="op">&gt;</span>[]<span class="op">;</span></span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_required<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="kw">readonly</span> Edge[]<span class="op">&gt;&gt;;</span></span>
+<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> added_nsids<span class="op">:</span> <span class="bu">Readonly</span><span class="op">&lt;</span><span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">string</span><span class="op">&gt;&gt;;</span></span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> removed_nsids<span class="op">:</span> <span class="kw">readonly</span> <span class="dt">string</span>[]<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><strong><code>PanprotoError</code></strong> – Base class for all panproto errors.</li>
 <li><strong><code>WasmError</code></strong> – Errors from the WASM boundary (load failures, call failures, disposed handles).</li>

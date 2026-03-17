@@ -494,6 +494,12 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -508,19 +514,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -537,7 +543,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -554,31 +560,31 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -621,7 +627,48 @@ div.csl-indent {
   <li><a href="#conflict-detection" id="toc-conflict-detection" class="nav-link" data-scroll-target="#conflict-detection"><span class="header-section-number">6.7.2</span> Conflict Detection</a></li>
   <li><a href="#practical-use-composing-schema-theories" id="toc-practical-use-composing-schema-theories" class="nav-link" data-scroll-target="#practical-use-composing-schema-theories"><span class="header-section-number">6.7.3</span> Practical Use: Composing Schema Theories</a></li>
   </ul></li>
-  <li><a href="#summary-of-the-mathematical-stack" id="toc-summary-of-the-mathematical-stack" class="nav-link" data-scroll-target="#summary-of-the-mathematical-stack"><span class="header-section-number">6.8</span> Summary of the Mathematical Stack</a></li>
+  <li><a href="#type-checking" id="toc-type-checking" class="nav-link" data-scroll-target="#type-checking"><span class="header-section-number">6.8</span> Type-Checking</a>
+  <ul class="collapse">
+  <li><a href="#typecheck_term" id="toc-typecheck_term" class="nav-link" data-scroll-target="#typecheck_term"><span class="header-section-number">6.8.1</span> typecheck_term</a></li>
+  <li><a href="#infer_var_sorts" id="toc-infer_var_sorts" class="nav-link" data-scroll-target="#infer_var_sorts"><span class="header-section-number">6.8.2</span> infer_var_sorts</a></li>
+  <li><a href="#typecheck_equation-and-typecheck_theory" id="toc-typecheck_equation-and-typecheck_theory" class="nav-link" data-scroll-target="#typecheck_equation-and-typecheck_theory"><span class="header-section-number">6.8.3</span> typecheck_equation and typecheck_theory</a></li>
+  <li><a href="#type-checking-errors" id="toc-type-checking-errors" class="nav-link" data-scroll-target="#type-checking-errors"><span class="header-section-number">6.8.4</span> Type-Checking Errors</a></li>
+  </ul></li>
+  <li><a href="#model-checking" id="toc-model-checking" class="nav-link" data-scroll-target="#model-checking"><span class="header-section-number">6.9</span> Model Checking</a>
+  <ul class="collapse">
+  <li><a href="#model-and-modelvalue" id="toc-model-and-modelvalue" class="nav-link" data-scroll-target="#model-and-modelvalue"><span class="header-section-number">6.9.1</span> Model and ModelValue</a></li>
+  <li><a href="#check_model-and-check_model_with_options" id="toc-check_model-and-check_model_with_options" class="nav-link" data-scroll-target="#check_model-and-check_model_with_options"><span class="header-section-number">6.9.2</span> check_model and check_model_with_options</a></li>
+  <li><a href="#equationviolation" id="toc-equationviolation" class="nav-link" data-scroll-target="#equationviolation"><span class="header-section-number">6.9.3</span> EquationViolation</a></li>
+  <li><a href="#checkmodeloptions" id="toc-checkmodeloptions" class="nav-link" data-scroll-target="#checkmodeloptions"><span class="header-section-number">6.9.4</span> CheckModelOptions</a></li>
+  </ul></li>
+  <li><a href="#pullbacks" id="toc-pullbacks" class="nav-link" data-scroll-target="#pullbacks"><span class="header-section-number">6.10</span> Pullbacks</a>
+  <ul class="collapse">
+  <li><a href="#mathematical-background" id="toc-mathematical-background" class="nav-link" data-scroll-target="#mathematical-background"><span class="header-section-number">6.10.1</span> Mathematical Background</a></li>
+  <li><a href="#pullbackresult" id="toc-pullbackresult" class="nav-link" data-scroll-target="#pullbackresult"><span class="header-section-number">6.10.2</span> PullbackResult</a></li>
+  <li><a href="#pullback-naming" id="toc-pullback-naming" class="nav-link" data-scroll-target="#pullback-naming"><span class="header-section-number">6.10.3</span> Pullback Naming</a></li>
+  <li><a href="#practical-use-merge-overlap-detection" id="toc-practical-use-merge-overlap-detection" class="nav-link" data-scroll-target="#practical-use-merge-overlap-detection"><span class="header-section-number">6.10.4</span> Practical Use: Merge Overlap Detection</a></li>
+  </ul></li>
+  <li><a href="#natural-transformations" id="toc-natural-transformations" class="nav-link" data-scroll-target="#natural-transformations"><span class="header-section-number">6.11</span> Natural Transformations</a>
+  <ul class="collapse">
+  <li><a href="#naturaltransformation" id="toc-naturaltransformation" class="nav-link" data-scroll-target="#naturaltransformation"><span class="header-section-number">6.11.1</span> NaturalTransformation</a></li>
+  <li><a href="#check_natural_transformation" id="toc-check_natural_transformation" class="nav-link" data-scroll-target="#check_natural_transformation"><span class="header-section-number">6.11.2</span> check_natural_transformation</a></li>
+  <li><a href="#vertical-composition" id="toc-vertical-composition" class="nav-link" data-scroll-target="#vertical-composition"><span class="header-section-number">6.11.3</span> Vertical Composition</a></li>
+  <li><a href="#horizontal-composition" id="toc-horizontal-composition" class="nav-link" data-scroll-target="#horizontal-composition"><span class="header-section-number">6.11.4</span> Horizontal Composition</a></li>
+  </ul></li>
+  <li><a href="#free-models" id="toc-free-models" class="nav-link" data-scroll-target="#free-models"><span class="header-section-number">6.12</span> Free Models</a>
+  <ul class="collapse">
+  <li><a href="#how-free-model-construction-works" id="toc-how-free-model-construction-works" class="nav-link" data-scroll-target="#how-free-model-construction-works"><span class="header-section-number">6.12.1</span> How Free Model Construction Works</a></li>
+  <li><a href="#freemodelconfig" id="toc-freemodelconfig" class="nav-link" data-scroll-target="#freemodelconfig"><span class="header-section-number">6.12.2</span> FreeModelConfig</a></li>
+  <li><a href="#practical-examples" id="toc-practical-examples" class="nav-link" data-scroll-target="#practical-examples"><span class="header-section-number">6.12.3</span> Practical Examples</a></li>
+  <li><a href="#cli-integration" id="toc-cli-integration" class="nav-link" data-scroll-target="#cli-integration"><span class="header-section-number">6.12.4</span> CLI Integration</a></li>
+  </ul></li>
+  <li><a href="#quotient-theories" id="toc-quotient-theories" class="nav-link" data-scroll-target="#quotient-theories"><span class="header-section-number">6.13</span> Quotient Theories</a>
+  <ul class="collapse">
+  <li><a href="#how-quotienting-works" id="toc-how-quotienting-works" class="nav-link" data-scroll-target="#how-quotienting-works"><span class="header-section-number">6.13.1</span> How Quotienting Works</a></li>
+  <li><a href="#error-conditions" id="toc-error-conditions" class="nav-link" data-scroll-target="#error-conditions"><span class="header-section-number">6.13.2</span> Error Conditions</a></li>
+  <li><a href="#practical-use" id="toc-practical-use" class="nav-link" data-scroll-target="#practical-use"><span class="header-section-number">6.13.3</span> Practical Use</a></li>
+  </ul></li>
+  <li><a href="#summary-of-the-mathematical-stack" id="toc-summary-of-the-mathematical-stack" class="nav-link" data-scroll-target="#summary-of-the-mathematical-stack"><span class="header-section-number">6.14</span> Summary of the Mathematical Stack</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/06-gat-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -1012,12 +1059,316 @@ Figure&nbsp;6.2: Pushout (colimit) of two theories over a shared base. The share
 <p>The <code>panproto-protocols</code> crate uses colimits extensively. For example, the AT Protocol schema theory is built by combining a base graph theory (<code>ThGraph</code> with Vertex, Edge, src, tgt) with a constraint theory (<code>ThConstraint</code> with Constraint, target) over their shared <code>ThVertex</code>. The colimit produces a theory with all three sorts and all three operations, ready to serve as the schema theory for the AT Protocol.</p>
 </section>
 </section>
-<section id="summary-of-the-mathematical-stack" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="summary-of-the-mathematical-stack"><span class="header-section-number">6.8</span> Summary of the Mathematical Stack</h2>
+<section id="type-checking" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="type-checking"><span class="header-section-number">6.8</span> Type-Checking</h2>
+<p>The <code>typecheck</code> module provides verification that terms and equations are well-typed with respect to a theory’s operation signatures. Type-checking catches malformed equations, unsound morphisms, and invalid term constructions at construction time rather than silently producing wrong results downstream.</p>
+<section id="typecheck_term" class="level3" data-number="6.8.1">
+<h3 data-number="6.8.1" class="anchored" data-anchor-id="typecheck_term"><span class="header-section-number">6.8.1</span> typecheck_term</h3>
+<p>The core function <code>typecheck_term</code> infers the output sort of a term given a variable typing context and a theory. It walks the term tree recursively:</p>
+<ul>
+<li>For <code>Term::Var(x)</code>: returns the sort from the context, or <code>GatError::UnboundVariable</code>.</li>
+<li>For <code>Term::App { op, args }</code>: looks up <code>op</code> in the theory, recursively typechecks each argument, verifies that each argument’s sort matches the operation’s input signature, and returns the output sort.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> typecheck_term(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    term<span class="op">:</span> <span class="op">&amp;</span>Term<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    ctx<span class="op">:</span> <span class="op">&amp;</span>VarContext<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    theory<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> GatError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>VarContext</code> type is a <code>FxHashMap&lt;Arc&lt;str&gt;, Arc&lt;str&gt;&gt;</code> mapping variable names to their sort names. Callers construct a context manually when type-checking a standalone term, but more commonly the context is inferred automatically by <code>infer_var_sorts</code>.</p>
+</section>
+<section id="infer_var_sorts" class="level3" data-number="6.8.2">
+<h3 data-number="6.8.2" class="anchored" data-anchor-id="infer_var_sorts"><span class="header-section-number">6.8.2</span> infer_var_sorts</h3>
+<p><code>infer_var_sorts</code> walks both sides of an equation, collecting sort constraints from every operation application site. A variable used as argument <code>i</code> of operation <code>op</code> must have the sort declared for that input position. If the same variable appears at two positions requiring different sorts, the function returns <code>GatError::ConflictingVarSort</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> infer_var_sorts(eq<span class="op">:</span> <span class="op">&amp;</span>Equation<span class="op">,</span> theory<span class="op">:</span> <span class="op">&amp;</span>Theory) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>VarContext<span class="op">,</span> GatError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This function is the entry point for automatic variable sort inference, used by <code>typecheck_equation</code>, <code>check_model</code>, and <code>free_model</code>. It eliminates the need for explicit sort annotations on equation variables.</p>
+</section>
+<section id="typecheck_equation-and-typecheck_theory" class="level3" data-number="6.8.3">
+<h3 data-number="6.8.3" class="anchored" data-anchor-id="typecheck_equation-and-typecheck_theory"><span class="header-section-number">6.8.3</span> typecheck_equation and typecheck_theory</h3>
+<p><code>typecheck_equation</code> combines inference and checking: it infers variable sorts from the equation structure, typechecks both sides, and verifies they produce the same output sort. If the two sides have different sorts, it returns <code>GatError::EquationSortMismatch</code>.</p>
+<p><code>typecheck_theory</code> iterates over all equations in a theory and typechecks each one, returning the first error encountered. This is the function called during VCS validation to ensure that a protocol’s schema theory is internally consistent.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> typecheck_theory(theory<span class="op">:</span> <span class="op">&amp;</span>Theory) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> GatError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Type-checking is fast – it is linear in the size of the term tree for each equation. Even theories with hundreds of equations typecheck in microseconds. The VCS pipeline runs <code>typecheck_theory</code> on every <code>schema add</code> and <code>schema commit</code> without measurable overhead.</p>
+</div>
+</div>
+</section>
+<section id="type-checking-errors" class="level3" data-number="6.8.4">
+<h3 data-number="6.8.4" class="anchored" data-anchor-id="type-checking-errors"><span class="header-section-number">6.8.4</span> Type-Checking Errors</h3>
+<p>The type-checking functions produce specific error variants that carry enough context for actionable diagnostics:</p>
+<div id="tbl-typecheck-errors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-typecheck-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.1: Type-checking error variants.
+</figcaption>
+<div aria-describedby="tbl-typecheck-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Error variant</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>UnboundVariable</code></td>
+<td>A variable name is not in the typing context</td>
+</tr>
+<tr class="even">
+<td><code>OpNotFound</code></td>
+<td>An operation name does not exist in the theory</td>
+</tr>
+<tr class="odd">
+<td><code>TermArityMismatch</code></td>
+<td>Wrong number of arguments to an operation</td>
+</tr>
+<tr class="even">
+<td><code>ArgTypeMismatch</code></td>
+<td>An argument’s sort does not match the expected input sort</td>
+</tr>
+<tr class="odd">
+<td><code>EquationSortMismatch</code></td>
+<td>The two sides of an equation have different sorts</td>
+</tr>
+<tr class="even">
+<td><code>ConflictingVarSort</code></td>
+<td>A variable is used at positions requiring incompatible sorts</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+</section>
+<section id="model-checking" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="model-checking"><span class="header-section-number">6.9</span> Model Checking</h2>
+<p>The <code>check_model</code> module verifies that a <code>Model</code> (an interpretation of a theory in Set) satisfies all equations of its theory by enumerating variable assignments from carrier sets and evaluating both sides.</p>
+<section id="model-and-modelvalue" class="level3" data-number="6.9.1">
+<h3 data-number="6.9.1" class="anchored" data-anchor-id="model-and-modelvalue"><span class="header-section-number">6.9.1</span> Model and ModelValue</h3>
+<p>A <code>Model</code> provides an interpretation of a theory: each sort maps to a carrier set (a <code>Vec&lt;ModelValue&gt;</code>), and each operation maps to a Rust closure that takes <code>ModelValue</code> arguments and returns a <code>ModelValue</code>. <code>ModelValue</code> is an enum with <code>Int(i64)</code> and <code>Str(String)</code> variants – enough for the finite models that panproto needs for equation verification.</p>
+</section>
+<section id="check_model-and-check_model_with_options" class="level3" data-number="6.9.2">
+<h3 data-number="6.9.2" class="anchored" data-anchor-id="check_model-and-check_model_with_options"><span class="header-section-number">6.9.2</span> check_model and check_model_with_options</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> check_model(model<span class="op">:</span> <span class="op">&amp;</span>Model<span class="op">,</span> theory<span class="op">:</span> <span class="op">&amp;</span>Theory) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>EquationViolation<span class="op">&gt;,</span> GatError<span class="op">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> check_model_with_options(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    model<span class="op">:</span> <span class="op">&amp;</span>Model<span class="op">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    theory<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    options<span class="op">:</span> <span class="op">&amp;</span>CheckModelOptions<span class="op">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>EquationViolation<span class="op">&gt;,</span> GatError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For each equation, the checker infers variable sorts, builds the cartesian product of the carrier sets for those sorts, and evaluates both sides of the equation under every assignment. If <code>lhs_value != rhs_value</code>, the assignment is recorded as an <code>EquationViolation</code>.</p>
+</section>
+<section id="equationviolation" class="level3" data-number="6.9.3">
+<h3 data-number="6.9.3" class="anchored" data-anchor-id="equationviolation"><span class="header-section-number">6.9.3</span> EquationViolation</h3>
+<p>Each violation captures the equation name, the variable assignment that triggered it, and the values that the two sides evaluated to:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EquationViolation <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> equation<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> assignment<span class="op">:</span> FxHashMap<span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> ModelValue<span class="op">&gt;,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> lhs_value<span class="op">:</span> ModelValue<span class="op">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> rhs_value<span class="op">:</span> ModelValue<span class="op">,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This gives enough information for the CLI to print a precise diagnostic: “equation ‘assoc’ violated when a=2, b=3, c=1: LHS=6, RHS=4”.</p>
+</section>
+<section id="checkmodeloptions" class="level3" data-number="6.9.4">
+<h3 data-number="6.9.4" class="anchored" data-anchor-id="checkmodeloptions"><span class="header-section-number">6.9.4</span> CheckModelOptions</h3>
+<p>The <code>CheckModelOptions</code> struct provides safety bounds for enumeration. The <code>max_assignments</code> field (default: 10,000) caps the total number of variable assignments evaluated per equation. An equation with 3 variables over a carrier of 100 elements would require 1,000,000 assignments – the limit prevents this from running for minutes.</p>
+<p>When the limit is exceeded, the function returns a <code>GatError::ModelError</code> rather than silently skipping the check. The VCS layer reports this as a non-blocking warning.</p>
+</section>
+</section>
+<section id="pullbacks" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="pullbacks"><span class="header-section-number">6.10</span> Pullbacks</h2>
+<p>The <code>pullback</code> function computes the categorical pullback of two theories over a common codomain. Where colimits (pushouts) merge theories together, pullbacks find the common structure that two theories share when mapped into a common target.</p>
+<section id="mathematical-background" class="level3" data-number="6.10.1">
+<h3 data-number="6.10.1" class="anchored" data-anchor-id="mathematical-background"><span class="header-section-number">6.10.1</span> Mathematical Background</h3>
+<p>Given morphisms <code>m1: T1 -&gt; C</code> and <code>m2: T2 -&gt; C</code>, the pullback theory <code>P</code> contains:</p>
+<ul>
+<li>A sort for each pair <code>(s1 in T1, s2 in T2)</code> where <code>m1(s1) = m2(s2)</code> and <code>s1</code>, <code>s2</code> have the same arity.</li>
+<li>An operation for each pair <code>(op1 in T1, op2 in T2)</code> where <code>m1(op1) = m2(op2)</code> and their input and output sort pairs exist in the pullback.</li>
+<li>An equation for each pair <code>(eq1 in T1, eq2 in T2)</code> where <code>m1(eq1) = m2(eq2)</code> (i.e., both equations map to the same codomain equation).</li>
+</ul>
+</section>
+<section id="pullbackresult" class="level3" data-number="6.10.2">
+<h3 data-number="6.10.2" class="anchored" data-anchor-id="pullbackresult"><span class="header-section-number">6.10.2</span> PullbackResult</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> PullbackResult <span class="op">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> theory<span class="op">:</span> Theory<span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> proj1<span class="op">:</span> TheoryMorphism<span class="op">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> proj2<span class="op">:</span> TheoryMorphism<span class="op">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The result includes projection morphisms <code>proj1: P -&gt; T1</code> and <code>proj2: P -&gt; T2</code> satisfying the universal property: <code>m1 . proj1 = m2 . proj2</code>. Both projections are validated by <code>check_morphism</code> in the test suite.</p>
+</section>
+<section id="pullback-naming" class="level3" data-number="6.10.3">
+<h3 data-number="6.10.3" class="anchored" data-anchor-id="pullback-naming"><span class="header-section-number">6.10.3</span> Pullback Naming</h3>
+<p>When both sides contribute an element with the same name, the pullback element keeps that name. When the names differ, the pullback element is named <code>"name1=name2"</code>. For example, pulling back theories where <code>V1</code> and <code>V2</code> both map to <code>Vertex</code> in the codomain produces a pullback sort named <code>V1=V2</code>.</p>
+</section>
+<section id="practical-use-merge-overlap-detection" class="level3" data-number="6.10.4">
+<h3 data-number="6.10.4" class="anchored" data-anchor-id="practical-use-merge-overlap-detection"><span class="header-section-number">6.10.4</span> Practical Use: Merge Overlap Detection</h3>
+<p>The VCS merge algorithm uses pullbacks to detect structural overlap between two branches. When merging branch A and branch B, the three-way merge computes the pullback of the two branch theories over the merge base theory. Non-empty pullback elements indicate shared structure that must be reconciled, while empty pullback means the branches modified disjoint parts of the schema.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-pullback" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pullback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-pullback">graph LR
+    P["Pullback P"]
+    T1["Theory T1"]
+    T2["Theory T2"]
+    C["Codomain C"]
+
+    P --&gt;|"proj1"| T1
+    P --&gt;|"proj2"| T2
+    T1 --&gt;|"m1"| C
+    T2 --&gt;|"m2"| C
+
+    style P fill:#e8f4e8,stroke:#2d7d2d
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pullback-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Pullback of two theories over a common codomain. The pullback contains paired elements that agree in the codomain.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="natural-transformations" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="natural-transformations"><span class="header-section-number">6.11</span> Natural Transformations</h2>
+<p>A <em>natural transformation</em> is a morphism between two theory morphisms. Given morphisms <code>F, G: T1 -&gt; T2</code>, a natural transformation <code>alpha: F =&gt; G</code> assigns to each sort <code>S</code> in <code>T1</code> a term that maps values of sort <code>F(S)</code> to values of sort <code>G(S)</code>, subject to naturality conditions.</p>
+<section id="naturaltransformation" class="level3" data-number="6.11.1">
+<h3 data-number="6.11.1" class="anchored" data-anchor-id="naturaltransformation"><span class="header-section-number">6.11.1</span> NaturalTransformation</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> NaturalTransformation <span class="op">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> source<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> target<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> components<span class="op">:</span> HashMap<span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> Term<span class="op">&gt;,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each component is a <code>Term</code> with a single free variable <code>"x"</code> representing the input value. For the identity natural transformation, every component is <code>Term::Var("x")</code>.</p>
+</section>
+<section id="check_natural_transformation" class="level3" data-number="6.11.2">
+<h3 data-number="6.11.2" class="anchored" data-anchor-id="check_natural_transformation"><span class="header-section-number">6.11.2</span> check_natural_transformation</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> check_natural_transformation(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    nt<span class="op">:</span> <span class="op">&amp;</span>NaturalTransformation<span class="op">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    f<span class="op">:</span> <span class="op">&amp;</span>TheoryMorphism<span class="op">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    g<span class="op">:</span> <span class="op">&amp;</span>TheoryMorphism<span class="op">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    domain<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    codomain<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> GatError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The checker verifies four conditions:</p>
+<ol type="1">
+<li><strong>Domain/codomain agreement</strong>: <code>F</code> and <code>G</code> must have the same domain and codomain theories.</li>
+<li><strong>Component completeness</strong>: every sort in the domain must have a component.</li>
+<li><strong>Component validity</strong>: all operations used in component terms must exist in the codomain theory.</li>
+<li><strong>Naturality</strong>: for each operation <code>op: S1 -&gt; S2</code> in the domain, the naturality square must commute: <code>alpha_S2[x := F(op)(x)] == G(op)(alpha_S1(x))</code></li>
+</ol>
+<p>The naturality check is performed symbolically by substituting and comparing term trees. For n-ary operations, the check uses variables <code>x0, x1, ...</code> for each input.</p>
+</section>
+<section id="vertical-composition" class="level3" data-number="6.11.3">
+<h3 data-number="6.11.3" class="anchored" data-anchor-id="vertical-composition"><span class="header-section-number">6.11.3</span> Vertical Composition</h3>
+<p><code>vertical_compose</code> chains two natural transformations: given <code>alpha: F =&gt; G</code> and <code>beta: G =&gt; H</code>, it produces <code>beta . alpha: F =&gt; H</code>. For each sort <code>S</code>, the composed component is <code>beta_S[x := alpha_S(x)]</code>.</p>
+<p>The function checks that <code>alpha.target == beta.source</code> (the intermediate morphism must match) and returns <code>GatError::NatTransComposeMismatch</code> if they disagree.</p>
+</section>
+<section id="horizontal-composition" class="level3" data-number="6.11.4">
+<h3 data-number="6.11.4" class="anchored" data-anchor-id="horizontal-composition"><span class="header-section-number">6.11.4</span> Horizontal Composition</h3>
+<p><code>horizontal_compose</code> composes natural transformations along different morphism pairs: given <code>alpha: F =&gt; G</code> (between <code>T1</code> and <code>T2</code>) and <code>beta: H =&gt; K</code> (between <code>T2</code> and <code>T3</code>), it produces <code>beta * alpha: H.F =&gt; K.G</code>.</p>
+<p>For each sort <code>S</code> in the domain, the composed component is <code>beta_{G(S)}[x := H(alpha_S)]</code>, where <code>G(S)</code> is the sort that <code>G</code> maps <code>S</code> to, and <code>H(alpha_S)</code> is the result of applying <code>H</code>’s operation renaming to <code>alpha</code>’s component at <code>S</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Horizontal composition is used in the VCS merge pipeline when composing migration paths through different branch histories. The <code>compose_path</code> function in <code>panproto-vcs</code> assembles a chain of natural transformations to verify that the composed migration path is coherent.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="free-models" class="level2" data-number="6.12">
+<h2 data-number="6.12" class="anchored" data-anchor-id="free-models"><span class="header-section-number">6.12</span> Free Models</h2>
+<p>The <code>free_model</code> module constructs the free (initial) model of a theory – the minimal model that satisfies all equations. This is useful for generating test instances, computing protocol skeletons, and understanding the structure of a theory.</p>
+<section id="how-free-model-construction-works" class="level3" data-number="6.12.1">
+<h3 data-number="6.12.1" class="anchored" data-anchor-id="how-free-model-construction-works"><span class="header-section-number">6.12.1</span> How Free Model Construction Works</h3>
+<p>The construction proceeds in three phases:</p>
+<ol type="1">
+<li><p><strong>Term generation</strong>: enumerate all closed terms (terms with no free variables) up to a configurable depth bound, organized by sort. Nullary operations (constants) provide the seed; non-nullary operations are applied to all combinations of existing terms of the correct sorts.</p></li>
+<li><p><strong>Quotient by equations</strong>: use a union-find data structure to identify terms that must be equal according to the theory’s equations. For each equation, enumerate all valid variable substitutions (using the generated terms as values) and union the global indices of the LHS and RHS results.</p></li>
+<li><p><strong>Build model</strong>: select one representative per equivalence class as the carrier set elements, and define operations by symbolic term application.</p></li>
+</ol>
+</section>
+<section id="freemodelconfig" class="level3" data-number="6.12.2">
+<h3 data-number="6.12.2" class="anchored" data-anchor-id="freemodelconfig"><span class="header-section-number">6.12.2</span> FreeModelConfig</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> FreeModelConfig <span class="op">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> max_depth<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span>           <span class="co">// Default: 3</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> max_terms_per_sort<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span>  <span class="co">// Default: 1000</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The depth bound controls how deep the term enumeration goes. For a theory with a successor operation, depth 3 generates <code>zero</code>, <code>succ(zero)</code>, <code>succ(succ(zero))</code>, and <code>succ(succ(succ(zero)))</code>. The per-sort limit prevents combinatorial explosion in theories with binary operations.</p>
+</section>
+<section id="practical-examples" class="level3" data-number="6.12.3">
+<h3 data-number="6.12.3" class="anchored" data-anchor-id="practical-examples"><span class="header-section-number">6.12.3</span> Practical Examples</h3>
+<ul>
+<li><strong>Pointed set</strong> (one sort, one constant): free model has exactly 1 element.</li>
+<li><strong>Two constants, no equations</strong>: free model has 2 elements.</li>
+<li><strong>Two constants with <code>a = b</code> equation</strong>: free model has 1 element (the equation collapses them).</li>
+<li><strong>Monoid with identity laws</strong>: at depth 1, the free model collapses <code>mul(unit, x)</code> and <code>mul(x, unit)</code> with <code>x</code>, leaving only the identity element.</li>
+<li><strong>Graph theory</strong> (no constants): free model has empty carrier sets for both Vertex and Edge, since there are no closed terms.</li>
+</ul>
+</section>
+<section id="cli-integration" class="level3" data-number="6.12.4">
+<h3 data-number="6.12.4" class="anchored" data-anchor-id="cli-integration"><span class="header-section-number">6.12.4</span> CLI Integration</h3>
+<p>The <code>schema scaffold</code> command uses <code>free_model</code> to generate skeleton instances. The <code>--depth</code> and <code>--max-terms</code> flags map directly to <code>FreeModelConfig</code> fields.</p>
+</section>
+</section>
+<section id="quotient-theories" class="level2" data-number="6.13">
+<h2 data-number="6.13" class="anchored" data-anchor-id="quotient-theories"><span class="header-section-number">6.13</span> Quotient Theories</h2>
+<p>The <code>quotient</code> function simplifies a theory by identifying (merging) sorts and/or operations. This is the dual of theory extension: where extension adds new structure, quotienting collapses existing structure by declaring that previously distinct elements are now the same.</p>
+<section id="how-quotienting-works" class="level3" data-number="6.13.1">
+<h3 data-number="6.13.1" class="anchored" data-anchor-id="how-quotienting-works"><span class="header-section-number">6.13.1</span> How Quotienting Works</h3>
+<p>Given a theory and a list of identification pairs <code>(a, b)</code>, the function:</p>
+<ol type="1">
+<li>Classifies each pair as a sort identification or operation identification by checking whether the names exist as sorts or operations in the theory.</li>
+<li>Builds a union-find for sorts and a union-find for operations, computing the transitive closure of the identifications.</li>
+<li>Verifies compatibility: identified sorts must have the same arity, and identified operations must have the same signature after sort renaming.</li>
+<li>Rebuilds the theory with one representative per equivalence class. Sort parameters, operation input sorts, and equation terms are all renamed through the sort and operation rename maps.</li>
+<li>Deduplicates equations that become identical after renaming.</li>
+</ol>
+</section>
+<section id="error-conditions" class="level3" data-number="6.13.2">
+<h3 data-number="6.13.2" class="anchored" data-anchor-id="error-conditions"><span class="header-section-number">6.13.2</span> Error Conditions</h3>
+<ul>
+<li><code>GatError::QuotientIncompatible</code>: the identified elements have incompatible structure (different arities or signatures).</li>
+<li><code>GatError::SortNotFound</code> / <code>GatError::OpNotFound</code>: a name referenced during rebuilding does not exist.</li>
+</ul>
+</section>
+<section id="practical-use" class="level3" data-number="6.13.3">
+<h3 data-number="6.13.3" class="anchored" data-anchor-id="practical-use"><span class="header-section-number">6.13.3</span> Practical Use</h3>
+<p>Quotient theories are used when composing protocol fragments that have structurally equivalent but differently-named elements. For example, if protocol A has sort <code>Node</code> and protocol B has sort <code>Vertex</code>, and both have the same role in the combined theory, quotienting by <code>(Node, Vertex)</code> produces a single sort (the alphabetically-first representative, <code>Node</code>).</p>
+<p>The alphabetical representative selection is deterministic and stable, ensuring that quotienting the same theory with the same identifications always produces the same result.</p>
+</section>
+</section>
+<section id="summary-of-the-mathematical-stack" class="level2" data-number="6.14">
+<h2 data-number="6.14" class="anchored" data-anchor-id="summary-of-the-mathematical-stack"><span class="header-section-number">6.14</span> Summary of the Mathematical Stack</h2>
 <div id="tbl-math-rust" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-math-rust-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.1: Mapping from mathematical concepts to Rust types.
+Table&nbsp;6.2: Mapping from mathematical concepts to Rust types.
 </figcaption>
 <div aria-describedby="tbl-math-rust-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1058,6 +1409,36 @@ Table&nbsp;6.1: Mapping from mathematical concepts to Rust types.
 <td>Theory composition</td>
 <td><code>colimit()</code></td>
 <td>Pushout in the category of GATs</td>
+</tr>
+<tr class="even">
+<td>Theory intersection</td>
+<td><code>pullback()</code></td>
+<td>Pullback in the category of GATs</td>
+</tr>
+<tr class="odd">
+<td>Term well-typedness</td>
+<td><code>typecheck_term()</code></td>
+<td>Type inference in dependent type theory</td>
+</tr>
+<tr class="even">
+<td>Model verification</td>
+<td><code>check_model()</code></td>
+<td>Model checking for equational theories</td>
+</tr>
+<tr class="odd">
+<td>2-morphism</td>
+<td><code>NaturalTransformation</code></td>
+<td>Natural transformation between functors</td>
+</tr>
+<tr class="even">
+<td>Initial model</td>
+<td><code>free_model()</code></td>
+<td>Free algebra / term model construction</td>
+</tr>
+<tr class="odd">
+<td>Theory quotient</td>
+<td><code>quotient()</code></td>
+<td>Congruence on an algebraic theory</td>
 </tr>
 </tbody>
 </table>
@@ -1575,237 +1956,512 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-gat -- The GAT Engine {#sec-gat-engine}</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-gat`</span> is Level 0 of the panproto crate hierarchy: the mathematical foundation on which everything else is built. This crate implements generalized algebraic theories (GATs) as defined by @cartmell1986, providing the data structures and algorithms for sorts, operations, equations, theory morphisms, and colimits.</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>This chapter walks through every major type and function in the crate, explaining both the Rust implementation and the mathematical concepts it encodes.</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sorts and Sort Parameters</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>A _sort_ is a type in a GAT. Sorts may be _simple_ (zero parameters) or _dependent_ (parameterized by terms of other sorts). The distinction between simple and dependent sorts is what separates GATs from ordinary algebraic theories in the sense of @lawvere1963: in an ordinary algebraic theory, all sorts are simple.</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">### SortParam</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>A <span class="in">`SortParam`</span> names a dependency of a sort on a term of another sort. For example, in the theory of categories, the hom-sort <span class="in">`Hom(a: Ob, b: Ob)`</span> has two parameters, each of sort <span class="in">`Ob`</span>.</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Sort</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Sort`</span> combines a name with zero or more <span class="in">`SortParam`</span> entries. Simple sorts have an empty parameter list.</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/sort.rs" start-line=1 end-line=38}</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>The <span class="in">`arity()`</span> method returns the number of parameters -- this is the key invariant that theory morphisms must preserve.</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>In panproto's schema theories, most sorts are simple (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Constraint`</span>). Dependent sorts appear when a schema theory needs to express constraints that depend on a vertex (e.g., <span class="in">`Constraint(v: Vertex)`</span>), or when modeling categories where morphisms depend on their source and target objects.</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### Concrete Examples</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>Here are some sorts you will encounter in panproto protocol definitions:</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Vertex`</span> -- simple sort, arity 0. The vertices of a schema graph.</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Edge`</span> -- simple sort, arity 0. Directed edges between vertices.</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Hom(a: Ob, b: Ob)`</span> -- dependent sort, arity 2. Morphisms in a category.</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Constraint(v: Vertex)`</span> -- dependent sort, arity 1. Constraints attached to a specific vertex.</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operations</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>An _operation_ (also called a term constructor) is a function in a GAT. Each operation has a name, typed inputs, and a typed output. Operations with zero inputs are constants (nullary constructors).</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/op.rs" start-line=1 end-line=23}</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>The <span class="in">`inputs`</span> field stores <span class="in">`(param_name, sort_name)`</span> pairs. This is sufficient for first-order operations. Higher-order operations (operations whose inputs are themselves operations) are not directly supported -- panproto does not need them for its protocol modeling use case.</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Operation Signatures in Practice</span></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>In a graph schema theory, you would see operations like:</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`src: (e: Edge) -&gt; Vertex`</span> -- the source vertex of an edge.</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`tgt: (e: Edge) -&gt; Vertex`</span> -- the target vertex of an edge.</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`unit: () -&gt; Carrier`</span> -- a nullary operation (constant) in a monoid theory.</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>The type signature of an operation is the pair <span class="in">`(input_sorts, output_sort)`</span>. Theory morphisms must preserve these signatures up to the sort mapping.</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Equations</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>Equations (axioms) constrain the behavior of operations. An equation consists of a name and two <span class="in">`Term`</span> trees that must be considered equal. panproto uses a simple term language:</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Term::Var(name)`</span> -- a variable reference.</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Term::App(op_name, args)`</span> -- application of an operation to arguments.</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>Equations are not computationally evaluated; they serve as proof obligations that theory morphisms must preserve. When <span class="in">`panproto-gat`</span> checks a morphism, it verifies that for each equation <span class="in">`lhs = rhs`</span> in the domain theory, the mapped equation <span class="in">`F(lhs) = F(rhs)`</span> exists in the codomain theory.</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Theory`</span> struct is the central type of <span class="in">`panproto-gat`</span>. It groups sorts, operations, and equations under a name, with optional inheritance via <span class="in">`extends`</span>.</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/theory.rs" start-line=10 end-line=44}</span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Inheritance</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>The <span class="in">`extends`</span> field enables compositional theory construction. When theory B extends theory A, B inherits all of A's sorts, operations, and equations. The <span class="in">`resolve_theory`</span> function computes the transitive closure of the inheritance chain, merging declarations and detecting cycles.</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>Diamond inheritance is handled correctly: if theories B and C both extend A, and theory D extends both B and C, the shared declarations from A appear exactly once in the resolved theory D.</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>For the conceptual introduction to GATs, see the <span class="co">[</span><span class="ot">tutorial chapter 3</span><span class="co">](https://panproto.github.io/tutorial/chapters/03-what-is-a-theory.html)</span>.</span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Structure Diagram</span></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>%%| label: fig-theory-structure</span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Internal structure of a Theory. Sorts may have SortParam dependencies; Operations reference sorts by name; Equations contain Term trees.</span><span class="ot">"</span></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>classDiagram</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    class Theory {</span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>        +String name</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ extends</span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>        +Vec~Sort~ sorts</span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>        +Vec~Operation~ ops</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>        +Vec~Equation~ eqs</span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>        +find_sort(name) Option~Sort~</span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>        +find_op(name) Option~Operation~</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>        +find_eq(name) Option~Equation~</span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>    class Sort {</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>        +String name</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>        +Vec~SortParam~ params</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>        +is_simple() bool</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>        +arity() usize</span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    class SortParam {</span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>        +String name</span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>        +String <span class="fu">sort</span></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>    class Operation {</span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>        +String name</span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>        +Vec~(String, String)~ inputs</span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>        +String output</span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>        +arity() usize</span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>    class Equation {</span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>        +String name</span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>        +Term lhs</span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>        +Term rhs</span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>    class Term {</span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>        <span class="ot">&lt;&lt;</span><span class="kw">enumeration</span><span class="st">&gt;&gt;</span></span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="st">        Var(String)</span></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="st">        App(String, Vec~Term~)</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Sort : contains</span></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Operation : contains</span></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Equation : contains</span></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="st">    Sort *-- SortParam : params</span></span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="st">    Equation *-- Term : lhs, rhs</span></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="st">    Operation ..&gt; Sort : references by name</span></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="st">## Theory Morphisms</span></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="st">A _theory morphism_ is a structure-preserving map from one theory to another. It maps sorts to sorts and operations to operations, subject to three preservation conditions:</span></span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="st">1. **Arity preservation**: if sort S has arity n, then F(S) must also have arity n.</span></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="st">2. **Signature preservation**: if operation `op: (a: A, b: B) -&gt; C`, then `F(op): (a: F(A), b: F(B)) -&gt; F(C)`.</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="st">3. **Equation preservation**: if `lhs = rhs` is an equation in the domain, then `F(lhs) = F(rhs)` must be an equation in the codomain.</span></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="st">```{.rust include="../../crates/panproto-gat/src/morphism.rs" start-line=8 end-line=24}</span></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="st">The `check_morphism` function validates all three conditions. This is the critical correctness check for schema migrations: a migration specification is valid if and only if it induces a valid theory morphism between the source and target schema theories.</span></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="st">### Why Morphisms Matter for Migration</span></span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="st">When you migrate data from schema v1 to schema v2, the migration is mathematically a theory morphism from v2's schema theory to v1's schema theory (note the direction reversal -- this is the contravariance of restriction functors). The `CompiledMigration` in `panproto-inst` is the executable form of this morphism, and the `wtype_restrict` pipeline is the functor it induces on instances.</span></span>
-<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="st">This is the fundamental guarantee that makes panproto migrations principled: because the restrict operation is functorial, composing two migrations and restricting is the same as restricting twice [</span><span class="dt">@spivak2012</span><span class="st">]. There are no "migration bugs" that arise from order-of-operations issues.</span></span>
-<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a><span class="st">### Inducing Schema Renames</span></span>
-<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a><span class="st">Theory morphisms induce schema-level renames via `induce_schema_renames()`. Sort-map entries where `old ≠ new` become `NameSite::VertexKind` renames (since sorts map to vertex kinds at the schema level), and op-map entries where `old ≠ new` become `NameSite::EdgeKind` renames. This is the top of the _morphism tower_ described in </span><span class="dt">@sec</span><span class="st">-naming-identity.</span></span>
-<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a><span class="st">## Identity and Naming</span></span>
-<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a><span class="st">The `ident` module provides three types that separate identity from display name:</span></span>
-<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a><span class="st">- **`ScopeTag`**: An opaque scope tag distinguishing different naming contexts. Generated via `ScopeTag::fresh()`.</span></span>
-<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a><span class="st">- **`Ident`**: A first-class identifier where equality uses `(scope, index)` only, not the display name. Follows `GATlab` [</span><span class="dt">@lynch2024</span><span class="st">].</span></span>
-<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a><span class="st">- **`Name`**: An interned string handle (`Arc&lt;str&gt;`) with a pointer-equality fast path. Drop-in replacement for `String` in hot-path types.</span></span>
-<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a><span class="st">The `NameSite` enum enumerates the nine naming sites (edge labels, vertex IDs, vertex kinds, edge kinds, NSIDs, constraint sorts, instance anchors, theory names, sort names). `SiteRename` is a site-qualified rename operation used in schema morphism provenance and VCS commit metadata.</span></span>
-<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a><span class="st">See </span><span class="dt">@sec</span><span class="st">-naming-identity for the full contributor guide.</span></span>
-<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a><span class="st">## Colimits</span></span>
-<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a><span class="st">The `colimit` function computes the pushout of two theories over a shared base theory. This is how panproto composes protocol fragments modularly.</span></span>
-<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a><span class="st">```{.rust include="../../crates/panproto-gat/src/colimit.rs" start-line=6 end-line=24}</span></span>
-<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a><span class="st">Given theories T1 and T2 that share a common sub-theory S, the colimit produces a combined theory containing all declarations from both, with the shared declarations identified (not duplicated).</span></span>
-<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a><span class="st">### Pushout Diagram</span></span>
-<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a><span class="st">%%| label: fig-pushout</span></span>
-<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a><span class="st">%%| fig-cap: "Pushout (colimit) of two theories over a shared base. The shared sorts, operations, and equations appear exactly once in the result."</span></span>
-<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a><span class="st">graph LR</span></span>
-<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a><span class="st">    S["Shared theory S"]</span></span>
-<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="st">    T1["Theory T1"]</span></span>
-<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a><span class="st">    T2["Theory T2"]</span></span>
-<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a><span class="st">    C["Colimit T1 +_S T2"]</span></span>
-<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a><span class="st">    S --&gt;|"inclusion"| T1</span></span>
-<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a><span class="st">    S --&gt;|"inclusion"| T2</span></span>
-<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a><span class="st">    T1 --&gt;|"injection"| C</span></span>
-<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a><span class="st">    T2 --&gt;|"injection"| C</span></span>
-<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="st">    style C fill:#e8f4e8,stroke:#2d7d2d</span></span>
-<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
-<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a><span class="st">### Conflict Detection</span></span>
-<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a><span class="st">The colimit function detects three kinds of conflicts:</span></span>
-<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a><span class="st">- **Sort conflicts**: T1 and T2 both declare a sort with the same name but different parameter lists, and the sort is not in the shared base.</span></span>
-<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a><span class="st">- **Operation conflicts**: same-named operations with incompatible signatures.</span></span>
-<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a><span class="st">- **Equation conflicts**: same-named equations with different term content.</span></span>
-<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a><span class="st">Compatible duplicates (same name, same definition) are silently deduplicated. This allows independent protocol extensions to share common vocabulary without coordination, as long as they agree on the meaning of shared names.</span></span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a><span class="st">### Practical Use: Composing Schema Theories</span></span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="st">The `panproto-protocols` crate uses colimits extensively. For example, the AT Protocol schema theory is built by combining a base graph theory (`ThGraph` with Vertex, Edge, src, tgt) with a constraint theory (`ThConstraint` with Constraint, target) over their shared `ThVertex`. The colimit produces a theory with all three sorts and all three operations, ready to serve as the schema theory for the AT Protocol.</span></span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a><span class="st">## Summary of the Mathematical Stack</span></span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a><span class="st">| Concept | Rust type | Mathematical origin |</span></span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="st">|---|---|---|</span></span>
-<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="st">| Type in a GAT | `Sort` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 1 |</span></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="st">| Term constructor | `Operation` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 2 |</span></span>
-<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a><span class="st">| Axiom | `Equation` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 3 |</span></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a><span class="st">| Structure-preserving map | `TheoryMorphism` | </span><span class="dt">@lawvere1963</span><span class="st"> (generalized to GATs) |</span></span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a><span class="st">| Theory composition | `colimit()` | Pushout in the category of GATs |</span></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a><span class="st">: Mapping from mathematical concepts to Rust types. {#tbl-math-rust}</span></span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="st">The GATlab system [</span><span class="dt">@lynch2024</span><span class="st">] takes a similar approach to implementing GATs in Julia, focusing on computational category theory. panproto's `panproto-gat` is more narrowly scoped -- it provides just enough GAT machinery to support schema migration and protocol composition, without attempting to be a general-purpose categorical algebra system.</span></span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.callout-important}</span></span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="st">`panproto-gat` is the only crate in the system that has zero knowledge of schemas, instances, or protocols. If you find yourself importing `panproto-schema` types in `panproto-gat`, something has gone wrong architecturally. The abstraction boundary here is strict and intentional.</span></span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-gat -- The GAT Engine {#sec-gat-engine}</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-gat`</span> is Level 0 of the panproto crate hierarchy: the mathematical foundation on which everything else is built. This crate implements generalized algebraic theories (GATs) as defined by @cartmell1986, providing the data structures and algorithms for sorts, operations, equations, theory morphisms, and colimits.</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>This chapter walks through every major type and function in the crate, explaining both the Rust implementation and the mathematical concepts it encodes.</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sorts and Sort Parameters</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>A _sort_ is a type in a GAT. Sorts may be _simple_ (zero parameters) or _dependent_ (parameterized by terms of other sorts). The distinction between simple and dependent sorts is what separates GATs from ordinary algebraic theories in the sense of @lawvere1963: in an ordinary algebraic theory, all sorts are simple.</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">### SortParam</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>A <span class="in">`SortParam`</span> names a dependency of a sort on a term of another sort. For example, in the theory of categories, the hom-sort <span class="in">`Hom(a: Ob, b: Ob)`</span> has two parameters, each of sort <span class="in">`Ob`</span>.</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Sort</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Sort`</span> combines a name with zero or more <span class="in">`SortParam`</span> entries. Simple sorts have an empty parameter list.</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/sort.rs" start-line=1 end-line=38}</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>The <span class="in">`arity()`</span> method returns the number of parameters -- this is the key invariant that theory morphisms must preserve.</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>In panproto's schema theories, most sorts are simple (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Constraint`</span>). Dependent sorts appear when a schema theory needs to express constraints that depend on a vertex (e.g., <span class="in">`Constraint(v: Vertex)`</span>), or when modeling categories where morphisms depend on their source and target objects.</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="fu">### Concrete Examples</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>Here are some sorts you will encounter in panproto protocol definitions:</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Vertex`</span> -- simple sort, arity 0. The vertices of a schema graph.</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Edge`</span> -- simple sort, arity 0. Directed edges between vertices.</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Hom(a: Ob, b: Ob)`</span> -- dependent sort, arity 2. Morphisms in a category.</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Constraint(v: Vertex)`</span> -- dependent sort, arity 1. Constraints attached to a specific vertex.</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operations</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>An _operation_ (also called a term constructor) is a function in a GAT. Each operation has a name, typed inputs, and a typed output. Operations with zero inputs are constants (nullary constructors).</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/op.rs" start-line=1 end-line=23}</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>The <span class="in">`inputs`</span> field stores <span class="in">`(param_name, sort_name)`</span> pairs. This is sufficient for first-order operations. Higher-order operations (operations whose inputs are themselves operations) are not directly supported -- panproto does not need them for its protocol modeling use case.</span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="fu">### Operation Signatures in Practice</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>In a graph schema theory, you would see operations like:</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`src: (e: Edge) -&gt; Vertex`</span> -- the source vertex of an edge.</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`tgt: (e: Edge) -&gt; Vertex`</span> -- the target vertex of an edge.</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`unit: () -&gt; Carrier`</span> -- a nullary operation (constant) in a monoid theory.</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>The type signature of an operation is the pair <span class="in">`(input_sorts, output_sort)`</span>. Theory morphisms must preserve these signatures up to the sort mapping.</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Equations</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>Equations (axioms) constrain the behavior of operations. An equation consists of a name and two <span class="in">`Term`</span> trees that must be considered equal. panproto uses a simple term language:</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Term::Var(name)`</span> -- a variable reference.</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Term::App(op_name, args)`</span> -- application of an operation to arguments.</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>Equations are not computationally evaluated; they serve as proof obligations that theory morphisms must preserve. When <span class="in">`panproto-gat`</span> checks a morphism, it verifies that for each equation <span class="in">`lhs = rhs`</span> in the domain theory, the mapped equation <span class="in">`F(lhs) = F(rhs)`</span> exists in the codomain theory.</span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Theory`</span> struct is the central type of <span class="in">`panproto-gat`</span>. It groups sorts, operations, and equations under a name, with optional inheritance via <span class="in">`extends`</span>.</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/theory.rs" start-line=10 end-line=44}</span></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Inheritance</span></span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>The <span class="in">`extends`</span> field enables compositional theory construction. When theory B extends theory A, B inherits all of A's sorts, operations, and equations. The <span class="in">`resolve_theory`</span> function computes the transitive closure of the inheritance chain, merging declarations and detecting cycles.</span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>Diamond inheritance is handled correctly: if theories B and C both extend A, and theory D extends both B and C, the shared declarations from A appear exactly once in the resolved theory D.</span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>For the conceptual introduction to GATs, see the <span class="co">[</span><span class="ot">tutorial chapter 3</span><span class="co">](https://panproto.github.io/tutorial/chapters/03-what-is-a-theory.html)</span>.</span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Structure Diagram</span></span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>%%| label: fig-theory-structure</span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Internal structure of a Theory. Sorts may have SortParam dependencies; Operations reference sorts by name; Equations contain Term trees.</span><span class="ot">"</span></span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>classDiagram</span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>    class Theory {</span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>        +Vec~String~ extends</span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>        +Vec~Sort~ sorts</span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>        +Vec~Operation~ ops</span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a>        +Vec~Equation~ eqs</span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a>        +find_sort(name) Option~Sort~</span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a>        +find_op(name) Option~Operation~</span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a>        +find_eq(name) Option~Equation~</span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a>    class Sort {</span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>        +Vec~SortParam~ params</span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a>        +is_simple() bool</span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a>        +arity() usize</span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a>    class SortParam {</span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a>        +String <span class="fu">sort</span></span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>    class Operation {</span>
+<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a>        +Vec~(String, String)~ inputs</span>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a>        +String output</span>
+<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a>        +arity() usize</span>
+<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a>    class Equation {</span>
+<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a>        +String name</span>
+<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a>        +Term lhs</span>
+<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a>        +Term rhs</span>
+<span id="cb15-124"><a href="#cb15-124" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-125"><a href="#cb15-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-126"><a href="#cb15-126" aria-hidden="true" tabindex="-1"></a>    class Term {</span>
+<span id="cb15-127"><a href="#cb15-127" aria-hidden="true" tabindex="-1"></a>        <span class="ot">&lt;&lt;</span><span class="kw">enumeration</span><span class="st">&gt;&gt;</span></span>
+<span id="cb15-128"><a href="#cb15-128" aria-hidden="true" tabindex="-1"></a><span class="st">        Var(String)</span></span>
+<span id="cb15-129"><a href="#cb15-129" aria-hidden="true" tabindex="-1"></a><span class="st">        App(String, Vec~Term~)</span></span>
+<span id="cb15-130"><a href="#cb15-130" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb15-131"><a href="#cb15-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-132"><a href="#cb15-132" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Sort : contains</span></span>
+<span id="cb15-133"><a href="#cb15-133" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Operation : contains</span></span>
+<span id="cb15-134"><a href="#cb15-134" aria-hidden="true" tabindex="-1"></a><span class="st">    Theory *-- Equation : contains</span></span>
+<span id="cb15-135"><a href="#cb15-135" aria-hidden="true" tabindex="-1"></a><span class="st">    Sort *-- SortParam : params</span></span>
+<span id="cb15-136"><a href="#cb15-136" aria-hidden="true" tabindex="-1"></a><span class="st">    Equation *-- Term : lhs, rhs</span></span>
+<span id="cb15-137"><a href="#cb15-137" aria-hidden="true" tabindex="-1"></a><span class="st">    Operation ..&gt; Sort : references by name</span></span>
+<span id="cb15-138"><a href="#cb15-138" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-139"><a href="#cb15-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-140"><a href="#cb15-140" aria-hidden="true" tabindex="-1"></a><span class="st">## Theory Morphisms</span></span>
+<span id="cb15-141"><a href="#cb15-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-142"><a href="#cb15-142" aria-hidden="true" tabindex="-1"></a><span class="st">A _theory morphism_ is a structure-preserving map from one theory to another. It maps sorts to sorts and operations to operations, subject to three preservation conditions:</span></span>
+<span id="cb15-143"><a href="#cb15-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-144"><a href="#cb15-144" aria-hidden="true" tabindex="-1"></a><span class="st">1. **Arity preservation**: if sort S has arity n, then F(S) must also have arity n.</span></span>
+<span id="cb15-145"><a href="#cb15-145" aria-hidden="true" tabindex="-1"></a><span class="st">2. **Signature preservation**: if operation `op: (a: A, b: B) -&gt; C`, then `F(op): (a: F(A), b: F(B)) -&gt; F(C)`.</span></span>
+<span id="cb15-146"><a href="#cb15-146" aria-hidden="true" tabindex="-1"></a><span class="st">3. **Equation preservation**: if `lhs = rhs` is an equation in the domain, then `F(lhs) = F(rhs)` must be an equation in the codomain.</span></span>
+<span id="cb15-147"><a href="#cb15-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-148"><a href="#cb15-148" aria-hidden="true" tabindex="-1"></a><span class="st">```{.rust include="../../crates/panproto-gat/src/morphism.rs" start-line=8 end-line=24}</span></span>
+<span id="cb15-149"><a href="#cb15-149" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-150"><a href="#cb15-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-151"><a href="#cb15-151" aria-hidden="true" tabindex="-1"></a><span class="st">The `check_morphism` function validates all three conditions. This is the critical correctness check for schema migrations: a migration specification is valid if and only if it induces a valid theory morphism between the source and target schema theories.</span></span>
+<span id="cb15-152"><a href="#cb15-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-153"><a href="#cb15-153" aria-hidden="true" tabindex="-1"></a><span class="st">### Why Morphisms Matter for Migration</span></span>
+<span id="cb15-154"><a href="#cb15-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-155"><a href="#cb15-155" aria-hidden="true" tabindex="-1"></a><span class="st">When you migrate data from schema v1 to schema v2, the migration is mathematically a theory morphism from v2's schema theory to v1's schema theory (note the direction reversal -- this is the contravariance of restriction functors). The `CompiledMigration` in `panproto-inst` is the executable form of this morphism, and the `wtype_restrict` pipeline is the functor it induces on instances.</span></span>
+<span id="cb15-156"><a href="#cb15-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-157"><a href="#cb15-157" aria-hidden="true" tabindex="-1"></a><span class="st">This is the fundamental guarantee that makes panproto migrations principled: because the restrict operation is functorial, composing two migrations and restricting is the same as restricting twice [</span><span class="dt">@spivak2012</span><span class="st">]. There are no "migration bugs" that arise from order-of-operations issues.</span></span>
+<span id="cb15-158"><a href="#cb15-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-159"><a href="#cb15-159" aria-hidden="true" tabindex="-1"></a><span class="st">### Inducing Schema Renames</span></span>
+<span id="cb15-160"><a href="#cb15-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-161"><a href="#cb15-161" aria-hidden="true" tabindex="-1"></a><span class="st">Theory morphisms induce schema-level renames via `induce_schema_renames()`. Sort-map entries where `old ≠ new` become `NameSite::VertexKind` renames (since sorts map to vertex kinds at the schema level), and op-map entries where `old ≠ new` become `NameSite::EdgeKind` renames. This is the top of the _morphism tower_ described in </span><span class="dt">@sec</span><span class="st">-naming-identity.</span></span>
+<span id="cb15-162"><a href="#cb15-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-163"><a href="#cb15-163" aria-hidden="true" tabindex="-1"></a><span class="st">## Identity and Naming</span></span>
+<span id="cb15-164"><a href="#cb15-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a><span class="st">The `ident` module provides three types that separate identity from display name:</span></span>
+<span id="cb15-166"><a href="#cb15-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a><span class="st">- **`ScopeTag`**: An opaque scope tag distinguishing different naming contexts. Generated via `ScopeTag::fresh()`.</span></span>
+<span id="cb15-168"><a href="#cb15-168" aria-hidden="true" tabindex="-1"></a><span class="st">- **`Ident`**: A first-class identifier where equality uses `(scope, index)` only, not the display name. Follows `GATlab` [</span><span class="dt">@lynch2024</span><span class="st">].</span></span>
+<span id="cb15-169"><a href="#cb15-169" aria-hidden="true" tabindex="-1"></a><span class="st">- **`Name`**: An interned string handle (`Arc&lt;str&gt;`) with a pointer-equality fast path. Drop-in replacement for `String` in hot-path types.</span></span>
+<span id="cb15-170"><a href="#cb15-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a><span class="st">The `NameSite` enum enumerates the nine naming sites (edge labels, vertex IDs, vertex kinds, edge kinds, NSIDs, constraint sorts, instance anchors, theory names, sort names). `SiteRename` is a site-qualified rename operation used in schema morphism provenance and VCS commit metadata.</span></span>
+<span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a><span class="st">See </span><span class="dt">@sec</span><span class="st">-naming-identity for the full contributor guide.</span></span>
+<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a><span class="st">## Colimits</span></span>
+<span id="cb15-176"><a href="#cb15-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a><span class="st">The `colimit` function computes the pushout of two theories over a shared base theory. This is how panproto composes protocol fragments modularly.</span></span>
+<span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a><span class="st">```{.rust include="../../crates/panproto-gat/src/colimit.rs" start-line=6 end-line=24}</span></span>
+<span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a><span class="st">Given theories T1 and T2 that share a common sub-theory S, the colimit produces a combined theory containing all declarations from both, with the shared declarations identified (not duplicated).</span></span>
+<span id="cb15-183"><a href="#cb15-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-184"><a href="#cb15-184" aria-hidden="true" tabindex="-1"></a><span class="st">### Pushout Diagram</span></span>
+<span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a><span class="st">%%| label: fig-pushout</span></span>
+<span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a><span class="st">%%| fig-cap: "Pushout (colimit) of two theories over a shared base. The shared sorts, operations, and equations appear exactly once in the result."</span></span>
+<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a><span class="st">graph LR</span></span>
+<span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a><span class="st">    S["Shared theory S"]</span></span>
+<span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a><span class="st">    T1["Theory T1"]</span></span>
+<span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a><span class="st">    T2["Theory T2"]</span></span>
+<span id="cb15-195"><a href="#cb15-195" aria-hidden="true" tabindex="-1"></a><span class="st">    C["Colimit T1 +_S T2"]</span></span>
+<span id="cb15-196"><a href="#cb15-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-197"><a href="#cb15-197" aria-hidden="true" tabindex="-1"></a><span class="st">    S --&gt;|"inclusion"| T1</span></span>
+<span id="cb15-198"><a href="#cb15-198" aria-hidden="true" tabindex="-1"></a><span class="st">    S --&gt;|"inclusion"| T2</span></span>
+<span id="cb15-199"><a href="#cb15-199" aria-hidden="true" tabindex="-1"></a><span class="st">    T1 --&gt;|"injection"| C</span></span>
+<span id="cb15-200"><a href="#cb15-200" aria-hidden="true" tabindex="-1"></a><span class="st">    T2 --&gt;|"injection"| C</span></span>
+<span id="cb15-201"><a href="#cb15-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-202"><a href="#cb15-202" aria-hidden="true" tabindex="-1"></a><span class="st">    style C fill:#e8f4e8,stroke:#2d7d2d</span></span>
+<span id="cb15-203"><a href="#cb15-203" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-204"><a href="#cb15-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-205"><a href="#cb15-205" aria-hidden="true" tabindex="-1"></a><span class="st">### Conflict Detection</span></span>
+<span id="cb15-206"><a href="#cb15-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-207"><a href="#cb15-207" aria-hidden="true" tabindex="-1"></a><span class="st">The colimit function detects three kinds of conflicts:</span></span>
+<span id="cb15-208"><a href="#cb15-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-209"><a href="#cb15-209" aria-hidden="true" tabindex="-1"></a><span class="st">- **Sort conflicts**: T1 and T2 both declare a sort with the same name but different parameter lists, and the sort is not in the shared base.</span></span>
+<span id="cb15-210"><a href="#cb15-210" aria-hidden="true" tabindex="-1"></a><span class="st">- **Operation conflicts**: same-named operations with incompatible signatures.</span></span>
+<span id="cb15-211"><a href="#cb15-211" aria-hidden="true" tabindex="-1"></a><span class="st">- **Equation conflicts**: same-named equations with different term content.</span></span>
+<span id="cb15-212"><a href="#cb15-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-213"><a href="#cb15-213" aria-hidden="true" tabindex="-1"></a><span class="st">Compatible duplicates (same name, same definition) are silently deduplicated. This allows independent protocol extensions to share common vocabulary without coordination, as long as they agree on the meaning of shared names.</span></span>
+<span id="cb15-214"><a href="#cb15-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-215"><a href="#cb15-215" aria-hidden="true" tabindex="-1"></a><span class="st">### Practical Use: Composing Schema Theories</span></span>
+<span id="cb15-216"><a href="#cb15-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-217"><a href="#cb15-217" aria-hidden="true" tabindex="-1"></a><span class="st">The `panproto-protocols` crate uses colimits extensively. For example, the AT Protocol schema theory is built by combining a base graph theory (`ThGraph` with Vertex, Edge, src, tgt) with a constraint theory (`ThConstraint` with Constraint, target) over their shared `ThVertex`. The colimit produces a theory with all three sorts and all three operations, ready to serve as the schema theory for the AT Protocol.</span></span>
+<span id="cb15-218"><a href="#cb15-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-219"><a href="#cb15-219" aria-hidden="true" tabindex="-1"></a><span class="st">## Type-Checking</span></span>
+<span id="cb15-220"><a href="#cb15-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-221"><a href="#cb15-221" aria-hidden="true" tabindex="-1"></a><span class="st">The `typecheck` module provides verification that terms and equations are well-typed with respect to a theory's operation signatures. Type-checking catches malformed equations, unsound morphisms, and invalid term constructions at construction time rather than silently producing wrong results downstream.</span></span>
+<span id="cb15-222"><a href="#cb15-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-223"><a href="#cb15-223" aria-hidden="true" tabindex="-1"></a><span class="st">### typecheck_term</span></span>
+<span id="cb15-224"><a href="#cb15-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-225"><a href="#cb15-225" aria-hidden="true" tabindex="-1"></a><span class="st">The core function `typecheck_term` infers the output sort of a term given a variable typing context and a theory. It walks the term tree recursively:</span></span>
+<span id="cb15-226"><a href="#cb15-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-227"><a href="#cb15-227" aria-hidden="true" tabindex="-1"></a><span class="st">- For `Term::Var(x)`: returns the sort from the context, or `GatError::UnboundVariable`.</span></span>
+<span id="cb15-228"><a href="#cb15-228" aria-hidden="true" tabindex="-1"></a><span class="st">- For `Term::App { op, args }`: looks up `op` in the theory, recursively typechecks each argument, verifies that each argument's sort matches the operation's input signature, and returns the output sort.</span></span>
+<span id="cb15-229"><a href="#cb15-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-230"><a href="#cb15-230" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-231"><a href="#cb15-231" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn typecheck_term(</span></span>
+<span id="cb15-232"><a href="#cb15-232" aria-hidden="true" tabindex="-1"></a><span class="st">    term: &amp;Term,</span></span>
+<span id="cb15-233"><a href="#cb15-233" aria-hidden="true" tabindex="-1"></a><span class="st">    ctx: &amp;VarContext,</span></span>
+<span id="cb15-234"><a href="#cb15-234" aria-hidden="true" tabindex="-1"></a><span class="st">    theory: &amp;Theory,</span></span>
+<span id="cb15-235"><a href="#cb15-235" aria-hidden="true" tabindex="-1"></a><span class="st">) -&gt; Result&lt;Arc&lt;str&gt;, GatError&gt;</span></span>
+<span id="cb15-236"><a href="#cb15-236" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-237"><a href="#cb15-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-238"><a href="#cb15-238" aria-hidden="true" tabindex="-1"></a><span class="st">The `VarContext` type is a `FxHashMap&lt;Arc&lt;str&gt;, Arc&lt;str&gt;&gt;` mapping variable names to their sort names. Callers construct a context manually when type-checking a standalone term, but more commonly the context is inferred automatically by `infer_var_sorts`.</span></span>
+<span id="cb15-239"><a href="#cb15-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-240"><a href="#cb15-240" aria-hidden="true" tabindex="-1"></a><span class="st">### infer_var_sorts</span></span>
+<span id="cb15-241"><a href="#cb15-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-242"><a href="#cb15-242" aria-hidden="true" tabindex="-1"></a><span class="st">`infer_var_sorts` walks both sides of an equation, collecting sort constraints from every operation application site. A variable used as argument `i` of operation `op` must have the sort declared for that input position. If the same variable appears at two positions requiring different sorts, the function returns `GatError::ConflictingVarSort`.</span></span>
+<span id="cb15-243"><a href="#cb15-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-244"><a href="#cb15-244" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-245"><a href="#cb15-245" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn infer_var_sorts(eq: &amp;Equation, theory: &amp;Theory) -&gt; Result&lt;VarContext, GatError&gt;</span></span>
+<span id="cb15-246"><a href="#cb15-246" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-247"><a href="#cb15-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-248"><a href="#cb15-248" aria-hidden="true" tabindex="-1"></a><span class="st">This function is the entry point for automatic variable sort inference, used by `typecheck_equation`, `check_model`, and `free_model`. It eliminates the need for explicit sort annotations on equation variables.</span></span>
+<span id="cb15-249"><a href="#cb15-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-250"><a href="#cb15-250" aria-hidden="true" tabindex="-1"></a><span class="st">### typecheck_equation and typecheck_theory</span></span>
+<span id="cb15-251"><a href="#cb15-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-252"><a href="#cb15-252" aria-hidden="true" tabindex="-1"></a><span class="st">`typecheck_equation` combines inference and checking: it infers variable sorts from the equation structure, typechecks both sides, and verifies they produce the same output sort. If the two sides have different sorts, it returns `GatError::EquationSortMismatch`.</span></span>
+<span id="cb15-253"><a href="#cb15-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-254"><a href="#cb15-254" aria-hidden="true" tabindex="-1"></a><span class="st">`typecheck_theory` iterates over all equations in a theory and typechecks each one, returning the first error encountered. This is the function called during VCS validation to ensure that a protocol's schema theory is internally consistent.</span></span>
+<span id="cb15-255"><a href="#cb15-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-256"><a href="#cb15-256" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-257"><a href="#cb15-257" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn typecheck_theory(theory: &amp;Theory) -&gt; Result&lt;(), GatError&gt;</span></span>
+<span id="cb15-258"><a href="#cb15-258" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-259"><a href="#cb15-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-260"><a href="#cb15-260" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.callout-tip}</span></span>
+<span id="cb15-261"><a href="#cb15-261" aria-hidden="true" tabindex="-1"></a><span class="st">Type-checking is fast -- it is linear in the size of the term tree for each equation. Even theories with hundreds of equations typecheck in microseconds. The VCS pipeline runs `typecheck_theory` on every `schema add` and `schema commit` without measurable overhead.</span></span>
+<span id="cb15-262"><a href="#cb15-262" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb15-263"><a href="#cb15-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-264"><a href="#cb15-264" aria-hidden="true" tabindex="-1"></a><span class="st">### Type-Checking Errors</span></span>
+<span id="cb15-265"><a href="#cb15-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-266"><a href="#cb15-266" aria-hidden="true" tabindex="-1"></a><span class="st">The type-checking functions produce specific error variants that carry enough context for actionable diagnostics:</span></span>
+<span id="cb15-267"><a href="#cb15-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-268"><a href="#cb15-268" aria-hidden="true" tabindex="-1"></a><span class="st">| Error variant | Cause |</span></span>
+<span id="cb15-269"><a href="#cb15-269" aria-hidden="true" tabindex="-1"></a><span class="st">|---|---|</span></span>
+<span id="cb15-270"><a href="#cb15-270" aria-hidden="true" tabindex="-1"></a><span class="st">| `UnboundVariable` | A variable name is not in the typing context |</span></span>
+<span id="cb15-271"><a href="#cb15-271" aria-hidden="true" tabindex="-1"></a><span class="st">| `OpNotFound` | An operation name does not exist in the theory |</span></span>
+<span id="cb15-272"><a href="#cb15-272" aria-hidden="true" tabindex="-1"></a><span class="st">| `TermArityMismatch` | Wrong number of arguments to an operation |</span></span>
+<span id="cb15-273"><a href="#cb15-273" aria-hidden="true" tabindex="-1"></a><span class="st">| `ArgTypeMismatch` | An argument's sort does not match the expected input sort |</span></span>
+<span id="cb15-274"><a href="#cb15-274" aria-hidden="true" tabindex="-1"></a><span class="st">| `EquationSortMismatch` | The two sides of an equation have different sorts |</span></span>
+<span id="cb15-275"><a href="#cb15-275" aria-hidden="true" tabindex="-1"></a><span class="st">| `ConflictingVarSort` | A variable is used at positions requiring incompatible sorts |</span></span>
+<span id="cb15-276"><a href="#cb15-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-277"><a href="#cb15-277" aria-hidden="true" tabindex="-1"></a><span class="st">: Type-checking error variants. {#tbl-typecheck-errors}</span></span>
+<span id="cb15-278"><a href="#cb15-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-279"><a href="#cb15-279" aria-hidden="true" tabindex="-1"></a><span class="st">## Model Checking</span></span>
+<span id="cb15-280"><a href="#cb15-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-281"><a href="#cb15-281" aria-hidden="true" tabindex="-1"></a><span class="st">The `check_model` module verifies that a `Model` (an interpretation of a theory in Set) satisfies all equations of its theory by enumerating variable assignments from carrier sets and evaluating both sides.</span></span>
+<span id="cb15-282"><a href="#cb15-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-283"><a href="#cb15-283" aria-hidden="true" tabindex="-1"></a><span class="st">### Model and ModelValue</span></span>
+<span id="cb15-284"><a href="#cb15-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-285"><a href="#cb15-285" aria-hidden="true" tabindex="-1"></a><span class="st">A `Model` provides an interpretation of a theory: each sort maps to a carrier set (a `Vec&lt;ModelValue&gt;`), and each operation maps to a Rust closure that takes `ModelValue` arguments and returns a `ModelValue`. `ModelValue` is an enum with `Int(i64)` and `Str(String)` variants -- enough for the finite models that panproto needs for equation verification.</span></span>
+<span id="cb15-286"><a href="#cb15-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-287"><a href="#cb15-287" aria-hidden="true" tabindex="-1"></a><span class="st">### check_model and check_model_with_options</span></span>
+<span id="cb15-288"><a href="#cb15-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-289"><a href="#cb15-289" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-290"><a href="#cb15-290" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn check_model(model: &amp;Model, theory: &amp;Theory) -&gt; Result&lt;Vec&lt;EquationViolation&gt;, GatError&gt;</span></span>
+<span id="cb15-291"><a href="#cb15-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-292"><a href="#cb15-292" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn check_model_with_options(</span></span>
+<span id="cb15-293"><a href="#cb15-293" aria-hidden="true" tabindex="-1"></a><span class="st">    model: &amp;Model,</span></span>
+<span id="cb15-294"><a href="#cb15-294" aria-hidden="true" tabindex="-1"></a><span class="st">    theory: &amp;Theory,</span></span>
+<span id="cb15-295"><a href="#cb15-295" aria-hidden="true" tabindex="-1"></a><span class="st">    options: &amp;CheckModelOptions,</span></span>
+<span id="cb15-296"><a href="#cb15-296" aria-hidden="true" tabindex="-1"></a><span class="st">) -&gt; Result&lt;Vec&lt;EquationViolation&gt;, GatError&gt;</span></span>
+<span id="cb15-297"><a href="#cb15-297" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-298"><a href="#cb15-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-299"><a href="#cb15-299" aria-hidden="true" tabindex="-1"></a><span class="st">For each equation, the checker infers variable sorts, builds the cartesian product of the carrier sets for those sorts, and evaluates both sides of the equation under every assignment. If `lhs_value != rhs_value`, the assignment is recorded as an `EquationViolation`.</span></span>
+<span id="cb15-300"><a href="#cb15-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-301"><a href="#cb15-301" aria-hidden="true" tabindex="-1"></a><span class="st">### EquationViolation</span></span>
+<span id="cb15-302"><a href="#cb15-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-303"><a href="#cb15-303" aria-hidden="true" tabindex="-1"></a><span class="st">Each violation captures the equation name, the variable assignment that triggered it, and the values that the two sides evaluated to:</span></span>
+<span id="cb15-304"><a href="#cb15-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-305"><a href="#cb15-305" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-306"><a href="#cb15-306" aria-hidden="true" tabindex="-1"></a><span class="st">pub struct EquationViolation {</span></span>
+<span id="cb15-307"><a href="#cb15-307" aria-hidden="true" tabindex="-1"></a><span class="st">    pub equation: Arc&lt;str&gt;,</span></span>
+<span id="cb15-308"><a href="#cb15-308" aria-hidden="true" tabindex="-1"></a><span class="st">    pub assignment: FxHashMap&lt;Arc&lt;str&gt;, ModelValue&gt;,</span></span>
+<span id="cb15-309"><a href="#cb15-309" aria-hidden="true" tabindex="-1"></a><span class="st">    pub lhs_value: ModelValue,</span></span>
+<span id="cb15-310"><a href="#cb15-310" aria-hidden="true" tabindex="-1"></a><span class="st">    pub rhs_value: ModelValue,</span></span>
+<span id="cb15-311"><a href="#cb15-311" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb15-312"><a href="#cb15-312" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-313"><a href="#cb15-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-314"><a href="#cb15-314" aria-hidden="true" tabindex="-1"></a><span class="st">This gives enough information for the CLI to print a precise diagnostic: "equation 'assoc' violated when a=2, b=3, c=1: LHS=6, RHS=4".</span></span>
+<span id="cb15-315"><a href="#cb15-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-316"><a href="#cb15-316" aria-hidden="true" tabindex="-1"></a><span class="st">### CheckModelOptions</span></span>
+<span id="cb15-317"><a href="#cb15-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-318"><a href="#cb15-318" aria-hidden="true" tabindex="-1"></a><span class="st">The `CheckModelOptions` struct provides safety bounds for enumeration. The `max_assignments` field (default: 10,000) caps the total number of variable assignments evaluated per equation. An equation with 3 variables over a carrier of 100 elements would require 1,000,000 assignments -- the limit prevents this from running for minutes.</span></span>
+<span id="cb15-319"><a href="#cb15-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-320"><a href="#cb15-320" aria-hidden="true" tabindex="-1"></a><span class="st">When the limit is exceeded, the function returns a `GatError::ModelError` rather than silently skipping the check. The VCS layer reports this as a non-blocking warning.</span></span>
+<span id="cb15-321"><a href="#cb15-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-322"><a href="#cb15-322" aria-hidden="true" tabindex="-1"></a><span class="st">## Pullbacks</span></span>
+<span id="cb15-323"><a href="#cb15-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-324"><a href="#cb15-324" aria-hidden="true" tabindex="-1"></a><span class="st">The `pullback` function computes the categorical pullback of two theories over a common codomain. Where colimits (pushouts) merge theories together, pullbacks find the common structure that two theories share when mapped into a common target.</span></span>
+<span id="cb15-325"><a href="#cb15-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-326"><a href="#cb15-326" aria-hidden="true" tabindex="-1"></a><span class="st">### Mathematical Background</span></span>
+<span id="cb15-327"><a href="#cb15-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-328"><a href="#cb15-328" aria-hidden="true" tabindex="-1"></a><span class="st">Given morphisms `m1: T1 -&gt; C` and `m2: T2 -&gt; C`, the pullback theory `P` contains:</span></span>
+<span id="cb15-329"><a href="#cb15-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-330"><a href="#cb15-330" aria-hidden="true" tabindex="-1"></a><span class="st">- A sort for each pair `(s1 in T1, s2 in T2)` where `m1(s1) = m2(s2)` and `s1`, `s2` have the same arity.</span></span>
+<span id="cb15-331"><a href="#cb15-331" aria-hidden="true" tabindex="-1"></a><span class="st">- An operation for each pair `(op1 in T1, op2 in T2)` where `m1(op1) = m2(op2)` and their input and output sort pairs exist in the pullback.</span></span>
+<span id="cb15-332"><a href="#cb15-332" aria-hidden="true" tabindex="-1"></a><span class="st">- An equation for each pair `(eq1 in T1, eq2 in T2)` where `m1(eq1) = m2(eq2)` (i.e., both equations map to the same codomain equation).</span></span>
+<span id="cb15-333"><a href="#cb15-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-334"><a href="#cb15-334" aria-hidden="true" tabindex="-1"></a><span class="st">### PullbackResult</span></span>
+<span id="cb15-335"><a href="#cb15-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-336"><a href="#cb15-336" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-337"><a href="#cb15-337" aria-hidden="true" tabindex="-1"></a><span class="st">pub struct PullbackResult {</span></span>
+<span id="cb15-338"><a href="#cb15-338" aria-hidden="true" tabindex="-1"></a><span class="st">    pub theory: Theory,</span></span>
+<span id="cb15-339"><a href="#cb15-339" aria-hidden="true" tabindex="-1"></a><span class="st">    pub proj1: TheoryMorphism,</span></span>
+<span id="cb15-340"><a href="#cb15-340" aria-hidden="true" tabindex="-1"></a><span class="st">    pub proj2: TheoryMorphism,</span></span>
+<span id="cb15-341"><a href="#cb15-341" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb15-342"><a href="#cb15-342" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-343"><a href="#cb15-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-344"><a href="#cb15-344" aria-hidden="true" tabindex="-1"></a><span class="st">The result includes projection morphisms `proj1: P -&gt; T1` and `proj2: P -&gt; T2` satisfying the universal property: `m1 . proj1 = m2 . proj2`. Both projections are validated by `check_morphism` in the test suite.</span></span>
+<span id="cb15-345"><a href="#cb15-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-346"><a href="#cb15-346" aria-hidden="true" tabindex="-1"></a><span class="st">### Pullback Naming</span></span>
+<span id="cb15-347"><a href="#cb15-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-348"><a href="#cb15-348" aria-hidden="true" tabindex="-1"></a><span class="st">When both sides contribute an element with the same name, the pullback element keeps that name. When the names differ, the pullback element is named `"name1=name2"`. For example, pulling back theories where `V1` and `V2` both map to `Vertex` in the codomain produces a pullback sort named `V1=V2`.</span></span>
+<span id="cb15-349"><a href="#cb15-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-350"><a href="#cb15-350" aria-hidden="true" tabindex="-1"></a><span class="st">### Practical Use: Merge Overlap Detection</span></span>
+<span id="cb15-351"><a href="#cb15-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-352"><a href="#cb15-352" aria-hidden="true" tabindex="-1"></a><span class="st">The VCS merge algorithm uses pullbacks to detect structural overlap between two branches. When merging branch A and branch B, the three-way merge computes the pullback of the two branch theories over the merge base theory. Non-empty pullback elements indicate shared structure that must be reconciled, while empty pullback means the branches modified disjoint parts of the schema.</span></span>
+<span id="cb15-353"><a href="#cb15-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-356"><a href="#cb15-356" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb15-357"><a href="#cb15-357" aria-hidden="true" tabindex="-1"></a><span class="st">%%| label: fig-pullback</span></span>
+<span id="cb15-358"><a href="#cb15-358" aria-hidden="true" tabindex="-1"></a><span class="st">%%| fig-cap: "Pullback of two theories over a common codomain. The pullback contains paired elements that agree in the codomain."</span></span>
+<span id="cb15-359"><a href="#cb15-359" aria-hidden="true" tabindex="-1"></a><span class="st">graph LR</span></span>
+<span id="cb15-360"><a href="#cb15-360" aria-hidden="true" tabindex="-1"></a><span class="st">    P["Pullback P"]</span></span>
+<span id="cb15-361"><a href="#cb15-361" aria-hidden="true" tabindex="-1"></a><span class="st">    T1["Theory T1"]</span></span>
+<span id="cb15-362"><a href="#cb15-362" aria-hidden="true" tabindex="-1"></a><span class="st">    T2["Theory T2"]</span></span>
+<span id="cb15-363"><a href="#cb15-363" aria-hidden="true" tabindex="-1"></a><span class="st">    C["Codomain C"]</span></span>
+<span id="cb15-364"><a href="#cb15-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-365"><a href="#cb15-365" aria-hidden="true" tabindex="-1"></a><span class="st">    P --&gt;|"proj1"| T1</span></span>
+<span id="cb15-366"><a href="#cb15-366" aria-hidden="true" tabindex="-1"></a><span class="st">    P --&gt;|"proj2"| T2</span></span>
+<span id="cb15-367"><a href="#cb15-367" aria-hidden="true" tabindex="-1"></a><span class="st">    T1 --&gt;|"m1"| C</span></span>
+<span id="cb15-368"><a href="#cb15-368" aria-hidden="true" tabindex="-1"></a><span class="st">    T2 --&gt;|"m2"| C</span></span>
+<span id="cb15-369"><a href="#cb15-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-370"><a href="#cb15-370" aria-hidden="true" tabindex="-1"></a><span class="st">    style P fill:#e8f4e8,stroke:#2d7d2d</span></span>
+<span id="cb15-371"><a href="#cb15-371" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-372"><a href="#cb15-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-373"><a href="#cb15-373" aria-hidden="true" tabindex="-1"></a><span class="st">## Natural Transformations</span></span>
+<span id="cb15-374"><a href="#cb15-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-375"><a href="#cb15-375" aria-hidden="true" tabindex="-1"></a><span class="st">A _natural transformation_ is a morphism between two theory morphisms. Given morphisms `F, G: T1 -&gt; T2`, a natural transformation `alpha: F =&gt; G` assigns to each sort `S` in `T1` a term that maps values of sort `F(S)` to values of sort `G(S)`, subject to naturality conditions.</span></span>
+<span id="cb15-376"><a href="#cb15-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-377"><a href="#cb15-377" aria-hidden="true" tabindex="-1"></a><span class="st">### NaturalTransformation</span></span>
+<span id="cb15-378"><a href="#cb15-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-379"><a href="#cb15-379" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-380"><a href="#cb15-380" aria-hidden="true" tabindex="-1"></a><span class="st">pub struct NaturalTransformation {</span></span>
+<span id="cb15-381"><a href="#cb15-381" aria-hidden="true" tabindex="-1"></a><span class="st">    pub name: Arc&lt;str&gt;,</span></span>
+<span id="cb15-382"><a href="#cb15-382" aria-hidden="true" tabindex="-1"></a><span class="st">    pub source: Arc&lt;str&gt;,</span></span>
+<span id="cb15-383"><a href="#cb15-383" aria-hidden="true" tabindex="-1"></a><span class="st">    pub target: Arc&lt;str&gt;,</span></span>
+<span id="cb15-384"><a href="#cb15-384" aria-hidden="true" tabindex="-1"></a><span class="st">    pub components: HashMap&lt;Arc&lt;str&gt;, Term&gt;,</span></span>
+<span id="cb15-385"><a href="#cb15-385" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb15-386"><a href="#cb15-386" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-387"><a href="#cb15-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-388"><a href="#cb15-388" aria-hidden="true" tabindex="-1"></a><span class="st">Each component is a `Term` with a single free variable `"x"` representing the input value. For the identity natural transformation, every component is `Term::Var("x")`.</span></span>
+<span id="cb15-389"><a href="#cb15-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-390"><a href="#cb15-390" aria-hidden="true" tabindex="-1"></a><span class="st">### check_natural_transformation</span></span>
+<span id="cb15-391"><a href="#cb15-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-392"><a href="#cb15-392" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-393"><a href="#cb15-393" aria-hidden="true" tabindex="-1"></a><span class="st">pub fn check_natural_transformation(</span></span>
+<span id="cb15-394"><a href="#cb15-394" aria-hidden="true" tabindex="-1"></a><span class="st">    nt: &amp;NaturalTransformation,</span></span>
+<span id="cb15-395"><a href="#cb15-395" aria-hidden="true" tabindex="-1"></a><span class="st">    f: &amp;TheoryMorphism,</span></span>
+<span id="cb15-396"><a href="#cb15-396" aria-hidden="true" tabindex="-1"></a><span class="st">    g: &amp;TheoryMorphism,</span></span>
+<span id="cb15-397"><a href="#cb15-397" aria-hidden="true" tabindex="-1"></a><span class="st">    domain: &amp;Theory,</span></span>
+<span id="cb15-398"><a href="#cb15-398" aria-hidden="true" tabindex="-1"></a><span class="st">    codomain: &amp;Theory,</span></span>
+<span id="cb15-399"><a href="#cb15-399" aria-hidden="true" tabindex="-1"></a><span class="st">) -&gt; Result&lt;(), GatError&gt;</span></span>
+<span id="cb15-400"><a href="#cb15-400" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-401"><a href="#cb15-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-402"><a href="#cb15-402" aria-hidden="true" tabindex="-1"></a><span class="st">The checker verifies four conditions:</span></span>
+<span id="cb15-403"><a href="#cb15-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-404"><a href="#cb15-404" aria-hidden="true" tabindex="-1"></a><span class="st">1. **Domain/codomain agreement**: `F` and `G` must have the same domain and codomain theories.</span></span>
+<span id="cb15-405"><a href="#cb15-405" aria-hidden="true" tabindex="-1"></a><span class="st">2. **Component completeness**: every sort in the domain must have a component.</span></span>
+<span id="cb15-406"><a href="#cb15-406" aria-hidden="true" tabindex="-1"></a><span class="st">3. **Component validity**: all operations used in component terms must exist in the codomain theory.</span></span>
+<span id="cb15-407"><a href="#cb15-407" aria-hidden="true" tabindex="-1"></a><span class="st">4. **Naturality**: for each operation `op: S1 -&gt; S2` in the domain, the naturality square must commute:</span></span>
+<span id="cb15-408"><a href="#cb15-408" aria-hidden="true" tabindex="-1"></a><span class="st">   `alpha_S2[x := F(op)(x)] == G(op)(alpha_S1(x))`</span></span>
+<span id="cb15-409"><a href="#cb15-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-410"><a href="#cb15-410" aria-hidden="true" tabindex="-1"></a><span class="st">The naturality check is performed symbolically by substituting and comparing term trees. For n-ary operations, the check uses variables `x0, x1, ...` for each input.</span></span>
+<span id="cb15-411"><a href="#cb15-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-412"><a href="#cb15-412" aria-hidden="true" tabindex="-1"></a><span class="st">### Vertical Composition</span></span>
+<span id="cb15-413"><a href="#cb15-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-414"><a href="#cb15-414" aria-hidden="true" tabindex="-1"></a><span class="st">`vertical_compose` chains two natural transformations: given `alpha: F =&gt; G` and `beta: G =&gt; H`, it produces `beta . alpha: F =&gt; H`. For each sort `S`, the composed component is `beta_S[x := alpha_S(x)]`.</span></span>
+<span id="cb15-415"><a href="#cb15-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-416"><a href="#cb15-416" aria-hidden="true" tabindex="-1"></a><span class="st">The function checks that `alpha.target == beta.source` (the intermediate morphism must match) and returns `GatError::NatTransComposeMismatch` if they disagree.</span></span>
+<span id="cb15-417"><a href="#cb15-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-418"><a href="#cb15-418" aria-hidden="true" tabindex="-1"></a><span class="st">### Horizontal Composition</span></span>
+<span id="cb15-419"><a href="#cb15-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-420"><a href="#cb15-420" aria-hidden="true" tabindex="-1"></a><span class="st">`horizontal_compose` composes natural transformations along different morphism pairs: given `alpha: F =&gt; G` (between `T1` and `T2`) and `beta: H =&gt; K` (between `T2` and `T3`), it produces `beta * alpha: H.F =&gt; K.G`.</span></span>
+<span id="cb15-421"><a href="#cb15-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-422"><a href="#cb15-422" aria-hidden="true" tabindex="-1"></a><span class="st">For each sort `S` in the domain, the composed component is `beta_{G(S)}[x := H(alpha_S)]`, where `G(S)` is the sort that `G` maps `S` to, and `H(alpha_S)` is the result of applying `H`'s operation renaming to `alpha`'s component at `S`.</span></span>
+<span id="cb15-423"><a href="#cb15-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-424"><a href="#cb15-424" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.callout-note}</span></span>
+<span id="cb15-425"><a href="#cb15-425" aria-hidden="true" tabindex="-1"></a><span class="st">Horizontal composition is used in the VCS merge pipeline when composing migration paths through different branch histories. The `compose_path` function in `panproto-vcs` assembles a chain of natural transformations to verify that the composed migration path is coherent.</span></span>
+<span id="cb15-426"><a href="#cb15-426" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
+<span id="cb15-427"><a href="#cb15-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-428"><a href="#cb15-428" aria-hidden="true" tabindex="-1"></a><span class="st">## Free Models</span></span>
+<span id="cb15-429"><a href="#cb15-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-430"><a href="#cb15-430" aria-hidden="true" tabindex="-1"></a><span class="st">The `free_model` module constructs the free (initial) model of a theory -- the minimal model that satisfies all equations. This is useful for generating test instances, computing protocol skeletons, and understanding the structure of a theory.</span></span>
+<span id="cb15-431"><a href="#cb15-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-432"><a href="#cb15-432" aria-hidden="true" tabindex="-1"></a><span class="st">### How Free Model Construction Works</span></span>
+<span id="cb15-433"><a href="#cb15-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-434"><a href="#cb15-434" aria-hidden="true" tabindex="-1"></a><span class="st">The construction proceeds in three phases:</span></span>
+<span id="cb15-435"><a href="#cb15-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-436"><a href="#cb15-436" aria-hidden="true" tabindex="-1"></a><span class="st">1. **Term generation**: enumerate all closed terms (terms with no free variables) up to a configurable depth bound, organized by sort. Nullary operations (constants) provide the seed; non-nullary operations are applied to all combinations of existing terms of the correct sorts.</span></span>
+<span id="cb15-437"><a href="#cb15-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-438"><a href="#cb15-438" aria-hidden="true" tabindex="-1"></a><span class="st">2. **Quotient by equations**: use a union-find data structure to identify terms that must be equal according to the theory's equations. For each equation, enumerate all valid variable substitutions (using the generated terms as values) and union the global indices of the LHS and RHS results.</span></span>
+<span id="cb15-439"><a href="#cb15-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-440"><a href="#cb15-440" aria-hidden="true" tabindex="-1"></a><span class="st">3. **Build model**: select one representative per equivalence class as the carrier set elements, and define operations by symbolic term application.</span></span>
+<span id="cb15-441"><a href="#cb15-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-442"><a href="#cb15-442" aria-hidden="true" tabindex="-1"></a><span class="st">### FreeModelConfig</span></span>
+<span id="cb15-443"><a href="#cb15-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-444"><a href="#cb15-444" aria-hidden="true" tabindex="-1"></a><span class="st">```rust</span></span>
+<span id="cb15-445"><a href="#cb15-445" aria-hidden="true" tabindex="-1"></a><span class="st">pub struct FreeModelConfig {</span></span>
+<span id="cb15-446"><a href="#cb15-446" aria-hidden="true" tabindex="-1"></a><span class="st">    pub max_depth: usize,           // Default: 3</span></span>
+<span id="cb15-447"><a href="#cb15-447" aria-hidden="true" tabindex="-1"></a><span class="st">    pub max_terms_per_sort: usize,  // Default: 1000</span></span>
+<span id="cb15-448"><a href="#cb15-448" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb15-449"><a href="#cb15-449" aria-hidden="true" tabindex="-1"></a><span class="st">```</span></span>
+<span id="cb15-450"><a href="#cb15-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-451"><a href="#cb15-451" aria-hidden="true" tabindex="-1"></a><span class="st">The depth bound controls how deep the term enumeration goes. For a theory with a successor operation, depth 3 generates `zero`, `succ(zero)`, `succ(succ(zero))`, and `succ(succ(succ(zero)))`. The per-sort limit prevents combinatorial explosion in theories with binary operations.</span></span>
+<span id="cb15-452"><a href="#cb15-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-453"><a href="#cb15-453" aria-hidden="true" tabindex="-1"></a><span class="st">### Practical Examples</span></span>
+<span id="cb15-454"><a href="#cb15-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-455"><a href="#cb15-455" aria-hidden="true" tabindex="-1"></a><span class="st">- **Pointed set** (one sort, one constant): free model has exactly 1 element.</span></span>
+<span id="cb15-456"><a href="#cb15-456" aria-hidden="true" tabindex="-1"></a><span class="st">- **Two constants, no equations**: free model has 2 elements.</span></span>
+<span id="cb15-457"><a href="#cb15-457" aria-hidden="true" tabindex="-1"></a><span class="st">- **Two constants with `a = b` equation**: free model has 1 element (the equation collapses them).</span></span>
+<span id="cb15-458"><a href="#cb15-458" aria-hidden="true" tabindex="-1"></a><span class="st">- **Monoid with identity laws**: at depth 1, the free model collapses `mul(unit, x)` and `mul(x, unit)` with `x`, leaving only the identity element.</span></span>
+<span id="cb15-459"><a href="#cb15-459" aria-hidden="true" tabindex="-1"></a><span class="st">- **Graph theory** (no constants): free model has empty carrier sets for both Vertex and Edge, since there are no closed terms.</span></span>
+<span id="cb15-460"><a href="#cb15-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-461"><a href="#cb15-461" aria-hidden="true" tabindex="-1"></a><span class="st">### CLI Integration</span></span>
+<span id="cb15-462"><a href="#cb15-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-463"><a href="#cb15-463" aria-hidden="true" tabindex="-1"></a><span class="st">The `schema scaffold` command uses `free_model` to generate skeleton instances. The `--depth` and `--max-terms` flags map directly to `FreeModelConfig` fields.</span></span>
+<span id="cb15-464"><a href="#cb15-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-465"><a href="#cb15-465" aria-hidden="true" tabindex="-1"></a><span class="st">## Quotient Theories</span></span>
+<span id="cb15-466"><a href="#cb15-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-467"><a href="#cb15-467" aria-hidden="true" tabindex="-1"></a><span class="st">The `quotient` function simplifies a theory by identifying (merging) sorts and/or operations. This is the dual of theory extension: where extension adds new structure, quotienting collapses existing structure by declaring that previously distinct elements are now the same.</span></span>
+<span id="cb15-468"><a href="#cb15-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-469"><a href="#cb15-469" aria-hidden="true" tabindex="-1"></a><span class="st">### How Quotienting Works</span></span>
+<span id="cb15-470"><a href="#cb15-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-471"><a href="#cb15-471" aria-hidden="true" tabindex="-1"></a><span class="st">Given a theory and a list of identification pairs `(a, b)`, the function:</span></span>
+<span id="cb15-472"><a href="#cb15-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-473"><a href="#cb15-473" aria-hidden="true" tabindex="-1"></a><span class="st">1. Classifies each pair as a sort identification or operation identification by checking whether the names exist as sorts or operations in the theory.</span></span>
+<span id="cb15-474"><a href="#cb15-474" aria-hidden="true" tabindex="-1"></a><span class="st">2. Builds a union-find for sorts and a union-find for operations, computing the transitive closure of the identifications.</span></span>
+<span id="cb15-475"><a href="#cb15-475" aria-hidden="true" tabindex="-1"></a><span class="st">3. Verifies compatibility: identified sorts must have the same arity, and identified operations must have the same signature after sort renaming.</span></span>
+<span id="cb15-476"><a href="#cb15-476" aria-hidden="true" tabindex="-1"></a><span class="st">4. Rebuilds the theory with one representative per equivalence class. Sort parameters, operation input sorts, and equation terms are all renamed through the sort and operation rename maps.</span></span>
+<span id="cb15-477"><a href="#cb15-477" aria-hidden="true" tabindex="-1"></a><span class="st">5. Deduplicates equations that become identical after renaming.</span></span>
+<span id="cb15-478"><a href="#cb15-478" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-479"><a href="#cb15-479" aria-hidden="true" tabindex="-1"></a><span class="st">### Error Conditions</span></span>
+<span id="cb15-480"><a href="#cb15-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-481"><a href="#cb15-481" aria-hidden="true" tabindex="-1"></a><span class="st">- `GatError::QuotientIncompatible`: the identified elements have incompatible structure (different arities or signatures).</span></span>
+<span id="cb15-482"><a href="#cb15-482" aria-hidden="true" tabindex="-1"></a><span class="st">- `GatError::SortNotFound` / `GatError::OpNotFound`: a name referenced during rebuilding does not exist.</span></span>
+<span id="cb15-483"><a href="#cb15-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-484"><a href="#cb15-484" aria-hidden="true" tabindex="-1"></a><span class="st">### Practical Use</span></span>
+<span id="cb15-485"><a href="#cb15-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-486"><a href="#cb15-486" aria-hidden="true" tabindex="-1"></a><span class="st">Quotient theories are used when composing protocol fragments that have structurally equivalent but differently-named elements. For example, if protocol A has sort `Node` and protocol B has sort `Vertex`, and both have the same role in the combined theory, quotienting by `(Node, Vertex)` produces a single sort (the alphabetically-first representative, `Node`).</span></span>
+<span id="cb15-487"><a href="#cb15-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-488"><a href="#cb15-488" aria-hidden="true" tabindex="-1"></a><span class="st">The alphabetical representative selection is deterministic and stable, ensuring that quotienting the same theory with the same identifications always produces the same result.</span></span>
+<span id="cb15-489"><a href="#cb15-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-490"><a href="#cb15-490" aria-hidden="true" tabindex="-1"></a><span class="st">## Summary of the Mathematical Stack</span></span>
+<span id="cb15-491"><a href="#cb15-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-492"><a href="#cb15-492" aria-hidden="true" tabindex="-1"></a><span class="st">| Concept | Rust type | Mathematical origin |</span></span>
+<span id="cb15-493"><a href="#cb15-493" aria-hidden="true" tabindex="-1"></a><span class="st">|---|---|---|</span></span>
+<span id="cb15-494"><a href="#cb15-494" aria-hidden="true" tabindex="-1"></a><span class="st">| Type in a GAT | `Sort` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 1 |</span></span>
+<span id="cb15-495"><a href="#cb15-495" aria-hidden="true" tabindex="-1"></a><span class="st">| Term constructor | `Operation` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 2 |</span></span>
+<span id="cb15-496"><a href="#cb15-496" aria-hidden="true" tabindex="-1"></a><span class="st">| Axiom | `Equation` | </span><span class="dt">@cartmell1986</span><span class="st">, Definition 3 |</span></span>
+<span id="cb15-497"><a href="#cb15-497" aria-hidden="true" tabindex="-1"></a><span class="st">| Structure-preserving map | `TheoryMorphism` | </span><span class="dt">@lawvere1963</span><span class="st"> (generalized to GATs) |</span></span>
+<span id="cb15-498"><a href="#cb15-498" aria-hidden="true" tabindex="-1"></a><span class="st">| Theory composition | `colimit()` | Pushout in the category of GATs |</span></span>
+<span id="cb15-499"><a href="#cb15-499" aria-hidden="true" tabindex="-1"></a><span class="st">| Theory intersection | `pullback()` | Pullback in the category of GATs |</span></span>
+<span id="cb15-500"><a href="#cb15-500" aria-hidden="true" tabindex="-1"></a><span class="st">| Term well-typedness | `typecheck_term()` | Type inference in dependent type theory |</span></span>
+<span id="cb15-501"><a href="#cb15-501" aria-hidden="true" tabindex="-1"></a><span class="st">| Model verification | `check_model()` | Model checking for equational theories |</span></span>
+<span id="cb15-502"><a href="#cb15-502" aria-hidden="true" tabindex="-1"></a><span class="st">| 2-morphism | `NaturalTransformation` | Natural transformation between functors |</span></span>
+<span id="cb15-503"><a href="#cb15-503" aria-hidden="true" tabindex="-1"></a><span class="st">| Initial model | `free_model()` | Free algebra / term model construction |</span></span>
+<span id="cb15-504"><a href="#cb15-504" aria-hidden="true" tabindex="-1"></a><span class="st">| Theory quotient | `quotient()` | Congruence on an algebraic theory |</span></span>
+<span id="cb15-505"><a href="#cb15-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-506"><a href="#cb15-506" aria-hidden="true" tabindex="-1"></a><span class="st">: Mapping from mathematical concepts to Rust types. {#tbl-math-rust}</span></span>
+<span id="cb15-507"><a href="#cb15-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-508"><a href="#cb15-508" aria-hidden="true" tabindex="-1"></a><span class="st">The GATlab system [</span><span class="dt">@lynch2024</span><span class="st">] takes a similar approach to implementing GATs in Julia, focusing on computational category theory. panproto's `panproto-gat` is more narrowly scoped -- it provides just enough GAT machinery to support schema migration and protocol composition, without attempting to be a general-purpose categorical algebra system.</span></span>
+<span id="cb15-509"><a href="#cb15-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-510"><a href="#cb15-510" aria-hidden="true" tabindex="-1"></a><span class="st">::: {.callout-important}</span></span>
+<span id="cb15-511"><a href="#cb15-511" aria-hidden="true" tabindex="-1"></a><span class="st">`panproto-gat` is the only crate in the system that has zero knowledge of schemas, instances, or protocols. If you find yourself importing `panproto-schema` types in `panproto-gat`, something has gone wrong architecturally. The abstraction boundary here is strict and intentional.</span></span>
+<span id="cb15-512"><a href="#cb15-512" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

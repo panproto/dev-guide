@@ -396,7 +396,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -455,26 +455,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="./chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="./chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="./chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="./chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -580,7 +580,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#who-this-guide-is-for" id="toc-who-this-guide-is-for" class="nav-link" data-scroll-target="#who-this-guide-is-for">Who this guide is for</a></li>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#how-to-navigate-this-guide" id="toc-how-to-navigate-this-guide" class="nav-link" data-scroll-target="#how-to-navigate-this-guide">How to navigate this guide</a></li>
+  <li><a href="#crate-map" id="toc-crate-map" class="nav-link" data-scroll-target="#crate-map">Crate map</a></li>
+  <li><a href="#how-to-navigate-this-guide" id="toc-how-to-navigate-this-guide" class="nav-link" data-scroll-target="#how-to-navigate-this-guide">How to navigate this guide</a>
+  <ul class="collapse">
+  <li><a href="#reading-roadmaps" id="toc-reading-roadmaps" class="nav-link" data-scroll-target="#reading-roadmaps">Reading roadmaps</a></li>
+  </ul></li>
   <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
   <li><a href="#conventions-used-in-this-guide" id="toc-conventions-used-in-this-guide" class="nav-link" data-scroll-target="#conventions-used-in-this-guide">Conventions used in this guide</a></li>
   </ul></li>
@@ -625,25 +629,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
-<p>This is the <strong>panproto Developer Guide</strong> — an architecture reference and contributor handbook for the panproto project. It documents the internals of the universal schema migration engine: how crates are organized, how the algebraic machinery works under the hood, and how to contribute effectively.</p>
+<p>This is the <strong>panproto Developer Guide</strong> — an architecture reference and contributor handbook for the panproto schematic version control system. It documents how crates are organized, how the algebraic machinery works under the hood, and how to contribute effectively.</p>
 <section id="who-this-guide-is-for" class="level2">
 <h2 class="anchored" data-anchor-id="who-this-guide-is-for">Who this guide is for</h2>
 <p>This guide is written for three audiences:</p>
 <ul>
 <li><strong>Contributors</strong> submitting bug fixes, performance improvements, or new features to the panproto codebase.</li>
 <li><strong>Protocol authors</strong> adding support for new schema languages (e.g., a new IDL or data-definition format) by implementing panproto’s protocol trait.</li>
-<li><strong>Researchers</strong> who want to understand panproto’s internals — its use of Generalized Algebraic Theories, W-type instances, and bidirectional lenses — in order to extend or build on the engine.</li>
+<li><strong>Researchers</strong> who want to understand panproto’s internals — its use of Generalized Algebraic Theories, tree-shaped data instances (W-types), and bidirectional lenses — in order to extend or build on the engine.</li>
 </ul>
-<p>If you are a <em>user</em> of panproto who wants to learn how to define schemas, run migrations, and use the TypeScript SDK, start with the <a href="https://panproto.github.io/tutorial/">panproto Tutorial</a> instead. The tutorial teaches you how to <strong>use</strong> panproto; this guide explains how it <strong>works</strong>.</p>
+<p>If you are a <em>user</em> of panproto who wants to learn how to define schemas, run migrations, and use the TypeScript SDK, start with the <a href="https://panproto.dev/tutorial/">panproto Tutorial</a> instead. The tutorial teaches you how to <strong>use</strong> panproto; this guide explains how it <strong>works</strong>.</p>
 </section>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>You should be comfortable with:</p>
 <ul>
 <li><strong>Rust</strong> (ownership, traits, generics, <code>Result</code>-based error handling). The codebase targets Edition 2024.</li>
 <li><strong>Basic TypeScript</strong>, enough to read the SDK wrapper and its tests.</li>
-<li><strong>Algebraic concepts</strong> like sorts, operations, and equations. You do not need a category theory background — the <a href="https://panproto.github.io/tutorial/appendices/A-category-theory-cheatsheet.html">tutorial’s category theory cheatsheet</a> provides a gentle introduction — but familiarity with algebraic thinking will help.</li>
+<li><strong>Algebraic concepts</strong> — specifically <em>sorts</em> (types in a formal theory), <em>operations</em> (functions connecting sorts), and <em>equations</em> (invariants those functions satisfy). The <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a> provides relevant background.</li>
 </ul>
+</section>
+<section id="crate-map" class="level2">
+<h2 class="anchored" data-anchor-id="crate-map">Crate map</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 38%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Crates</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><code>panproto-gat</code></td>
+<td>The GAT engine: theories, structure-preserving maps, theory merges</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>panproto-schema</code>, <code>panproto-inst</code></td>
+<td>Schema graphs and instance trees</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>panproto-mig</code>, <code>panproto-lens</code>, <code>panproto-check</code></td>
+<td>Migration compilation, lenses, breaking-change analysis</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>panproto-protocols</code></td>
+<td>Protocol definitions and schema-level presentation</td>
+</tr>
+<tr class="odd">
+<td>3.5</td>
+<td><code>panproto-io</code></td>
+<td>Instance-level presentation: format-specific parse/emit</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><code>panproto-core</code>, <code>panproto-wasm</code>, <code>panproto-cli</code></td>
+<td>Re-export facade, WASM boundary, CLI</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="how-to-navigate-this-guide" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-navigate-this-guide">How to navigate this guide</h2>
@@ -654,6 +706,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Part IV — Contributing Process.</strong> Chapters 16–18 cover coding conventions, the testing philosophy, and the PR workflow. Read these before opening your first pull request.</p>
 <p><strong>Part V — Project Operations.</strong> Chapter 19 covers the release process and versioning policy.</p>
 <p><strong>Appendices.</strong> The glossary (Appendix A) defines every domain term. The source code map (Appendix B) is a directory-level index of the entire repository. The troubleshooting FAQ (Appendix C) addresses common build and test issues.</p>
+<section id="reading-roadmaps" class="level3">
+<h3 class="anchored" data-anchor-id="reading-roadmaps">Reading roadmaps</h3>
+<p><strong>Contributors</strong> landing a fix or feature: chapters 1–2, then chapter 3 (build), then chapters 16–18 (PR workflow).</p>
+<p><strong>Protocol authors</strong> adding a new schema language: chapters 5 (architecture), 6 (GAT engine), then the protocol chapter.</p>
+<p><strong>Researchers</strong> exploring the internals: chapters 5–6, then <a href="chapters/22-advanced-internals.html" class="quarto-xref"><span>18&nbsp; Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></a>, then <a href="chapters/26-protolens-engine.html" class="quarto-xref"><span>19&nbsp; Protolens Engine</span></a> and <a href="chapters/27-auto-lens-pipeline.html" class="quarto-xref"><span>20&nbsp; Automated Lens Generation Pipeline</span></a>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -668,10 +725,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="links" class="level2">
 <h2 class="anchored" data-anchor-id="links">Links</h2>
 <ul>
-<li><strong>Tutorial:</strong> <a href="https://panproto.github.io/tutorial/" class="uri">https://panproto.github.io/tutorial/</a></li>
+<li><strong>Tutorial:</strong> <a href="https://panproto.dev/tutorial/" class="uri">https://panproto.dev/tutorial/</a></li>
 <li><strong>Repository:</strong> <a href="https://github.com/panproto/panproto" class="uri">https://github.com/panproto/panproto</a></li>
 <li><strong>Rustdoc:</strong> generated from <code>cargo doc --workspace --no-deps</code></li>
 </ul>
@@ -1169,7 +1227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Preface {.unnumbered}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This is the **panproto Developer Guide** --- an architecture reference and contributor handbook for the panproto project. It documents the internals of the universal schema migration engine: how crates are organized, how the algebraic machinery works under the hood, and how to contribute effectively.</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This is the **panproto Developer Guide** --- an architecture reference and contributor handbook for the panproto schematic version control system. It documents how crates are organized, how the algebraic machinery works under the hood, and how to contribute effectively.</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Who this guide is for</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1177,62 +1235,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Contributors** submitting bug fixes, performance improvements, or new features to the panproto codebase.</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Protocol authors** adding support for new schema languages (e.g., a new IDL or data-definition format) by implementing panproto's protocol trait.</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Researchers** who want to understand panproto's internals --- its use of Generalized Algebraic Theories, W-type instances, and bidirectional lenses --- in order to extend or build on the engine.</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Researchers** who want to understand panproto's internals --- its use of Generalized Algebraic Theories, tree-shaped data instances (W-types), and bidirectional lenses --- in order to extend or build on the engine.</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>If you are a *user* of panproto who wants to learn how to define schemas, run migrations, and use the TypeScript SDK, start with the [panproto Tutorial](https://panproto.github.io/tutorial/) instead. The tutorial teaches you how to **use** panproto; this guide explains how it **works**.</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>If you are a *user* of panproto who wants to learn how to define schemas, run migrations, and use the TypeScript SDK, start with the [panproto Tutorial](https://panproto.dev/tutorial/) instead. The tutorial teaches you how to **use** panproto; this guide explains how it **works**.</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>You should be comfortable with:</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rust** (ownership, traits, generics, <span class="in">`Result`</span>-based error handling). The codebase targets Edition 2024.</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Basic TypeScript**, enough to read the SDK wrapper and its tests.</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Algebraic concepts** like sorts, operations, and equations. You do not need a category theory background --- the <span class="co">[</span><span class="ot">tutorial's category theory cheatsheet</span><span class="co">](https://panproto.github.io/tutorial/appendices/A-category-theory-cheatsheet.html)</span> provides a gentle introduction --- but familiarity with algebraic thinking will help.</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rust** (ownership, traits, generics, <span class="in">`Result`</span>-based error handling). The codebase targets Edition 2024.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Basic TypeScript**, enough to read the SDK wrapper and its tests.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Algebraic concepts** --- specifically *sorts* (types in a formal theory), *operations* (functions connecting sorts), and *equations* (invariants those functions satisfy). The <span class="co">[</span><span class="ot">tutorial's formal foundations appendix</span><span class="co">](https://panproto.dev/tutorial/appendices/A-formal-foundations.html)</span> provides relevant background.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Crate map</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to navigate this guide</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>The guide is organized into six parts:</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>**Part I --- Getting Started.**</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>Read @sec-welcome and @sec-first-contribution to understand the project's goals, clone the repository, and land your first pull request. This is the recommended starting point for all new contributors.</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>**Part II --- Development Environment.**</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>Chapters 3--4 cover building, testing, debugging, and profiling. Return here whenever you need to set up a new machine or diagnose a test failure.</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>**Part III --- Architecture &amp; Internals.**</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>Chapters 5--15 are deep dives into each crate and subsystem. Read the architecture overview first, then jump to whichever crate you are working on.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Crates <span class="pp">|</span> Role <span class="pp">|</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|--------|------|</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> The GAT engine: theories, structure-preserving maps, theory merges <span class="pp">|</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span> <span class="pp">|</span> Schema graphs and instance trees <span class="pp">|</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>, <span class="in">`panproto-check`</span> <span class="pp">|</span> Migration compilation, lenses, breaking-change analysis <span class="pp">|</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Protocol definitions and schema-level presentation <span class="pp">|</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3.5 <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span> Instance-level presentation: format-specific parse/emit <span class="pp">|</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to navigate this guide</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>The guide is organized into six parts:</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>**Part IV --- Contributing Process.**</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Chapters 16--18 cover coding conventions, the testing philosophy, and the PR workflow. Read these before opening your first pull request.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>**Part I --- Getting Started.**</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Read @sec-welcome and @sec-first-contribution to understand the project's goals, clone the repository, and land your first pull request. This is the recommended starting point for all new contributors.</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>**Part V --- Project Operations.**</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Chapter 19 covers the release process and versioning policy.</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>**Part II --- Development Environment.**</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Chapters 3--4 cover building, testing, debugging, and profiling. Return here whenever you need to set up a new machine or diagnose a test failure.</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>**Appendices.**</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>The glossary (Appendix A) defines every domain term. The source code map (Appendix B) is a directory-level index of the entire repository. The troubleshooting FAQ (Appendix C) addresses common build and test issues.</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>**Part III --- Architecture &amp; Internals.**</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Chapters 5--15 are deep dives into each crate and subsystem. Read the architecture overview first, then jump to whichever crate you are working on.</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick-start path</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>**Part IV --- Contributing Process.**</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Chapters 16--18 cover coding conventions, the testing philosophy, and the PR workflow. Read these before opening your first pull request.</span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>If you want to land a contribution as fast as possible: read chapters 1 and 2, build the project (chapter 3), make your change, then read chapters 16--18 before opening your PR.</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>**Part V --- Project Operations.**</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>Chapter 19 covers the release process and versioning policy.</span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Links</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial:** <span class="ot">&lt;https://panproto.github.io/tutorial/&gt;</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Repository:** <span class="ot">&lt;https://github.com/panproto/panproto&gt;</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rustdoc:** generated from <span class="in">`cargo doc --workspace --no-deps`</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions used in this guide</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Inline code like <span class="in">`panproto-gat`</span> refers to a crate name.</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>File paths like <span class="in">`crates/panproto-gat/src/theory.rs`</span> are relative to the repository root.</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shell commands assume a Unix-like environment (macOS or Linux).</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Callout boxes highlight important notes, tips, and warnings.</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>*Aaron Steven White --- {{&lt; meta date &gt;}}*</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>**Appendices.**</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>The glossary (Appendix A) defines every domain term. The source code map (Appendix B) is a directory-level index of the entire repository. The troubleshooting FAQ (Appendix C) addresses common build and test issues.</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reading roadmaps</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>**Contributors** landing a fix or feature: chapters 1--2, then chapter 3 (build), then chapters 16--18 (PR workflow).</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>**Protocol authors** adding a new schema language: chapters 5 (architecture), 6 (GAT engine), then the protocol chapter.</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>**Researchers** exploring the internals: chapters 5--6, then @sec-advanced-internals, then @sec-protolens-engine and @sec-auto-lens-pipeline.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Quick-start path</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>If you want to land a contribution as fast as possible: read chapters 1 and 2, build the project (chapter 3), make your change, then read chapters 16--18 before opening your PR.</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Links</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial:** <span class="ot">&lt;https://panproto.dev/tutorial/&gt;</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Repository:** <span class="ot">&lt;https://github.com/panproto/panproto&gt;</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rustdoc:** generated from <span class="in">`cargo doc --workspace --no-deps`</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions used in this guide</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Inline code like <span class="in">`panproto-gat`</span> refers to a crate name.</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>File paths like <span class="in">`crates/panproto-gat/src/theory.rs`</span> are relative to the repository root.</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shell commands assume a Unix-like environment (macOS or Linux).</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Callout boxes highlight important notes, tips, and warnings.</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>*Aaron Steven White --- {{&lt; meta date &gt;}}*</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

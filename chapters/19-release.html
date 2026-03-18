@@ -400,7 +400,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -459,26 +459,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -781,8 +781,8 @@ Note
 <h2 data-number="25.7" class="anchored" data-anchor-id="doc-deployments"><span class="header-section-number">25.7</span> Doc Deployments</h2>
 <p>Two documentation sites auto-deploy on push to <code>main</code>:</p>
 <ul>
-<li><strong>Tutorial</strong> (<code>publish-tutorial.yml</code>): The user-facing tutorial at <code>panproto.github.io/tutorial/</code> is built with Quarto and deployed to GitHub Pages.</li>
-<li><strong>Dev guide</strong>: This developer guide at <code>panproto.github.io/dev-guide/</code> follows the same pattern.</li>
+<li><strong>Tutorial</strong> (<code>publish-tutorial.yml</code>): The user-facing tutorial at <code>panproto.dev/tutorial/</code> is built with Quarto and deployed to GitHub Pages.</li>
+<li><strong>Dev guide</strong>: This developer guide at <code>panproto.dev/dev-guide/</code> follows the same pattern.</li>
 </ul>
 <p>Both workflows build the Quarto site and push the rendered HTML to the <code>gh-pages</code> branch. Deployment is automatic – no manual steps are required after merging to <code>main</code>.</p>
 </section>
@@ -1409,8 +1409,8 @@ Note
 <span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>Two documentation sites auto-deploy on push to <span class="in">`main`</span>:</span>
 <span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial** (<span class="in">`publish-tutorial.yml`</span>): The user-facing tutorial at <span class="in">`panproto.github.io/tutorial/`</span> is built with Quarto and deployed to GitHub Pages.</span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dev guide**: This developer guide at <span class="in">`panproto.github.io/dev-guide/`</span> follows the same pattern.</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial** (<span class="in">`publish-tutorial.yml`</span>): The user-facing tutorial at <span class="in">`panproto.dev/tutorial/`</span> is built with Quarto and deployed to GitHub Pages.</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dev guide**: This developer guide at <span class="in">`panproto.dev/dev-guide/`</span> follows the same pattern.</span>
 <span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>Both workflows build the Quarto site and push the rendered HTML to the <span class="in">`gh-pages`</span> branch. Deployment is automatic -- no manual steps are required after merging to <span class="in">`main`</span>.</span>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>

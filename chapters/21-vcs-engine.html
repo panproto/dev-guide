@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/22-building-blocks.html" rel="next">
+<link href="../chapters/22-advanced-internals.html" rel="next">
 <link href="../chapters/15-cli.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -415,7 +415,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -474,26 +474,26 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -602,7 +602,7 @@ div.csl-indent {
   <li><a href="#dag-algorithms" id="toc-dag-algorithms" class="nav-link" data-scroll-target="#dag-algorithms"><span class="header-section-number">17.5</span> DAG Algorithms</a></li>
   <li><a href="#repository-operations" id="toc-repository-operations" class="nav-link" data-scroll-target="#repository-operations"><span class="header-section-number">17.6</span> Repository Operations</a></li>
   <li><a href="#error-variants" id="toc-error-variants" class="nav-link" data-scroll-target="#error-variants"><span class="header-section-number">17.7</span> Error Variants</a></li>
-  <li><a href="#three-way-merge-pushout-construction" id="toc-three-way-merge-pushout-construction" class="nav-link" data-scroll-target="#three-way-merge-pushout-construction"><span class="header-section-number">17.8</span> Three-Way Merge (Pushout Construction)</a></li>
+  <li><a href="#three-way-merge-combining-diverged-branches" id="toc-three-way-merge-combining-diverged-branches" class="nav-link" data-scroll-target="#three-way-merge-combining-diverged-branches"><span class="header-section-number">17.8</span> Three-Way Merge (Combining Diverged Branches)</a></li>
   <li><a href="#rename-detection" id="toc-rename-detection" class="nav-link" data-scroll-target="#rename-detection"><span class="header-section-number">17.9</span> Rename Detection</a>
   <ul class="collapse">
   <li><a href="#algorithm" id="toc-algorithm" class="nav-link" data-scroll-target="#algorithm"><span class="header-section-number">17.9.1</span> Algorithm</a></li>
@@ -643,37 +643,37 @@ div.csl-indent {
 </header>
 
 
-<p>The <code>panproto-vcs</code> crate implements schematic version control: schemas are content-addressed objects stored in a commit DAG, with branches, merge via colimit, and data lifting through history.</p>
+<p>The <code>panproto-vcs</code> crate implements schematic version control: schemas are content-addressed objects stored in a commit DAG, with branches, three-way merge, and data lifting through history.</p>
 <section id="module-layout" class="level2" data-number="17.1">
 <h2 data-number="17.1" class="anchored" data-anchor-id="module-layout"><span class="header-section-number">17.1</span> Module Layout</h2>
 <pre><code>crates/panproto-vcs/src/
-  lib.rs           — public API, re-exports
-  error.rs         — VcsError (thiserror, non_exhaustive)
-  hash.rs          — canonical serialization + blake3 content addressing
-  object.rs        — ObjectId, CommitObject, Object enum
-  store.rs         — Store trait, HeadState, ReflogEntry
-  fs_store.rs      — FsStore (.panproto/ on disk)
-  mem_store.rs     — MemStore (HashMap-backed, for tests + WASM)
-  refs.rs          — branches, tags, resolve_ref
-  reflog.rs        — append-only audit log of ref changes
-  index.rs         — staging area + validation pipeline
-  dag.rs           — merge base, path finding, log walk, compose_path
-  merge.rs         — three-way schema merge + conflict detection
-  rebase.rs        — replay commits onto a new base
-  cherry_pick.rs   — apply single commit's migration
-  reset.rs         — soft/mixed/hard HEAD reset
-  stash.rs         — save/restore working state
-  bisect.rs        — binary search for breaking commit
-  blame.rs         — schema element attribution
-  auto_mig.rs      — derive Migration from SchemaDiff
-  rename_detect.rs — heuristic rename detection between versions
-  status.rs        — HEAD vs index vs working file
-  repo.rs          — Repository orchestration (porcelain)
-  gc.rs            — garbage collection</code></pre>
+  lib.rs           -- public API, re-exports
+  error.rs         -- VcsError (thiserror, non_exhaustive)
+  hash.rs          -- canonical serialization + blake3 content addressing
+  object.rs        -- ObjectId, CommitObject, Object enum
+  store.rs         -- Store trait, HeadState, ReflogEntry
+  fs_store.rs      -- FsStore (.panproto/ on disk)
+  mem_store.rs     -- MemStore (HashMap-backed, for tests + WASM)
+  refs.rs          -- branches, tags, resolve_ref
+  reflog.rs        -- append-only audit log of ref changes
+  index.rs         -- staging area + validation pipeline
+  dag.rs           -- merge base, path finding, log walk, compose_path
+  merge.rs         -- three-way schema merge + conflict detection
+  rebase.rs        -- replay commits onto a new base
+  cherry_pick.rs   -- apply single commit's migration
+  reset.rs         -- soft/mixed/hard HEAD reset
+  stash.rs         -- save/restore working state
+  bisect.rs        -- binary search for breaking commit
+  blame.rs         -- schema element attribution
+  auto_mig.rs      -- derive Migration from SchemaDiff
+  rename_detect.rs -- heuristic rename detection between versions
+  status.rs        -- HEAD vs index vs working file
+  repo.rs          -- Repository orchestration (porcelain)
+  gc.rs            -- garbage collection</code></pre>
 </section>
 <section id="object-store" class="level2" data-number="17.2">
 <h2 data-number="17.2" class="anchored" data-anchor-id="object-store"><span class="header-section-number">17.2</span> Object Store</h2>
-<p><code>ObjectId</code> is a blake3 hash of the canonical MessagePack serialization. Canonical forms use <code>BTreeMap</code> instead of <code>HashMap</code> and exclude precomputed indices, which are derived data. Three object types live in the store:</p>
+<p><code>ObjectId</code> is a blake3 hash of the canonical MessagePack serialization. Canonical forms use <code>BTreeMap</code> instead of <code>HashMap</code> and exclude precomputed indices, which are derived data. Four object types live in the store:</p>
 <ul>
 <li><code>Object::Schema(Schema)</code>: a schema snapshot</li>
 <li><code>Object::Migration { src, tgt, mapping }</code>: a morphism between two schemas</li>
@@ -720,15 +720,15 @@ div.csl-indent {
 <h2 data-number="17.6" class="anchored" data-anchor-id="repository-operations"><span class="header-section-number">17.6</span> Repository Operations</h2>
 <p>Beyond the core commit flow, <code>repo.rs</code> exposes several additional operations:</p>
 <ul>
-<li><code>Repository::amend()</code> — replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <code>gc</code>).</li>
-<li><code>refs::force_delete_branch</code> — deletes a branch regardless of merge status</li>
-<li><code>refs::rename_branch</code> — renames a branch ref, updating HEAD if the current branch is renamed</li>
-<li><code>refs::create_and_checkout_branch</code> — creates a branch at HEAD and switches to it atomically</li>
-<li><code>refs::create_annotated_tag</code> — creates a <code>TagObject</code> in the store and points a tag ref at it</li>
-<li><code>refs::create_tag_force</code> — overwrites an existing tag ref</li>
-<li><code>stash::stash_apply</code> — re-applies the top stash entry without removing it from the stack</li>
-<li><code>stash::stash_show</code> — returns the schema diff between the stash entry and its parent</li>
-<li><code>stash::stash_clear</code> — drops all stash entries and removes the <code>refs/stash</code> ref</li>
+<li><code>Repository::amend()</code> – replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <code>gc</code>).</li>
+<li><code>refs::force_delete_branch</code> – deletes a branch regardless of merge status</li>
+<li><code>refs::rename_branch</code> – renames a branch ref, updating HEAD if the current branch is renamed</li>
+<li><code>refs::create_and_checkout_branch</code> – creates a branch at HEAD and switches to it atomically</li>
+<li><code>refs::create_annotated_tag</code> – creates a <code>TagObject</code> in the store and points a tag ref at it</li>
+<li><code>refs::create_tag_force</code> – overwrites an existing tag ref</li>
+<li><code>stash::stash_apply</code> – re-applies the top stash entry without removing it from the stack</li>
+<li><code>stash::stash_show</code> – returns the schema diff between the stash entry and its parent</li>
+<li><code>stash::stash_clear</code> – drops all stash entries and removes the <code>refs/stash</code> ref</li>
 </ul>
 </section>
 <section id="error-variants" class="level2" data-number="17.7">
@@ -744,16 +744,16 @@ div.csl-indent {
 <li><code>RemoteNotSupported</code></li>
 </ul>
 </section>
-<section id="three-way-merge-pushout-construction" class="level2" data-number="17.8">
-<h2 data-number="17.8" class="anchored" data-anchor-id="three-way-merge-pushout-construction"><span class="header-section-number">17.8</span> Three-Way Merge (Pushout Construction)</h2>
-<p>Given schemas base, ours, theirs, the merge computes the categorical pushout:</p>
+<section id="three-way-merge-combining-diverged-branches" class="level2" data-number="17.8">
+<h2 data-number="17.8" class="anchored" data-anchor-id="three-way-merge-combining-diverged-branches"><span class="header-section-number">17.8</span> Three-Way Merge (Combining Diverged Branches)</h2>
+<p>Given schemas <code>base</code>, <code>ours</code>, <code>theirs</code>, the merge computes a combined result:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <ol type="1">
-<li><code>diff(base, ours)</code> and <code>diff(base, theirs)</code> — the extended diff covers all 13 schema fields (vertices, edges, constraints, hyper-edges, required, NSIDs, variants, orderings, recursion points, usage modes, spans, nominal)</li>
+<li><code>diff(base, ours)</code> and <code>diff(base, theirs)</code> – the extended diff covers all 13 schema fields (vertices, edges, constraints, hyper-edges, required, NSIDs, variants, orderings, recursion points, usage modes, spans, nominal)</li>
 <li>For every element in every field, classify its fate on each side: unchanged, added, removed, or modified</li>
-<li>Apply the pushout rule: one-sided changes accepted; identical changes deduplicated; incompatible changes flagged as typed conflicts with the base value retained</li>
-<li>No tie-breaking — the merge is commutative: <code>merge(base, A, B) == merge(base, B, A)</code></li>
+<li>Apply the merge rule: one-sided changes accepted; identical changes deduplicated; incompatible changes flagged as typed conflicts with the base value retained</li>
+<li>No tie-breaking – the merge is commutative: <code>merge(base, A, B) == merge(base, B, A)</code></li>
 <li>Rebuild precomputed indices</li>
-<li>Derive migrations from ours→merged and theirs→merged via <code>auto_mig::derive_migration</code></li>
+<li>Derive migrations from ours-&gt;merged and theirs-&gt;merged via <code>auto_mig::derive_migration</code></li>
 </ol>
 </section>
 <section id="rename-detection" class="level2" data-number="17.9">
@@ -769,34 +769,34 @@ div.csl-indent {
 <li>Same vertex kind: +0.3</li>
 <li>Same outgoing edge names: +0.3</li>
 <li>Same incoming edge names: +0.2</li>
-<li>Edit distance of vertex ID names ≤ 3: +0.2</li>
+<li>Edit distance of vertex ID names &lt;= 3: +0.2</li>
 </ul></li>
 <li>Greedy bipartite matching: take highest-scoring pairs first</li>
-<li>Return pairs ≥ threshold</li>
+<li>Return pairs &gt;= threshold</li>
 </ol>
 <p>For edge label rename detection (<code>detect_edge_renames</code>), the algorithm compares removed and added edges between the same surviving vertex pair, scoring by name edit distance normalized to string length.</p>
 </section>
 <section id="commitobject-integration" class="level3" data-number="17.9.2">
 <h3 data-number="17.9.2" class="anchored" data-anchor-id="commitobject-integration"><span class="header-section-number">17.9.2</span> CommitObject Integration</h3>
 <p>Detected renames are stored in <code>CommitObject.renames</code> as <code>Vec&lt;SiteRename&gt;</code>. This field is <code>#[serde(default, skip_serializing_if = "Vec::is_empty")]</code>, so old commits without renames deserialize correctly.</p>
-<p>See <a href="23-naming-identity.html" class="quarto-xref"><span>Chapter 19</span></a> for the full naming and identity architecture.</p>
+<p>See <a href="22-advanced-internals.html#sec-naming-identity-section" class="quarto-xref"><span>Section 18.2</span></a> for the full naming and identity architecture.</p>
 </section>
 </section>
 <section id="related-work-and-differentiation" class="level2" data-number="17.10">
 <h2 data-number="17.10" class="anchored" data-anchor-id="related-work-and-differentiation"><span class="header-section-number">17.10</span> Related Work and Differentiation</h2>
-<p>The term “schematic version control” is chosen to distinguish from “semantic version control” (which refers to AST-aware diffing tools for source code) and from schema registries (which store schema versions linearly without branching or merge).</p>
+<p>The term “schematic version control” distinguishes panproto from “semantic version control” (AST-aware diffing tools for source code) and from schema registries (which store schema versions linearly without branching or merge).</p>
 <section id="semanticstructural-version-control-for-source-code" class="level3" data-number="17.10.1">
 <h3 data-number="17.10.1" class="anchored" data-anchor-id="semanticstructural-version-control-for-source-code"><span class="header-section-number">17.10.1</span> Semantic/Structural Version Control for Source Code</h3>
 <p>These tools bring structure-awareness to source code via AST/CST parsing. They understand syntax but not the semantics of the data being versioned.</p>
 <section id="sem-and-weave-ataraxy-labs" class="level4" data-number="17.10.1.1">
 <h4 data-number="17.10.1.1" class="anchored" data-anchor-id="sem-and-weave-ataraxy-labs"><span class="header-section-number">17.10.1.1</span> <a href="https://github.com/Ataraxy-Labs/sem">sem</a> and <a href="https://github.com/Ataraxy-Labs/weave">weave</a> (Ataraxy Labs)</h4>
 <p>sem is a Rust CLI that provides entity-level diff, blame, graph, and impact analysis for code across 16 languages via tree-sitter. It uses structural hashing to distinguish cosmetic changes from real logic changes. weave is its companion merge driver, which resolves conflicts at the entity level and achieves 31/31 clean merges on a benchmark where git manages 15/31.</p>
-<p>Both tools sit on top of git. They do not replace git’s object store or DAG; they provide a smarter view of git’s existing data. sem parses source code into entity trees (functions, classes, interfaces). panproto-vcs operates on a different kind of object entirely: mathematical schema structure expressed as GAT models with sorts, operations, and equations. weave’s merge works by entity-level pattern matching. panproto-vcs’s merge is a pushout over a shared base theory.</p>
+<p>Both tools sit on top of git. They do not replace git’s object store or DAG; they provide a smarter view of git’s existing data. sem parses source code into entity trees (functions, classes, interfaces). panproto-vcs operates on a different kind of object: mathematical schema structure expressed as GAT models with sorts (types in a formal theory, not sorting operations), operations, and equations. weave’s merge works by entity-level pattern matching. panproto-vcs’s merge computes the combined result over a shared base theory.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
 <section id="cow-tikhon-jelvis" class="level4" data-number="17.10.1.2">
 <h4 data-number="17.10.1.2" class="anchored" data-anchor-id="cow-tikhon-jelvis"><span class="header-section-number">17.10.1.2</span> <a href="https://jelv.is/cow/">Cow</a> (Tikhon Jelvis)</h4>
 <p>Cow is a Haskell project that diffs and merges parse trees instead of text. It uses a modification of the Wagner-Fischer algorithm to compute tree edit distance, and can detect moves and group related changes.</p>
-<p>Cow works on generic parse trees and is language-agnostic. panproto-vcs works on typed schema graphs where the types (sorts, operations, equations) constrain what counts as a valid change. Cow’s merge minimizes edit distance; panproto-vcs computes a pushout, which carries universal-property guarantees that edit-distance approaches lack.</p>
+<p>Cow works on generic parse trees and is language-agnostic. panproto-vcs works on typed schema graphs where the types (sorts, operations, equations) constrain what counts as a valid change. Cow’s merge minimizes edit distance; panproto-vcs computes a merge with universal-property guarantees that edit-distance approaches lack.</p>
 </section>
 <section id="difftastic-wilfred-hughes" class="level4" data-number="17.10.1.3">
 <h4 data-number="17.10.1.3" class="anchored" data-anchor-id="difftastic-wilfred-hughes"><span class="header-section-number">17.10.1.3</span> <a href="https://github.com/Wilfred/difftastic">difftastic</a> (Wilfred Hughes)</h4>
@@ -805,7 +805,7 @@ div.csl-indent {
 <section id="mergiraf" class="level4" data-number="17.10.1.4">
 <h4 data-number="17.10.1.4" class="anchored" data-anchor-id="mergiraf"><span class="header-section-number">17.10.1.4</span> <a href="https://codeberg.org/mergiraf/mergiraf">Mergiraf</a></h4>
 <p>Mergiraf is a Rust syntax-aware three-way merge tool for git using tree-sitter, supporting 33 languages. When the AST merge fails, it falls back to line-based merging.</p>
-<p>The fallback is the important difference. Mergiraf is heuristic: when its structured approach doesn’t work, it silently degrades to a less-informed algorithm. panproto-vcs’s merge via colimit always produces a result. Conflicts are reported explicitly, never papered over.</p>
+<p>The fallback is the important difference. Mergiraf is heuristic: when its structured approach fails, it silently degrades to a less-informed algorithm. panproto-vcs’s merge always produces a result. Conflicts are reported explicitly, never papered over.</p>
 </section>
 <section id="semanticmerge-spork-jdime-jfstmerge-intellimerge" class="level4" data-number="17.10.1.5">
 <h4 data-number="17.10.1.5" class="anchored" data-anchor-id="semanticmerge-spork-jdime-jfstmerge-intellimerge"><span class="header-section-number">17.10.1.5</span> SemanticMerge, Spork, JDime, jFSTMerge, IntelliMerge</h4>
@@ -822,25 +822,25 @@ div.csl-indent {
 </section>
 <section id="a-categorical-theory-of-patches-mimram2013" class="level4" data-number="17.10.2.2">
 <h4 data-number="17.10.2.2" class="anchored" data-anchor-id="a-categorical-theory-of-patches-mimram2013"><span class="header-section-number">17.10.2.2</span> A Categorical Theory of Patches <span class="citation" data-cites="mimram2013">(<a href="#ref-mimram2013" role="doc-biblioref">Mimram and Di Giusto 2013</a>)</span></h4>
-<p>Mimram and Di Giusto define a category where objects are files and morphisms are patches, with merge defined as the pushout. They investigate the free completion of this category under finite colimits and give an explicit description where objects are finite sets labeled by lines equipped with a transitive relation.</p>
-<p>panproto-vcs implements this idea for schemas rather than text files. The objects in Mimram and Di Giusto’s category are sequences of lines, a flat structure. panproto’s objects are models of GATs: typed graphs with protocol-specific sorts, operations, equations, and constraints. The richer structure gives the pushout more to work with.</p>
+<p>Mimram and Di Giusto define a category where objects are files and morphisms are patches, with merge defined as a shared-structure merge.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> They investigate the free completion of this category under finite merges and give an explicit description where objects are finite sets labeled by lines equipped with a transitive relation.</p>
+<p>panproto-vcs implements this idea for schemas rather than text files. The objects in Mimram and Di Giusto’s category are sequences of lines, a flat structure. panproto’s objects are models of GATs: typed graphs with protocol-specific sorts, operations, equations, and constraints. The richer structure gives the merge more to work with.</p>
 </section>
 <section id="dvcs-for-structured-data-schurmann2020" class="level4" data-number="17.10.2.3">
 <h4 data-number="17.10.2.3" class="anchored" data-anchor-id="dvcs-for-structured-data-schurmann2020"><span class="header-section-number">17.10.2.3</span> DVCS for Structured Data <span class="citation" data-cites="schurmann2020">(<a href="#ref-schurmann2020" role="doc-biblioref">Schürmann 2020</a>)</span></h4>
-<p>Schürmann’s manifesto calls for version control over relational algebra and algebraic datatypes, inspired by Pijul’s categorical patch theory. It identifies the gap but provides no implementation. panproto-vcs realizes this vision.</p>
+<p>Schurmann’s manifesto calls for version control over relational algebra and algebraic datatypes. It identifies the gap but provides no implementation. panproto-vcs realizes this vision.</p>
 </section>
 </section>
 <section id="algebraiccategorical-vcs" class="level3" data-number="17.10.3">
 <h3 data-number="17.10.3" class="anchored" data-anchor-id="algebraiccategorical-vcs"><span class="header-section-number">17.10.3</span> Algebraic/Categorical VCS</h3>
 <section id="darcs" class="level4" data-number="17.10.3.1">
-<h4 data-number="17.10.3.1" class="anchored" data-anchor-id="darcs"><span class="header-section-number">17.10.3.1</span> <a href="https://darcs.net/">Darcs</a></h4>
+<h4 data-number="17.10.3.1" class="anchored" data-anchor-id="darcs"><span class="header-section-number">17.10.3.1</span> <a href="http://darcs.net/">Darcs</a></h4>
 <p>Darcs is a Haskell VCS where patches are algebraic objects with inverse and commutation operations. Merge works by finding a reordering of patches that lets both sides apply cleanly.</p>
-<p>Darcs’s patches are syntactic: line insertions and deletions that can commute when they touch different lines. panproto’s migrations are semantic: vertex and edge maps that compose associatively and merge via pushout. Darcs has no notion of typed structure.</p>
+<p>Darcs’s patches are syntactic: line insertions and deletions that can commute when they touch different lines. panproto’s migrations are semantic: vertex and edge maps that compose associatively and merge over shared structure. Darcs has no notion of typed structure.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </section>
 <section id="pijul" class="level4" data-number="17.10.3.2">
 <h4 data-number="17.10.3.2" class="anchored" data-anchor-id="pijul"><span class="header-section-number">17.10.3.2</span> <a href="https://pijul.org/">Pijul</a></h4>
-<p>Pijul is a Rust DVCS based on <span class="citation" data-cites="mimram2013">Mimram and Di Giusto (<a href="#ref-mimram2013" role="doc-biblioref">2013</a>)</span>’s categorical patch theory. Merge is the pushout in a category of files and patches, giving commutativity and associativity.</p>
-<p>Pijul and panproto-vcs share the deepest theoretical connection: both use pushouts for merge. The difference is in the objects. Pijul’s objects are byte-chunk graphs, essentially ordered sequences of text blocks. panproto’s are models of GATs with protocol-specific theories, constraints, and edge rules. panproto’s pushout has access to type information that lets it distinguish “both branches renamed vertex X” (conflict) from “both branches added unrelated vertices” (clean merge). Pijul cannot make this distinction. Additionally, panproto can migrate instance data through the DAG via functorial lifting, which requires understanding the semantics of the objects being versioned.</p>
+<p>Pijul is a Rust DVCS based on <span class="citation" data-cites="mimram2013">Mimram and Di Giusto (<a href="#ref-mimram2013" role="doc-biblioref">2013</a>)</span>’s categorical patch theory. Merge is the shared-structure merge in a category of files and patches, giving commutativity and associativity.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>Pijul’s objects are byte-chunk graphs, essentially ordered sequences of text blocks. panproto’s are models of GATs with protocol-specific theories, constraints, and edge rules. panproto’s merge has access to type information that lets it distinguish “both branches renamed vertex X” (conflict) from “both branches added unrelated vertices” (clean merge). Pijul cannot make this distinction. Additionally, panproto can migrate instance data through the DAG via lifting, which requires understanding the semantics of the objects being versioned.</p>
 </section>
 </section>
 <section id="schema-migration-tools" class="level3" data-number="17.10.4">
@@ -853,8 +853,8 @@ div.csl-indent {
 </section>
 <section id="buf-buf-technologies" class="level4" data-number="17.10.4.2">
 <h4 data-number="17.10.4.2" class="anchored" data-anchor-id="buf-buf-technologies"><span class="header-section-number">17.10.4.2</span> <a href="https://buf.build/">buf</a> (Buf Technologies)</h4>
-<p>buf is a Go tool for Protobuf schema linting, breaking change detection, and schema registry. It integrates with CI/CD to enforce compatibility.</p>
-<p>buf is a registry and linter for a single protocol. It relies on git for version control, cannot migrate instance data, has no merge algorithm, and does not work across protocol boundaries.</p>
+<p><a href="https://buf.build/">Buf</a> is a Go tool for Protobuf schema linting, breaking change detection, and schema registry. It integrates with CI/CD to enforce compatibility.</p>
+<p>Buf is a registry and linter for a single protocol. It relies on git for version control, cannot migrate instance data, has no merge algorithm, and does not work across protocol boundaries.</p>
 </section>
 <section id="atlas-ariga" class="level4" data-number="17.10.4.3">
 <h4 data-number="17.10.4.3" class="anchored" data-anchor-id="atlas-ariga"><span class="header-section-number">17.10.4.3</span> <a href="https://atlasgo.io/">Atlas</a> (Ariga)</h4>
@@ -978,7 +978,7 @@ div.csl-indent {
 <td>No</td>
 <td>SQL scripts</td>
 <td>No</td>
-<td><strong>Yes (functorial lift)</strong></td>
+<td><strong>Yes (lifting)</strong></td>
 </tr>
 <tr class="odd">
 <td>Round-trip guarantee</td>
@@ -1040,6 +1040,16 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 </div>
 </div>
 </section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The merge combines the two branch schemas along their shared base, producing a unified result. Categorically, this is a pushout (colimit) over the shared base.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The merge combines two theories along their shared elements. Categorically, this is a pushout (colimit).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The merge combines structures along shared elements, producing a universal result. Categorically, this is a pushout (colimit).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Both <a href="http://darcs.net/">Darcs</a> and <a href="https://pijul.org/">Pijul</a> use algebraic patch theories, but their objects are untyped text (lines and insertions). panproto’s objects are typed schema graphs with sorts, operations, and equations, which allows the merge to exploit type information for conflict detection.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Both Pijul and panproto-vcs use pushouts for merge. The difference is in the objects being merged.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1514,47 +1524,47 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/22-building-blocks.html" class="pagination-link" aria-label="Building-Block Theories">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/22-advanced-internals.html" class="pagination-link" aria-label="Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># VCS Engine {#sec-vcs-engine}</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-vcs`</span> crate implements schematic version control: schemas are content-addressed objects stored in a commit DAG, with branches, merge via colimit, and data lifting through history.</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-vcs`</span> crate implements schematic version control: schemas are content-addressed objects stored in a commit DAG, with branches, three-way merge, and data lifting through history.</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Layout</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="in">crates/panproto-vcs/src/</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="in">  lib.rs           — public API, re-exports</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="in">  error.rs         — VcsError (thiserror, non_exhaustive)</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="in">  hash.rs          — canonical serialization + blake3 content addressing</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="in">  object.rs        — ObjectId, CommitObject, Object enum</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="in">  store.rs         — Store trait, HeadState, ReflogEntry</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="in">  fs_store.rs      — FsStore (.panproto/ on disk)</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="in">  mem_store.rs     — MemStore (HashMap-backed, for tests + WASM)</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="in">  refs.rs          — branches, tags, resolve_ref</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="in">  reflog.rs        — append-only audit log of ref changes</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="in">  index.rs         — staging area + validation pipeline</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="in">  dag.rs           — merge base, path finding, log walk, compose_path</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">  merge.rs         — three-way schema merge + conflict detection</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="in">  rebase.rs        — replay commits onto a new base</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="in">  cherry_pick.rs   — apply single commit's migration</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="in">  reset.rs         — soft/mixed/hard HEAD reset</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="in">  stash.rs         — save/restore working state</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">  bisect.rs        — binary search for breaking commit</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="in">  blame.rs         — schema element attribution</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">  auto_mig.rs      — derive Migration from SchemaDiff</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="in">  rename_detect.rs — heuristic rename detection between versions</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="in">  status.rs        — HEAD vs index vs working file</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="in">  repo.rs          — Repository orchestration (porcelain)</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="in">  gc.rs            — garbage collection</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="in">  lib.rs           -- public API, re-exports</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="in">  error.rs         -- VcsError (thiserror, non_exhaustive)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="in">  hash.rs          -- canonical serialization + blake3 content addressing</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="in">  object.rs        -- ObjectId, CommitObject, Object enum</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="in">  store.rs         -- Store trait, HeadState, ReflogEntry</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="in">  fs_store.rs      -- FsStore (.panproto/ on disk)</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="in">  mem_store.rs     -- MemStore (HashMap-backed, for tests + WASM)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="in">  refs.rs          -- branches, tags, resolve_ref</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="in">  reflog.rs        -- append-only audit log of ref changes</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="in">  index.rs         -- staging area + validation pipeline</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="in">  dag.rs           -- merge base, path finding, log walk, compose_path</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">  merge.rs         -- three-way schema merge + conflict detection</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="in">  rebase.rs        -- replay commits onto a new base</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="in">  cherry_pick.rs   -- apply single commit's migration</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="in">  reset.rs         -- soft/mixed/hard HEAD reset</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="in">  stash.rs         -- save/restore working state</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="in">  bisect.rs        -- binary search for breaking commit</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="in">  blame.rs         -- schema element attribution</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="in">  auto_mig.rs      -- derive Migration from SchemaDiff</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="in">  rename_detect.rs -- heuristic rename detection between versions</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="in">  status.rs        -- HEAD vs index vs working file</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="in">  repo.rs          -- Repository orchestration (porcelain)</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="in">  gc.rs            -- garbage collection</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Object Store</span></span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="in">`ObjectId`</span> is a blake3 hash of the canonical MessagePack serialization. Canonical forms use <span class="in">`BTreeMap`</span> instead of <span class="in">`HashMap`</span> and exclude precomputed indices, which are derived data. Three object types live in the store:</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="in">`ObjectId`</span> is a blake3 hash of the canonical MessagePack serialization. Canonical forms use <span class="in">`BTreeMap`</span> instead of <span class="in">`HashMap`</span> and exclude precomputed indices, which are derived data. Four object types live in the store:</span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Object::Schema(Schema)`</span>: a schema snapshot</span>
 <span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Object::Migration { src, tgt, mapping }`</span>: a morphism between two schemas</span>
@@ -1605,15 +1615,15 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>Beyond the core commit flow, <span class="in">`repo.rs`</span> exposes several additional operations:</span>
 <span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Repository::amend()`</span> — replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <span class="in">`gc`</span>).</span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::force_delete_branch`</span> — deletes a branch regardless of merge status</span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::rename_branch`</span> — renames a branch ref, updating HEAD if the current branch is renamed</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_and_checkout_branch`</span> — creates a branch at HEAD and switches to it atomically</span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_annotated_tag`</span> — creates a <span class="in">`TagObject`</span> in the store and points a tag ref at it</span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_tag_force`</span> — overwrites an existing tag ref</span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_apply`</span> — re-applies the top stash entry without removing it from the stack</span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_show`</span> — returns the schema diff between the stash entry and its parent</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_clear`</span> — drops all stash entries and removes the <span class="in">`refs/stash`</span> ref</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Repository::amend()`</span> -- replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <span class="in">`gc`</span>).</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::force_delete_branch`</span> -- deletes a branch regardless of merge status</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::rename_branch`</span> -- renames a branch ref, updating HEAD if the current branch is renamed</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_and_checkout_branch`</span> -- creates a branch at HEAD and switches to it atomically</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_annotated_tag`</span> -- creates a <span class="in">`TagObject`</span> in the store and points a tag ref at it</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_tag_force`</span> -- overwrites an existing tag ref</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_apply`</span> -- re-applies the top stash entry without removing it from the stack</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_show`</span> -- returns the schema diff between the stash entry and its parent</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stash::stash_clear`</span> -- drops all stash entries and removes the <span class="in">`refs/stash`</span> ref</span>
 <span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Variants</span></span>
 <span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a></span>
@@ -1627,16 +1637,16 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`StashEmpty`</span>, <span class="in">`InvalidRef`</span>, <span class="in">`CorruptObject`</span></span>
 <span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`RemoteNotSupported`</span></span>
 <span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three-Way Merge (Pushout Construction)</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three-Way Merge (Combining Diverged Branches)</span></span>
 <span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>Given schemas base, ours, theirs, the merge computes the categorical pushout:</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>Given schemas <span class="in">`base`</span>, <span class="in">`ours`</span>, <span class="in">`theirs`</span>, the merge computes a combined result:^<span class="co">[</span><span class="ot">The merge combines the two branch schemas along their shared base, producing a unified result. Categorically, this is a pushout (colimit) over the shared base.</span><span class="co">]</span></span>
 <span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`diff(base, ours)`</span> and <span class="in">`diff(base, theirs)`</span> — the extended diff covers all 13 schema fields (vertices, edges, constraints, hyper-edges, required, NSIDs, variants, orderings, recursion points, usage modes, spans, nominal)</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`diff(base, ours)`</span> and <span class="in">`diff(base, theirs)`</span> -- the extended diff covers all 13 schema fields (vertices, edges, constraints, hyper-edges, required, NSIDs, variants, orderings, recursion points, usage modes, spans, nominal)</span>
 <span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For every element in every field, classify its fate on each side: unchanged, added, removed, or modified</span>
-<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Apply the pushout rule: one-sided changes accepted; identical changes deduplicated; incompatible changes flagged as typed conflicts with the base value retained</span>
-<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>No tie-breaking — the merge is commutative: <span class="in">`merge(base, A, B) == merge(base, B, A)`</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Apply the merge rule: one-sided changes accepted; identical changes deduplicated; incompatible changes flagged as typed conflicts with the base value retained</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>No tie-breaking -- the merge is commutative: <span class="in">`merge(base, A, B) == merge(base, B, A)`</span></span>
 <span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Rebuild precomputed indices</span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Derive migrations from ours→merged and theirs→merged via <span class="in">`auto_mig::derive_migration`</span></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Derive migrations from ours-&gt;merged and theirs-&gt;merged via <span class="in">`auto_mig::derive_migration`</span></span>
 <span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rename Detection</span></span>
 <span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a></span>
@@ -1651,9 +1661,9 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same vertex kind: +0.3</span>
 <span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same outgoing edge names: +0.3</span>
 <span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Same incoming edge names: +0.2</span>
-<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Edit distance of vertex ID names ≤ 3: +0.2</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Edit distance of vertex ID names &lt;= 3: +0.2</span>
 <span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Greedy bipartite matching: take highest-scoring pairs first</span>
-<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Return pairs ≥ threshold</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Return pairs &gt;= threshold</span>
 <span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>For edge label rename detection (<span class="in">`detect_edge_renames`</span>), the algorithm compares removed and added edges between the same surviving vertex pair, scoring by name edit distance normalized to string length.</span>
 <span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a></span>
@@ -1661,11 +1671,11 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>Detected renames are stored in <span class="in">`CommitObject.renames`</span> as <span class="in">`Vec&lt;SiteRename&gt;`</span>. This field is <span class="in">`#[serde(default, skip_serializing_if = "Vec::is_empty")]`</span>, so old commits without renames deserialize correctly.</span>
 <span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>See @sec-naming-identity for the full naming and identity architecture.</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>See @sec-naming-identity-section for the full naming and identity architecture.</span>
 <span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Related Work and Differentiation</span></span>
 <span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>The term "schematic version control" is chosen to distinguish from "semantic version control" (which refers to AST-aware diffing tools for source code) and from schema registries (which store schema versions linearly without branching or merge).</span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>The term "schematic version control" distinguishes panproto from "semantic version control" (AST-aware diffing tools for source code) and from schema registries (which store schema versions linearly without branching or merge).</span>
 <span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="fu">### Semantic/Structural Version Control for Source Code</span></span>
 <span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a></span>
@@ -1675,13 +1685,13 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>sem is a Rust CLI that provides entity-level diff, blame, graph, and impact analysis for code across 16 languages via tree-sitter. It uses structural hashing to distinguish cosmetic changes from real logic changes. weave is its companion merge driver, which resolves conflicts at the entity level and achieves 31/31 clean merges on a benchmark where git manages 15/31.</span>
 <span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>Both tools sit on top of git. They do not replace git's object store or DAG; they provide a smarter view of git's existing data. sem parses source code into entity trees (functions, classes, interfaces). panproto-vcs operates on a different kind of object entirely: mathematical schema structure expressed as GAT models with sorts, operations, and equations. weave's merge works by entity-level pattern matching. panproto-vcs's merge is a pushout over a shared base theory.</span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>Both tools sit on top of git. They do not replace git's object store or DAG; they provide a smarter view of git's existing data. sem parses source code into entity trees (functions, classes, interfaces). panproto-vcs operates on a different kind of object: mathematical schema structure expressed as GAT models with sorts (types in a formal theory, not sorting operations), operations, and equations. weave's merge works by entity-level pattern matching. panproto-vcs's merge computes the combined result over a shared base theory.^<span class="co">[</span><span class="ot">The merge combines two theories along their shared elements. Categorically, this is a pushout (colimit).</span><span class="co">]</span></span>
 <span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [Cow](https://jelv.is/cow/) (Tikhon Jelvis)</span></span>
 <span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>Cow is a Haskell project that diffs and merges parse trees instead of text. It uses a modification of the Wagner-Fischer algorithm to compute tree edit distance, and can detect moves and group related changes.</span>
 <span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>Cow works on generic parse trees and is language-agnostic. panproto-vcs works on typed schema graphs where the types (sorts, operations, equations) constrain what counts as a valid change. Cow's merge minimizes edit distance; panproto-vcs computes a pushout, which carries universal-property guarantees that edit-distance approaches lack.</span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>Cow works on generic parse trees and is language-agnostic. panproto-vcs works on typed schema graphs where the types (sorts, operations, equations) constrain what counts as a valid change. Cow's merge minimizes edit distance; panproto-vcs computes a merge with universal-property guarantees that edit-distance approaches lack.</span>
 <span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [difftastic](https://github.com/Wilfred/difftastic) (Wilfred Hughes)</span></span>
 <span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a></span>
@@ -1691,7 +1701,7 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>Mergiraf is a Rust syntax-aware three-way merge tool for git using tree-sitter, supporting 33 languages. When the AST merge fails, it falls back to line-based merging.</span>
 <span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>The fallback is the important difference. Mergiraf is heuristic: when its structured approach doesn't work, it silently degrades to a less-informed algorithm. panproto-vcs's merge via colimit always produces a result. Conflicts are reported explicitly, never papered over.</span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>The fallback is the important difference. Mergiraf is heuristic: when its structured approach fails, it silently degrades to a less-informed algorithm. panproto-vcs's merge always produces a result. Conflicts are reported explicitly, never papered over.</span>
 <span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a><span class="fu">#### SemanticMerge, Spork, JDime, jFSTMerge, IntelliMerge</span></span>
 <span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a></span>
@@ -1709,27 +1719,27 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-188"><a href="#cb4-188" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-189"><a href="#cb4-189" aria-hidden="true" tabindex="-1"></a><span class="fu">#### A Categorical Theory of Patches [@mimram2013]</span></span>
 <span id="cb4-190"><a href="#cb4-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a>Mimram and Di Giusto define a category where objects are files and morphisms are patches, with merge defined as the pushout. They investigate the free completion of this category under finite colimits and give an explicit description where objects are finite sets labeled by lines equipped with a transitive relation.</span>
+<span id="cb4-191"><a href="#cb4-191" aria-hidden="true" tabindex="-1"></a>Mimram and Di Giusto define a category where objects are files and morphisms are patches, with merge defined as a shared-structure merge.^<span class="co">[</span><span class="ot">The merge combines structures along shared elements, producing a universal result. Categorically, this is a pushout (colimit).</span><span class="co">]</span> They investigate the free completion of this category under finite merges and give an explicit description where objects are finite sets labeled by lines equipped with a transitive relation.</span>
 <span id="cb4-192"><a href="#cb4-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a>panproto-vcs implements this idea for schemas rather than text files. The objects in Mimram and Di Giusto's category are sequences of lines, a flat structure. panproto's objects are models of GATs: typed graphs with protocol-specific sorts, operations, equations, and constraints. The richer structure gives the pushout more to work with.</span>
+<span id="cb4-193"><a href="#cb4-193" aria-hidden="true" tabindex="-1"></a>panproto-vcs implements this idea for schemas rather than text files. The objects in Mimram and Di Giusto's category are sequences of lines, a flat structure. panproto's objects are models of GATs: typed graphs with protocol-specific sorts, operations, equations, and constraints. The richer structure gives the merge more to work with.</span>
 <span id="cb4-194"><a href="#cb4-194" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-195"><a href="#cb4-195" aria-hidden="true" tabindex="-1"></a><span class="fu">#### DVCS for Structured Data [@schurmann2020]</span></span>
 <span id="cb4-196"><a href="#cb4-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a>Schürmann's manifesto calls for version control over relational algebra and algebraic datatypes, inspired by Pijul's categorical patch theory. It identifies the gap but provides no implementation. panproto-vcs realizes this vision.</span>
+<span id="cb4-197"><a href="#cb4-197" aria-hidden="true" tabindex="-1"></a>Schurmann's manifesto calls for version control over relational algebra and algebraic datatypes. It identifies the gap but provides no implementation. panproto-vcs realizes this vision.</span>
 <span id="cb4-198"><a href="#cb4-198" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-199"><a href="#cb4-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### Algebraic/Categorical VCS</span></span>
 <span id="cb4-200"><a href="#cb4-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [Darcs](https://darcs.net/)</span></span>
+<span id="cb4-201"><a href="#cb4-201" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [Darcs](http://darcs.net/)</span></span>
 <span id="cb4-202"><a href="#cb4-202" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-203"><a href="#cb4-203" aria-hidden="true" tabindex="-1"></a>Darcs is a Haskell VCS where patches are algebraic objects with inverse and commutation operations. Merge works by finding a reordering of patches that lets both sides apply cleanly.</span>
 <span id="cb4-204"><a href="#cb4-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a>Darcs's patches are syntactic: line insertions and deletions that can commute when they touch different lines. panproto's migrations are semantic: vertex and edge maps that compose associatively and merge via pushout. Darcs has no notion of typed structure.</span>
+<span id="cb4-205"><a href="#cb4-205" aria-hidden="true" tabindex="-1"></a>Darcs's patches are syntactic: line insertions and deletions that can commute when they touch different lines. panproto's migrations are semantic: vertex and edge maps that compose associatively and merge over shared structure. Darcs has no notion of typed structure.^<span class="co">[</span><span class="ot">Both [Darcs](http://darcs.net/) and [Pijul](https://pijul.org/) use algebraic patch theories, but their objects are untyped text (lines and insertions). panproto's objects are typed schema graphs with sorts, operations, and equations, which allows the merge to exploit type information for conflict detection.</span><span class="co">]</span></span>
 <span id="cb4-206"><a href="#cb4-206" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-207"><a href="#cb4-207" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [Pijul](https://pijul.org/)</span></span>
 <span id="cb4-208"><a href="#cb4-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a>Pijul is a Rust DVCS based on @mimram2013's categorical patch theory. Merge is the pushout in a category of files and patches, giving commutativity and associativity.</span>
+<span id="cb4-209"><a href="#cb4-209" aria-hidden="true" tabindex="-1"></a>Pijul is a Rust DVCS based on @mimram2013's categorical patch theory. Merge is the shared-structure merge in a category of files and patches, giving commutativity and associativity.^<span class="co">[</span><span class="ot">Both Pijul and panproto-vcs use pushouts for merge. The difference is in the objects being merged.</span><span class="co">]</span></span>
 <span id="cb4-210"><a href="#cb4-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-211"><a href="#cb4-211" aria-hidden="true" tabindex="-1"></a>Pijul and panproto-vcs share the deepest theoretical connection: both use pushouts for merge. The difference is in the objects. Pijul's objects are byte-chunk graphs, essentially ordered sequences of text blocks. panproto's are models of GATs with protocol-specific theories, constraints, and edge rules. panproto's pushout has access to type information that lets it distinguish "both branches renamed vertex X" (conflict) from "both branches added unrelated vertices" (clean merge). Pijul cannot make this distinction. Additionally, panproto can migrate instance data through the DAG via functorial lifting, which requires understanding the semantics of the objects being versioned.</span>
+<span id="cb4-211"><a href="#cb4-211" aria-hidden="true" tabindex="-1"></a>Pijul's objects are byte-chunk graphs, essentially ordered sequences of text blocks. panproto's are models of GATs with protocol-specific theories, constraints, and edge rules. panproto's merge has access to type information that lets it distinguish "both branches renamed vertex X" (conflict) from "both branches added unrelated vertices" (clean merge). Pijul cannot make this distinction. Additionally, panproto can migrate instance data through the DAG via lifting, which requires understanding the semantics of the objects being versioned.</span>
 <span id="cb4-212"><a href="#cb4-212" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-213"><a href="#cb4-213" aria-hidden="true" tabindex="-1"></a><span class="fu">### Schema Migration Tools</span></span>
 <span id="cb4-214"><a href="#cb4-214" aria-hidden="true" tabindex="-1"></a></span>
@@ -1743,9 +1753,9 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-222"><a href="#cb4-222" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-223"><a href="#cb4-223" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [buf](https://buf.build/) (Buf Technologies)</span></span>
 <span id="cb4-224"><a href="#cb4-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-225"><a href="#cb4-225" aria-hidden="true" tabindex="-1"></a>buf is a Go tool for Protobuf schema linting, breaking change detection, and schema registry. It integrates with CI/CD to enforce compatibility.</span>
+<span id="cb4-225"><a href="#cb4-225" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Buf</span><span class="co">](https://buf.build/)</span> is a Go tool for Protobuf schema linting, breaking change detection, and schema registry. It integrates with CI/CD to enforce compatibility.</span>
 <span id="cb4-226"><a href="#cb4-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-227"><a href="#cb4-227" aria-hidden="true" tabindex="-1"></a>buf is a registry and linter for a single protocol. It relies on git for version control, cannot migrate instance data, has no merge algorithm, and does not work across protocol boundaries.</span>
+<span id="cb4-227"><a href="#cb4-227" aria-hidden="true" tabindex="-1"></a>Buf is a registry and linter for a single protocol. It relies on git for version control, cannot migrate instance data, has no merge algorithm, and does not work across protocol boundaries.</span>
 <span id="cb4-228"><a href="#cb4-228" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-229"><a href="#cb4-229" aria-hidden="true" tabindex="-1"></a><span class="fu">#### [Atlas](https://atlasgo.io/) (Ariga)</span></span>
 <span id="cb4-230"><a href="#cb4-230" aria-hidden="true" tabindex="-1"></a></span>
@@ -1778,7 +1788,7 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-257"><a href="#cb4-257" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Commit DAG <span class="pp">|</span> No (uses git) <span class="pp">|</span> No <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No (linear) <span class="pp">|</span> **Yes** <span class="pp">|</span></span>
 <span id="cb4-258"><a href="#cb4-258" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Branching <span class="pp">|</span> No (uses git) <span class="pp">|</span> No <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> **Yes** <span class="pp">|</span></span>
 <span id="cb4-259"><a href="#cb4-259" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Structural merge <span class="pp">|</span> Entity-level <span class="pp">|</span> Tree-edit <span class="pp">|</span> Pushout (lines) <span class="pp">|</span> Commutation <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> **Pushout (typed graphs)** <span class="pp">|</span></span>
-<span id="cb4-260"><a href="#cb4-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Instance data migration <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> JSON transform <span class="pp">|</span> No <span class="pp">|</span> SQL scripts <span class="pp">|</span> No <span class="pp">|</span> **Yes (functorial lift)** <span class="pp">|</span></span>
+<span id="cb4-260"><a href="#cb4-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Instance data migration <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> JSON transform <span class="pp">|</span> No <span class="pp">|</span> SQL scripts <span class="pp">|</span> No <span class="pp">|</span> **Yes (lifting)** <span class="pp">|</span></span>
 <span id="cb4-261"><a href="#cb4-261" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Round-trip guarantee <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> Partial <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> **Yes (lens complement)** <span class="pp">|</span></span>
 <span id="cb4-262"><a href="#cb4-262" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Cross-protocol <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> Multi-format <span class="pp">|</span> **Yes (76 protocols, same algebra)** <span class="pp">|</span></span>
 <span id="cb4-263"><a href="#cb4-263" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Breaking change detection <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span> **Yes (built into staging)** <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>

@@ -400,7 +400,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -459,26 +459,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -644,78 +644,71 @@ Tip
 </section>
 <section id="the-resource-enum-and-slab-allocator" class="level2" data-number="13.2">
 <h2 data-number="13.2" class="anchored" data-anchor-id="the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The Resource Enum and Slab Allocator</h2>
-<p>All WASM-side resources are stored in a thread-local <code>Vec&lt;Option&lt;Resource&gt;&gt;</code>. Each resource is one of four variants:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="15"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 14;"><span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">wasm_bindgen::</span>JsError<span class="op">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::error::</span>WasmError<span class="op">;</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// A resource stored in the slab.</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// Schemas are stored behind `Arc` so that `MigrationWithSchemas`</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// can share ownership without deep-cloning on every `lift_record`</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// or `get_record` call.</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Resource <span class="op">{</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protocol specification.</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A built schema.</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    Schema(Arc<span class="op">&lt;</span>Schema<span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration ready for per-record application.</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration bundled with its source and target schemas,</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// needed for lens put operations and accurate schema reconstruction.</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    MigrationWithSchemas <span class="op">{</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The compiled migration.</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The source schema (pre-migration).</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        src_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The target schema (post-migration).</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        tgt_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// An I/O protocol registry with all 77 protocol codecs.</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    IoRegistry(<span class="dt">Box</span><span class="op">&lt;</span>ProtocolRegistry<span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A GAT theory.</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    Theory(<span class="dt">Box</span><span class="op">&lt;</span>Theory<span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A VCS in-memory repository.</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    VcsRepo(<span class="dt">Box</span><span class="op">&lt;</span>MemStore<span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="pp">thread_local!</span> <span class="op">{</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">static</span> SLAB<span class="op">:</span> RefCell<span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span>Resource<span class="op">&gt;&gt;&gt;</span> <span class="op">=</span> <span class="kw">const</span> <span class="op">{</span> <span class="pp">RefCell::</span>new(<span class="dt">Vec</span><span class="pp">::</span>new()) <span class="op">};</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">/// Allocate a resource in the slab and return its handle.</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>cast_possible_truncation<span class="at">)]</span> <span class="co">// Handles are u32; exceeding 4B resources is not realistic.</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> alloc(resource<span class="op">:</span> Resource) <span class="op">-&gt;</span> <span class="dt">u32</span> <span class="op">{</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    SLAB<span class="op">.</span>with_borrow_mut(<span class="op">|</span>slab<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Try to reuse a freed slot.</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i<span class="op">,</span> slot) <span class="kw">in</span> slab<span class="op">.</span>iter_mut()<span class="op">.</span>enumerate() <span class="op">{</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> slot<span class="op">.</span>is_none() <span class="op">{</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>slot <span class="op">=</span> <span class="cn">Some</span>(resource)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>Resource</code> enum captures the three fundamental types (protocol, schema, compiled migration) plus a fourth variant (<code>MigrationWithSchemas</code>) that bundles a compiled migration with its source and target schemas – needed for lens <code>get</code>/<code>put</code> operations.</p>
+<p>All WASM-side resources are stored in a thread-local <code>Vec&lt;Option&lt;Resource&gt;&gt;</code>. Each resource is one of ten variants:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="20"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 19;"><span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// A resource stored in the slab.</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Schemas are stored behind `Arc` so that `MigrationWithSchemas`</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// can share ownership without deep-cloning on every `lift_record`</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// or `get_record` call.</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Resource <span class="op">{</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protocol specification.</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A built schema.</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    Schema(Arc<span class="op">&lt;</span>Schema<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration ready for per-record application.</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A compiled migration bundled with its source and target schemas,</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// needed for lens put operations and accurate schema reconstruction.</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    MigrationWithSchemas <span class="op">{</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The compiled migration.</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The source schema (pre-migration).</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        src_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The target schema (post-migration).</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        tgt_schema<span class="op">:</span> Arc<span class="op">&lt;</span>Schema<span class="op">&gt;,</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// An I/O protocol registry with all 77 protocol codecs.</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    IoRegistry(<span class="dt">Box</span><span class="op">&lt;</span>ProtocolRegistry<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A GAT theory.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Theory(<span class="dt">Box</span><span class="op">&lt;</span>Theory<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A VCS in-memory repository.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    VcsRepo(<span class="dt">Box</span><span class="op">&lt;</span>MemStore<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A protolens chain (reusable, schema-independent).</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    ProtolensChain(<span class="dt">Box</span><span class="op">&lt;</span>ProtolensChain<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A symmetric lens.</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    SymmetricLensHandle(<span class="dt">Box</span><span class="op">&lt;</span>SymmetricLens<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// A data set (instances bound to a schema).</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    DataSet(<span class="dt">Box</span><span class="op">&lt;</span>DataSetObject<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="pp">thread_local!</span> <span class="op">{</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">static</span> SLAB<span class="op">:</span> RefCell<span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span>Resource<span class="op">&gt;&gt;&gt;</span> <span class="op">=</span> <span class="kw">const</span> <span class="op">{</span> <span class="pp">RefCell::</span>new(<span class="dt">Vec</span><span class="pp">::</span>new()) <span class="op">};</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>Resource</code> enum captures the core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus the <code>MigrationWithSchemas</code> variant that bundles a compiled migration with its source and target schemas – needed for lens <code>get</code>/<code>put</code> operations.</p>
 <p>The <code>alloc</code> function scans for a freed slot before appending, so handle values are reused. Handles are <code>u32</code> indices, which means the slab can hold up to 4 billion simultaneous resources – more than sufficient for any realistic workload.</p>
 </section>
 <section id="the-with_resource-pattern" class="level2" data-number="13.3">
 <h2 data-number="13.3" class="anchored" data-anchor-id="the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> Pattern</h2>
 <p>Accessing a resource requires borrowing the thread-local slab. The <code>with_resource</code> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="62"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 61;"><span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="co">// No free slot; push a new one.</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> handle <span class="op">=</span> slab<span class="op">.</span>len() <span class="kw">as</span> <span class="dt">u32</span><span class="op">;</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        slab<span class="op">.</span>push(<span class="cn">Some</span>(resource))<span class="op">;</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>        handle</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">/// Access a resource by handle, returning an error if the handle is</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">/// invalid or the slot is empty.</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">/// The callback `f` receives a reference to the resource. The borrow</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">/// is released when the callback returns, so the reference must not</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="co">/// escape.</span></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> with_resource<span class="op">&lt;</span>T<span class="op">&gt;</span>(</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>    handle<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>    f<span class="op">:</span> <span class="kw">impl</span> <span class="bu">FnOnce</span>(<span class="op">&amp;</span>Resource) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> WasmError<span class="op">&gt;,</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="78"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 77;"><span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co">/// Access a resource by handle, returning an error if the handle is</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="co">/// invalid or the slot is empty.</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="co">/// The callback `f` receives a reference to the resource. The borrow</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="co">/// is released when the callback returns, so the reference must not</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="co">/// escape.</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> with_resource<span class="op">&lt;</span>T<span class="op">&gt;</span>(</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    handle<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    f<span class="op">:</span> <span class="kw">impl</span> <span class="bu">FnOnce</span>(<span class="op">&amp;</span>Resource) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> WasmError<span class="op">&gt;,</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>T<span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>    SLAB<span class="op">.</span>with_borrow(<span class="op">|</span>slab<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> idx <span class="op">=</span> handle <span class="kw">as</span> <span class="dt">usize</span><span class="op">;</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> resource <span class="op">=</span> slab</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>get(idx)</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>and_then(<span class="dt">Option</span><span class="pp">::</span>as_ref)</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>ok_or(<span class="pp">WasmError::</span>InvalidHandle <span class="op">{</span> handle <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>        f(resource)<span class="op">.</span>map_err(<span class="bu">Into</span><span class="pp">::</span>into)</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <code>RefCell</code> rules). The callback-based API makes it structurally impossible.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -734,10 +727,7 @@ Note
 <section id="the-buildop-tagged-enum" class="level2" data-number="13.4">
 <h2 data-number="13.4" class="anchored" data-anchor-id="the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>BuildOp</code> Tagged Enum</h2>
 <p>Schema construction operations are sent from JS as a MessagePack-encoded <code>Vec&lt;BuildOp&gt;</code>. The <code>BuildOp</code> enum uses serde’s internally-tagged representation (<code>#[serde(tag = "op")]</code>), so each operation is a flat object with an <code>op</code> discriminant:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="23"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 22;"><span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::error::</span>WasmError<span class="op">;</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::slab::</span><span class="op">{</span><span class="kw">self</span><span class="op">,</span> Resource<span class="op">};</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// A serializable builder operation for constructing schemas.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="26"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 25;"><span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// A serializable builder operation for constructing schemas.</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>serde<span class="at">(</span>tag <span class="op">=</span> <span class="st">"op"</span><span class="at">)]</span></span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> BuildOp <span class="op">{</span></span>
@@ -790,7 +780,10 @@ Note
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    Required <span class="op">{</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The vertex that owns the requirement.</span></span>
 <span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>        vertex<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The edges that are required.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The edges that are required.</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="pp">panproto_core::schema::</span>Edge<span class="op">&gt;,</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The five variants (<code>Vertex</code>, <code>Edge</code>, <code>Constraint</code>, <code>HyperEdge</code>, <code>Required</code>) mirror the <code>SchemaBuilder</code> methods in <code>panproto-schema</code>. The TypeScript SDK constructs these as plain objects and encodes them with <code>@msgpack/msgpack</code>.</p>
 </section>
 <section id="entry-points" class="level2" data-number="13.5">
@@ -798,10 +791,7 @@ Note
 <section id="define_protocol" class="level3" data-number="13.5.1">
 <h3 data-number="13.5.1" class="anchored" data-anchor-id="define_protocol"><span class="header-section-number">13.5.1</span> <code>define_protocol</code></h3>
 <p>Registers a protocol specification and returns a handle:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="81"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 80;"><span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co">/// Register a protocol specification and return a handle.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="84"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 83;"><span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a><span class="co">/// Register a protocol specification and return a handle.</span></span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
 <span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `spec` bytes are MessagePack-encoded `Protocol` data.</span></span>
 <span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -812,16 +802,16 @@ Note
 <span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> define_protocol(spec<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> JsError<span class="op">&gt;</span> <span class="op">{</span></span>
 <span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> protocol<span class="op">:</span> <span class="pp">panproto_core::schema::</span>Protocol <span class="op">=</span></span>
 <span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        <span class="pp">rmp_serde::</span>from_slice(spec)<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>DeserializationFailed <span class="op">{</span></span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Protocol(protocol)))</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The pattern is representative of all entry points: deserialize MessagePack input with <code>rmp_serde::from_slice</code>, perform the operation, allocate the result in the slab, and return the handle.</p>
 </section>
 <section id="build_schema" class="level3" data-number="13.5.2">
 <h3 data-number="13.5.2" class="anchored" data-anchor-id="build_schema"><span class="header-section-number">13.5.2</span> <code>build_schema</code></h3>
 <p>The most complex entry point. It takes a protocol handle and a <code>Vec&lt;BuildOp&gt;</code>, replays the operations through <code>SchemaBuilder</code>, and returns a schema handle:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="97"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 96;"><span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Protocol(protocol)))</span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co">/// Build a schema from a protocol handle and `MessagePack`-encoded</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="100"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 99;"><span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co">/// Build a schema from a protocol handle and `MessagePack`-encoded</span></span>
 <span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co">/// builder operations.</span></span>
 <span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
 <span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="co">/// The `ops` bytes are a `MessagePack`-encoded `Vec&lt;BuildOp&gt;`.</span></span>
@@ -889,7 +879,10 @@ Note
 <span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> schema <span class="op">=</span> builder<span class="op">.</span>build()<span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">WasmError::</span>SchemaBuildFailed <span class="op">{</span></span>
 <span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>        reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">?;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(<span class="pp">std::sync::Arc::</span>new(schema))))</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="all-ten-entry-points" class="level3" data-number="13.5.3">
 <h3 data-number="13.5.3" class="anchored" data-anchor-id="all-ten-entry-points"><span class="header-section-number">13.5.3</span> All Ten Entry Points</h3>
@@ -1566,12 +1559,12 @@ Tip
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Resource Enum and Slab Allocator</span></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>All WASM-side resources are stored in a thread-local <span class="in">`Vec&lt;Option&lt;Resource&gt;&gt;`</span>. Each resource is one of four variants:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>All WASM-side resources are stored in a thread-local <span class="in">`Vec&lt;Option&lt;Resource&gt;&gt;`</span>. Each resource is one of ten variants:</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=15 end-line=60}</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=20 end-line=58}</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Resource`</span> enum captures the three fundamental types (protocol, schema, compiled migration) plus a fourth variant (<span class="in">`MigrationWithSchemas`</span>) that bundles a compiled migration with its source and target schemas -- needed for lens <span class="in">`get`</span>/<span class="in">`put`</span> operations.</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Resource`</span> enum captures the core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus the <span class="in">`MigrationWithSchemas`</span> variant that bundles a compiled migration with its source and target schemas -- needed for lens <span class="in">`get`</span>/<span class="in">`put`</span> operations.</span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alloc`</span> function scans for a freed slot before appending, so handle values are reused. Handles are <span class="in">`u32`</span> indices, which means the slab can hold up to 4 billion simultaneous resources -- more than sufficient for any realistic workload.</span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
@@ -1579,7 +1572,7 @@ Tip
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>Accessing a resource requires borrowing the thread-local slab. The <span class="in">`with_resource`</span> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=62 end-line=80}</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=78 end-line=96}</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <span class="in">`RefCell`</span> rules). The callback-based API makes it structurally impossible.</span>
@@ -1592,7 +1585,7 @@ Tip
 <span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>Schema construction operations are sent from JS as a MessagePack-encoded <span class="in">`Vec&lt;BuildOp&gt;`</span>. The <span class="in">`BuildOp`</span> enum uses serde's internally-tagged representation (<span class="in">`#[serde(tag = "op")]`</span>), so each operation is a flat object with an <span class="in">`op`</span> discriminant:</span>
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=23 end-line=79}</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=26 end-line=82}</span></span>
 <span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>The five variants (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Constraint`</span>, <span class="in">`HyperEdge`</span>, <span class="in">`Required`</span>) mirror the <span class="in">`SchemaBuilder`</span> methods in <span class="in">`panproto-schema`</span>. The TypeScript SDK constructs these as plain objects and encodes them with <span class="in">`@msgpack/msgpack`</span>.</span>
@@ -1603,7 +1596,7 @@ Tip
 <span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>Registers a protocol specification and returns a handle:</span>
 <span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=81 end-line=95}</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=84 end-line=98}</span></span>
 <span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>The pattern is representative of all entry points: deserialize MessagePack input with <span class="in">`rmp_serde::from_slice`</span>, perform the operation, allocate the result in the slab, and return the handle.</span>
@@ -1612,7 +1605,7 @@ Tip
 <span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>The most complex entry point. It takes a protocol handle and a <span class="in">`Vec&lt;BuildOp&gt;`</span>, replays the operations through <span class="in">`SchemaBuilder`</span>, and returns a schema handle:</span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=97 end-line=168}</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=100 end-line=171}</span></span>
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### All Ten Entry Points</span></span>

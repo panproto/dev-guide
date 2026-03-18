@@ -396,7 +396,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -455,26 +455,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -609,7 +609,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This appendix defines every domain term used in the panproto codebase and documentation. Each definition is specific to panproto’s usage. For the underlying category theory foundations, see the <a href="https://panproto.github.io/tutorial/appendices/A-category-theory-cheatsheet.html">tutorial’s category theory cheatsheet</a>.</p>
+<p>This appendix defines every domain term used in the panproto codebase and documentation. Each definition is specific to panproto’s usage. For the underlying category theory foundations, see the <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a>.</p>
 <section id="algebraic-foundations" class="level2" data-number="26.1">
 <h2 data-number="26.1" class="anchored" data-anchor-id="algebraic-foundations"><span class="header-section-number">26.1</span> Algebraic foundations</h2>
 <dl>
@@ -753,13 +753,41 @@ A function within a compiled migration that computes the value of a target-schem
 <dd>
 A bidirectional transformation that pairs a forward “get” with a backward “put,” enabling round-trip data migration between schema versions.
 </dd>
+<dt>Protolens</dt>
+<dd>
+A schema-parameterized family of lenses, formalized as a natural transformation between theory endofunctors. For any schema satisfying a precondition, a protolens can be instantiated into a concrete <code>Lens</code>. Implemented in <code>crates/panproto-lens/src/protolens.rs</code>.
+</dd>
 <dt>Complement</dt>
 <dd>
 The information lost by a lens’s “get” direction, stored so that “put” can reconstruct the original. Essential for lossless round-trips.
 </dd>
+<dt>Complement Constructor</dt>
+<dd>
+A type-level description of how a protolens’s complement depends on the schema at instantiation time. Variants include <code>Empty</code> (lossless), <code>DroppedSortData</code>, <code>DroppedOpData</code>, and <code>Composite</code>. Represented by <code>ComplementConstructor</code> in <code>crates/panproto-lens/src/protolens.rs</code>.
+</dd>
 <dt>Combinator</dt>
 <dd>
 A function that builds complex lenses from simpler ones (e.g., <code>compose</code>, <code>product</code>, <code>sum</code>). Implemented in <code>crates/panproto-lens/src/combinators.rs</code>.
+</dd>
+<dt>Schema Endofunctor</dt>
+<dd>
+A map from theories to theories, pairing a precondition (<code>TheoryConstraint</code>) with a transformation (<code>TheoryTransform</code>). Schema endofunctors are the building blocks of protolenses. Represented by <code>TheoryEndofunctor</code> in <code>crates/panproto-gat/src/schema_functor.rs</code>.
+</dd>
+<dt>Theory Constraint</dt>
+<dd>
+A predicate on theories that determines whether a theory endofunctor or protolens can be applied. Supports <code>HasSort</code>, <code>HasOp</code>, <code>HasEquation</code>, <code>All</code>, <code>Any</code>, <code>Not</code>, and <code>Unconstrained</code>. Represented by <code>TheoryConstraint</code> in <code>crates/panproto-gat/src/schema_functor.rs</code>.
+</dd>
+<dt>Naturality</dt>
+<dd>
+The coherence condition on a protolens: instantiating at one schema and then migrating must produce the same result as migrating first and then instantiating. Naturality ensures that protolenses are well-behaved families of lenses, not ad-hoc collections.
+</dd>
+<dt>Instantiation (Pi-elimination)</dt>
+<dd>
+The operation of applying a protolens to a specific schema and protocol to produce a concrete <code>Lens</code>. Mathematically, this is Pi-type elimination—evaluating a dependent function at a specific argument. Performed by <code>Protolens::instantiate</code>.
+</dd>
+<dt>Factorization (morphism decomposition)</dt>
+<dd>
+The decomposition of a theory morphism into a sequence of elementary endofunctor steps (drops, renames, adds). Each step maps to an elementary protolens constructor. Implemented by <code>factorize()</code> in <code>crates/panproto-gat/src/factorize.rs</code>.
 </dd>
 <dt>Get</dt>
 <dd>
@@ -1317,7 +1345,7 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Glossary {#sec-glossary}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This appendix defines every domain term used in the panproto codebase and documentation. Each definition is specific to panproto's usage. For the underlying category theory foundations, see the <span class="co">[</span><span class="ot">tutorial's category theory cheatsheet</span><span class="co">](https://panproto.github.io/tutorial/appendices/A-category-theory-cheatsheet.html)</span>.</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This appendix defines every domain term used in the panproto codebase and documentation. Each definition is specific to panproto's usage. For the underlying category theory foundations, see the <span class="co">[</span><span class="ot">tutorial's formal foundations appendix</span><span class="co">](https://panproto.dev/tutorial/appendices/A-formal-foundations.html)</span>.</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Algebraic foundations</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1419,60 +1447,81 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>Lens</span>
 <span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>: A bidirectional transformation that pairs a forward "get" with a backward "put," enabling round-trip data migration between schema versions.</span>
 <span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>Complement</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>: The information lost by a lens's "get" direction, stored so that "put" can reconstruct the original. Essential for lossless round-trips.</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>Protolens</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>: A schema-parameterized family of lenses, formalized as a natural transformation between theory endofunctors. For any schema satisfying a precondition, a protolens can be instantiated into a concrete <span class="in">`Lens`</span>. Implemented in <span class="in">`crates/panproto-lens/src/protolens.rs`</span>.</span>
 <span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>Combinator</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>: A function that builds complex lenses from simpler ones (e.g., <span class="in">`compose`</span>, <span class="in">`product`</span>, <span class="in">`sum`</span>). Implemented in <span class="in">`crates/panproto-lens/src/combinators.rs`</span>.</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>Complement</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>: The information lost by a lens's "get" direction, stored so that "put" can reconstruct the original. Essential for lossless round-trips.</span>
 <span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Get</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>: The forward direction of a lens: extracts target-schema data from a source instance.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Complement Constructor</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>: A type-level description of how a protolens's complement depends on the schema at instantiation time. Variants include <span class="in">`Empty`</span> (lossless), <span class="in">`DroppedSortData`</span>, <span class="in">`DroppedOpData`</span>, and <span class="in">`Composite`</span>. Represented by <span class="in">`ComplementConstructor`</span> in <span class="in">`crates/panproto-lens/src/protolens.rs`</span>.</span>
 <span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>Put</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>: The backward direction of a lens: given updated target data and a complement, reconstructs a source instance.</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>Combinator</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>: A function that builds complex lenses from simpler ones (e.g., <span class="in">`compose`</span>, <span class="in">`product`</span>, <span class="in">`sum`</span>). Implemented in <span class="in">`crates/panproto-lens/src/combinators.rs`</span>.</span>
 <span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>GetPut law</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`put(get(s), s) = s`</span> --- putting back unchanged data recovers the original source.</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>Schema Endofunctor</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>: A map from theories to theories, pairing a precondition (<span class="in">`TheoryConstraint`</span>) with a transformation (<span class="in">`TheoryTransform`</span>). Schema endofunctors are the building blocks of protolenses. Represented by <span class="in">`TheoryEndofunctor`</span> in <span class="in">`crates/panproto-gat/src/schema_functor.rs`</span>.</span>
 <span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>PutGet law</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`get(put(t, s)) = t`</span> --- getting after a put yields the updated target.</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>Theory Constraint</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>: A predicate on theories that determines whether a theory endofunctor or protolens can be applied. Supports <span class="in">`HasSort`</span>, <span class="in">`HasOp`</span>, <span class="in">`HasEquation`</span>, <span class="in">`All`</span>, <span class="in">`Any`</span>, <span class="in">`Not`</span>, and <span class="in">`Unconstrained`</span>. Represented by <span class="in">`TheoryConstraint`</span> in <span class="in">`crates/panproto-gat/src/schema_functor.rs`</span>.</span>
 <span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Restrict and lift operations</span></span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>Restrict</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>: The forward migration operation: given a source instance and a compiled migration, produce the corresponding target instance by dropping non-surviving elements and remapping the rest.</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>Lift</span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>: The backward migration operation: given a target instance and a compiled migration (with complement), reconstruct a source instance. The inverse of restrict.</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Anchor</span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>: The assignment of a surviving node to its position in the target schema during restrict. Computed by <span class="in">`anchor_surviving()`</span>.</span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>Reachable</span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>: A node is reachable if it can be reached from a surviving node by following arcs. Unreachable nodes are dropped during restrict.</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>Ancestor contraction</span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>: The merging of ancestor chains when intermediate vertices are removed by a migration. Implemented in <span class="in">`ancestor_contraction()`</span>.</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>Edge resolution</span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>: The process of rewiring edges during restrict according to the compiled migration's edge remap and resolver functions.</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>Fan reconstruction</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>: Rebuilding fan (ordered child collection) structures after restrict, accounting for removed or reordered arcs.</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>Naturality</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>: The coherence condition on a protolens: instantiating at one schema and then migrating must produce the same result as migrating first and then instantiating. Naturality ensures that protolenses are well-behaved families of lenses, not ad-hoc collections.</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>Instantiation (Pi-elimination)</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>: The operation of applying a protolens to a specific schema and protocol to produce a concrete <span class="in">`Lens`</span>. Mathematically, this is Pi-type elimination---evaluating a dependent function at a specific argument. Performed by <span class="in">`Protolens::instantiate`</span>.</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>Factorization (morphism decomposition)</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>: The decomposition of a theory morphism into a sequence of elementary endofunctor steps (drops, renames, adds). Each step maps to an elementary protolens constructor. Implemented by <span class="in">`factorize()`</span> in <span class="in">`crates/panproto-gat/src/factorize.rs`</span>.</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>Get</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>: The forward direction of a lens: extracts target-schema data from a source instance.</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>Put</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>: The backward direction of a lens: given updated target data and a complement, reconstructs a source instance.</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>GetPut law</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`put(get(s), s) = s`</span> --- putting back unchanged data recovers the original source.</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>PutGet law</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`get(put(t, s)) = t`</span> --- getting after a put yields the updated target.</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Restrict and lift operations</span></span>
 <span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Infrastructure</span></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>Handle</span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>: An opaque integer identifier used by the WASM slab allocator to reference Rust objects from JavaScript without exposing raw pointers.</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>Slab allocator</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>: The allocation strategy in <span class="in">`panproto-wasm`</span> that stores Rust objects in a <span class="in">`Vec`</span>-backed slab, returning integer handles to JavaScript. Avoids GC interaction.</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>MessagePack</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>: The binary serialization format used at the WASM boundary to pass structured data between Rust and JavaScript. Implemented via <span class="in">`rmp-serde`</span>.</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>wasm-bindgen</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>: The Rust-to-JavaScript binding generator used by <span class="in">`panproto-wasm`</span> to expose the engine's API to the TypeScript SDK.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>Restrict</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>: The forward migration operation: given a source instance and a compiled migration, produce the corresponding target instance by dropping non-surviving elements and remapping the rest.</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>Lift</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>: The backward migration operation: given a target instance and a compiled migration (with complement), reconstruct a source instance. The inverse of restrict.</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>Anchor</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>: The assignment of a surviving node to its position in the target schema during restrict. Computed by <span class="in">`anchor_surviving()`</span>.</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>Reachable</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>: A node is reachable if it can be reached from a surviving node by following arcs. Unreachable nodes are dropped during restrict.</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>Ancestor contraction</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>: The merging of ancestor chains when intermediate vertices are removed by a migration. Implemented in <span class="in">`ancestor_contraction()`</span>.</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>Edge resolution</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>: The process of rewiring edges during restrict according to the compiled migration's edge remap and resolver functions.</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>Fan reconstruction</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>: Rebuilding fan (ordered child collection) structures after restrict, accounting for removed or reordered arcs.</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Infrastructure</span></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>Handle</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>: An opaque integer identifier used by the WASM slab allocator to reference Rust objects from JavaScript without exposing raw pointers.</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>Slab allocator</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>: The allocation strategy in <span class="in">`panproto-wasm`</span> that stores Rust objects in a <span class="in">`Vec`</span>-backed slab, returning integer handles to JavaScript. Avoids GC interaction.</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>MessagePack</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>: The binary serialization format used at the WASM boundary to pass structured data between Rust and JavaScript. Implemented via <span class="in">`rmp-serde`</span>.</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>wasm-bindgen</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>: The Rust-to-JavaScript binding generator used by <span class="in">`panproto-wasm`</span> to expose the engine's API to the TypeScript SDK.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -419,7 +419,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -478,26 +478,26 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -640,7 +640,7 @@ div.csl-indent {
 </header>
 
 
-<p>This chapter presents the 30,000-foot view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end, you should be able to trace any piece of functionality back to the crate that owns it and understand <em>why</em> the system is structured the way it is.</p>
+<p>This chapter presents the high-level view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end you should be able to trace any piece of functionality back to the crate that owns it and understand <em>why</em> the system is structured this way.</p>
 <section id="the-crate-dependency-hierarchy" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</h2>
 <p>panproto is organized into eleven crates arranged in six dependency levels. Each level depends only on the levels below it, producing a strict DAG that keeps compile times manageable and enforces separation of concerns.</p>
@@ -682,12 +682,12 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <tr class="even">
 <td>3</td>
 <td><code>panproto-protocols</code></td>
-<td>Protocol definitions: theory composition, schema-level presentation functors</td>
+<td>Protocol definitions: theory composition, schema-level presentation (the parse/emit layer that converts native format syntax to panproto’s internal representation)</td>
 </tr>
 <tr class="odd">
 <td>3.5</td>
 <td><code>panproto-io</code></td>
-<td>Instance-level presentation functors: format-specific parse/emit for all 76 protocols</td>
+<td>Instance-level presentation: format-specific parse/emit for all 76 protocols</td>
 </tr>
 <tr class="even">
 <td>4</td>
@@ -699,11 +699,11 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 </div>
 </figure>
 </div>
-<p><strong>Level 0</strong> is the mathematical foundation. It knows nothing about schemas, instances, or protocols – only about the algebra of generalized algebraic theories.</p>
+<p><strong>Level 0</strong> is the algebraic foundation. It knows nothing about schemas, instances, or protocols — only about the algebra of generalized algebraic theories.</p>
 <p><strong>Level 1</strong> introduces the data model. <code>panproto-schema</code> defines the hypergraph structure that represents a data format’s type system; <code>panproto-inst</code> defines instances (actual data) conforming to those schemas.</p>
-<p><strong>Level 2</strong> is where the interesting operations live: compiling migration specifications into executable form (<code>panproto-mig</code>), constructing bidirectional lenses (<code>panproto-lens</code>), and classifying schema changes as breaking or non-breaking (<code>panproto-check</code>).</p>
-<p><strong>Level 3</strong> bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0–2. It also provides <strong>schema-level presentation functors</strong>: the parse/emit operations that convert native format specifications (<code>.proto</code> files, SQL DDL, GraphQL SDL) into abstract <code>Schema</code> models.</p>
-<p><strong>Level 3.5</strong> provides the <strong>instance-level presentation functors</strong> via <code>panproto-io</code>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<code>WInstance</code>/<code>FInstance</code>). Together with <code>panproto-protocols</code>, it completes both levels of the functorial data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly.</p>
+<p><strong>Level 2</strong> is where the interesting operations live: compiling migration specifications into executable form (<code>panproto-mig</code>), constructing bidirectional lenses (<code>panproto-lens</code>), and classifying schema changes as breaking or non-breaking (<code>panproto-check</code>). The protolens layer in <code>panproto-lens</code> lifts concrete lenses to schema-parameterized families (see <a href="26-protolens-engine.html" class="quarto-xref"><span>Chapter 19</span></a>). This layer depends on <code>panproto-gat</code>’s <code>schema_functor</code> and <code>factorize</code> modules for theory-level transforms and morphism decomposition, and on <code>panproto-check</code> for schema diffing that feeds the automated lens generation pipeline (<a href="27-auto-lens-pipeline.html" class="quarto-xref"><span>Chapter 20</span></a>). <code>panproto-lens</code> thus has a dependency on <code>panproto-check</code> in addition to <code>panproto-mig</code>.</p>
+<p><strong>Level 3</strong> bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0–2. It also provides <strong>schema-level presentation</strong>: the parse/emit operations that convert native format specifications (<code>.proto</code> files, SQL DDL, GraphQL SDL) into abstract <code>Schema</code> models.</p>
+<p><strong>Level 3.5</strong> provides <strong>instance-level presentation</strong> via <code>panproto-io</code>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<code>WInstance</code>/<code>FInstance</code>). Together with <code>panproto-protocols</code>, it completes both levels of the data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from <span class="citation" data-cites="spivak2012">Spivak (<a href="#ref-spivak2012" role="doc-biblioref">2012</a>)</span> ensures that parse, restrict, and emit compose correctly.</p>
 <p><strong>Level 4</strong> provides the consumer-facing surfaces: <code>panproto-core</code> re-exports everything through a single dependency, <code>panproto-wasm</code> exposes a handle-based WebAssembly API, and <code>panproto-cli</code> wraps it all in a command-line tool.</p>
 <section id="the-re-export-facade" class="level3" data-number="5.1.1">
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</h3>
@@ -723,7 +723,7 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_inst <span class="kw">as</span> inst<span class="op">;</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-io` for instance-level parse/emit across all protocols.</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_io <span class="kw">as</span> io<span class="op">;</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-lens` for bidirectional lens combinators.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-lens` for bidirectional lenses and protolenses.</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_lens <span class="kw">as</span> lens<span class="op">;</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-mig` for migration and lifting operations.</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_mig <span class="kw">as</span> mig<span class="op">;</span></span>
@@ -811,12 +811,12 @@ Figure&nbsp;5.1: Crate dependency graph. Arrows point from dependant to dependen
 <h2 data-number="5.2" class="anchored" data-anchor-id="key-design-decisions"><span class="header-section-number">5.2</span> Key Design Decisions</h2>
 <section id="why-gats" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="why-gats"><span class="header-section-number">5.2.1</span> Why GATs</h3>
-<p>panproto formalizes data format specifications as <em>generalized algebraic theories</em> (GATs), following the framework introduced by <span class="citation" data-cites="cartmell1986">Cartmell (<a href="#ref-cartmell1986" role="doc-biblioref">1986</a>)</span>. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., “the type of a field depends on a discriminator tag”).</p>
-<p>Ordinary algebraic theories in the sense of <span class="citation" data-cites="lawvere1963">Lawvere (<a href="#ref-lawvere1963" role="doc-biblioref">1963</a>)</span> cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</p>
+<p>panproto formalizes data format specifications as <em>generalized algebraic theories</em> (GATs).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> A GAT describes a schema language’s vocabulary: what kinds of entities exist (<strong>sorts</strong> — a type in a formal theory, not a sorting operation — like <code>Vertex</code> and <code>Edge</code>), what relationships connect them (<strong>operations</strong>, like <code>src: Edge → Vertex</code>), and what consistency rules hold (<strong>equations</strong>, like “a foreign key’s source column must belong to its source table”). The “generalized” part is that sorts can depend on other sorts—the set of valid constraints for a string vertex is different from the set for an integer vertex. This dependent structure appears in every real schema language: the type of a Protobuf field depends on a discriminator tag, the valid constraints on a JSON Schema node depend on its <code>type</code> keyword, and the applicable column constraints in SQL depend on the column’s data type.</p>
+<p>GATs give panproto three capabilities:</p>
 <ul>
-<li><strong>Dependent sorts</strong>: <code>Hom(a: Ob, b: Ob)</code> in a category theory, or <code>Constraint(v: Vertex)</code> in a schema theory.</li>
-<li><strong>Structure-preserving morphisms</strong>: maps between theories that respect arities and equations, enabling principled schema migration.</li>
-<li><strong>Colimits</strong>: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</li>
+<li><strong>Dependent sorts</strong>: the set of valid constraints for a vertex depends on what kind of vertex it is. <code>Constraint(v: Vertex)</code> is a different set for each <code>v</code>.</li>
+<li><strong>Structure-preserving morphisms</strong>: maps between theories that respect arities and equations. A schema migration is a morphism: it maps old sorts to new sorts and old operations to new operations, and the engine checks that all equations still hold.</li>
+<li><strong>Compositional assembly</strong>: theories can be merged along shared structure, so protocols are assembled from reusable building blocks (e.g., “graph + constraints + multiplicity” for ATProto).</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -828,7 +828,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For the user-facing introduction to theories and protocols, see the <a href="https://panproto.github.io/tutorial/">tutorial</a> chapters 3–4.</p>
+<p>For the user-facing introduction to theories and protocols, see the <a href="https://panproto.dev/tutorial/">tutorial</a> chapters 3–4.</p>
 </div>
 </div>
 </section>
@@ -849,19 +849,19 @@ Note
 </section>
 <section id="why-immutable-fluent-builders" class="level3" data-number="5.2.4">
 <h3 data-number="5.2.4" class="anchored" data-anchor-id="why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why Immutable Fluent Builders</h3>
-<p><code>SchemaBuilder</code> and the migration DSL use an immutable fluent pattern: each method consumes <code>self</code> and returns <code>Result&lt;Self, Error&gt;</code>. This prevents partial construction – you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <code>build()</code> only needs to check global properties (like non-emptiness) and compute indices.</p>
+<p><code>SchemaBuilder</code> and the migration DSL use an immutable fluent pattern: each method consumes <code>self</code> and returns <code>Result&lt;Self, Error&gt;</code>. This prevents partial construction — you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <code>build()</code> only needs to check global properties (like non-emptiness) and compute indices.</p>
 </section>
 </section>
 <section id="the-two-parameter-architecture" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="the-two-parameter-architecture"><span class="header-section-number">5.3</span> The Two-Parameter Architecture</h2>
 <p>Every protocol in panproto is defined by a pair of GATs:</p>
 <ol type="1">
-<li><strong>Schema theory</strong> – describes the <em>shape</em> of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</li>
+<li><strong>Schema theory</strong> – describes the <em>shape</em> of a data format. Its models (a concrete instance that satisfies a theory’s requirements — like a Rust struct implementing a trait) are schemas (hypergraphs of vertex kinds and edge rules).</li>
 <li><strong>Instance theory</strong> – describes the <em>content</em> that inhabits a schema. Its models are instances (trees or tables of data).</li>
 </ol>
-<p>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <code>panproto-schema</code> captures this pairing:</p>
+<p>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued models for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <code>panproto-schema</code> captures this pairing:</p>
 <pre><code>Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</code></pre>
-<p>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial – it composes correctly and preserves the structural axioms of the instance theory <span class="citation" data-cites="spivak2012">(<a href="#ref-spivak2012" role="doc-biblioref">Spivak 2012</a>)</span>.</p>
+<p>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The guarantee is that restriction (projecting data from the target schema onto the source schema, keeping only what the source schema expects) along a theory morphism composes correctly and preserves the structural axioms of the instance theory.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
 <section id="migration-lifecycle" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="migration-lifecycle"><span class="header-section-number">5.4</span> Migration Lifecycle</h2>
@@ -983,7 +983,7 @@ Table&nbsp;5.2: Where to find things.
 </div>
 </figure>
 </div>
-<p>The next four chapters dive deep into the core crates – starting with the GAT engine in <a href="06-gat-engine.html" class="quarto-xref"><span>Chapter 6</span></a>, then schemas and protocols in <a href="07-schema-protocols.html" class="quarto-xref"><span>Chapter 7</span></a>, and instances in <a href="08-instances-wtype.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+<p>The next four chapters dive deep into the core crates — starting with the GAT engine in <a href="06-gat-engine.html" class="quarto-xref"><span>Chapter 6</span></a>, then schemas and protocols in <a href="07-schema-protocols.html" class="quarto-xref"><span>Chapter 7</span></a>, and instances in <a href="08-instances-wtype.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
 
 
 <!-- -->
@@ -999,6 +999,13 @@ Lawvere, F. William. 1963. <span>“Functorial Semantics of Algebraic Theories.�
 Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Information and Computation</em> 217: 31–51. <a href="https://doi.org/10.1016/j.ic.2012.05.001">https://doi.org/10.1016/j.ic.2012.05.001</a>.
 </div>
 </div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>GATs were introduced by <span class="citation" data-cites="cartmell1986">Cartmell (<a href="#ref-cartmell1986" role="doc-biblioref">1986</a>)</span>, extending the ordinary algebraic theories of <span class="citation" data-cites="lawvere1963">Lawvere (<a href="#ref-lawvere1963" role="doc-biblioref">1963</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Restriction composes correctly: restricting along two successive migrations produces the same result as restricting along their composition. This compositionality property is called functoriality, and is established formally in <span class="citation" data-cites="spivak2012">Spivak (<a href="#ref-spivak2012" role="doc-biblioref">2012</a>)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1480,7 +1487,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Architecture Overview {#sec-architecture-overview}</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>This chapter presents the 30,000-foot view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end, you should be able to trace any piece of functionality back to the crate that owns it and understand _why_ the system is structured the way it is.</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>This chapter presents the high-level view of panproto: its crate hierarchy, the key design decisions that shaped the system, and the two-parameter architecture that ties everything together. By the end you should be able to trace any piece of functionality back to the crate that owns it and understand _why_ the system is structured this way.</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Crate Dependency Hierarchy</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1491,21 +1498,21 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> The GAT engine: theories, morphisms, colimits <span class="pp">|</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span> <span class="pp">|</span> Schema graphs and instance trees <span class="pp">|</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>, <span class="in">`panproto-check`</span> <span class="pp">|</span> Migration compilation, lenses, breaking-change analysis <span class="pp">|</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Protocol definitions: theory composition, schema-level presentation functors <span class="pp">|</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3.5 <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span> Instance-level presentation functors: format-specific parse/emit for all 76 protocols <span class="pp">|</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Protocol definitions: theory composition, schema-level presentation (the parse/emit layer that converts native format syntax to panproto's internal representation) <span class="pp">|</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3.5 <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span> Instance-level presentation: format-specific parse/emit for all 76 protocols <span class="pp">|</span></span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>: The six-level crate hierarchy. {#tbl-crate-levels}</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>**Level 0** is the mathematical foundation. It knows nothing about schemas, instances, or protocols -- only about the algebra of generalized algebraic theories.</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>**Level 0** is the algebraic foundation. It knows nothing about schemas, instances, or protocols --- only about the algebra of generalized algebraic theories.</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>**Level 1** introduces the data model. <span class="in">`panproto-schema`</span> defines the hypergraph structure that represents a data format's type system; <span class="in">`panproto-inst`</span> defines instances (actual data) conforming to those schemas.</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>**Level 2** is where the interesting operations live: compiling migration specifications into executable form (<span class="in">`panproto-mig`</span>), constructing bidirectional lenses (<span class="in">`panproto-lens`</span>), and classifying schema changes as breaking or non-breaking (<span class="in">`panproto-check`</span>).</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>**Level 2** is where the interesting operations live: compiling migration specifications into executable form (<span class="in">`panproto-mig`</span>), constructing bidirectional lenses (<span class="in">`panproto-lens`</span>), and classifying schema changes as breaking or non-breaking (<span class="in">`panproto-check`</span>). The protolens layer in <span class="in">`panproto-lens`</span> lifts concrete lenses to schema-parameterized families (see @sec-protolens-engine). This layer depends on <span class="in">`panproto-gat`</span>'s <span class="in">`schema_functor`</span> and <span class="in">`factorize`</span> modules for theory-level transforms and morphism decomposition, and on <span class="in">`panproto-check`</span> for schema diffing that feeds the automated lens generation pipeline (@sec-auto-lens-pipeline). <span class="in">`panproto-lens`</span> thus has a dependency on <span class="in">`panproto-check`</span> in addition to <span class="in">`panproto-mig`</span>.</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>**Level 3** bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0--2. It also provides **schema-level presentation functors**: the parse/emit operations that convert native format specifications (<span class="in">`.proto`</span> files, SQL DDL, GraphQL SDL) into abstract <span class="in">`Schema`</span> models.</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>**Level 3** bundles concrete protocol definitions. Each protocol (AT Protocol, SQL, Protobuf, etc.) is a pair of GATs plus well-formedness rules, all built on the primitives from Levels 0--2. It also provides **schema-level presentation**: the parse/emit operations that convert native format specifications (<span class="in">`.proto`</span> files, SQL DDL, GraphQL SDL) into abstract <span class="in">`Schema`</span> models.</span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>**Level 3.5** provides the **instance-level presentation functors** via <span class="in">`panproto-io`</span>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<span class="in">`WInstance`</span>/<span class="in">`FInstance`</span>). Together with <span class="in">`panproto-protocols`</span>, it completes both levels of the functorial data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from Spivak 2012 ensures that parse → restrict → emit composes correctly.</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>**Level 3.5** provides **instance-level presentation** via <span class="in">`panproto-io`</span>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<span class="in">`WInstance`</span>/<span class="in">`FInstance`</span>). Together with <span class="in">`panproto-protocols`</span>, it completes both levels of the data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from @spivak2012 ensures that parse, restrict, and emit compose correctly.</span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>**Level 4** provides the consumer-facing surfaces: <span class="in">`panproto-core`</span> re-exports everything through a single dependency, <span class="in">`panproto-wasm`</span> exposes a handle-based WebAssembly API, and <span class="in">`panproto-cli`</span> wraps it all in a command-line tool.</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
@@ -1581,16 +1588,16 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why GATs</span></span>
 <span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>panproto formalizes data format specifications as _generalized algebraic theories_ (GATs), following the framework introduced by @cartmell1986. A GAT is a multi-sorted equational theory whose sorts may depend on terms of other sorts. This is precisely the expressive power needed to capture dependent typing relationships that appear in real-world data formats (e.g., "the type of a field depends on a discriminator tag").</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>panproto formalizes data format specifications as _generalized algebraic theories_ (GATs).^<span class="co">[</span><span class="ot">GATs were introduced by @cartmell1986, extending the ordinary algebraic theories of @lawvere1963.</span><span class="co">]</span>  A GAT describes a schema language's vocabulary: what kinds of entities exist (**sorts** --- a type in a formal theory, not a sorting operation --- like `Vertex` and `Edge`), what relationships connect them (**operations**, like `src: Edge → Vertex`), and what consistency rules hold (**equations**, like "a foreign key's source column must belong to its source table"). The "generalized" part is that sorts can depend on other sorts---the set of valid constraints for a string vertex is different from the set for an integer vertex. This dependent structure appears in every real schema language: the type of a Protobuf field depends on a discriminator tag, the valid constraints on a JSON Schema node depend on its <span class="in">`type`</span> keyword, and the applicable column constraints in SQL depend on the column's data type.</span>
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>Ordinary algebraic theories in the sense of @lawvere1963 cannot express sort dependencies, so they are insufficient for modeling protocols like AT Protocol or Protobuf where type structure is genuinely dependent. GATs give us:</span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>GATs give panproto three capabilities:</span>
 <span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dependent sorts**: <span class="in">`Hom(a: Ob, b: Ob)`</span> in a category theory, or <span class="in">`Constraint(v: Vertex)`</span> in a schema theory.</span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Structure-preserving morphisms**: maps between theories that respect arities and equations, enabling principled schema migration.</span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Colimits**: pushouts that compose theories modularly, so protocols can be assembled from reusable fragments.</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dependent sorts**: the set of valid constraints for a vertex depends on what kind of vertex it is. <span class="in">`Constraint(v: Vertex)`</span> is a different set for each <span class="in">`v`</span>.</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Structure-preserving morphisms**: maps between theories that respect arities and equations. A schema migration is a morphism: it maps old sorts to new sorts and old operations to new operations, and the engine checks that all equations still hold.</span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compositional assembly**: theories can be merged along shared structure, so protocols are assembled from reusable building blocks (e.g., "graph + constraints + multiplicity" for ATProto).</span>
 <span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to theories and protocols, see the <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.github.io/tutorial/)</span> chapters 3--4.</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>For the user-facing introduction to theories and protocols, see the <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.dev/tutorial/)</span> chapters 3--4.</span>
 <span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Handle-Based WASM API</span></span>
@@ -1611,22 +1618,22 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Immutable Fluent Builders</span></span>
 <span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction -- you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction --- you cannot hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
 <span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Two-Parameter Architecture</span></span>
 <span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>Every protocol in panproto is defined by a pair of GATs:</span>
 <span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Schema theory** -- describes the _shape_ of a data format. Its models are schemas (hypergraphs of vertex kinds and edge rules).</span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Schema theory** -- describes the _shape_ of a data format. Its models (a concrete instance that satisfies a theory's requirements --- like a Rust struct implementing a trait) are schemas (hypergraphs of vertex kinds and edge rules).</span>
 <span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Instance theory** -- describes the _content_ that inhabits a schema. Its models are instances (trees or tables of data).</span>
 <span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued functors for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <span class="in">`panproto-schema`</span> captures this pairing:</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>This factorization is the key architectural insight. A single schema theory can have multiple instance theories (e.g., W-type trees for document data, set-valued models for relational data), and a single instance theory can serve multiple schema theories. The Protocol struct in <span class="in">`panproto-schema`</span> captures this pairing:</span>
 <span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a><span class="in">Protocol = (schema_theory: GAT, instance_theory: GAT, edge_rules, ...)</span></span>
 <span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The mathematical guarantee is that restriction along a theory morphism is functorial -- it composes correctly and preserves the structural axioms of the instance theory <span class="co">[</span><span class="ot">@spivak2012</span><span class="co">]</span>.</span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The guarantee is that restriction (projecting data from the target schema onto the source schema, keeping only what the source schema expects) along a theory morphism composes correctly and preserves the structural axioms of the instance theory.^<span class="co">[</span><span class="ot">Restriction composes correctly: restricting along two successive migrations produces the same result as restricting along their composition. This compositionality property is called functoriality, and is established formally in @spivak2012.</span><span class="co">]</span></span>
 <span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Lifecycle</span></span>
 <span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a></span>
@@ -1687,7 +1694,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a>: Where to find things. {#tbl-where}</span>
 <span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>The next four chapters dive deep into the core crates -- starting with the GAT engine in @sec-gat-engine, then schemas and protocols in @sec-schema-protocols, and instances in @sec-instances-wtype.</span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>The next four chapters dive deep into the core crates --- starting with the GAT engine in @sec-gat-engine, then schemas and protocols in @sec-schema-protocols, and instances in @sec-instances-wtype.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

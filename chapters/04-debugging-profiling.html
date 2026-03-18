@@ -396,7 +396,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the W-type Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -455,26 +455,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/22-building-blocks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Building-Block Theories</span></span></a>
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/23-naming-identity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Naming, Identity, and the Morphism Tower</span></span></a>
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/24-auto-morphisms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automatic Morphisms and the Adjoint Triple</span></span></a>
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/25-type-checking-pipeline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">The Type-Checking Pipeline</span></span></a>
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
       </ul>
@@ -662,7 +662,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="stepping-through-the-w-type-restrict-pipeline" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</h2>
-<p>The restrict pipeline in <code>panproto-inst</code> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</p>
+<p>The restrict pipeline in <code>panproto-inst</code> transforms a W-type instance (a tree-shaped data record whose structure is determined by the schema) when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</p>
 <ol type="1">
 <li><p><strong><code>anchor_surviving()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</p></li>
 <li><p><strong><code>reachable_from_root()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code> — BFS from root through anchor-surviving nodes. If nodes appear unreachable despite surviving, the reachability check is the place to look.</p></li>
@@ -803,7 +803,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="4.5.5" class="anchored" data-anchor-id="colimit-produces-unexpected-merged-theory"><span class="header-section-number">4.5.5</span> Colimit produces unexpected merged theory</h3>
 <p>When two theories are merged via <code>colimit()</code> and the result has unexpected sorts or operations:</p>
 <ol type="1">
-<li><p><strong>Verify the span.</strong> The colimit is computed over a span: two morphisms from a shared sub-theory. Print both morphisms and confirm that the shared sorts map correctly in each direction.</p></li>
+<li><p><strong>Verify the span.</strong> The colimit is computed over a span — two structure-preserving maps from a shared base theory to each of the theories being merged. Print both morphisms and confirm that the shared sorts map correctly in each direction.</p></li>
 <li><p><strong>Check equation preservation.</strong> If the merged theory has conflicting equations, <code>colimit()</code> will return an error. But if equations are merely <em>missing</em>, the merged theory may be valid but semantically wrong. Inspect the equations in the output theory.</p></li>
 <li><p><strong>Trace with debug logging:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_gat=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-gat <span class="at">--</span> test_colimit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1403,7 +1403,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stepping through the W-type restrict pipeline</span></span>
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>The restrict pipeline in <span class="in">`panproto-inst`</span> transforms a W-type instance when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>The restrict pipeline in <span class="in">`panproto-inst`</span> transforms a W-type instance (a tree-shaped data record whose structure is determined by the schema) when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`anchor_surviving()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span> --- Determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</span>
 <span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
@@ -1529,7 +1529,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>When two theories are merged via <span class="in">`colimit()`</span> and the result has unexpected sorts or operations:</span>
 <span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Verify the span.** The colimit is computed over a span: two morphisms from a shared sub-theory. Print both morphisms and confirm that the shared sorts map correctly in each direction.</span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Verify the span.** The colimit is computed over a span --- two structure-preserving maps from a shared base theory to each of the theories being merged. Print both morphisms and confirm that the shared sorts map correctly in each direction.</span>
 <span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Check equation preservation.** If the merged theory has conflicting equations, <span class="in">`colimit()`</span> will return an error. But if equations are merely *missing*, the merged theory may be valid but semantically wrong. Inspect the equations in the output theory.</span>
 <span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Trace with debug logging:**</span>
 <span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a></span>

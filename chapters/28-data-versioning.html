@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>21&nbsp; Data Versioning Internals – panproto: Developer Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/27-auto-lens-pipeline.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-data-object-model" id="toc-sec-data-object-model" class="nav-link active" data-scroll-target="#sec-data-object-model"><span class="header-section-number">21.1</span> Object model: DataSetObject, ComplementObject, Protocol</a>
+  <ul class="collapse">
+  <li><a href="#datasetobject" id="toc-datasetobject" class="nav-link" data-scroll-target="#datasetobject"><span class="header-section-number">21.1.1</span> DataSetObject</a></li>
+  <li><a href="#complementobject" id="toc-complementobject" class="nav-link" data-scroll-target="#complementobject"><span class="header-section-number">21.1.2</span> ComplementObject</a></li>
+  <li><a href="#protocol-variant" id="toc-protocol-variant" class="nav-link" data-scroll-target="#protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</a></li>
+  </ul></li>
+  <li><a href="#sec-commit-extensions" id="toc-sec-commit-extensions" class="nav-link" data-scroll-target="#sec-commit-extensions"><span class="header-section-number">21.2</span> CommitObject extensions</a></li>
+  <li><a href="#sec-data-hash-functions" id="toc-sec-data-hash-functions" class="nav-link" data-scroll-target="#sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for new types</a></li>
+  <li><a href="#sec-data-mig-algorithms" id="toc-sec-data-mig-algorithms" class="nav-link" data-scroll-target="#sec-data-mig-algorithms"><span class="header-section-number">21.4</span> data_mig.rs: migrate_forward/backward algorithms</a>
+  <ul class="collapse">
+  <li><a href="#migrate_forward" id="toc-migrate_forward" class="nav-link" data-scroll-target="#migrate_forward"><span class="header-section-number">21.4.1</span> migrate_forward</a></li>
+  <li><a href="#migrate_backward" id="toc-migrate_backward" class="nav-link" data-scroll-target="#migrate_backward"><span class="header-section-number">21.4.2</span> migrate_backward</a></li>
+  <li><a href="#detect_staleness" id="toc-detect_staleness" class="nav-link" data-scroll-target="#detect_staleness"><span class="header-section-number">21.4.3</span> detect_staleness</a></li>
+  <li><a href="#migrate_through_path" id="toc-migrate_through_path" class="nav-link" data-scroll-target="#migrate_through_path"><span class="header-section-number">21.4.4</span> migrate_through_path</a></li>
+  </ul></li>
+  <li><a href="#sec-complement-lifecycle" id="toc-sec-complement-lifecycle" class="nav-link" data-scroll-target="#sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, GC</a></li>
+  <li><a href="#sec-dag-path-migration" id="toc-sec-dag-path-migration" class="nav-link" data-scroll-target="#sec-dag-path-migration"><span class="header-section-number">21.6</span> DAG path migration: multi-step data migration through commit history</a></li>
+  <li><a href="#sec-checkout-merge-integration" id="toc-sec-checkout-merge-integration" class="nav-link" data-scroll-target="#sec-checkout-merge-integration"><span class="header-section-number">21.7</span> checkout_with_data / merge_with_data integration</a>
+  <ul class="collapse">
+  <li><a href="#checkout_with_data" id="toc-checkout_with_data" class="nav-link" data-scroll-target="#checkout_with_data"><span class="header-section-number">21.7.1</span> checkout_with_data</a></li>
+  <li><a href="#merge_with_data" id="toc-merge_with_data" class="nav-link" data-scroll-target="#merge_with_data"><span class="header-section-number">21.7.2</span> merge_with_data</a></li>
+  </ul></li>
+  <li><a href="#sec-index-staging" id="toc-sec-index-staging" class="nav-link" data-scroll-target="#sec-index-staging"><span class="header-section-number">21.8</span> Index staging: StagedData, staged_protocol</a>
+  <ul class="collapse">
+  <li><a href="#stageddata" id="toc-stageddata" class="nav-link" data-scroll-target="#stageddata"><span class="header-section-number">21.8.1</span> StagedData</a></li>
+  <li><a href="#staged_protocol" id="toc-staged_protocol" class="nav-link" data-scroll-target="#staged_protocol"><span class="header-section-number">21.8.2</span> staged_protocol</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/28-data-versioning.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-data-versioning-internals" class="quarto-section-identifier"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter covers the object model, algorithms, and integration points for data versioning in <code>panproto-vcs</code>. For the user-facing workflow, see the <a href="https://panproto.dev/tutorial/chapters/19-data-versioning.html">tutorial’s data versioning chapter</a>.</p>
+<section id="sec-data-object-model" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="sec-data-object-model"><span class="header-section-number">21.1</span> Object model: DataSetObject, ComplementObject, Protocol</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
+<p>Three new variants join the <code>Object</code> enum:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Object <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    Schema(Schema)<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    Migration(CompiledMigration)<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    Commit(CommitObject)<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Tag(TagObject)<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    DataSet(DataSetObject)<span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    Complement(ComplementObject)<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="datasetobject" class="level3" data-number="21.1.1">
+<h3 data-number="21.1.1" class="anchored" data-anchor-id="datasetobject"><span class="header-section-number">21.1.1</span> DataSetObject</h3>
+<p>A <code>DataSetObject</code> is a content-addressed snapshot of instance data bound to a specific schema version:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> DataSetObject <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> record_count<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> <span class="co">// MessagePack-encoded instances</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>data</code> field stores all instances as a single MessagePack array. Each element is a serialized <code>WInstance</code> or <code>FInstance</code>. The <code>schema_id</code> links the snapshot to the schema these instances conform to.</p>
+<p>Content addressing means two snapshots with identical data and schema produce the same <code>ObjectId</code>. This provides deduplication: if the same records are staged multiple times against the same schema, only one object is stored.</p>
+</section>
+<section id="complementobject" class="level3" data-number="21.1.2">
+<h3 data-number="21.1.2" class="anchored" data-anchor-id="complementobject"><span class="header-section-number">21.1.2</span> ComplementObject</h3>
+<p>A <code>ComplementObject</code> stores the data lost during a forward migration step:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ComplementObject <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> migration_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> complement<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> <span class="co">// MessagePack-encoded complement</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><strong><code>migration_id</code></strong>: the <code>ObjectId</code> of the <code>Migration</code> object that produced this complement.</li>
+<li><strong><code>data_id</code></strong>: the <code>ObjectId</code> of the <code>DataSetObject</code> the complement was extracted from.</li>
+<li><strong><code>complement</code></strong>: the serialized complement data (field values removed by <code>RemoveVertex</code>, edge data removed by <code>RemoveEdge</code>, etc.).</li>
+</ul>
+<p>The complement’s content hash depends on all three fields. Two different migrations applied to the same data produce different complement objects even if the complement bytes happen to be identical, because the <code>migration_id</code> differs.</p>
+</section>
+<section id="protocol-variant" class="level3" data-number="21.1.3">
+<h3 data-number="21.1.3" class="anchored" data-anchor-id="protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</h3>
+<p>The <code>Protocol</code> variant stores a complete <code>panproto_protocols::Protocol</code> value. This is the same struct used throughout the codebase—no wrapper or subset. Serialization uses the existing <code>serde</code> implementation with MessagePack encoding.</p>
+</section>
+</section>
+<section id="sec-commit-extensions" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="sec-commit-extensions"><span class="header-section-number">21.2</span> CommitObject extensions</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
+<p><code>CommitObject</code> gains three fields:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CommitObject <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> parent_ids<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> migration_id<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> message<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> author<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> timestamp<span class="op">:</span> <span class="dt">u64</span><span class="op">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> renames<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>SiteRename<span class="op">&gt;,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// New fields:</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> protocol_id<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data_ids<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> complement_ids<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><strong><code>protocol_id</code></strong>: optional reference to a <code>Protocol</code> object. When present, this commit is pinned to a specific protocol version. Validation uses this protocol rather than the ambient protocol.</li>
+<li><strong><code>data_ids</code></strong>: references to <code>DataSetObject</code> values staged with this commit. A commit can have zero or more data snapshots (one per data directory).</li>
+<li><strong><code>complement_ids</code></strong>: references to <code>ComplementObject</code> values generated during data migration. These are stored at commit time so that backward migration can retrieve them.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These fields are not <code>serde(default)</code>. Existing serialized commits will fail to deserialize. This is a breaking change. Repositories created before this version must be re-initialized.</p>
+</div>
+</div>
+</section>
+<section id="sec-data-hash-functions" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for new types</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/hash.rs</code></p>
+<p>Content addressing requires a canonical serialization. The existing <code>hash_object</code> function dispatches on the <code>Object</code> variant. Three new arms handle the new types:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">Object::</span>DataSet(ds) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="st">b"dataset</span><span class="sc">\0</span><span class="st">"</span>)<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="op">&amp;</span>ds<span class="op">.</span>schema_id<span class="op">.</span><span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">rmp_serde::encode::</span>write(<span class="op">&amp;</span><span class="kw">mut</span> buf<span class="op">,</span> <span class="op">&amp;</span>ds<span class="op">.</span>data)<span class="op">?;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">blake3::</span>hash(<span class="op">&amp;</span>buf)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="pp">Object::</span>Complement(c) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="st">b"complement</span><span class="sc">\0</span><span class="st">"</span>)<span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="op">&amp;</span>c<span class="op">.</span>migration_id<span class="op">.</span><span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="op">&amp;</span>c<span class="op">.</span>data_id<span class="op">.</span><span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="pp">rmp_serde::encode::</span>write(<span class="op">&amp;</span><span class="kw">mut</span> buf<span class="op">,</span> <span class="op">&amp;</span>c<span class="op">.</span>complement)<span class="op">?;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="pp">blake3::</span>hash(<span class="op">&amp;</span>buf)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="pp">Object::</span>Protocol(p) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="st">b"protocol</span><span class="sc">\0</span><span class="st">"</span>)<span class="op">;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="pp">rmp_serde::encode::</span>write(<span class="op">&amp;</span><span class="kw">mut</span> buf<span class="op">,</span> p)<span class="op">?;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="pp">blake3::</span>hash(<span class="op">&amp;</span>buf)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each canonical form starts with a type tag (<code>dataset\0</code>, <code>complement\0</code>, <code>protocol\0</code>) to prevent hash collisions between objects of different types that happen to have the same byte content. This follows the same pattern used by <code>Schema</code>, <code>Migration</code>, and <code>Commit</code>.</p>
+</section>
+<section id="sec-data-mig-algorithms" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="sec-data-mig-algorithms"><span class="header-section-number">21.4</span> data_mig.rs: migrate_forward/backward algorithms</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/data_mig.rs</code></p>
+<section id="migrate_forward" class="level3" data-number="21.4.1">
+<h3 data-number="21.4.1" class="anchored" data-anchor-id="migrate_forward"><span class="header-section-number">21.4.1</span> migrate_forward</h3>
+<p><code>migrate_forward</code> takes a <code>DataSetObject</code>, a <code>CompiledMigration</code>, and the store, and returns a new <code>DataSetObject</code> plus a <code>ComplementObject</code>:</p>
+<ol type="1">
+<li>Deserialize the MessagePack instances from <code>data.data</code>.</li>
+<li>For each instance, apply the migration’s <code>lift_wtype</code> (or <code>lift_functor</code> for functor instances), capturing the complement.</li>
+<li>Collect all complements into a single MessagePack array.</li>
+<li>Construct the new <code>DataSetObject</code> with the target schema’s <code>ObjectId</code> and the migrated instances.</li>
+<li>Construct the <code>ComplementObject</code> with the migration’s <code>ObjectId</code>, the original data’s <code>ObjectId</code>, and the complement bytes.</li>
+<li>Store both objects and return their <code>ObjectId</code> values.</li>
+</ol>
+<p>If the migration is lossless (complement is empty for every instance), no <code>ComplementObject</code> is created. The function returns <code>None</code> for the complement ID.</p>
+</section>
+<section id="migrate_backward" class="level3" data-number="21.4.2">
+<h3 data-number="21.4.2" class="anchored" data-anchor-id="migrate_backward"><span class="header-section-number">21.4.2</span> migrate_backward</h3>
+<p><code>migrate_backward</code> takes a <code>DataSetObject</code>, a <code>ComplementObject</code>, and a <code>CompiledMigration</code>:</p>
+<ol type="1">
+<li>Invert the migration via <code>panproto_mig::invert</code>.</li>
+<li>Deserialize both the data instances and the complement instances.</li>
+<li>For each (instance, complement) pair, apply the inverted migration’s <code>lift_wtype</code> with the complement data restored.</li>
+<li>Construct a new <code>DataSetObject</code> bound to the source schema.</li>
+</ol>
+<p>Backward migration fails with <code>Error::MissingComplement</code> if the complement object cannot be found in the store. Lossless steps do not need complements—the inverted migration can reconstruct the original data without external input.</p>
+</section>
+<section id="detect_staleness" class="level3" data-number="21.4.3">
+<h3 data-number="21.4.3" class="anchored" data-anchor-id="detect_staleness"><span class="header-section-number">21.4.3</span> detect_staleness</h3>
+<p><code>detect_staleness</code> takes a list of <code>DataSetObject</code> IDs and the current HEAD commit’s schema ID:</p>
+<ol type="1">
+<li>For each data set, compare <code>data.schema_id</code> against the HEAD schema ID.</li>
+<li>If they differ, find the DAG path from <code>data.schema_id</code> to the HEAD schema.</li>
+<li>Return a <code>StalenessReport</code> for each stale data set: the path length, the transform types along the path, and whether any step requires a complement.</li>
+</ol>
+<p>The function does not migrate data. It is a read-only diagnostic.</p>
+</section>
+<section id="migrate_through_path" class="level3" data-number="21.4.4">
+<h3 data-number="21.4.4" class="anchored" data-anchor-id="migrate_through_path"><span class="header-section-number">21.4.4</span> migrate_through_path</h3>
+<p><code>migrate_through_path</code> composes <code>migrate_forward</code> along a DAG path:</p>
+<ol type="1">
+<li>Walk the commit path from the data’s schema version to the target commit.</li>
+<li>At each step, extract the migration from the commit and call <code>migrate_forward</code>.</li>
+<li>Chain the resulting <code>DataSetObject</code> into the next step’s input.</li>
+<li>Collect all <code>ComplementObject</code> IDs for storage in the final commit.</li>
+</ol>
+<p>For backward segments of a path (when the target is an ancestor), the function uses <code>migrate_backward</code> with the stored complements.</p>
+</section>
+</section>
+<section id="sec-complement-lifecycle" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, GC</h2>
+<p>Complements follow the same lifecycle as other objects in the store:</p>
+<ol type="1">
+<li><strong>Creation</strong>: <code>migrate_forward</code> produces a <code>ComplementObject</code> and writes it to the store.</li>
+<li><strong>Storage</strong>: The <code>ComplementObject</code>’s <code>ObjectId</code> is recorded in the <code>CommitObject</code>’s <code>complement_ids</code> field.</li>
+<li><strong>Retrieval</strong>: <code>migrate_backward</code> looks up the complement by walking the commit’s <code>complement_ids</code> and matching on <code>migration_id</code> and <code>data_id</code>.</li>
+<li><strong>GC</strong>: <code>gc::mark_sweep</code> marks complements reachable from any commit in the reflog. Unreachable complements are deleted.</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Complements are only generated for lossy migrations. A chain of five rename steps produces zero complement objects. A single <code>RemoveVertex</code> step produces one complement object per data set. Storage cost is proportional to the data actually lost, not the number of migration steps.</p>
+</div>
+</div>
+<p>The retrieval algorithm in <code>migrate_backward</code> is:</p>
+<ol type="1">
+<li>Find the commit whose <code>data_ids</code> contains the current data set’s <code>ObjectId</code>.</li>
+<li>Scan that commit’s <code>complement_ids</code> for a <code>ComplementObject</code> whose <code>migration_id</code> matches the step’s migration and whose <code>data_id</code> matches the input data set.</li>
+<li>If found, deserialize and use. If not found and the step is lossy, return <code>Error::MissingComplement</code>.</li>
+</ol>
+</section>
+<section id="sec-dag-path-migration" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="sec-dag-path-migration"><span class="header-section-number">21.6</span> DAG path migration: multi-step data migration through commit history</h2>
+<p><code>migrate_through_path</code> handles three cases:</p>
+<p><strong>Linear path (ancestor to descendant)</strong>: walk forward through each commit, applying <code>migrate_forward</code> at each step. Each step’s output <code>DataSetObject</code> becomes the next step’s input.</p>
+<p><strong>Linear path (descendant to ancestor)</strong>: walk backward through each commit, applying <code>migrate_backward</code> with stored complements. This is the <code>--backward</code> flag in the CLI.</p>
+<p><strong>Non-linear path (across branches)</strong>: find the LCA (lowest common ancestor) of the source and target commits. Walk backward from the source to the LCA, then forward from the LCA to the target. The backward leg consumes complements; the forward leg produces new ones.</p>
+<p>The path is computed by <code>dag::find_path</code>, which returns a sequence of <code>(CommitObject, Direction)</code> pairs. <code>Direction::Forward</code> means the migration at this commit should be applied as-is. <code>Direction::Backward</code> means the migration should be inverted.</p>
+</section>
+<section id="sec-checkout-merge-integration" class="level2" data-number="21.7">
+<h2 data-number="21.7" class="anchored" data-anchor-id="sec-checkout-merge-integration"><span class="header-section-number">21.7</span> checkout_with_data / merge_with_data integration</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/repo.rs</code></p>
+<section id="checkout_with_data" class="level3" data-number="21.7.1">
+<h3 data-number="21.7.1" class="anchored" data-anchor-id="checkout_with_data"><span class="header-section-number">21.7.1</span> checkout_with_data</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> checkout_with_data(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    target<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    data_dir<span class="op">:</span> <span class="op">&amp;</span><span class="dt">Path</span><span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>ObjectId<span class="op">&gt;&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li>Resolve <code>target</code> to a commit ID.</li>
+<li>Read all data files from <code>data_dir</code> and construct a <code>DataSetObject</code> bound to the current HEAD schema.</li>
+<li>Find the DAG path from the current HEAD to the target commit.</li>
+<li>Call <code>migrate_through_path</code> with the data set and the path.</li>
+<li>Write migrated records back to <code>data_dir</code>.</li>
+<li>Perform the normal <code>checkout</code> (update HEAD, update index).</li>
+<li>Return the <code>ObjectId</code> values of any complements generated.</li>
+</ol>
+</section>
+<section id="merge_with_data" class="level3" data-number="21.7.2">
+<h3 data-number="21.7.2" class="anchored" data-anchor-id="merge_with_data"><span class="header-section-number">21.7.2</span> merge_with_data</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> merge_with_data(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    branch<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    author<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    data_dir<span class="op">:</span> <span class="op">&amp;</span><span class="dt">Path</span><span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>MergeResult<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol type="1">
+<li>Perform the normal <code>merge</code> (three-way pushout, conflict detection).</li>
+<li>If the merge succeeds (no conflicts), derive the protolens chain from the current branch’s schema to the merged schema.</li>
+<li>Read data from <code>data_dir</code>, construct a <code>DataSetObject</code>, and apply <code>migrate_forward</code> with the derived migration.</li>
+<li>Store complements.</li>
+<li>Write migrated records to <code>data_dir</code>.</li>
+<li>Include the data and complement <code>ObjectId</code> values in the merge commit’s <code>data_ids</code> and <code>complement_ids</code>.</li>
+</ol>
+<p>If the merge has conflicts, data migration is skipped. The <code>MergeResult</code> contains the conflicts, and the caller must resolve them before migrating data.</p>
+</section>
+</section>
+<section id="sec-index-staging" class="level2" data-number="21.8">
+<h2 data-number="21.8" class="anchored" data-anchor-id="sec-index-staging"><span class="header-section-number">21.8</span> Index staging: StagedData, staged_protocol</h2>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
+<p>The <code>Index</code> struct gains two fields:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> <span class="bu">Index</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> staged_schema<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>StagedSchema<span class="op">&gt;,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> staged_data<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>StagedData<span class="op">&gt;,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> staged_protocol<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Protocol<span class="op">&gt;,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="stageddata" class="level3" data-number="21.8.1">
+<h3 data-number="21.8.1" class="anchored" data-anchor-id="stageddata"><span class="header-section-number">21.8.1</span> StagedData</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> StagedData <span class="op">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> path<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data<span class="op">:</span> DataSetObject<span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>StagedData</code> records the filesystem path and the constructed <code>DataSetObject</code>. Multiple data directories can be staged simultaneously (one <code>StagedData</code> per directory).</p>
+<p><code>Repository::add_data(path)</code> reads all files in <code>path</code>, serializes them as instances, constructs a <code>DataSetObject</code> bound to the current HEAD schema, and appends to <code>staged_data</code>.</p>
+</section>
+<section id="staged_protocol" class="level3" data-number="21.8.2">
+<h3 data-number="21.8.2" class="anchored" data-anchor-id="staged_protocol"><span class="header-section-number">21.8.2</span> staged_protocol</h3>
+<p><code>Repository::add_protocol(protocol)</code> sets <code>staged_protocol</code> to the provided <code>Protocol</code> value. At commit time, the protocol is stored as an <code>Object::Protocol</code> and its <code>ObjectId</code> is written to the <code>CommitObject</code>’s <code>protocol_id</code> field.</p>
+<p>Only one protocol can be staged per commit. Calling <code>add_protocol</code> twice overwrites the first.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>Index</code> is serialized as JSON to <code>.panproto/index.json</code>. The new fields use <code>serde(default)</code> on <code>staged_data</code> (defaults to empty vec) but <code>staged_protocol</code> is <code>Option&lt;Protocol&gt;</code> (defaults to <code>None</code>). This means old index files missing these fields will deserialize with empty data staging, but the <code>Index</code> struct itself is a breaking change because the <code>CommitObject</code> it produces now requires the new fields.</p>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.dev\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/27-auto-lens-pipeline.html" class="pagination-link" aria-label="Automated Lens Generation Pipeline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Versioning Internals {#sec-data-versioning-internals}</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>This chapter covers the object model, algorithms, and integration points for data versioning in <span class="in">`panproto-vcs`</span>. For the user-facing workflow, see the <span class="co">[</span><span class="ot">tutorial's data versioning chapter</span><span class="co">](https://panproto.dev/tutorial/chapters/19-data-versioning.html)</span>.</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Object model: DataSetObject, ComplementObject, Protocol {#sec-data-object-model}</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/objects.rs`</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>Three new variants join the <span class="in">`Object`</span> enum:</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>pub enum Object {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Schema</span>(Schema),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Migration</span>(CompiledMigration),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Commit</span>(CommitObject),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Tag</span>(TagObject),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">DataSet</span>(DataSetObject),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Complement</span>(ComplementObject),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Protocol</span>(Protocol),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### DataSetObject</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>A <span class="in">`DataSetObject`</span> is a content-addressed snapshot of instance data bound to a specific schema version:</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>pub struct DataSetObject {</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    pub schema_id<span class="sc">:</span> ObjectId,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    pub record_count<span class="sc">:</span> usize,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    pub data<span class="sc">:</span> Vec<span class="sc">&lt;</span>u8<span class="sc">&gt;</span>, <span class="sc">/</span><span class="er">/</span> MessagePack<span class="sc">-</span>encoded instances</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>The <span class="in">`data`</span> field stores all instances as a single MessagePack array. Each element is a serialized <span class="in">`WInstance`</span> or <span class="in">`FInstance`</span>. The <span class="in">`schema_id`</span> links the snapshot to the schema these instances conform to.</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>Content addressing means two snapshots with identical data and schema produce the same <span class="in">`ObjectId`</span>. This provides deduplication: if the same records are staged multiple times against the same schema, only one object is stored.</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="fu">### ComplementObject</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>A <span class="in">`ComplementObject`</span> stores the data lost during a forward migration step:</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>pub struct ComplementObject {</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    pub migration_id<span class="sc">:</span> ObjectId,</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    pub data_id<span class="sc">:</span> ObjectId,</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    pub complement<span class="sc">:</span> Vec<span class="sc">&lt;</span>u8<span class="sc">&gt;</span>, <span class="sc">/</span><span class="er">/</span> MessagePack<span class="sc">-</span>encoded complement</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`migration_id`**: the <span class="in">`ObjectId`</span> of the <span class="in">`Migration`</span> object that produced this complement.</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`data_id`**: the <span class="in">`ObjectId`</span> of the <span class="in">`DataSetObject`</span> the complement was extracted from.</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`complement`**: the serialized complement data (field values removed by <span class="in">`RemoveVertex`</span>, edge data removed by <span class="in">`RemoveEdge`</span>, etc.).</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>The complement's content hash depends on all three fields. Two different migrations applied to the same data produce different complement objects even if the complement bytes happen to be identical, because the <span class="in">`migration_id`</span> differs.</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### Protocol variant</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Protocol`</span> variant stores a complete <span class="in">`panproto_protocols::Protocol`</span> value. This is the same struct used throughout the codebase---no wrapper or subset. Serialization uses the existing <span class="in">`serde`</span> implementation with MessagePack encoding.</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## CommitObject extensions {#sec-commit-extensions}</span></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/objects.rs`</span></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a><span class="in">`CommitObject`</span> gains three fields:</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>pub struct CommitObject {</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    pub schema_id<span class="sc">:</span> ObjectId,</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>    pub parent_ids<span class="sc">:</span> Vec<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span>,</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>    pub migration_id<span class="sc">:</span> Option<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span>,</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>    pub message<span class="sc">:</span> String,</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    pub author<span class="sc">:</span> String,</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>    pub timestamp<span class="sc">:</span> u64,</span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>    pub renames<span class="sc">:</span> Vec<span class="sc">&lt;</span>SiteRename<span class="sc">&gt;</span>,</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    <span class="sc">/</span><span class="er">/</span> New fields<span class="sc">:</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>    pub protocol_id<span class="sc">:</span> Option<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span>,</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>    pub data_ids<span class="sc">:</span> Vec<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span>,</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>    pub complement_ids<span class="sc">:</span> Vec<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span>,</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protocol_id`**: optional reference to a <span class="in">`Protocol`</span> object. When present, this commit is pinned to a specific protocol version. Validation uses this protocol rather than the ambient protocol.</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`data_ids`**: references to <span class="in">`DataSetObject`</span> values staged with this commit. A commit can have zero or more data snapshots (one per data directory).</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`complement_ids`**: references to <span class="in">`ComplementObject`</span> values generated during data migration. These are stored at commit time so that backward migration can retrieve them.</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>:::{.callout-note}</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>These fields are not <span class="in">`serde(default)`</span>. Existing serialized commits will fail to deserialize. This is a breaking change. Repositories created before this version must be re-initialized.</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hash functions: canonical forms for new types {#sec-data-hash-functions}</span></span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/hash.rs`</span></span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>Content addressing requires a canonical serialization. The existing <span class="in">`hash_object`</span> function dispatches on the <span class="in">`Object`</span> variant. Three new arms handle the new types:</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>Object<span class="sc">::</span><span class="fu">DataSet</span>(ds) <span class="sc">=&gt;</span> {</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>    let mut buf <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(b<span class="st">"dataset</span><span class="sc">\0</span><span class="st">"</span>);</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(<span class="sc">&amp;</span>ds.schema_id<span class="fl">.0</span>);</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>    rmp_serde<span class="sc">::</span>encode<span class="sc">::</span><span class="fu">write</span>(<span class="sc">&amp;</span>mut buf, <span class="sc">&amp;</span>ds.data)?;</span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>    blake3<span class="sc">::</span><span class="fu">hash</span>(<span class="sc">&amp;</span>buf)</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>Object<span class="sc">::</span><span class="fu">Complement</span>(c) <span class="sc">=&gt;</span> {</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>    let mut buf <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(b<span class="st">"complement</span><span class="sc">\0</span><span class="st">"</span>);</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(<span class="sc">&amp;</span>c.migration_id<span class="fl">.0</span>);</span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(<span class="sc">&amp;</span>c.data_id<span class="fl">.0</span>);</span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>    rmp_serde<span class="sc">::</span>encode<span class="sc">::</span><span class="fu">write</span>(<span class="sc">&amp;</span>mut buf, <span class="sc">&amp;</span>c.complement)?;</span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a>    blake3<span class="sc">::</span><span class="fu">hash</span>(<span class="sc">&amp;</span>buf)</span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>Object<span class="sc">::</span><span class="fu">Protocol</span>(p) <span class="sc">=&gt;</span> {</span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>    let mut buf <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>    <span class="fu">buf.extend_from_slice</span>(b<span class="st">"protocol</span><span class="sc">\0</span><span class="st">"</span>);</span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>    rmp_serde<span class="sc">::</span>encode<span class="sc">::</span><span class="fu">write</span>(<span class="sc">&amp;</span>mut buf, p)?;</span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a>    blake3<span class="sc">::</span><span class="fu">hash</span>(<span class="sc">&amp;</span>buf)</span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>Each canonical form starts with a type tag (<span class="in">`dataset\0`</span>, <span class="in">`complement\0`</span>, <span class="in">`protocol\0`</span>) to prevent hash collisions between objects of different types that happen to have the same byte content. This follows the same pattern used by <span class="in">`Schema`</span>, <span class="in">`Migration`</span>, and <span class="in">`Commit`</span>.</span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## data_mig.rs: migrate_forward/backward algorithms {#sec-data-mig-algorithms}</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/data_mig.rs`</span></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### migrate_forward</span></span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a><span class="in">`migrate_forward`</span> takes a <span class="in">`DataSetObject`</span>, a <span class="in">`CompiledMigration`</span>, and the store, and returns a new <span class="in">`DataSetObject`</span> plus a <span class="in">`ComplementObject`</span>:</span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Deserialize the MessagePack instances from <span class="in">`data.data`</span>.</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each instance, apply the migration's <span class="in">`lift_wtype`</span> (or <span class="in">`lift_functor`</span> for functor instances), capturing the complement.</span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Collect all complements into a single MessagePack array.</span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Construct the new <span class="in">`DataSetObject`</span> with the target schema's <span class="in">`ObjectId`</span> and the migrated instances.</span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Construct the <span class="in">`ComplementObject`</span> with the migration's <span class="in">`ObjectId`</span>, the original data's <span class="in">`ObjectId`</span>, and the complement bytes.</span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Store both objects and return their <span class="in">`ObjectId`</span> values.</span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>If the migration is lossless (complement is empty for every instance), no <span class="in">`ComplementObject`</span> is created. The function returns <span class="in">`None`</span> for the complement ID.</span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### migrate_backward</span></span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a><span class="in">`migrate_backward`</span> takes a <span class="in">`DataSetObject`</span>, a <span class="in">`ComplementObject`</span>, and a <span class="in">`CompiledMigration`</span>:</span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Invert the migration via <span class="in">`panproto_mig::invert`</span>.</span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Deserialize both the data instances and the complement instances.</span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>For each (instance, complement) pair, apply the inverted migration's <span class="in">`lift_wtype`</span> with the complement data restored.</span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Construct a new <span class="in">`DataSetObject`</span> bound to the source schema.</span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a>Backward migration fails with <span class="in">`Error::MissingComplement`</span> if the complement object cannot be found in the store. Lossless steps do not need complements---the inverted migration can reconstruct the original data without external input.</span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="fu">### detect_staleness</span></span>
+<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="in">`detect_staleness`</span> takes a list of <span class="in">`DataSetObject`</span> IDs and the current HEAD commit's schema ID:</span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>For each data set, compare <span class="in">`data.schema_id`</span> against the HEAD schema ID.</span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>If they differ, find the DAG path from <span class="in">`data.schema_id`</span> to the HEAD schema.</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Return a <span class="in">`StalenessReport`</span> for each stale data set: the path length, the transform types along the path, and whether any step requires a complement.</span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>The function does not migrate data. It is a read-only diagnostic.</span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### migrate_through_path</span></span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="in">`migrate_through_path`</span> composes <span class="in">`migrate_forward`</span> along a DAG path:</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Walk the commit path from the data's schema version to the target commit.</span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>At each step, extract the migration from the commit and call <span class="in">`migrate_forward`</span>.</span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Chain the resulting <span class="in">`DataSetObject`</span> into the next step's input.</span>
+<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Collect all <span class="in">`ComplementObject`</span> IDs for storage in the final commit.</span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a>For backward segments of a path (when the target is an ancestor), the function uses <span class="in">`migrate_backward`</span> with the stored complements.</span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement lifecycle: creation, storage, retrieval, GC {#sec-complement-lifecycle}</span></span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a>Complements follow the same lifecycle as other objects in the store:</span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Creation**: <span class="in">`migrate_forward`</span> produces a <span class="in">`ComplementObject`</span> and writes it to the store.</span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Storage**: The <span class="in">`ComplementObject`</span>'s <span class="in">`ObjectId`</span> is recorded in the <span class="in">`CommitObject`</span>'s <span class="in">`complement_ids`</span> field.</span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Retrieval**: <span class="in">`migrate_backward`</span> looks up the complement by walking the commit's <span class="in">`complement_ids`</span> and matching on <span class="in">`migration_id`</span> and <span class="in">`data_id`</span>.</span>
+<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**GC**: <span class="in">`gc::mark_sweep`</span> marks complements reachable from any commit in the reflog. Unreachable complements are deleted.</span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip}</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>Complements are only generated for lossy migrations. A chain of five rename steps produces zero complement objects. A single <span class="in">`RemoveVertex`</span> step produces one complement object per data set. Storage cost is proportional to the data actually lost, not the number of migration steps.</span>
+<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a>The retrieval algorithm in <span class="in">`migrate_backward`</span> is:</span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Find the commit whose <span class="in">`data_ids`</span> contains the current data set's <span class="in">`ObjectId`</span>.</span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Scan that commit's <span class="in">`complement_ids`</span> for a <span class="in">`ComplementObject`</span> whose <span class="in">`migration_id`</span> matches the step's migration and whose <span class="in">`data_id`</span> matches the input data set.</span>
+<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If found, deserialize and use. If not found and the step is lossy, return <span class="in">`Error::MissingComplement`</span>.</span>
+<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a><span class="fu">## DAG path migration: multi-step data migration through commit history {#sec-dag-path-migration}</span></span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a><span class="in">`migrate_through_path`</span> handles three cases:</span>
+<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a>**Linear path (ancestor to descendant)**: walk forward through each commit, applying <span class="in">`migrate_forward`</span> at each step. Each step's output <span class="in">`DataSetObject`</span> becomes the next step's input.</span>
+<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a>**Linear path (descendant to ancestor)**: walk backward through each commit, applying <span class="in">`migrate_backward`</span> with stored complements. This is the <span class="in">`--backward`</span> flag in the CLI.</span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a>**Non-linear path (across branches)**: find the LCA (lowest common ancestor) of the source and target commits. Walk backward from the source to the LCA, then forward from the LCA to the target. The backward leg consumes complements; the forward leg produces new ones.</span>
+<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a>The path is computed by <span class="in">`dag::find_path`</span>, which returns a sequence of <span class="in">`(CommitObject, Direction)`</span> pairs. <span class="in">`Direction::Forward`</span> means the migration at this commit should be applied as-is. <span class="in">`Direction::Backward`</span> means the migration should be inverted.</span>
+<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a><span class="fu">## checkout_with_data / merge_with_data integration {#sec-checkout-merge-integration}</span></span>
+<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/repo.rs`</span></span>
+<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a><span class="fu">### checkout_with_data</span></span>
+<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">checkout_with_data</span>(</span>
+<span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&amp;</span>mut self,</span>
+<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a>    target<span class="sc">:</span> <span class="er">&amp;</span>str,</span>
+<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a>    data_dir<span class="sc">:</span> <span class="er">&amp;</span>Path,</span>
+<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>ObjectId<span class="sc">&gt;</span><span class="er">&gt;</span></span>
+<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Resolve <span class="in">`target`</span> to a commit ID.</span>
+<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Read all data files from <span class="in">`data_dir`</span> and construct a <span class="in">`DataSetObject`</span> bound to the current HEAD schema.</span>
+<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Find the DAG path from the current HEAD to the target commit.</span>
+<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Call <span class="in">`migrate_through_path`</span> with the data set and the path.</span>
+<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write migrated records back to <span class="in">`data_dir`</span>.</span>
+<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Perform the normal <span class="in">`checkout`</span> (update HEAD, update index).</span>
+<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Return the <span class="in">`ObjectId`</span> values of any complements generated.</span>
+<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a><span class="fu">### merge_with_data</span></span>
+<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">merge_with_data</span>(</span>
+<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a>    <span class="sc">&amp;</span>mut self,</span>
+<span id="cb10-230"><a href="#cb10-230" aria-hidden="true" tabindex="-1"></a>    branch<span class="sc">:</span> <span class="er">&amp;</span>str,</span>
+<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a>    author<span class="sc">:</span> <span class="er">&amp;</span>str,</span>
+<span id="cb10-232"><a href="#cb10-232" aria-hidden="true" tabindex="-1"></a>    data_dir<span class="sc">:</span> <span class="er">&amp;</span>Path,</span>
+<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>MergeResult<span class="sc">&gt;</span></span>
+<span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Perform the normal <span class="in">`merge`</span> (three-way pushout, conflict detection).</span>
+<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>If the merge succeeds (no conflicts), derive the protolens chain from the current branch's schema to the merged schema.</span>
+<span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Read data from <span class="in">`data_dir`</span>, construct a <span class="in">`DataSetObject`</span>, and apply <span class="in">`migrate_forward`</span> with the derived migration.</span>
+<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Store complements.</span>
+<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Write migrated records to <span class="in">`data_dir`</span>.</span>
+<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Include the data and complement <span class="in">`ObjectId`</span> values in the merge commit's <span class="in">`data_ids`</span> and <span class="in">`complement_ids`</span>.</span>
+<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a>If the merge has conflicts, data migration is skipped. The <span class="in">`MergeResult`</span> contains the conflicts, and the caller must resolve them before migrating data.</span>
+<span id="cb10-244"><a href="#cb10-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-245"><a href="#cb10-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Index staging: StagedData, staged_protocol {#sec-index-staging}</span></span>
+<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/objects.rs`</span></span>
+<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Index`</span> struct gains two fields:</span>
+<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-251"><a href="#cb10-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a>pub struct Index {</span>
+<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a>    pub staged_schema<span class="sc">:</span> Option<span class="sc">&lt;</span>StagedSchema<span class="sc">&gt;</span>,</span>
+<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a>    pub staged_data<span class="sc">:</span> Vec<span class="sc">&lt;</span>StagedData<span class="sc">&gt;</span>,</span>
+<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a>    pub staged_protocol<span class="sc">:</span> Option<span class="sc">&lt;</span>Protocol<span class="sc">&gt;</span>,</span>
+<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a><span class="fu">### StagedData</span></span>
+<span id="cb10-260"><a href="#cb10-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a>pub struct StagedData {</span>
+<span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a>    pub path<span class="sc">:</span> PathBuf,</span>
+<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a>    pub data<span class="sc">:</span> DataSetObject,</span>
+<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a><span class="in">`StagedData`</span> records the filesystem path and the constructed <span class="in">`DataSetObject`</span>. Multiple data directories can be staged simultaneously (one <span class="in">`StagedData`</span> per directory).</span>
+<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a><span class="in">`Repository::add_data(path)`</span> reads all files in <span class="in">`path`</span>, serializes them as instances, constructs a <span class="in">`DataSetObject`</span> bound to the current HEAD schema, and appends to <span class="in">`staged_data`</span>.</span>
+<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a><span class="fu">### staged_protocol</span></span>
+<span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a><span class="in">`Repository::add_protocol(protocol)`</span> sets <span class="in">`staged_protocol`</span> to the provided <span class="in">`Protocol`</span> value. At commit time, the protocol is stored as an <span class="in">`Object::Protocol`</span> and its <span class="in">`ObjectId`</span> is written to the <span class="in">`CommitObject`</span>'s <span class="in">`protocol_id`</span> field.</span>
+<span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a>Only one protocol can be staged per commit. Calling <span class="in">`add_protocol`</span> twice overwrites the first.</span>
+<span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a>:::{.callout-note}</span>
+<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Index`</span> is serialized as JSON to <span class="in">`.panproto/index.json`</span>. The new fields use <span class="in">`serde(default)`</span> on <span class="in">`staged_data`</span> (defaults to empty vec) but <span class="in">`staged_protocol`</span> is <span class="in">`Option&lt;Protocol&gt;`</span> (defaults to <span class="in">`None`</span>). This means old index files missing these fields will deserialize with empty data staging, but the <span class="in">`Index`</span> struct itself is a breaking change because the <span class="in">`CommitObject`</span> it produces now requires the new fields.</span>
+<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/28-data-versioning.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

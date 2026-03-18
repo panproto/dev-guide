@@ -1016,45 +1016,45 @@ Note
 <section id="wasmhandle-and-resource-safety" class="level2" data-number="14.6">
 <h2 data-number="14.6" class="anchored" data-anchor-id="wasmhandle-and-resource-safety"><span class="header-section-number">14.6</span> WasmHandle and Resource Safety</h2>
 <p>Every WASM-side resource is wrapped in a <code>WasmHandle</code>, which implements <code>Disposable</code> for use with the <code>using</code> declaration:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="229"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 228;"><span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> WasmHandle <span class="kw">implements</span> Disposable {</span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a>  #handle<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
-<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a>  #disposed <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="229"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript" style="counter-reset: source-line 228;"><span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle registry — prevents resource leaks</span></span>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
 <span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(handle<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span>) {</span>
-<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span> <span class="op">=</span> handle<span class="op">;</span></span>
-<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">freeHandle</span> <span class="op">=</span> freeHandle<span class="op">;</span></span>
-<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>    leakedHandleRegistry<span class="op">.</span><span class="fu">register</span>(<span class="kw">this</span><span class="op">,</span> { handle<span class="op">,</span> freeHandle }<span class="op">,</span> <span class="kw">this</span>)<span class="op">;</span></span>
-<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** The raw WASM handle id. Only for internal use within the SDK. */</span></span>
-<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">id</span>()<span class="op">:</span> <span class="dt">number</span> {</span>
-<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span>#<span class="at">disposed</span>) {</span>
-<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="fu">WasmError</span>(<span class="st">'Attempted to use a disposed handle'</span>)<span class="op">;</span></span>
-<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span><span class="op">;</span></span>
-<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** Whether this handle has been disposed. */</span></span>
-<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a>  <span class="kw">get</span> <span class="fu">disposed</span>()<span class="op">:</span> <span class="dt">boolean</span> {</span>
-<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span>#<span class="at">disposed</span><span class="op">;</span></span>
-<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a>  <span class="co">/** Release the underlying WASM resource. */</span></span>
-<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>  [<span class="bu">Symbol</span><span class="op">.</span><span class="at">dispose</span>]()<span class="op">:</span> <span class="dt">void</span> {</span>
-<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span>#<span class="at">disposed</span>) <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">disposed</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
-<span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a>    leakedHandleRegistry<span class="op">.</span><span class="fu">unregister</span>(<span class="kw">this</span>)<span class="op">;</span></span>
-<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
-<span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span>#<span class="fu">freeHandle</span>(<span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span>)<span class="op">;</span></span>
-<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">catch</span> {</span>
-<span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a>      <span class="co">// WASM module may already be torn down; swallow.</span></span>
-<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="co">/** Weak reference registry for leaked handle detection. */</span></span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> leakedHandleRegistry <span class="op">=</span> <span class="kw">new</span> <span class="bu">FinalizationRegistry</span><span class="op">&lt;</span>CleanupInfo<span class="op">&gt;</span>((info) <span class="kw">=&gt;</span> {</span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Safety net: if a disposable wrapper is GC'd without being disposed,</span></span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>  <span class="co">// free the underlying WASM handle.</span></span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a>    info<span class="op">.</span><span class="fu">freeHandle</span>(info<span class="op">.</span><span class="at">handle</span>)<span class="op">;</span></span>
+<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
+<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a>    <span class="co">// WASM module may already be torn down; swallow.</span></span>
+<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> CleanupInfo {</span>
+<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> handle<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span></span>
+<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a><span class="co"> * A disposable wrapper around a WASM handle.</span></span>
+<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a><span class="co"> * Implements `Symbol.dispose` for use with `using` declarations.</span></span>
+<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a><span class="co"> * A `FinalizationRegistry` acts as a safety net for handles that</span></span>
+<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a><span class="co"> * are not explicitly disposed.</span></span>
+<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> WasmHandle <span class="kw">implements</span> Disposable {</span>
+<span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a>  #handle<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a>  #disposed <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a>  <span class="kw">readonly</span> #freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span><span class="op">;</span></span>
+<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a>  <span class="kw">constructor</span>(handle<span class="op">:</span> <span class="dt">number</span><span class="op">,</span> freeHandle<span class="op">:</span> (h<span class="op">:</span> <span class="dt">number</span>) <span class="kw">=&gt;</span> <span class="dt">void</span>) {</span>
+<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">handle</span> <span class="op">=</span> handle<span class="op">;</span></span>
+<span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span>#<span class="at">freeHandle</span> <span class="op">=</span> freeHandle<span class="op">;</span></span>
+<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>    leakedHandleRegistry<span class="op">.</span><span class="fu">register</span>(<span class="kw">this</span><span class="op">,</span> { handle<span class="op">,</span> freeHandle }<span class="op">,</span> <span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Two layers of safety prevent handle leaks:</p>
 <ol type="1">
 <li><strong><code>Symbol.dispose</code></strong> – Explicit cleanup. Called automatically by <code>using</code> or manually by the consumer.</li>

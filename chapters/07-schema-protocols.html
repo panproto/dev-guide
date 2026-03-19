@@ -777,12 +777,12 @@ Note
 <span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="at">)]</span></span>
 <span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nominal<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">bool</span><span class="op">&gt;,</span></span>
 <span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -- precomputed indices --</span></span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Outgoing edges per vertex ID.</span></span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> outgoing<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> SmallVec<span class="op">&lt;</span>Edge<span class="op">,</span> <span class="dv">4</span><span class="op">&gt;&gt;,</span></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Incoming edges per vertex ID.</span></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> incoming<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> SmallVec<span class="op">&lt;</span>Edge<span class="op">,</span> <span class="dv">4</span><span class="op">&gt;&gt;,</span></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Edges between a specific `(src, tgt)` pair.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -- enrichment fields --</span></span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Coercion expressions: `(source_kind, target_kind)` to coercion expression.</span></span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> with <span class="op">=</span> <span class="st">"crate::serde_helpers::map_as_vec_default"</span><span class="at">)]</span></span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> coercions<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> <span class="pp">panproto_expr::</span>Expr<span class="op">&gt;,</span></span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Merger expressions: `vertex_id` to merger expression.</span></span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="at">)]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The adjacency indices (<code>outgoing</code>, <code>incoming</code>, <code>between</code>) are <code>HashMap</code>s from vertex IDs (or vertex-pair tuples) to <code>SmallVec&lt;Edge, N&gt;</code>. Using <code>SmallVec</code> avoids heap allocation for vertices with few neighbors, which is the common case – most schema vertices have between one and four outgoing edges.</p>
 <p>The indices are computed once at build time and never modified. This makes lookups O(1) and supports the fast graph traversals that the migration and validation pipelines require.</p>
 <section id="schema-as-a-theory-model" class="level3" data-number="7.2.1">
@@ -883,7 +883,7 @@ Table&nbsp;7.1: How GAT sorts map to Schema fields.
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Whether this protocol uses nominal identity (`ThNominal`).</span></span>
 <span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="at">)]</span></span>
 <span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nominal_identity<span class="op">:</span> <span class="dt">bool</span><span class="op">,</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="edgerule" class="level3" data-number="7.3.1">
 <h3 data-number="7.3.1" class="anchored" data-anchor-id="edgerule"><span class="header-section-number">7.3.1</span> EdgeRule</h3>
 <p>The <code>EdgeRule</code> struct encodes well-formedness constraints on schema edges. Each rule governs a specific edge kind and specifies which vertex kinds are permitted as sources and targets. When a list is empty, any vertex kind is allowed in that position.</p>
@@ -970,43 +970,43 @@ Figure&nbsp;7.1: Class diagram showing the relationships between Protocol, Schem
 <section id="schemabuilder" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="schemabuilder"><span class="header-section-number">7.4</span> SchemaBuilder</h2>
 <p>The <code>SchemaBuilder</code> is the only way to construct a <code>Schema</code>. It enforces a fluent, consume-self API where each method returns <code>Result&lt;Self, SchemaError&gt;</code>, so validation failures are caught immediately and partial construction is impossible.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="17"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 16;"><span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// A builder for incrementally constructing a validated [`Schema`].</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Example</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```ignore</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// let schema = SchemaBuilder::new(&amp;protocol)</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post", "record", Some("app.bsky.feed.post"))?</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post:body", "object", None)?</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">///     .edge("post", "post:body", "record-schema", None)?</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">///     .build()?;</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SchemaBuilder <span class="op">{</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    protocol<span class="op">:</span> Protocol<span class="op">,</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    vertices<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Vertex<span class="op">&gt;,</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;,</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    hyper_edges<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> HyperEdge<span class="op">&gt;,</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    constraints<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Constraint<span class="op">&gt;&gt;,</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    required<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;&gt;,</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    nsids<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    edge_set<span class="op">:</span> FxHashSet<span class="op">&lt;</span>(Name<span class="op">,</span> Name<span class="op">,</span> Name<span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span>Name<span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SchemaBuilder <span class="op">{</span></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new builder for the given protocol.</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> new(protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            edges<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>            hyper_edges<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>            constraints<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>            required<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            nsids<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>            edge_set<span class="op">:</span> <span class="pp">FxHashSet::</span><span class="kw">default</span>()<span class="op">,</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="17"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 16;"><span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">panproto_expr::</span>Expr<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// A builder for incrementally constructing a validated [`Schema`].</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Example</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```ignore</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// let schema = SchemaBuilder::new(&amp;protocol)</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post", "record", Some("app.bsky.feed.post"))?</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">///     .vertex("post:body", "object", None)?</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">///     .edge("post", "post:body", "record-schema", None)?</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">///     .build()?;</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">/// ```</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SchemaBuilder <span class="op">{</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    protocol<span class="op">:</span> Protocol<span class="op">,</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    vertices<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Vertex<span class="op">&gt;,</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;,</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    hyper_edges<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> HyperEdge<span class="op">&gt;,</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    constraints<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Constraint<span class="op">&gt;&gt;,</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    required<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Edge<span class="op">&gt;&gt;,</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    nsids<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    edge_set<span class="op">:</span> FxHashSet<span class="op">&lt;</span>(Name<span class="op">,</span> Name<span class="op">,</span> Name<span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span>Name<span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    coercions<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> Expr<span class="op">&gt;,</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    mergers<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Expr<span class="op">&gt;,</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    defaults<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Expr<span class="op">&gt;,</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    policies<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Expr<span class="op">&gt;,</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> SchemaBuilder <span class="op">{</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new builder for the given protocol.</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> new(protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>            edges<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>            hyper_edges<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="validation-pipeline" class="level3" data-number="7.4.1">
 <h3 data-number="7.4.1" class="anchored" data-anchor-id="validation-pipeline"><span class="header-section-number">7.4.1</span> Validation Pipeline</h3>
 <p>The builder validates elements incrementally as they are added, then performs a final global check at <code>build()</code> time:</p>

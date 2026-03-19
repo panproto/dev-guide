@@ -656,6 +656,8 @@ window.Quarto = {
   <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">10.14</span> Module Map</a></li>
   <li><a href="#when-to-use-lenses-vs.-migrations" id="toc-when-to-use-lenses-vs.-migrations" class="nav-link" data-scroll-target="#when-to-use-lenses-vs.-migrations"><span class="header-section-number">10.15</span> When to Use Lenses vs.&nbsp;Migrations</a></li>
   <li><a href="#performance-considerations" id="toc-performance-considerations" class="nav-link" data-scroll-target="#performance-considerations"><span class="header-section-number">10.16</span> Performance Considerations</a></li>
+  <li><a href="#sec-optic-classification" id="toc-sec-optic-classification" class="nav-link" data-scroll-target="#sec-optic-classification"><span class="header-section-number">10.17</span> Optic Classification</a></li>
+  <li><a href="#sec-symbolic-simplification" id="toc-sec-symbolic-simplification" class="nav-link" data-scroll-target="#sec-symbolic-simplification"><span class="header-section-number">10.18</span> Symbolic Simplification</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/10-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -874,10 +876,10 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The standalone <code>combinators.rs</code> module has been superseded by protolenses (<a href="26-protolens-engine.html" class="quarto-xref"><span>Chapter 19</span></a>). The combinator semantics described below are now implemented as elementary protolens constructors in <code>protolens::elementary</code> (e.g., <code>elementary::rename_sort</code>, <code>elementary::drop_sort</code>, <code>elementary::add_sort</code>). See <a href="26-protolens-engine.html#sec-elementary-protolens" class="quarto-xref"><span>Section 19.7</span></a> for the full list.</p>
+<p>The combinator semantics described below are implemented as elementary protolens constructors in <code>protolens::elementary</code> (e.g., <code>elementary::rename_sort</code>, <code>elementary::drop_sort</code>, <code>elementary::add_sort</code>). See <a href="26-protolens-engine.html#sec-elementary-protolens" class="quarto-xref"><span>Section 19.7</span></a> for the full list.</p>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Conceptual combinator enum (now implemented via protolens::elementary)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Conceptual combinator enum (implemented via protolens::elementary)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Combinator <span class="op">{</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    RenameField <span class="op">{</span> old<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> new<span class="op">:</span> <span class="dt">String</span> <span class="op">},</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    AddField <span class="op">{</span> name<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span> <span class="kw">default</span><span class="op">:</span> Value <span class="op">},</span></span>
@@ -1118,7 +1120,7 @@ Tip
 </section>
 <section id="relationship-to-cambria-style-combinators" class="level3" data-number="10.13.2">
 <h3 data-number="10.13.2" class="anchored" data-anchor-id="relationship-to-cambria-style-combinators"><span class="header-section-number">10.13.2</span> Relationship to Cambria-style Combinators</h3>
-<p>The conceptual Cambria-style combinators described above (rename, add, remove, etc.) are now implemented as elementary protolens constructors. Each combinator maps to a corresponding <code>protolens::elementary</code> function that operates at the theory level, producing a <code>Protolens</code> that can be instantiated against any schema satisfying its precondition. The <code>diff_to_protolens</code> module provides automated derivation of protolens chains from schema diffs.</p>
+<p>The conceptual Cambria-style combinators described above (rename, add, remove, etc.) are implemented as elementary protolens constructors. Each combinator maps to a corresponding <code>protolens::elementary</code> function that operates at the theory level, producing a <code>Protolens</code> that can be instantiated against any schema satisfying its precondition. The <code>diff_to_protolens</code> module provides automated derivation of protolens chains from schema diffs.</p>
 </section>
 </section>
 <section id="module-map" class="level2" data-number="10.14">
@@ -1249,6 +1251,60 @@ Tip
 <p>For lossless transformations (empty complement), <code>get</code> and <code>put</code> have essentially the same cost as a migration lift and its inverse.</p>
 <p>In batch scenarios where the same lens is applied to many instances (e.g., projecting a million records to an API view), the lens should be constructed once and reused. The <code>Lens</code> struct is <code>Clone</code> and can be shared across threads via <code>Arc&lt;Lens&gt;</code>. The compiled migration inside the lens is immutable after construction, so concurrent <code>get</code> calls are safe without synchronization.</p>
 <p>The complement size is the primary cost driver. A lens that drops a single leaf field produces a small complement (one node, one arc). A lens that removes an entire subtree produces a complement proportional to the subtree size. When designing lens-based APIs, consider whether the complement can be compressed or whether a more targeted lens (removing only the specific fields needed) would reduce overhead.</p>
+</section>
+<section id="sec-optic-classification" class="level2" data-number="10.17">
+<h2 data-number="10.17" class="anchored" data-anchor-id="sec-optic-classification"><span class="header-section-number">10.17</span> Optic Classification</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/optic.rs</code></p>
+<p>Not every schema change is a lens. The <code>OpticKind</code> enum classifies protolens chains into five optic types, enabling complement optimization:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Kind</th>
+<th>Complement</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Iso</code></td>
+<td>Unit (none needed)</td>
+<td>All-rename chains, lossless coercions</td>
+</tr>
+<tr class="even">
+<td><code>Lens</code></td>
+<td>Dropped data</td>
+<td>Any sort/op drops, additions with defaults</td>
+</tr>
+<tr class="odd">
+<td><code>Prism</code></td>
+<td>Variant tag</td>
+<td>Accessing a field in a union type</td>
+</tr>
+<tr class="even">
+<td><code>Affine</code></td>
+<td>(variant tag, dropped data)</td>
+<td>Lens composed with Prism</td>
+</tr>
+<tr class="odd">
+<td><code>Traversal</code></td>
+<td>Position list</td>
+<td>Mapping over array elements</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>OpticKind::compose</code> method implements the standard optics lattice composition rules: Iso is the identity element, Traversal absorbs everything, and mixing Lens with Prism yields Affine.</p>
+<p>The <code>classify_transform</code> function maps each <code>TheoryTransform</code> to its optic kind. When a protolens chain is classified as <code>Iso</code>, the engine skips complement computation entirely — a significant optimization for the common case where schema changes are renames and lossless coercions.</p>
+</section>
+<section id="sec-symbolic-simplification" class="level2" data-number="10.18">
+<h2 data-number="10.18" class="anchored" data-anchor-id="sec-symbolic-simplification"><span class="header-section-number">10.18</span> Symbolic Simplification</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/symbolic.rs</code></p>
+<p>Protolens chains composed from multiple schema migrations often contain redundant steps. The <code>simplify_steps</code> function applies algebraic rewrite rules in a fixpoint loop:</p>
+<ol type="1">
+<li><strong>Inverse cancellation</strong>: <code>rename(A,B)</code> followed by <code>rename(B,A)</code> → removed.</li>
+<li><strong>Rename fusion</strong>: <code>rename(A,B)</code> followed by <code>rename(B,C)</code> → <code>rename(A,C)</code>.</li>
+<li><strong>Add-drop cancellation</strong>: <code>add(X)</code> followed by <code>drop(X)</code> → removed.</li>
+</ol>
+<p>A chain composed from three separate schema migrations might have 15 steps, many of which cancel or fuse. Symbolic simplification reduces this to the minimal equivalent chain before any data is touched.</p>
 
 
 <!-- -->
@@ -1883,11 +1939,11 @@ Johnson, Michael, and Robert Rosebrugh. 2013. <span>“Delta Lenses and Opfibrat
 <span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>Rather than constructing <span class="in">`Migration`</span> objects and compiling them by hand, the combinator API lets you describe schema transformations as a chain of atomic operations. Each combinator represents a single, well-understood schema change.</span>
 <span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>The standalone <span class="in">`combinators.rs`</span> module has been superseded by protolenses (@sec-protolens-engine). The combinator semantics described below are now implemented as elementary protolens constructors in <span class="in">`protolens::elementary`</span> (e.g., <span class="in">`elementary::rename_sort`</span>, <span class="in">`elementary::drop_sort`</span>, <span class="in">`elementary::add_sort`</span>). See @sec-elementary-protolens for the full list.</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>The combinator semantics described below are implemented as elementary protolens constructors in <span class="in">`protolens::elementary`</span> (e.g., <span class="in">`elementary::rename_sort`</span>, <span class="in">`elementary::drop_sort`</span>, <span class="in">`elementary::add_sort`</span>). See @sec-elementary-protolens for the full list.</span>
 <span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Conceptual combinator <span class="fu">enum</span> (now implemented via protolens<span class="sc">::</span>elementary)</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Conceptual combinator <span class="fu">enum</span> (implemented via protolens<span class="sc">::</span>elementary)</span>
 <span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>pub enum Combinator {</span>
 <span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>    RenameField { old<span class="sc">:</span> String, new<span class="sc">:</span> String },</span>
 <span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>    AddField { name<span class="sc">:</span> String, kind<span class="sc">:</span> String, default<span class="sc">:</span> Value },</span>
@@ -2053,7 +2109,7 @@ Johnson, Michael, and Robert Rosebrugh. 2013. <span>“Delta Lenses and Opfibrat
 <span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a><span class="fu">### Relationship to Cambria-style Combinators</span></span>
 <span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a>The conceptual Cambria-style combinators described above (rename, add, remove, etc.) are now implemented as elementary protolens constructors. Each combinator maps to a corresponding <span class="in">`protolens::elementary`</span> function that operates at the theory level, producing a <span class="in">`Protolens`</span> that can be instantiated against any schema satisfying its precondition. The <span class="in">`diff_to_protolens`</span> module provides automated derivation of protolens chains from schema diffs.</span>
+<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a>The conceptual Cambria-style combinators described above (rename, add, remove, etc.) are implemented as elementary protolens constructors. Each combinator maps to a corresponding <span class="in">`protolens::elementary`</span> function that operates at the theory level, producing a <span class="in">`Protolens`</span> that can be instantiated against any schema satisfying its precondition. The <span class="in">`diff_to_protolens`</span> module provides automated derivation of protolens chains from schema diffs.</span>
 <span id="cb5-303"><a href="#cb5-303" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-304"><a href="#cb5-304" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
 <span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a></span>
@@ -2101,6 +2157,36 @@ Johnson, Michael, and Robert Rosebrugh. 2013. <span>“Delta Lenses and Opfibrat
 <span id="cb5-347"><a href="#cb5-347" aria-hidden="true" tabindex="-1"></a>In batch scenarios where the same lens is applied to many instances (e.g., projecting a million records to an API view), the lens should be constructed once and reused. The <span class="in">`Lens`</span> struct is <span class="in">`Clone`</span> and can be shared across threads via <span class="in">`Arc&lt;Lens&gt;`</span>. The compiled migration inside the lens is immutable after construction, so concurrent <span class="in">`get`</span> calls are safe without synchronization.</span>
 <span id="cb5-348"><a href="#cb5-348" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-349"><a href="#cb5-349" aria-hidden="true" tabindex="-1"></a>The complement size is the primary cost driver. A lens that drops a single leaf field produces a small complement (one node, one arc). A lens that removes an entire subtree produces a complement proportional to the subtree size. When designing lens-based APIs, consider whether the complement can be compressed or whether a more targeted lens (removing only the specific fields needed) would reduce overhead.</span>
+<span id="cb5-350"><a href="#cb5-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-351"><a href="#cb5-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## Optic Classification {#sec-optic-classification}</span></span>
+<span id="cb5-352"><a href="#cb5-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-353"><a href="#cb5-353" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/optic.rs`</span></span>
+<span id="cb5-354"><a href="#cb5-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-355"><a href="#cb5-355" aria-hidden="true" tabindex="-1"></a>Not every schema change is a lens. The <span class="in">`OpticKind`</span> enum classifies protolens chains into five optic types, enabling complement optimization:</span>
+<span id="cb5-356"><a href="#cb5-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-357"><a href="#cb5-357" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Kind <span class="pp">|</span> Complement <span class="pp">|</span> When <span class="pp">|</span></span>
+<span id="cb5-358"><a href="#cb5-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb5-359"><a href="#cb5-359" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Iso`</span> <span class="pp">|</span> Unit (none needed) <span class="pp">|</span> All-rename chains, lossless coercions <span class="pp">|</span></span>
+<span id="cb5-360"><a href="#cb5-360" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Lens`</span> <span class="pp">|</span> Dropped data <span class="pp">|</span> Any sort/op drops, additions with defaults <span class="pp">|</span></span>
+<span id="cb5-361"><a href="#cb5-361" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Prism`</span> <span class="pp">|</span> Variant tag <span class="pp">|</span> Accessing a field in a union type <span class="pp">|</span></span>
+<span id="cb5-362"><a href="#cb5-362" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Affine`</span> <span class="pp">|</span> (variant tag, dropped data) <span class="pp">|</span> Lens composed with Prism <span class="pp">|</span></span>
+<span id="cb5-363"><a href="#cb5-363" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Traversal`</span> <span class="pp">|</span> Position list <span class="pp">|</span> Mapping over array elements <span class="pp">|</span></span>
+<span id="cb5-364"><a href="#cb5-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-365"><a href="#cb5-365" aria-hidden="true" tabindex="-1"></a>The <span class="in">`OpticKind::compose`</span> method implements the standard optics lattice composition rules: Iso is the identity element, Traversal absorbs everything, and mixing Lens with Prism yields Affine.</span>
+<span id="cb5-366"><a href="#cb5-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-367"><a href="#cb5-367" aria-hidden="true" tabindex="-1"></a>The <span class="in">`classify_transform`</span> function maps each <span class="in">`TheoryTransform`</span> to its optic kind. When a protolens chain is classified as <span class="in">`Iso`</span>, the engine skips complement computation entirely — a significant optimization for the common case where schema changes are renames and lossless coercions.</span>
+<span id="cb5-368"><a href="#cb5-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-369"><a href="#cb5-369" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symbolic Simplification {#sec-symbolic-simplification}</span></span>
+<span id="cb5-370"><a href="#cb5-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-371"><a href="#cb5-371" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/symbolic.rs`</span></span>
+<span id="cb5-372"><a href="#cb5-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-373"><a href="#cb5-373" aria-hidden="true" tabindex="-1"></a>Protolens chains composed from multiple schema migrations often contain redundant steps. The <span class="in">`simplify_steps`</span> function applies algebraic rewrite rules in a fixpoint loop:</span>
+<span id="cb5-374"><a href="#cb5-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-375"><a href="#cb5-375" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Inverse cancellation**: <span class="in">`rename(A,B)`</span> followed by <span class="in">`rename(B,A)`</span> → removed.</span>
+<span id="cb5-376"><a href="#cb5-376" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Rename fusion**: <span class="in">`rename(A,B)`</span> followed by <span class="in">`rename(B,C)`</span> → <span class="in">`rename(A,C)`</span>.</span>
+<span id="cb5-377"><a href="#cb5-377" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Add-drop cancellation**: <span class="in">`add(X)`</span> followed by <span class="in">`drop(X)`</span> → removed.</span>
+<span id="cb5-378"><a href="#cb5-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-379"><a href="#cb5-379" aria-hidden="true" tabindex="-1"></a>A chain composed from three separate schema migrations might have 15 steps, many of which cancel or fuse. Symbolic simplification reduces this to the minimal equivalent chain before any data is touched.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

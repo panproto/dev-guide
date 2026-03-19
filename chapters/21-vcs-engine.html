@@ -720,7 +720,7 @@ div.csl-indent {
 <h2 data-number="17.6" class="anchored" data-anchor-id="repository-operations"><span class="header-section-number">17.6</span> Repository Operations</h2>
 <p>Beyond the core commit flow, <code>repo.rs</code> exposes several additional operations:</p>
 <ul>
-<li><code>Repository::amend()</code> – replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <code>gc</code>).</li>
+<li><code>Repository::amend()</code> – creates a commit with the same parent(s) as the current HEAD but updated schema, migration, and message. The previous HEAD commit becomes unreachable (collectible by <code>gc</code>).</li>
 <li><code>refs::force_delete_branch</code> – deletes a branch regardless of merge status</li>
 <li><code>refs::rename_branch</code> – renames a branch ref, updating HEAD if the current branch is renamed</li>
 <li><code>refs::create_and_checkout_branch</code> – creates a branch at HEAD and switches to it atomically</li>
@@ -758,7 +758,7 @@ div.csl-indent {
 </section>
 <section id="rename-detection" class="level2" data-number="17.9">
 <h2 data-number="17.9" class="anchored" data-anchor-id="rename-detection"><span class="header-section-number">17.9</span> Rename Detection</h2>
-<p>The <code>rename_detect</code> module provides heuristic rename detection between schema versions. When <code>auto_mig::derive_migration</code> encounters a vertex that was removed in the old schema and a structurally similar vertex was added in the new schema, the rename detector can identify this as a rename rather than a delete-and-add.</p>
+<p>The <code>rename_detect</code> module provides heuristic rename detection between schema versions. When <code>auto_mig::derive_migration</code> encounters a vertex that is absent in one schema version and a structurally similar vertex appears in the other, the rename detector can identify this as a rename rather than a delete-and-add.</p>
 <section id="algorithm" class="level3" data-number="17.9.1">
 <h3 data-number="17.9.1" class="anchored" data-anchor-id="algorithm"><span class="header-section-number">17.9.1</span> Algorithm</h3>
 <p>For vertex rename detection (<code>detect_vertex_renames</code>):</p>
@@ -1615,7 +1615,7 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>Beyond the core commit flow, <span class="in">`repo.rs`</span> exposes several additional operations:</span>
 <span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Repository::amend()`</span> -- replaces the most recent commit. Creates a new commit with the same parent(s) but updated schema, migration, and message. The old commit becomes unreachable (collectible by <span class="in">`gc`</span>).</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Repository::amend()`</span> -- creates a commit with the same parent(s) as the current HEAD but updated schema, migration, and message. The previous HEAD commit becomes unreachable (collectible by <span class="in">`gc`</span>).</span>
 <span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::force_delete_branch`</span> -- deletes a branch regardless of merge status</span>
 <span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::rename_branch`</span> -- renames a branch ref, updating HEAD if the current branch is renamed</span>
 <span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`refs::create_and_checkout_branch`</span> -- creates a branch at HEAD and switches to it atomically</span>
@@ -1650,7 +1650,7 @@ Topos Institute. 2024. <span>“Structure-Aware Version Control via Observationa
 <span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rename Detection</span></span>
 <span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>The <span class="in">`rename_detect`</span> module provides heuristic rename detection between schema versions. When <span class="in">`auto_mig::derive_migration`</span> encounters a vertex that was removed in the old schema and a structurally similar vertex was added in the new schema, the rename detector can identify this as a rename rather than a delete-and-add.</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>The <span class="in">`rename_detect`</span> module provides heuristic rename detection between schema versions. When <span class="in">`auto_mig::derive_migration`</span> encounters a vertex that is absent in one schema version and a structurally similar vertex appears in the other, the rename detector can identify this as a rename rather than a delete-and-add.</span>
 <span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Algorithm</span></span>
 <span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a></span>

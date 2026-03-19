@@ -611,8 +611,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-python-lens" id="toc-sec-python-lens" class="nav-link" data-scroll-target="#sec-python-lens"><span class="header-section-number">15.10</span> Lens API (<code>_lens.py</code>)</a></li>
   <li><a href="#sec-python-errors" id="toc-sec-python-errors" class="nav-link" data-scroll-target="#sec-python-errors"><span class="header-section-number">15.11</span> Error Hierarchy (<code>_errors.py</code>)</a></li>
   <li><a href="#sec-python-panproto" id="toc-sec-python-panproto" class="nav-link" data-scroll-target="#sec-python-panproto"><span class="header-section-number">15.12</span> The <code>Panproto</code> Class</a></li>
-  <li><a href="#usage-pattern" id="toc-usage-pattern" class="nav-link" data-scroll-target="#usage-pattern"><span class="header-section-number">15.13</span> Usage Pattern</a></li>
-  <li><a href="#sec-python-conventions" id="toc-sec-python-conventions" class="nav-link" data-scroll-target="#sec-python-conventions"><span class="header-section-number">15.14</span> Conventions</a></li>
+  <li><a href="#schema-enrichment" id="toc-schema-enrichment" class="nav-link" data-scroll-target="#schema-enrichment"><span class="header-section-number">15.13</span> Schema Enrichment</a></li>
+  <li><a href="#migration-analysis" id="toc-migration-analysis" class="nav-link" data-scroll-target="#migration-analysis"><span class="header-section-number">15.14</span> Migration Analysis</a></li>
+  <li><a href="#gat-engine-access" id="toc-gat-engine-access" class="nav-link" data-scroll-target="#gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine Access</a></li>
+  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">15.16</span> VCS Integration</a></li>
+  <li><a href="#usage-pattern" id="toc-usage-pattern" class="nav-link" data-scroll-target="#usage-pattern"><span class="header-section-number">15.17</span> Usage Pattern</a></li>
+  <li><a href="#sec-python-conventions" id="toc-sec-python-conventions" class="nav-link" data-scroll-target="#sec-python-conventions"><span class="header-section-number">15.18</span> Conventions</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/20-python-sdk.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -769,7 +773,7 @@ Tip
 <p>The <code>_wasm.py</code> module handles WASM binary loading, instance creation, and resource lifecycle. It contains three key components: <code>WasmModule</code>, <code>WasmHandle</code>, and the <code>load_wasm</code> factory.</p>
 <section id="wasmmodule" class="level3" data-number="15.4.1">
 <h3 data-number="15.4.1" class="anchored" data-anchor-id="wasmmodule"><span class="header-section-number">15.4.1</span> <code>WasmModule</code></h3>
-<p><code>WasmModule</code> wraps a <code>wasmtime.Instance</code> and exposes the ten panproto WASM entry points as typed Python methods:</p>
+<p><code>WasmModule</code> wraps a <code>wasmtime.Instance</code> and exposes the panproto WASM entry points as typed Python methods:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 24;"><span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WasmModule:</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Wraps a wasmtime Instance exposing the panproto WASM exports.</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
@@ -1420,8 +1424,8 @@ Important
 <span id="cb15-469"><a href="#cb15-469" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._handle</span>
 <span id="cb15-470"><a href="#cb15-470" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-471"><a href="#cb15-471" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
-<span id="cb15-472"><a href="#cb15-472" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _wasm_module(<span class="va">self</span>) <span class="op">-&gt;</span> WasmModule:</span>
-<span id="cb15-473"><a href="#cb15-473" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""The owning WASM module (internal use only)."""</span></span>
+<span id="cb15-472"><a href="#cb15-472" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> wasm_module(<span class="va">self</span>) <span class="op">-&gt;</span> WasmModule:</span>
+<span id="cb15-473"><a href="#cb15-473" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""The WASM module backing this schema."""</span></span>
 <span id="cb15-474"><a href="#cb15-474" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._wasm</span>
 <span id="cb15-475"><a href="#cb15-475" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-476"><a href="#cb15-476" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ------------------------------------------------------------------</span></span>
@@ -2106,62 +2110,138 @@ Note
 <li><strong><code>diff(old, new)</code></strong> – Compute a structural diff between two schemas.</li>
 </ul>
 <p><code>Panproto</code> implements the context-manager protocol. When the <code>with</code> block exits, it releases all cached protocol handles:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-startfrom="638"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 637;"><span id="cb22-638"><a href="#cb22-638" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ------------------------------------------------------------------</span></span>
-<span id="cb22-639"><a href="#cb22-639" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Context manager / cleanup</span></span>
-<span id="cb22-640"><a href="#cb22-640" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ------------------------------------------------------------------</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-startfrom="638"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 637;"><span id="cb22-638"><a href="#cb22-638" aria-hidden="true" tabindex="-1"></a>            The source schema.</span>
+<span id="cb22-639"><a href="#cb22-639" aria-hidden="true" tabindex="-1"></a>        to_schema : BuiltSchema</span>
+<span id="cb22-640"><a href="#cb22-640" aria-hidden="true" tabindex="-1"></a>            The target schema.</span>
 <span id="cb22-641"><a href="#cb22-641" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-642"><a href="#cb22-642" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> close(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb22-643"><a href="#cb22-643" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Release all WASM resources held by this instance.</span></span>
-<span id="cb22-644"><a href="#cb22-644" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-645"><a href="#cb22-645" aria-hidden="true" tabindex="-1"></a><span class="co">        Disposes all cached protocols. After this call the instance must</span></span>
-<span id="cb22-646"><a href="#cb22-646" aria-hidden="true" tabindex="-1"></a><span class="co">        not be used.</span></span>
-<span id="cb22-647"><a href="#cb22-647" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
-<span id="cb22-648"><a href="#cb22-648" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> proto <span class="kw">in</span> <span class="va">self</span>._protocols.values():</span>
-<span id="cb22-649"><a href="#cb22-649" aria-hidden="true" tabindex="-1"></a>            proto.close()</span>
-<span id="cb22-650"><a href="#cb22-650" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._protocols.clear()</span>
-<span id="cb22-651"><a href="#cb22-651" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-652"><a href="#cb22-652" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__enter__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> Panproto:</span>
-<span id="cb22-653"><a href="#cb22-653" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
-<span id="cb22-654"><a href="#cb22-654" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-655"><a href="#cb22-655" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__exit__</span>(<span class="va">self</span>, <span class="op">*</span>_: <span class="bu">object</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb22-656"><a href="#cb22-656" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.close()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-642"><a href="#cb22-642" aria-hidden="true" tabindex="-1"></a>        Returns</span>
+<span id="cb22-643"><a href="#cb22-643" aria-hidden="true" tabindex="-1"></a>        <span class="op">-------</span></span>
+<span id="cb22-644"><a href="#cb22-644" aria-hidden="true" tabindex="-1"></a>        <span class="bu">tuple</span>[DataSetHandle, <span class="bu">bytes</span>]</span>
+<span id="cb22-645"><a href="#cb22-645" aria-hidden="true" tabindex="-1"></a>            A <span class="bu">tuple</span> of (new_data_handle, complement_bytes).</span>
+<span id="cb22-646"><a href="#cb22-646" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
+<span id="cb22-647"><a href="#cb22-647" aria-hidden="true" tabindex="-1"></a><span class="co">        return data.migrate_forward(from_schema, to_schema)</span></span>
+<span id="cb22-648"><a href="#cb22-648" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-649"><a href="#cb22-649" aria-hidden="true" tabindex="-1"></a><span class="co">    # ------------------------------------------------------------------</span></span>
+<span id="cb22-650"><a href="#cb22-650" aria-hidden="true" tabindex="-1"></a><span class="co">    # Context manager / cleanup</span></span>
+<span id="cb22-651"><a href="#cb22-651" aria-hidden="true" tabindex="-1"></a><span class="co">    # ------------------------------------------------------------------</span></span>
+<span id="cb22-652"><a href="#cb22-652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-653"><a href="#cb22-653" aria-hidden="true" tabindex="-1"></a><span class="co">    def close(self) -&gt; None:</span></span>
+<span id="cb22-654"><a href="#cb22-654" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span>Release <span class="bu">all</span> WASM resources held by this instance.</span>
+<span id="cb22-655"><a href="#cb22-655" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-656"><a href="#cb22-656" aria-hidden="true" tabindex="-1"></a>        Disposes <span class="bu">all</span> cached protocols. After this call the instance must</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="usage-pattern" class="level2" data-number="15.13">
-<h2 data-number="15.13" class="anchored" data-anchor-id="usage-pattern"><span class="header-section-number">15.13</span> Usage Pattern</h2>
+<section id="schema-enrichment" class="level2" data-number="15.13">
+<h2 data-number="15.13" class="anchored" data-anchor-id="schema-enrichment"><span class="header-section-number">15.13</span> Schema Enrichment</h2>
+<p>The <code>SchemaBuilder</code> supports enrichment through constraints, which encode defaults, coercions, and merge policies:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add constraints to encode enriched schema properties</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> (</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    protocol.schema()</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    .vertex(<span class="st">"post:body.text"</span>, <span class="st">"string"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.text"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"text"</span>})</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    .constraint(<span class="st">"post:body.text"</span>, <span class="st">"maxLength"</span>, <span class="st">"3000"</span>)   <span class="co"># refinement type</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    .constraint(<span class="st">"post:body.text"</span>, <span class="st">"minLength"</span>, <span class="st">"1"</span>)       <span class="co"># lower bound</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    .build()</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>) <span class="im">as</span> schema:</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> schema.data[<span class="st">"constraints"</span>][<span class="st">"post:body.text"</span>][<span class="dv">0</span>][<span class="st">"sort"</span>] <span class="op">==</span> <span class="st">"maxLength"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Constraints serve triple duty: they encode refinement types (value bounds), default behaviors (when a field has a known initial value), and coercion hints (when a field can be safely converted between representations). The protocol’s <code>constraint_sorts</code> list determines which constraint sorts are recognized during compatibility checking.</p>
+</section>
+<section id="migration-analysis" class="level2" data-number="15.14">
+<h2 data-number="15.14" class="anchored" data-anchor-id="migration-analysis"><span class="header-section-number">15.14</span> Migration Analysis</h2>
+<p>The SDK provides analysis capabilities through the diff/classify pipeline:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute structural diff</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>diff_report <span class="op">=</span> pp.diff(old_schema, new_schema)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify into breaking vs. non-breaking</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>compat <span class="op">=</span> pp.classify(diff_report)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Coverage: fraction of source vertices surviving in target</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>total_changes <span class="op">=</span> <span class="bu">len</span>(compat[<span class="st">"breaking"</span>]) <span class="op">+</span> <span class="bu">len</span>(compat[<span class="st">"non_breaking"</span>])</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> total_changes <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    coverage <span class="op">=</span> <span class="bu">len</span>(compat[<span class="st">"non_breaking"</span>]) <span class="op">/</span> total_changes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For optic classification, the protolens chain structure reveals whether a migration is an isomorphism (lossless, rename-only), a lens (lossy, drops data), or more complex:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> ProtolensChainHandle</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto-generate protolens</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ProtolensChainHandle.auto_generate(schema1, schema2, wasm) <span class="im">as</span> chain:</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fuse to analyze the composed transform</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> chain.fuse() <span class="im">as</span> fused:</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Serialize to inspect the transform structure</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        spec <span class="op">=</span> fused.to_json()</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># spec["complement_constructor"] == "Empty" means isomorphism</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># "DroppedSortData" in complement means lens</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="gat-engine-access" class="level2" data-number="15.15">
+<h2 data-number="15.15" class="anchored" data-anchor-id="gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine Access</h2>
+<p>The SDK provides direct access to the GAT engine for theory construction and composition:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create theories via WASM</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>theory_spec <span class="op">=</span> {</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"ThGraph"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sorts"</span>: [</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"Vertex"</span>, <span class="st">"params"</span>: []},</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"Edge"</span>, <span class="st">"params"</span>: []},</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ops"</span>: [</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"src"</span>, <span class="st">"inputs"</span>: [[<span class="st">"e"</span>, <span class="st">"Edge"</span>]], <span class="st">"output"</span>: <span class="st">"Vertex"</span>},</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"tgt"</span>, <span class="st">"inputs"</span>: [[<span class="st">"e"</span>, <span class="st">"Edge"</span>]], <span class="st">"output"</span>: <span class="st">"Vertex"</span>},</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eqs"</span>: [],</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pp.create_theory(theory_spec) <span class="im">as</span> th_graph:</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compose theories via colimit</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pp.colimit_theories(th_graph, th_constraint, shared) <span class="im">as</span> composed:</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># use composed theory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="vcs-integration" class="level2" data-number="15.16">
+<h2 data-number="15.16" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">15.16</span> VCS Integration</h2>
+<p>The SDK exposes version control operations for schemas and data:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a repository</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pp.vcs_init(<span class="st">"atproto"</span>) <span class="im">as</span> repo:</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage and commit schema changes</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    pp.vcs_add(repo, schema)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    commit_hash <span class="op">=</span> pp.vcs_commit(repo, <span class="st">"add post schema"</span>, <span class="st">"author@example.com"</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Query history</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    log <span class="op">=</span> pp.vcs_log(repo, count<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> pp.vcs_status(repo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="usage-pattern" class="level2" data-number="15.17">
+<h2 data-number="15.17" class="anchored" data-anchor-id="usage-pattern"><span class="header-section-number">15.17</span> Usage Pattern</h2>
 <p>A typical SDK session:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> Panproto</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize (loads WASM)</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Panproto.load() <span class="im">as</span> pp:</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get a protocol</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    atproto <span class="op">=</span> pp.protocol(<span class="st">"atproto"</span>)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build schemas</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> (</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        .build()</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> old_schema, (</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body.tags"</span>, <span class="st">"array"</span>)</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.tags"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"tags"</span>})</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        .build()</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> new_schema:</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compile migration</span></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> (</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>            pp.migration(old_schema, new_schema)</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post"</span>, <span class="st">"post"</span>)</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post:body"</span>, <span class="st">"post:body"</span>)</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">compile</span>()</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>        ) <span class="im">as</span> migration:</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Transform records</span></span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> migration.lift({<span class="st">"text"</span>: <span class="st">"hello"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> Panproto</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize (loads WASM)</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Panproto.load() <span class="im">as</span> pp:</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get a protocol</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    atproto <span class="op">=</span> pp.protocol(<span class="st">"atproto"</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build schemas</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> (</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        .build()</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> old_schema, (</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body.tags"</span>, <span class="st">"array"</span>)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.tags"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"tags"</span>})</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        .build()</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> new_schema:</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compile migration</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> (</span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>            pp.migration(old_schema, new_schema)</span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post"</span>, <span class="st">"post"</span>)</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post:body"</span>, <span class="st">"post:body"</span>)</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">compile</span>()</span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>        ) <span class="im">as</span> migration:</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Transform records</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> migration.lift({<span class="st">"text"</span>: <span class="st">"hello"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2176,8 +2256,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="sec-python-conventions" class="level2" data-number="15.14">
-<h2 data-number="15.14" class="anchored" data-anchor-id="sec-python-conventions"><span class="header-section-number">15.14</span> Conventions</h2>
+<section id="sec-python-conventions" class="level2" data-number="15.18">
+<h2 data-number="15.18" class="anchored" data-anchor-id="sec-python-conventions"><span class="header-section-number">15.18</span> Conventions</h2>
 <p>The Python SDK enforces the following project conventions:</p>
 <ul>
 <li><strong>Python 3.13+</strong> – The minimum supported version. The SDK uses PEP 695 type aliases, structural pattern matching, parenthesized context managers, and other 3.13 features.</li>
@@ -2674,439 +2754,532 @@ Tip
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># `panproto` --- The Python SDK {#sec-python-sdk}</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto`</span> PyPI package provides a Python 3.13+ interface to the panproto WASM engine. It mirrors the TypeScript SDK's fluent, type-safe API while embracing Python idioms: context managers instead of <span class="in">`Symbol.dispose`</span>, <span class="in">`TypedDict`</span> subclasses instead of interfaces, PEP 695 type aliases instead of TypeScript unions, and <span class="in">`weakref.finalize`</span> instead of <span class="in">`FinalizationRegistry`</span>. This chapter covers every public class and function in the SDK.</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>For a quick-reference listing of all public APIs with parameter types, see the tutorial's API reference appendix.</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Architecture Overview</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>The SDK is organized into eight modules, each with a focused responsibility:</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>classDiagram</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    class Panproto {</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>        +load(wasm_path?) Panproto$</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>        +protocol(name) Protocol</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>        +define_protocol(spec) Protocol</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>        +migration(src, tgt) MigrationBuilder</span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        +check_existence(src, tgt, builder) ExistenceReport</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        +compose(m1, m2) CompiledMigration</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        +diff(old, new) DiffReport</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>        +__enter__()</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>        +__exit__()</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    class Protocol {</span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>        +name: str</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>        +spec: ProtocolSpec</span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>        +schema() SchemaBuilder</span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    class SchemaBuilder {</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>        +vertex(id, kind, opts?) SchemaBuilder</span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>        +edge(src, tgt, kind, opts?) SchemaBuilder</span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>        +hyper_edge(id, kind, sig, parent) SchemaBuilder</span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>        +constraint(vertex, <span class="fu">sort</span>, value) SchemaBuilder</span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>        +required(vertex, edges) SchemaBuilder</span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>        +build() BuiltSchema</span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>    class BuiltSchema {</span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>        +data: SchemaData</span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>        +protocol: str</span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>        +vertices: Mapping</span>
-<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>        +edges: Sequence</span>
-<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
-<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>    class MigrationBuilder {</span>
-<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">map</span>(src, tgt) MigrationBuilder</span>
-<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>        +map_edge(src, tgt) MigrationBuilder</span>
-<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>        +resolve(src, tgt, edge) MigrationBuilder</span>
-<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>        +compile() CompiledMigration</span>
-<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>    class CompiledMigration {</span>
-<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>        +spec: MigrationSpec</span>
-<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a>        +lift(record) LiftResult</span>
-<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>        +get(record) GetResult</span>
-<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>        +put(view, complement) LiftResult</span>
-<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
-<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a>    Panproto --&gt; Protocol : protocol()</span>
-<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a>    Protocol --&gt; SchemaBuilder : schema()</span>
-<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a>    SchemaBuilder --&gt; BuiltSchema : build()</span>
-<span id="cb24-72"><a href="#cb24-72" aria-hidden="true" tabindex="-1"></a>    Panproto --&gt; MigrationBuilder : migration()</span>
-<span id="cb24-73"><a href="#cb24-73" aria-hidden="true" tabindex="-1"></a>    MigrationBuilder --&gt; CompiledMigration : compile()</span>
-<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project Structure</span></span>
-<span id="cb24-77"><a href="#cb24-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-78"><a href="#cb24-78" aria-hidden="true" tabindex="-1"></a>The SDK lives at <span class="in">`sdk/python/`</span> and follows a standard <span class="in">`src`</span> layout:</span>
-<span id="cb24-79"><a href="#cb24-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-80"><a href="#cb24-80" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
-<span id="cb24-81"><a href="#cb24-81" aria-hidden="true" tabindex="-1"></a><span class="in">sdk/python/</span></span>
-<span id="cb24-82"><a href="#cb24-82" aria-hidden="true" tabindex="-1"></a><span class="in">├── pyproject.toml          # hatchling build, pyright strict, ruff</span></span>
-<span id="cb24-83"><a href="#cb24-83" aria-hidden="true" tabindex="-1"></a><span class="in">├── src/</span></span>
-<span id="cb24-84"><a href="#cb24-84" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── panproto/</span></span>
-<span id="cb24-85"><a href="#cb24-85" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── __init__.py     # Public re-exports</span></span>
-<span id="cb24-86"><a href="#cb24-86" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _panproto.py    # Panproto entry point class</span></span>
-<span id="cb24-87"><a href="#cb24-87" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _protocol.py    # Protocol + 5 built-in specs</span></span>
-<span id="cb24-88"><a href="#cb24-88" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _schema.py      # SchemaBuilder + BuiltSchema</span></span>
-<span id="cb24-89"><a href="#cb24-89" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _migration.py   # MigrationBuilder + CompiledMigration</span></span>
-<span id="cb24-90"><a href="#cb24-90" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _lens.py        # Cambria-style lens combinators</span></span>
-<span id="cb24-91"><a href="#cb24-91" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _wasm.py        # wasmtime loading + WasmHandle</span></span>
-<span id="cb24-92"><a href="#cb24-92" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _msgpack.py     # MessagePack encode/decode helpers</span></span>
-<span id="cb24-93"><a href="#cb24-93" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _types.py       # TypedDicts + PEP 695 type aliases</span></span>
-<span id="cb24-94"><a href="#cb24-94" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _errors.py      # PanprotoError hierarchy</span></span>
-<span id="cb24-95"><a href="#cb24-95" aria-hidden="true" tabindex="-1"></a><span class="in">│       └── panproto_wasm_bg.wasm  # Bundled WASM binary</span></span>
-<span id="cb24-96"><a href="#cb24-96" aria-hidden="true" tabindex="-1"></a><span class="in">└── tests/</span></span>
-<span id="cb24-97"><a href="#cb24-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-98"><a href="#cb24-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-99"><a href="#cb24-99" aria-hidden="true" tabindex="-1"></a>All private modules use the underscore prefix (<span class="in">`_wasm.py`</span>, <span class="in">`_types.py`</span>, etc.). The public surface is defined entirely in <span class="in">`__init__.py`</span> via <span class="in">`__all__`</span>.</span>
-<span id="cb24-100"><a href="#cb24-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-101"><a href="#cb24-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building and Testing</span></span>
-<span id="cb24-102"><a href="#cb24-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-103"><a href="#cb24-103" aria-hidden="true" tabindex="-1"></a>The SDK uses <span class="co">[</span><span class="ot">Hatch</span><span class="co">](https://hatch.pypa.io/)</span> as its build backend. Runtime dependencies are minimal: <span class="in">`wasmtime&gt;=29.0.0`</span> and <span class="in">`msgpack&gt;=1.1.0`</span>.</span>
-<span id="cb24-104"><a href="#cb24-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-105"><a href="#cb24-105" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb24-106"><a href="#cb24-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Install in development mode</span></span>
-<span id="cb24-107"><a href="#cb24-107" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> <span class="st">"sdk/python[dev]"</span></span>
-<span id="cb24-108"><a href="#cb24-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-109"><a href="#cb24-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Run tests</span></span>
-<span id="cb24-110"><a href="#cb24-110" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> sdk/python/tests/</span>
-<span id="cb24-111"><a href="#cb24-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-112"><a href="#cb24-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Type checking (strict mode)</span></span>
-<span id="cb24-113"><a href="#cb24-113" aria-hidden="true" tabindex="-1"></a><span class="ex">pyright</span> sdk/python/src/</span>
-<span id="cb24-114"><a href="#cb24-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-115"><a href="#cb24-115" aria-hidden="true" tabindex="-1"></a><span class="co"># Lint + format</span></span>
-<span id="cb24-116"><a href="#cb24-116" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> check sdk/python/src/</span>
-<span id="cb24-117"><a href="#cb24-117" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> format sdk/python/src/</span>
-<span id="cb24-118"><a href="#cb24-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-119"><a href="#cb24-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-120"><a href="#cb24-120" aria-hidden="true" tabindex="-1"></a>The <span class="in">`[dev]`</span> extra pulls in <span class="in">`pytest&gt;=8.0`</span>, <span class="in">`ruff&gt;=0.5`</span>, and <span class="in">`pyright&gt;=1.1`</span>.</span>
-<span id="cb24-121"><a href="#cb24-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-122"><a href="#cb24-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Interaction Layer (`_wasm.py`) {#sec-python-wasm}</span></span>
-<span id="cb24-123"><a href="#cb24-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-124"><a href="#cb24-124" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_wasm.py`</span> module handles WASM binary loading, instance creation, and resource lifecycle. It contains three key components: <span class="in">`WasmModule`</span>, <span class="in">`WasmHandle`</span>, and the <span class="in">`load_wasm`</span> factory.</span>
-<span id="cb24-125"><a href="#cb24-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-126"><a href="#cb24-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### `WasmModule`</span></span>
-<span id="cb24-127"><a href="#cb24-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-128"><a href="#cb24-128" aria-hidden="true" tabindex="-1"></a><span class="in">`WasmModule`</span> wraps a <span class="in">`wasmtime.Instance`</span> and exposes the ten panproto WASM entry points as typed Python methods:</span>
-<span id="cb24-129"><a href="#cb24-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-130"><a href="#cb24-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=25 end-line=49}</span></span>
-<span id="cb24-131"><a href="#cb24-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-132"><a href="#cb24-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-133"><a href="#cb24-133" aria-hidden="true" tabindex="-1"></a>Each entry point method handles the raw call, converts between Python types and WASM integers/byte slices, and wraps any errors in <span class="in">`WasmError`</span>:</span>
-<span id="cb24-134"><a href="#cb24-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-135"><a href="#cb24-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`define_protocol(spec: bytes) -&gt; int`** -- Register a protocol, return a handle.</span>
-<span id="cb24-136"><a href="#cb24-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`build_schema(proto: int, ops: bytes) -&gt; int`** -- Build a schema, return a handle.</span>
-<span id="cb24-137"><a href="#cb24-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src: int, tgt: int, mapping: bytes) -&gt; bytes`** -- Validate a migration.</span>
-<span id="cb24-138"><a href="#cb24-138" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compile_migration(src: int, tgt: int, mapping: bytes) -&gt; int`** -- Compile a migration, return a handle.</span>
-<span id="cb24-139"><a href="#cb24-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`lift_record(migration: int, record: bytes) -&gt; bytes`** -- Forward transform.</span>
-<span id="cb24-140"><a href="#cb24-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`get_record(migration: int, record: bytes) -&gt; bytes`** -- Bidirectional get.</span>
-<span id="cb24-141"><a href="#cb24-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`put_record(migration: int, view: bytes, complement: bytes) -&gt; bytes`** -- Bidirectional put.</span>
-<span id="cb24-142"><a href="#cb24-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose_migrations(m1: int, m2: int) -&gt; int`** -- Compose two migrations.</span>
-<span id="cb24-143"><a href="#cb24-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff_schemas(s1: int, s2: int) -&gt; bytes`** -- Diff two schemas.</span>
-<span id="cb24-144"><a href="#cb24-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`free_handle(handle: int) -&gt; None`** -- Release a WASM resource.</span>
-<span id="cb24-145"><a href="#cb24-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-146"><a href="#cb24-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### `WasmHandle`</span></span>
-<span id="cb24-147"><a href="#cb24-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-148"><a href="#cb24-148" aria-hidden="true" tabindex="-1"></a>Every WASM-side resource is wrapped in a <span class="in">`WasmHandle`</span>, which implements the context-manager protocol for use with <span class="in">`with`</span> statements:</span>
-<span id="cb24-149"><a href="#cb24-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-150"><a href="#cb24-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=1102 end-line=1184}</span></span>
-<span id="cb24-151"><a href="#cb24-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-152"><a href="#cb24-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-153"><a href="#cb24-153" aria-hidden="true" tabindex="-1"></a>Two layers of safety prevent handle leaks:</span>
-<span id="cb24-154"><a href="#cb24-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-155"><a href="#cb24-155" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Context manager (`with` / explicit `.close()`)** -- Deterministic cleanup. Called automatically on block exit or manually by the consumer.</span>
-<span id="cb24-156"><a href="#cb24-156" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`weakref.finalize`** -- Safety net. If a <span class="in">`WasmHandle`</span> is garbage-collected without being closed, the weak-reference callback calls <span class="in">`free_handle`</span> to release the WASM resource.</span>
-<span id="cb24-157"><a href="#cb24-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-158"><a href="#cb24-158" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_free_handle_safe`</span> helper wraps the WASM call in <span class="in">`contextlib.suppress(Exception)`</span> so that finalization never raises, even if the WASM module has already been torn down.</span>
-<span id="cb24-159"><a href="#cb24-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-160"><a href="#cb24-160" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb24-161"><a href="#cb24-161" aria-hidden="true" tabindex="-1"></a>The <span class="in">`weakref.finalize`</span> callback is a last resort, not a primary mechanism. GC timing is non-deterministic, so relying on it can cause resource exhaustion under load. Always prefer explicit cleanup via <span class="in">`with`</span> blocks or <span class="in">`.close()`</span>.</span>
-<span id="cb24-162"><a href="#cb24-162" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-163"><a href="#cb24-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-164"><a href="#cb24-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### `load_wasm`</span></span>
-<span id="cb24-165"><a href="#cb24-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-166"><a href="#cb24-166" aria-hidden="true" tabindex="-1"></a>The <span class="in">`load_wasm`</span> factory reads a <span class="in">`.wasm`</span> binary from disk, creates a <span class="in">`wasmtime.Engine`</span>, <span class="in">`Store`</span>, <span class="in">`Module`</span>, and <span class="in">`Linker`</span>, instantiates the module with WASI imports, and returns a ready <span class="in">`WasmModule`</span>:</span>
-<span id="cb24-167"><a href="#cb24-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-168"><a href="#cb24-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=1227 end-line=1261}</span></span>
-<span id="cb24-169"><a href="#cb24-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-170"><a href="#cb24-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-171"><a href="#cb24-171" aria-hidden="true" tabindex="-1"></a>Unlike the TypeScript SDK's async <span class="in">`init()`</span>, the Python factory is synchronous---<span class="in">`wasmtime-py`</span> loads modules on the calling thread.</span>
-<span id="cb24-172"><a href="#cb24-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-173"><a href="#cb24-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type System (`_types.py`) {#sec-python-types}</span></span>
-<span id="cb24-174"><a href="#cb24-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-175"><a href="#cb24-175" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_types.py`</span> module defines all data-carrying types that cross the MessagePack boundary. It mirrors the Rust structures and the TypeScript SDK interfaces using Python 3.13+ conventions:</span>
-<span id="cb24-176"><a href="#cb24-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-177"><a href="#cb24-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rust              <span class="pp">|</span> Python                        <span class="pp">|</span></span>
-<span id="cb24-178"><a href="#cb24-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|-------------------------------|</span></span>
-<span id="cb24-179"><a href="#cb24-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`HashMap&lt;K, V&gt;`</span>   <span class="pp">|</span> <span class="in">`dict[str, V]`</span>                <span class="pp">|</span></span>
-<span id="cb24-180"><a href="#cb24-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Option&lt;T&gt;`</span>       <span class="pp">|</span> <span class="in">`T \| None`</span>                   <span class="pp">|</span></span>
-<span id="cb24-181"><a href="#cb24-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Vec&lt;T&gt;`</span>          <span class="pp">|</span> <span class="in">`list[T]`</span>                     <span class="pp">|</span></span>
-<span id="cb24-182"><a href="#cb24-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Result&lt;T, E&gt;`</span>    <span class="pp">|</span> Return value or raised error  <span class="pp">|</span></span>
-<span id="cb24-183"><a href="#cb24-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-184"><a href="#cb24-184" aria-hidden="true" tabindex="-1"></a><span class="fu">### TypedDicts</span></span>
-<span id="cb24-185"><a href="#cb24-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-186"><a href="#cb24-186" aria-hidden="true" tabindex="-1"></a>All structured data types are <span class="in">`TypedDict`</span> subclasses, since they represent plain dict structures deserialized from MessagePack. Key types include:</span>
-<span id="cb24-187"><a href="#cb24-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-188"><a href="#cb24-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtocolSpec`** -- A complete protocol specification with schema theory, instance theory, edge rules, object kinds, and constraint sorts.</span>
-<span id="cb24-189"><a href="#cb24-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Vertex`**, **`Edge`**, **`HyperEdge`**, **`Constraint`** -- Schema graph elements.</span>
-<span id="cb24-190"><a href="#cb24-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaData`** -- The full snapshot of a built schema (vertices, edges, hyperedges, constraints, required edges).</span>
-<span id="cb24-191"><a href="#cb24-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationSpec`**, **`LiftResult`**, **`GetResult`** -- Migration domain types.</span>
-<span id="cb24-192"><a href="#cb24-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceReport`**, **`ExistenceError`** -- Existence checking results.</span>
-<span id="cb24-193"><a href="#cb24-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`DiffReport`**, **`SchemaChange`** -- Schema diff results.</span>
-<span id="cb24-194"><a href="#cb24-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-195"><a href="#cb24-195" aria-hidden="true" tabindex="-1"></a>Optional fields use <span class="in">`NotRequired`</span> from <span class="in">`typing`</span>:</span>
-<span id="cb24-196"><a href="#cb24-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-197"><a href="#cb24-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_types.py" start-line=166 end-line=184}</span></span>
-<span id="cb24-198"><a href="#cb24-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-199"><a href="#cb24-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-200"><a href="#cb24-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### PEP 695 Type Aliases</span></span>
-<span id="cb24-201"><a href="#cb24-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-202"><a href="#cb24-202" aria-hidden="true" tabindex="-1"></a>The module uses <span class="in">`type`</span> statement syntax (PEP 695) for all type aliases:</span>
-<span id="cb24-203"><a href="#cb24-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-204"><a href="#cb24-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_types.py" start-line=25 end-line=31}</span></span>
-<span id="cb24-205"><a href="#cb24-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-206"><a href="#cb24-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-207"><a href="#cb24-207" aria-hidden="true" tabindex="-1"></a>The <span class="in">`JsonValue`</span> alias is a recursive type covering all JSON primitives plus nested sequences and mappings. It replaces <span class="in">`Any`</span> wherever the SDK must accept or return arbitrary JSON-like data.</span>
-<span id="cb24-208"><a href="#cb24-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-209"><a href="#cb24-209" aria-hidden="true" tabindex="-1"></a>Literal union aliases define the closed sets of enum-like strings:</span>
-<span id="cb24-210"><a href="#cb24-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-211"><a href="#cb24-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaChangeKind`** -- The ten atomic change kinds (<span class="in">`"vertex-added"`</span>, <span class="in">`"edge-removed"`</span>, etc.).</span>
-<span id="cb24-212"><a href="#cb24-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Compatibility`** -- Three-way classification: <span class="in">`"fully-compatible"`</span>, <span class="in">`"backward-compatible"`</span>, <span class="in">`"breaking"`</span>.</span>
-<span id="cb24-213"><a href="#cb24-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceErrorKind`** -- Ten structured error kinds emitted by the existence checker.</span>
-<span id="cb24-214"><a href="#cb24-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-215"><a href="#cb24-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Wire Format Types</span></span>
-<span id="cb24-216"><a href="#cb24-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-217"><a href="#cb24-217" aria-hidden="true" tabindex="-1"></a>Internal wire-format types (prefixed with <span class="in">`_`</span>) match the exact field names expected by Rust's <span class="in">`serde`</span>:</span>
-<span id="cb24-218"><a href="#cb24-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-219"><a href="#cb24-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`_SchemaOpVertex`**, **`_SchemaOpEdge`**, **`_SchemaOpHyperEdge`**, **`_SchemaOpConstraint`**, **`_SchemaOpRequired`** -- The five schema operation variants. The <span class="in">`op`</span> field acts as a serde internally-tagged discriminant.</span>
-<span id="cb24-220"><a href="#cb24-220" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaOp`** -- A PEP 695 union of the five variants.</span>
-<span id="cb24-221"><a href="#cb24-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationMapping`** -- Wire-format migration mapping with <span class="in">`vertex_map`</span>, <span class="in">`edge_map`</span>, and <span class="in">`resolver`</span>.</span>
-<span id="cb24-222"><a href="#cb24-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-223"><a href="#cb24-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## MessagePack Boundary (`_msgpack.py`) {#sec-python-msgpack}</span></span>
-<span id="cb24-224"><a href="#cb24-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-225"><a href="#cb24-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_msgpack.py`</span> module provides four encoding helpers that wrap the <span class="in">`msgpack`</span> library:</span>
-<span id="cb24-226"><a href="#cb24-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-227"><a href="#cb24-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_msgpack.py" start-line=40 end-line=102}</span></span>
-<span id="cb24-228"><a href="#cb24-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-229"><a href="#cb24-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-230"><a href="#cb24-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_to_wasm(value)`** -- Encode any <span class="in">`Packable`</span> value to MessagePack bytes for a WASM entry point.</span>
-<span id="cb24-231"><a href="#cb24-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`unpack_from_wasm(data)`** -- Decode MessagePack bytes from WASM. Callers narrow the return type as needed.</span>
-<span id="cb24-232"><a href="#cb24-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_schema_ops(ops)`** -- Encode a <span class="in">`Sequence[SchemaOp]`</span> for the <span class="in">`build_schema`</span> entry point.</span>
-<span id="cb24-233"><a href="#cb24-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_migration_mapping(mapping)`** -- Encode a <span class="in">`MigrationMapping`</span> for <span class="in">`compile_migration`</span> or <span class="in">`check_existence`</span>.</span>
-<span id="cb24-234"><a href="#cb24-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-235"><a href="#cb24-235" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Packable`</span> type alias defines the universe of MessagePack-serializable values:</span>
-<span id="cb24-236"><a href="#cb24-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-237"><a href="#cb24-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_msgpack.py" start-line=30 end-line=33}</span></span>
-<span id="cb24-238"><a href="#cb24-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-239"><a href="#cb24-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-240"><a href="#cb24-240" aria-hidden="true" tabindex="-1"></a>It extends <span class="in">`JsonValue`</span> with <span class="in">`bytes`</span>, since MessagePack natively supports binary data (used for opaque complements).</span>
-<span id="cb24-241"><a href="#cb24-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-242"><a href="#cb24-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol Definitions (`_protocol.py`) {#sec-python-protocol}</span></span>
-<span id="cb24-243"><a href="#cb24-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-244"><a href="#cb24-244" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Protocol`</span> holds a WASM-side handle to the registered protocol specification and provides the <span class="in">`schema()`</span> factory for building schemas within that protocol:</span>
-<span id="cb24-245"><a href="#cb24-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-246"><a href="#cb24-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=30 end-line=128}</span></span>
-<span id="cb24-247"><a href="#cb24-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-248"><a href="#cb24-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-249"><a href="#cb24-249" aria-hidden="true" tabindex="-1"></a>The <span class="in">`define_protocol`</span> module-level function serializes a <span class="in">`ProtocolSpec`</span> to its wire format, sends it to WASM, and wraps the returned handle:</span>
-<span id="cb24-250"><a href="#cb24-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-251"><a href="#cb24-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=136 end-line=181}</span></span>
-<span id="cb24-252"><a href="#cb24-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-253"><a href="#cb24-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-254"><a href="#cb24-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### Built-in Protocols</span></span>
-<span id="cb24-255"><a href="#cb24-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-256"><a href="#cb24-256" aria-hidden="true" tabindex="-1"></a>Five built-in protocol specs are provided as module-level constants: <span class="in">`ATPROTO_SPEC`</span>, <span class="in">`SQL_SPEC`</span>, <span class="in">`PROTOBUF_SPEC`</span>, <span class="in">`GRAPHQL_SPEC`</span>, and <span class="in">`JSON_SCHEMA_SPEC`</span>. They are auto-registered on first access via <span class="in">`panproto.protocol("atproto")`</span>. The <span class="in">`BUILTIN_PROTOCOLS`</span> mapping provides a name-to-spec lookup table:</span>
-<span id="cb24-257"><a href="#cb24-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-258"><a href="#cb24-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=278 end-line=285}</span></span>
-<span id="cb24-259"><a href="#cb24-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-260"><a href="#cb24-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-261"><a href="#cb24-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Builder (`_schema.py`) {#sec-python-schema}</span></span>
-<span id="cb24-262"><a href="#cb24-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-263"><a href="#cb24-263" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> is an immutable fluent builder. Each method returns a **new** builder instance, leaving the original unchanged. This makes it safe to branch schema definitions from a common base:</span>
-<span id="cb24-264"><a href="#cb24-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-265"><a href="#cb24-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=35 end-line=72}</span></span>
-<span id="cb24-266"><a href="#cb24-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-267"><a href="#cb24-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-268"><a href="#cb24-268" aria-hidden="true" tabindex="-1"></a>The builder accumulates <span class="in">`SchemaOp`</span> objects (matching the Rust <span class="in">`BuildOp`</span> tagged enum). Each mutation method creates a new instance with the new operation appended. On <span class="in">`.build()`</span>, it packs the accumulated operations as MessagePack, sends them to WASM, and wraps the returned handle:</span>
-<span id="cb24-269"><a href="#cb24-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-270"><a href="#cb24-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=376 end-line=412}</span></span>
-<span id="cb24-271"><a href="#cb24-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-272"><a href="#cb24-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-273"><a href="#cb24-273" aria-hidden="true" tabindex="-1"></a><span class="fu">### `BuiltSchema`</span></span>
-<span id="cb24-274"><a href="#cb24-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-275"><a href="#cb24-275" aria-hidden="true" tabindex="-1"></a><span class="in">`BuiltSchema`</span> is the validated result. It holds both a <span class="in">`WasmHandle`</span> (for passing to migration functions) and a local <span class="in">`SchemaData`</span> snapshot (for introspection without crossing the WASM boundary):</span>
-<span id="cb24-276"><a href="#cb24-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-277"><a href="#cb24-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=420 end-line=529}</span></span>
-<span id="cb24-278"><a href="#cb24-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-279"><a href="#cb24-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-280"><a href="#cb24-280" aria-hidden="true" tabindex="-1"></a>The <span class="in">`data`</span> property returns the full <span class="in">`SchemaData`</span> TypedDict. Convenience properties <span class="in">`protocol`</span>, <span class="in">`vertices`</span>, and <span class="in">`edges`</span> provide direct access to the most commonly used fields.</span>
-<span id="cb24-281"><a href="#cb24-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-282"><a href="#cb24-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Builder (`_migration.py`) {#sec-python-migration}</span></span>
-<span id="cb24-283"><a href="#cb24-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-284"><a href="#cb24-284" aria-hidden="true" tabindex="-1"></a><span class="in">`MigrationBuilder`</span> follows the same immutable fluent pattern. It accumulates vertex mappings, edge mappings, and resolvers:</span>
-<span id="cb24-285"><a href="#cb24-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-286"><a href="#cb24-286" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_migration.py" start-line=36 end-line=84}</span></span>
-<span id="cb24-287"><a href="#cb24-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-288"><a href="#cb24-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-289"><a href="#cb24-289" aria-hidden="true" tabindex="-1"></a>Three mutation methods build up the migration specification:</span>
-<span id="cb24-290"><a href="#cb24-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-291"><a href="#cb24-291" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`map(src_vertex, tgt_vertex)`** -- Map a source vertex to a target vertex.</span>
-<span id="cb24-292"><a href="#cb24-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`map_edge(src_edge, tgt_edge)`** -- Map a source edge to a target edge.</span>
-<span id="cb24-293"><a href="#cb24-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`resolve(src_kind, tgt_kind, resolved_edge)`** -- Add a resolver for ancestor-contraction ambiguity.</span>
-<span id="cb24-294"><a href="#cb24-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-295"><a href="#cb24-295" aria-hidden="true" tabindex="-1"></a>The <span class="in">`compile()`</span> method packs the mapping and sends it to the <span class="in">`compile_migration`</span> WASM entry point. The result is a <span class="in">`CompiledMigration`</span> with three data-path methods:</span>
-<span id="cb24-296"><a href="#cb24-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-297"><a href="#cb24-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_migration.py" start-line=226 end-line=390}</span></span>
-<span id="cb24-298"><a href="#cb24-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-299"><a href="#cb24-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-300"><a href="#cb24-300" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`lift(record)`** -- Forward-only transformation. The hot path: data goes through WASM as MessagePack bytes with no intermediate Python-heap allocation.</span>
-<span id="cb24-301"><a href="#cb24-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`get(record)`** -- Bidirectional get: extract a projected view and an opaque complement.</span>
-<span id="cb24-302"><a href="#cb24-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`put(view, complement)`** -- Bidirectional put: restore a full record from a (possibly modified) view and the complement from <span class="in">`get`</span>.</span>
-<span id="cb24-303"><a href="#cb24-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-304"><a href="#cb24-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb24-305"><a href="#cb24-305" aria-hidden="true" tabindex="-1"></a>The <span class="in">`complement`</span> from <span class="in">`get()`</span> is an opaque <span class="in">`bytes`</span> object. It captures the data discarded by the forward projection, enabling lossless round-tripping. Treat it as a black box---its internal format is a MessagePack-encoded Rust <span class="in">`Complement`</span> struct.</span>
-<span id="cb24-306"><a href="#cb24-306" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-307"><a href="#cb24-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-308"><a href="#cb24-308" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module-level Functions</span></span>
-<span id="cb24-309"><a href="#cb24-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-310"><a href="#cb24-310" aria-hidden="true" tabindex="-1"></a>Two additional functions are exported at module level:</span>
-<span id="cb24-311"><a href="#cb24-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-312"><a href="#cb24-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src, tgt, spec, wasm)`** -- Validate that a migration specification satisfies all protocol-derived existence conditions.</span>
-<span id="cb24-313"><a href="#cb24-313" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose_migrations(m1, m2, wasm)`** -- Compose two compiled migrations into one. The resulting migration is equivalent to applying *m1* first, then *m2*.</span>
-<span id="cb24-314"><a href="#cb24-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-315"><a href="#cb24-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens API (`_lens.py`) {#sec-python-lens}</span></span>
-<span id="cb24-316"><a href="#cb24-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-317"><a href="#cb24-317" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_lens.py`</span> module provides three handle classes for bidirectional schema transformations: <span class="in">`ProtolensChainHandle`</span> for schema-independent lens families, <span class="in">`LensHandle`</span> for concrete lenses, and <span class="in">`SymmetricLensHandle`</span> for symmetric bidirectional sync.</span>
-<span id="cb24-318"><a href="#cb24-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-319"><a href="#cb24-319" aria-hidden="true" tabindex="-1"></a><span class="in">`ProtolensChainHandle`</span> wraps a WASM-side protolens chain and can be instantiated against a concrete schema to produce a <span class="in">`LensHandle`</span>:</span>
-<span id="cb24-320"><a href="#cb24-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-321"><a href="#cb24-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_lens.py" start-line=36 end-line=128}</span></span>
-<span id="cb24-322"><a href="#cb24-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-323"><a href="#cb24-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-324"><a href="#cb24-324" aria-hidden="true" tabindex="-1"></a><span class="in">`LensHandle`</span> wraps a concrete lens with <span class="in">`get`</span>, <span class="in">`put`</span>, and law-checking operations:</span>
-<span id="cb24-325"><a href="#cb24-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-326"><a href="#cb24-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_lens.py" start-line=370 end-line=480}</span></span>
-<span id="cb24-327"><a href="#cb24-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-328"><a href="#cb24-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-329"><a href="#cb24-329" aria-hidden="true" tabindex="-1"></a>Key methods:</span>
-<span id="cb24-330"><a href="#cb24-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-331"><a href="#cb24-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.auto_generate(schema1, schema2, wasm)`** -- Auto-generate a protolens chain between two schemas.</span>
-<span id="cb24-332"><a href="#cb24-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.instantiate(schema)`** -- Instantiate the chain against a concrete schema.</span>
-<span id="cb24-333"><a href="#cb24-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.compose(other)`** -- Compose with another chain.</span>
-<span id="cb24-334"><a href="#cb24-334" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.fuse()`** -- Fuse all steps into a single protolens.</span>
-<span id="cb24-335"><a href="#cb24-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.lift(morphism_bytes)`** -- Lift along a theory morphism.</span>
-<span id="cb24-336"><a href="#cb24-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.auto_generate(schema1, schema2, wasm)`** -- Auto-generate and instantiate a lens.</span>
-<span id="cb24-337"><a href="#cb24-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.get(record)`** -- Forward projection: extract view and complement.</span>
-<span id="cb24-338"><a href="#cb24-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.put(view, complement)`** -- Backward put: restore from view and complement.</span>
-<span id="cb24-339"><a href="#cb24-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.check_laws(instance)`** -- Verify GetPut and PutGet laws.</span>
-<span id="cb24-340"><a href="#cb24-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-341"><a href="#cb24-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Hierarchy (`_errors.py`) {#sec-python-errors}</span></span>
-<span id="cb24-342"><a href="#cb24-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-343"><a href="#cb24-343" aria-hidden="true" tabindex="-1"></a>The SDK defines a four-class error hierarchy, all extending <span class="in">`PanprotoError`</span>:</span>
-<span id="cb24-344"><a href="#cb24-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-345"><a href="#cb24-345" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_errors.py" start-line=31 end-line=127}</span></span>
-<span id="cb24-346"><a href="#cb24-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-347"><a href="#cb24-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-348"><a href="#cb24-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`PanprotoError`** -- Base exception for all panproto errors. Stores the <span class="in">`message`</span> as an attribute.</span>
-<span id="cb24-349"><a href="#cb24-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`WasmError`** -- Errors from the WASM boundary (load failures, call failures, disposed handles).</span>
-<span id="cb24-350"><a href="#cb24-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaValidationError`** -- Schema building errors, with a <span class="in">`tuple[str, ...]`</span> of individual error strings.</span>
-<span id="cb24-351"><a href="#cb24-351" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationError`** -- Migration compilation or composition errors.</span>
-<span id="cb24-352"><a href="#cb24-352" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceCheckError`** -- Existence check failures, bundling the full <span class="in">`ExistenceReport`</span>.</span>
-<span id="cb24-353"><a href="#cb24-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-354"><a href="#cb24-354" aria-hidden="true" tabindex="-1"></a>All leaf exception classes are decorated with <span class="in">`@final`</span> to prevent subclassing. Each exception class uses <span class="in">`__slots__`</span> for memory efficiency and provides a custom <span class="in">`__repr__`</span> for better debug output.</span>
-<span id="cb24-355"><a href="#cb24-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-356"><a href="#cb24-356" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `Panproto` Class {#sec-python-panproto}</span></span>
-<span id="cb24-357"><a href="#cb24-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-358"><a href="#cb24-358" aria-hidden="true" tabindex="-1"></a><span class="in">`Panproto`</span> is the main entry point. It loads the WASM module and provides the top-level API:</span>
-<span id="cb24-359"><a href="#cb24-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-360"><a href="#cb24-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_panproto.py" start-line=40 end-line=68}</span></span>
-<span id="cb24-361"><a href="#cb24-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-362"><a href="#cb24-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-363"><a href="#cb24-363" aria-hidden="true" tabindex="-1"></a>Key methods:</span>
-<span id="cb24-364"><a href="#cb24-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-365"><a href="#cb24-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`load(wasm_path?)`** -- Synchronous factory. Reads the WASM binary (bundled by default) and returns a ready instance.</span>
-<span id="cb24-366"><a href="#cb24-366" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protocol(name)`** -- Get or auto-register a built-in protocol (<span class="in">`"atproto"`</span>, <span class="in">`"sql"`</span>, <span class="in">`"protobuf"`</span>, <span class="in">`"graphql"`</span>, <span class="in">`"json-schema"`</span>). Custom protocols must be registered first with <span class="in">`define_protocol`</span>.</span>
-<span id="cb24-367"><a href="#cb24-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`define_protocol(spec)`** -- Register a custom protocol specification.</span>
-<span id="cb24-368"><a href="#cb24-368" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`migration(src, tgt)`** -- Start building a migration between two schemas.</span>
-<span id="cb24-369"><a href="#cb24-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src, tgt, builder)`** -- Validate a migration against protocol-derived existence conditions.</span>
-<span id="cb24-370"><a href="#cb24-370" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose(m1, m2)`** -- Compose two compiled migrations into one.</span>
-<span id="cb24-371"><a href="#cb24-371" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff(old, new)`** -- Compute a structural diff between two schemas.</span>
-<span id="cb24-372"><a href="#cb24-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-373"><a href="#cb24-373" aria-hidden="true" tabindex="-1"></a><span class="in">`Panproto`</span> implements the context-manager protocol. When the <span class="in">`with`</span> block exits, it releases all cached protocol handles:</span>
-<span id="cb24-374"><a href="#cb24-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-375"><a href="#cb24-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_panproto.py" start-line=638 end-line=656}</span></span>
-<span id="cb24-376"><a href="#cb24-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-377"><a href="#cb24-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-378"><a href="#cb24-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage Pattern</span></span>
-<span id="cb24-379"><a href="#cb24-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-380"><a href="#cb24-380" aria-hidden="true" tabindex="-1"></a>A typical SDK session:</span>
-<span id="cb24-381"><a href="#cb24-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-382"><a href="#cb24-382" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb24-383"><a href="#cb24-383" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> Panproto</span>
-<span id="cb24-384"><a href="#cb24-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-385"><a href="#cb24-385" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize (loads WASM)</span></span>
-<span id="cb24-386"><a href="#cb24-386" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Panproto.load() <span class="im">as</span> pp:</span>
-<span id="cb24-387"><a href="#cb24-387" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get a protocol</span></span>
-<span id="cb24-388"><a href="#cb24-388" aria-hidden="true" tabindex="-1"></a>    atproto <span class="op">=</span> pp.protocol(<span class="st">"atproto"</span>)</span>
-<span id="cb24-389"><a href="#cb24-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-390"><a href="#cb24-390" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build schemas</span></span>
-<span id="cb24-391"><a href="#cb24-391" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> (</span>
-<span id="cb24-392"><a href="#cb24-392" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
-<span id="cb24-393"><a href="#cb24-393" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
-<span id="cb24-394"><a href="#cb24-394" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
-<span id="cb24-395"><a href="#cb24-395" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
-<span id="cb24-396"><a href="#cb24-396" aria-hidden="true" tabindex="-1"></a>        .build()</span>
-<span id="cb24-397"><a href="#cb24-397" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> old_schema, (</span>
-<span id="cb24-398"><a href="#cb24-398" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
-<span id="cb24-399"><a href="#cb24-399" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
-<span id="cb24-400"><a href="#cb24-400" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
-<span id="cb24-401"><a href="#cb24-401" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body.tags"</span>, <span class="st">"array"</span>)</span>
-<span id="cb24-402"><a href="#cb24-402" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
-<span id="cb24-403"><a href="#cb24-403" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.tags"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"tags"</span>})</span>
-<span id="cb24-404"><a href="#cb24-404" aria-hidden="true" tabindex="-1"></a>        .build()</span>
-<span id="cb24-405"><a href="#cb24-405" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> new_schema:</span>
-<span id="cb24-406"><a href="#cb24-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-407"><a href="#cb24-407" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compile migration</span></span>
-<span id="cb24-408"><a href="#cb24-408" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> (</span>
-<span id="cb24-409"><a href="#cb24-409" aria-hidden="true" tabindex="-1"></a>            pp.migration(old_schema, new_schema)</span>
-<span id="cb24-410"><a href="#cb24-410" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post"</span>, <span class="st">"post"</span>)</span>
-<span id="cb24-411"><a href="#cb24-411" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post:body"</span>, <span class="st">"post:body"</span>)</span>
-<span id="cb24-412"><a href="#cb24-412" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">compile</span>()</span>
-<span id="cb24-413"><a href="#cb24-413" aria-hidden="true" tabindex="-1"></a>        ) <span class="im">as</span> migration:</span>
-<span id="cb24-414"><a href="#cb24-414" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Transform records</span></span>
-<span id="cb24-415"><a href="#cb24-415" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> migration.lift({<span class="st">"text"</span>: <span class="st">"hello"</span>})</span>
-<span id="cb24-416"><a href="#cb24-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-417"><a href="#cb24-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-418"><a href="#cb24-418" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb24-419"><a href="#cb24-419" aria-hidden="true" tabindex="-1"></a>The <span class="in">`with`</span> statement ensures all WASM handles are freed when the block exits. Nested <span class="in">`with`</span> blocks (or the parenthesized multi-context form shown above) are the Python equivalent of TypeScript's <span class="in">`using`</span> keyword. If you need to manage handle lifetimes more flexibly, call <span class="in">`.close()`</span> manually or use <span class="in">`contextlib.ExitStack`</span>.</span>
-<span id="cb24-420"><a href="#cb24-420" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-421"><a href="#cb24-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-422"><a href="#cb24-422" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions {#sec-python-conventions}</span></span>
-<span id="cb24-423"><a href="#cb24-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-424"><a href="#cb24-424" aria-hidden="true" tabindex="-1"></a>The Python SDK enforces the following project conventions:</span>
-<span id="cb24-425"><a href="#cb24-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-426"><a href="#cb24-426" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Python 3.13+** -- The minimum supported version. The SDK uses PEP 695 type aliases, structural pattern matching, parenthesized context managers, and other 3.13 features.</span>
-<span id="cb24-427"><a href="#cb24-427" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PEP 695 type statements** -- All type aliases use the <span class="in">`type`</span> keyword syntax rather than <span class="in">`TypeAlias`</span>.</span>
-<span id="cb24-428"><a href="#cb24-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Strict pyright** -- <span class="in">`typeCheckingMode = "strict"`</span> with <span class="in">`reportMissingTypeStubs = false`</span>. All public and private functions have complete type annotations.</span>
-<span id="cb24-429"><a href="#cb24-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ruff** -- Lint and format with <span class="in">`target-version = "py313"`</span> and <span class="in">`line-length = 99`</span>. The enabled rule sets include pyflakes, pycodestyle, isort, pep8-naming, pyupgrade, bugbear, builtins shadowing, comprehensions, simplify, type-checking imports, and ruff-specific rules.</span>
-<span id="cb24-430"><a href="#cb24-430" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**numpy docstrings** -- All public classes and functions use the numpy docstring convention with <span class="in">`Parameters`</span>, <span class="in">`Returns`</span>, <span class="in">`Raises`</span>, and <span class="in">`Examples`</span> sections.</span>
-<span id="cb24-431"><a href="#cb24-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Immutable builders** -- <span class="in">`SchemaBuilder`</span> and <span class="in">`MigrationBuilder`</span> return new instances on every mutation. Internal state uses tuples and frozen dicts.</span>
-<span id="cb24-432"><a href="#cb24-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`__slots__` everywhere** -- All classes define <span class="in">`__slots__`</span> for memory efficiency and to catch attribute typos.</span>
-<span id="cb24-433"><a href="#cb24-433" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`@final` leaf classes** -- All concrete classes that should not be subclassed are decorated with <span class="in">`@final`</span>.</span>
-<span id="cb24-434"><a href="#cb24-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Underscore-prefixed private modules** -- All implementation modules use the <span class="in">`_`</span> prefix. The public API surface is defined in <span class="in">`__init__.py`</span> via <span class="in">`__all__`</span>.</span>
-<span id="cb24-435"><a href="#cb24-435" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**MIT license** -- Consistent with the rest of the panproto project.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># `panproto` --- The Python SDK {#sec-python-sdk}</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto`</span> PyPI package provides a Python 3.13+ interface to the panproto WASM engine. It mirrors the TypeScript SDK's fluent, type-safe API while embracing Python idioms: context managers instead of <span class="in">`Symbol.dispose`</span>, <span class="in">`TypedDict`</span> subclasses instead of interfaces, PEP 695 type aliases instead of TypeScript unions, and <span class="in">`weakref.finalize`</span> instead of <span class="in">`FinalizationRegistry`</span>. This chapter covers every public class and function in the SDK.</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>For a quick-reference listing of all public APIs with parameter types, see the tutorial's API reference appendix.</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Architecture Overview</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>The SDK is organized into eight modules, each with a focused responsibility:</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>classDiagram</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    class Panproto {</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        +load(wasm_path?) Panproto$</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        +protocol(name) Protocol</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        +define_protocol(spec) Protocol</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>        +migration(src, tgt) MigrationBuilder</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>        +check_existence(src, tgt, builder) ExistenceReport</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        +compose(m1, m2) CompiledMigration</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>        +diff(old, new) DiffReport</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>        +__enter__()</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>        +__exit__()</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    class Protocol {</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>        +name: str</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>        +spec: ProtocolSpec</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>        +schema() SchemaBuilder</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    class SchemaBuilder {</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>        +vertex(id, kind, opts?) SchemaBuilder</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>        +edge(src, tgt, kind, opts?) SchemaBuilder</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>        +hyper_edge(id, kind, sig, parent) SchemaBuilder</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>        +constraint(vertex, <span class="fu">sort</span>, value) SchemaBuilder</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>        +required(vertex, edges) SchemaBuilder</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>        +build() BuiltSchema</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>    class BuiltSchema {</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>        +data: SchemaData</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>        +protocol: str</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>        +vertices: Mapping</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>        +edges: Sequence</span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>    class MigrationBuilder {</span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">map</span>(src, tgt) MigrationBuilder</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>        +map_edge(src, tgt) MigrationBuilder</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>        +resolve(src, tgt, edge) MigrationBuilder</span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>        +compile() CompiledMigration</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>    class CompiledMigration {</span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>        +spec: MigrationSpec</span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a>        +lift(record) LiftResult</span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a>        +get(record) GetResult</span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a>        +put(view, complement) LiftResult</span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>        +<span class="fu">close</span>()</span>
+<span id="cb29-67"><a href="#cb29-67" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-68"><a href="#cb29-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-69"><a href="#cb29-69" aria-hidden="true" tabindex="-1"></a>    Panproto --&gt; Protocol : protocol()</span>
+<span id="cb29-70"><a href="#cb29-70" aria-hidden="true" tabindex="-1"></a>    Protocol --&gt; SchemaBuilder : schema()</span>
+<span id="cb29-71"><a href="#cb29-71" aria-hidden="true" tabindex="-1"></a>    SchemaBuilder --&gt; BuiltSchema : build()</span>
+<span id="cb29-72"><a href="#cb29-72" aria-hidden="true" tabindex="-1"></a>    Panproto --&gt; MigrationBuilder : migration()</span>
+<span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>    MigrationBuilder --&gt; CompiledMigration : compile()</span>
+<span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project Structure</span></span>
+<span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>The SDK lives at <span class="in">`sdk/python/`</span> and follows a standard <span class="in">`src`</span> layout:</span>
+<span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-80"><a href="#cb29-80" aria-hidden="true" tabindex="-1"></a><span class="in">```text</span></span>
+<span id="cb29-81"><a href="#cb29-81" aria-hidden="true" tabindex="-1"></a><span class="in">sdk/python/</span></span>
+<span id="cb29-82"><a href="#cb29-82" aria-hidden="true" tabindex="-1"></a><span class="in">├── pyproject.toml          # hatchling build, pyright strict, ruff</span></span>
+<span id="cb29-83"><a href="#cb29-83" aria-hidden="true" tabindex="-1"></a><span class="in">├── src/</span></span>
+<span id="cb29-84"><a href="#cb29-84" aria-hidden="true" tabindex="-1"></a><span class="in">│   └── panproto/</span></span>
+<span id="cb29-85"><a href="#cb29-85" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── __init__.py     # Public re-exports</span></span>
+<span id="cb29-86"><a href="#cb29-86" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _panproto.py    # Panproto entry point class</span></span>
+<span id="cb29-87"><a href="#cb29-87" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _protocol.py    # Protocol + 5 built-in specs</span></span>
+<span id="cb29-88"><a href="#cb29-88" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _schema.py      # SchemaBuilder + BuiltSchema</span></span>
+<span id="cb29-89"><a href="#cb29-89" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _migration.py   # MigrationBuilder + CompiledMigration</span></span>
+<span id="cb29-90"><a href="#cb29-90" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _lens.py        # Cambria-style lens combinators</span></span>
+<span id="cb29-91"><a href="#cb29-91" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _wasm.py        # wasmtime loading + WasmHandle</span></span>
+<span id="cb29-92"><a href="#cb29-92" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _msgpack.py     # MessagePack encode/decode helpers</span></span>
+<span id="cb29-93"><a href="#cb29-93" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _types.py       # TypedDicts + PEP 695 type aliases</span></span>
+<span id="cb29-94"><a href="#cb29-94" aria-hidden="true" tabindex="-1"></a><span class="in">│       ├── _errors.py      # PanprotoError hierarchy</span></span>
+<span id="cb29-95"><a href="#cb29-95" aria-hidden="true" tabindex="-1"></a><span class="in">│       └── panproto_wasm_bg.wasm  # Bundled WASM binary</span></span>
+<span id="cb29-96"><a href="#cb29-96" aria-hidden="true" tabindex="-1"></a><span class="in">└── tests/</span></span>
+<span id="cb29-97"><a href="#cb29-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a>All private modules use the underscore prefix (<span class="in">`_wasm.py`</span>, <span class="in">`_types.py`</span>, etc.). The public surface is defined entirely in <span class="in">`__init__.py`</span> via <span class="in">`__all__`</span>.</span>
+<span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building and Testing</span></span>
+<span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a>The SDK uses <span class="co">[</span><span class="ot">Hatch</span><span class="co">](https://hatch.pypa.io/)</span> as its build backend. Runtime dependencies are minimal: <span class="in">`wasmtime&gt;=29.0.0`</span> and <span class="in">`msgpack&gt;=1.1.0`</span>.</span>
+<span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-105"><a href="#cb29-105" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb29-106"><a href="#cb29-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Install in development mode</span></span>
+<span id="cb29-107"><a href="#cb29-107" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> <span class="st">"sdk/python[dev]"</span></span>
+<span id="cb29-108"><a href="#cb29-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-109"><a href="#cb29-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Run tests</span></span>
+<span id="cb29-110"><a href="#cb29-110" aria-hidden="true" tabindex="-1"></a><span class="ex">pytest</span> sdk/python/tests/</span>
+<span id="cb29-111"><a href="#cb29-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-112"><a href="#cb29-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Type checking (strict mode)</span></span>
+<span id="cb29-113"><a href="#cb29-113" aria-hidden="true" tabindex="-1"></a><span class="ex">pyright</span> sdk/python/src/</span>
+<span id="cb29-114"><a href="#cb29-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-115"><a href="#cb29-115" aria-hidden="true" tabindex="-1"></a><span class="co"># Lint + format</span></span>
+<span id="cb29-116"><a href="#cb29-116" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> check sdk/python/src/</span>
+<span id="cb29-117"><a href="#cb29-117" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> format sdk/python/src/</span>
+<span id="cb29-118"><a href="#cb29-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a>The <span class="in">`[dev]`</span> extra pulls in <span class="in">`pytest&gt;=8.0`</span>, <span class="in">`ruff&gt;=0.5`</span>, and <span class="in">`pyright&gt;=1.1`</span>.</span>
+<span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Interaction Layer (`_wasm.py`) {#sec-python-wasm}</span></span>
+<span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_wasm.py`</span> module handles WASM binary loading, instance creation, and resource lifecycle. It contains three key components: <span class="in">`WasmModule`</span>, <span class="in">`WasmHandle`</span>, and the <span class="in">`load_wasm`</span> factory.</span>
+<span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-126"><a href="#cb29-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### `WasmModule`</span></span>
+<span id="cb29-127"><a href="#cb29-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-128"><a href="#cb29-128" aria-hidden="true" tabindex="-1"></a><span class="in">`WasmModule`</span> wraps a <span class="in">`wasmtime.Instance`</span> and exposes the panproto WASM entry points as typed Python methods:</span>
+<span id="cb29-129"><a href="#cb29-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-130"><a href="#cb29-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=25 end-line=49}</span></span>
+<span id="cb29-131"><a href="#cb29-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-132"><a href="#cb29-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-133"><a href="#cb29-133" aria-hidden="true" tabindex="-1"></a>Each entry point method handles the raw call, converts between Python types and WASM integers/byte slices, and wraps any errors in <span class="in">`WasmError`</span>:</span>
+<span id="cb29-134"><a href="#cb29-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-135"><a href="#cb29-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`define_protocol(spec: bytes) -&gt; int`** -- Register a protocol, return a handle.</span>
+<span id="cb29-136"><a href="#cb29-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`build_schema(proto: int, ops: bytes) -&gt; int`** -- Build a schema, return a handle.</span>
+<span id="cb29-137"><a href="#cb29-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src: int, tgt: int, mapping: bytes) -&gt; bytes`** -- Validate a migration.</span>
+<span id="cb29-138"><a href="#cb29-138" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compile_migration(src: int, tgt: int, mapping: bytes) -&gt; int`** -- Compile a migration, return a handle.</span>
+<span id="cb29-139"><a href="#cb29-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`lift_record(migration: int, record: bytes) -&gt; bytes`** -- Forward transform.</span>
+<span id="cb29-140"><a href="#cb29-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`get_record(migration: int, record: bytes) -&gt; bytes`** -- Bidirectional get.</span>
+<span id="cb29-141"><a href="#cb29-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`put_record(migration: int, view: bytes, complement: bytes) -&gt; bytes`** -- Bidirectional put.</span>
+<span id="cb29-142"><a href="#cb29-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose_migrations(m1: int, m2: int) -&gt; int`** -- Compose two migrations.</span>
+<span id="cb29-143"><a href="#cb29-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff_schemas(s1: int, s2: int) -&gt; bytes`** -- Diff two schemas.</span>
+<span id="cb29-144"><a href="#cb29-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`free_handle(handle: int) -&gt; None`** -- Release a WASM resource.</span>
+<span id="cb29-145"><a href="#cb29-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-146"><a href="#cb29-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### `WasmHandle`</span></span>
+<span id="cb29-147"><a href="#cb29-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-148"><a href="#cb29-148" aria-hidden="true" tabindex="-1"></a>Every WASM-side resource is wrapped in a <span class="in">`WasmHandle`</span>, which implements the context-manager protocol for use with <span class="in">`with`</span> statements:</span>
+<span id="cb29-149"><a href="#cb29-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-150"><a href="#cb29-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=1102 end-line=1184}</span></span>
+<span id="cb29-151"><a href="#cb29-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-152"><a href="#cb29-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-153"><a href="#cb29-153" aria-hidden="true" tabindex="-1"></a>Two layers of safety prevent handle leaks:</span>
+<span id="cb29-154"><a href="#cb29-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-155"><a href="#cb29-155" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Context manager (`with` / explicit `.close()`)** -- Deterministic cleanup. Called automatically on block exit or manually by the consumer.</span>
+<span id="cb29-156"><a href="#cb29-156" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`weakref.finalize`** -- Safety net. If a <span class="in">`WasmHandle`</span> is garbage-collected without being closed, the weak-reference callback calls <span class="in">`free_handle`</span> to release the WASM resource.</span>
+<span id="cb29-157"><a href="#cb29-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-158"><a href="#cb29-158" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_free_handle_safe`</span> helper wraps the WASM call in <span class="in">`contextlib.suppress(Exception)`</span> so that finalization never raises, even if the WASM module has already been torn down.</span>
+<span id="cb29-159"><a href="#cb29-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-160"><a href="#cb29-160" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb29-161"><a href="#cb29-161" aria-hidden="true" tabindex="-1"></a>The <span class="in">`weakref.finalize`</span> callback is a last resort, not a primary mechanism. GC timing is non-deterministic, so relying on it can cause resource exhaustion under load. Always prefer explicit cleanup via <span class="in">`with`</span> blocks or <span class="in">`.close()`</span>.</span>
+<span id="cb29-162"><a href="#cb29-162" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-163"><a href="#cb29-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-164"><a href="#cb29-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### `load_wasm`</span></span>
+<span id="cb29-165"><a href="#cb29-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-166"><a href="#cb29-166" aria-hidden="true" tabindex="-1"></a>The <span class="in">`load_wasm`</span> factory reads a <span class="in">`.wasm`</span> binary from disk, creates a <span class="in">`wasmtime.Engine`</span>, <span class="in">`Store`</span>, <span class="in">`Module`</span>, and <span class="in">`Linker`</span>, instantiates the module with WASI imports, and returns a ready <span class="in">`WasmModule`</span>:</span>
+<span id="cb29-167"><a href="#cb29-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-168"><a href="#cb29-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_wasm.py" start-line=1227 end-line=1261}</span></span>
+<span id="cb29-169"><a href="#cb29-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a>Unlike the TypeScript SDK's async <span class="in">`init()`</span>, the Python factory is synchronous---<span class="in">`wasmtime-py`</span> loads modules on the calling thread.</span>
+<span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type System (`_types.py`) {#sec-python-types}</span></span>
+<span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_types.py`</span> module defines all data-carrying types that cross the MessagePack boundary. It mirrors the Rust structures and the TypeScript SDK interfaces using Python 3.13+ conventions:</span>
+<span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-177"><a href="#cb29-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rust              <span class="pp">|</span> Python                        <span class="pp">|</span></span>
+<span id="cb29-178"><a href="#cb29-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------------|-------------------------------|</span></span>
+<span id="cb29-179"><a href="#cb29-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`HashMap&lt;K, V&gt;`</span>   <span class="pp">|</span> <span class="in">`dict[str, V]`</span>                <span class="pp">|</span></span>
+<span id="cb29-180"><a href="#cb29-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Option&lt;T&gt;`</span>       <span class="pp">|</span> <span class="in">`T \| None`</span>                   <span class="pp">|</span></span>
+<span id="cb29-181"><a href="#cb29-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Vec&lt;T&gt;`</span>          <span class="pp">|</span> <span class="in">`list[T]`</span>                     <span class="pp">|</span></span>
+<span id="cb29-182"><a href="#cb29-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Result&lt;T, E&gt;`</span>    <span class="pp">|</span> Return value or raised error  <span class="pp">|</span></span>
+<span id="cb29-183"><a href="#cb29-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-184"><a href="#cb29-184" aria-hidden="true" tabindex="-1"></a><span class="fu">### TypedDicts</span></span>
+<span id="cb29-185"><a href="#cb29-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-186"><a href="#cb29-186" aria-hidden="true" tabindex="-1"></a>All structured data types are <span class="in">`TypedDict`</span> subclasses, since they represent plain dict structures deserialized from MessagePack. Key types include:</span>
+<span id="cb29-187"><a href="#cb29-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-188"><a href="#cb29-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtocolSpec`** -- A complete protocol specification with schema theory, instance theory, edge rules, object kinds, and constraint sorts.</span>
+<span id="cb29-189"><a href="#cb29-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Vertex`**, **`Edge`**, **`HyperEdge`**, **`Constraint`** -- Schema graph elements.</span>
+<span id="cb29-190"><a href="#cb29-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaData`** -- The full snapshot of a built schema (vertices, edges, hyperedges, constraints, required edges).</span>
+<span id="cb29-191"><a href="#cb29-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationSpec`**, **`LiftResult`**, **`GetResult`** -- Migration domain types.</span>
+<span id="cb29-192"><a href="#cb29-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceReport`**, **`ExistenceError`** -- Existence checking results.</span>
+<span id="cb29-193"><a href="#cb29-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`DiffReport`**, **`SchemaChange`** -- Schema diff results.</span>
+<span id="cb29-194"><a href="#cb29-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-195"><a href="#cb29-195" aria-hidden="true" tabindex="-1"></a>Optional fields use <span class="in">`NotRequired`</span> from <span class="in">`typing`</span>:</span>
+<span id="cb29-196"><a href="#cb29-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_types.py" start-line=166 end-line=184}</span></span>
+<span id="cb29-198"><a href="#cb29-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-199"><a href="#cb29-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### PEP 695 Type Aliases</span></span>
+<span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a>The module uses <span class="in">`type`</span> statement syntax (PEP 695) for all type aliases:</span>
+<span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-204"><a href="#cb29-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_types.py" start-line=25 end-line=31}</span></span>
+<span id="cb29-205"><a href="#cb29-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-206"><a href="#cb29-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-207"><a href="#cb29-207" aria-hidden="true" tabindex="-1"></a>The <span class="in">`JsonValue`</span> alias is a recursive type covering all JSON primitives plus nested sequences and mappings. It replaces <span class="in">`Any`</span> wherever the SDK must accept or return arbitrary JSON-like data.</span>
+<span id="cb29-208"><a href="#cb29-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-209"><a href="#cb29-209" aria-hidden="true" tabindex="-1"></a>Literal union aliases define the closed sets of enum-like strings:</span>
+<span id="cb29-210"><a href="#cb29-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-211"><a href="#cb29-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaChangeKind`** -- The ten atomic change kinds (<span class="in">`"vertex-added"`</span>, <span class="in">`"edge-removed"`</span>, etc.).</span>
+<span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Compatibility`** -- Three-way classification: <span class="in">`"fully-compatible"`</span>, <span class="in">`"backward-compatible"`</span>, <span class="in">`"breaking"`</span>.</span>
+<span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceErrorKind`** -- Ten structured error kinds emitted by the existence checker.</span>
+<span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Wire Format Types</span></span>
+<span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a>Internal wire-format types (prefixed with <span class="in">`_`</span>) match the exact field names expected by Rust's <span class="in">`serde`</span>:</span>
+<span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-219"><a href="#cb29-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`_SchemaOpVertex`**, **`_SchemaOpEdge`**, **`_SchemaOpHyperEdge`**, **`_SchemaOpConstraint`**, **`_SchemaOpRequired`** -- The five schema operation variants. The <span class="in">`op`</span> field acts as a serde internally-tagged discriminant.</span>
+<span id="cb29-220"><a href="#cb29-220" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaOp`** -- A PEP 695 union of the five variants.</span>
+<span id="cb29-221"><a href="#cb29-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationMapping`** -- Wire-format migration mapping with <span class="in">`vertex_map`</span>, <span class="in">`edge_map`</span>, and <span class="in">`resolver`</span>.</span>
+<span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## MessagePack Boundary (`_msgpack.py`) {#sec-python-msgpack}</span></span>
+<span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_msgpack.py`</span> module provides four encoding helpers that wrap the <span class="in">`msgpack`</span> library:</span>
+<span id="cb29-226"><a href="#cb29-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-227"><a href="#cb29-227" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_msgpack.py" start-line=40 end-line=102}</span></span>
+<span id="cb29-228"><a href="#cb29-228" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-229"><a href="#cb29-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-230"><a href="#cb29-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_to_wasm(value)`** -- Encode any <span class="in">`Packable`</span> value to MessagePack bytes for a WASM entry point.</span>
+<span id="cb29-231"><a href="#cb29-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`unpack_from_wasm(data)`** -- Decode MessagePack bytes from WASM. Callers narrow the return type as needed.</span>
+<span id="cb29-232"><a href="#cb29-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_schema_ops(ops)`** -- Encode a <span class="in">`Sequence[SchemaOp]`</span> for the <span class="in">`build_schema`</span> entry point.</span>
+<span id="cb29-233"><a href="#cb29-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pack_migration_mapping(mapping)`** -- Encode a <span class="in">`MigrationMapping`</span> for <span class="in">`compile_migration`</span> or <span class="in">`check_existence`</span>.</span>
+<span id="cb29-234"><a href="#cb29-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-235"><a href="#cb29-235" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Packable`</span> type alias defines the universe of MessagePack-serializable values:</span>
+<span id="cb29-236"><a href="#cb29-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-237"><a href="#cb29-237" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_msgpack.py" start-line=30 end-line=33}</span></span>
+<span id="cb29-238"><a href="#cb29-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-239"><a href="#cb29-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a>It extends <span class="in">`JsonValue`</span> with <span class="in">`bytes`</span>, since MessagePack natively supports binary data (used for opaque complements).</span>
+<span id="cb29-241"><a href="#cb29-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol Definitions (`_protocol.py`) {#sec-python-protocol}</span></span>
+<span id="cb29-243"><a href="#cb29-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Protocol`</span> holds a WASM-side handle to the registered protocol specification and provides the <span class="in">`schema()`</span> factory for building schemas within that protocol:</span>
+<span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=30 end-line=128}</span></span>
+<span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-248"><a href="#cb29-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-249"><a href="#cb29-249" aria-hidden="true" tabindex="-1"></a>The <span class="in">`define_protocol`</span> module-level function serializes a <span class="in">`ProtocolSpec`</span> to its wire format, sends it to WASM, and wraps the returned handle:</span>
+<span id="cb29-250"><a href="#cb29-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-251"><a href="#cb29-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=136 end-line=181}</span></span>
+<span id="cb29-252"><a href="#cb29-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-253"><a href="#cb29-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### Built-in Protocols</span></span>
+<span id="cb29-255"><a href="#cb29-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-256"><a href="#cb29-256" aria-hidden="true" tabindex="-1"></a>Five built-in protocol specs are provided as module-level constants: <span class="in">`ATPROTO_SPEC`</span>, <span class="in">`SQL_SPEC`</span>, <span class="in">`PROTOBUF_SPEC`</span>, <span class="in">`GRAPHQL_SPEC`</span>, and <span class="in">`JSON_SCHEMA_SPEC`</span>. They are auto-registered on first access via <span class="in">`panproto.protocol("atproto")`</span>. The <span class="in">`BUILTIN_PROTOCOLS`</span> mapping provides a name-to-spec lookup table:</span>
+<span id="cb29-257"><a href="#cb29-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-258"><a href="#cb29-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=278 end-line=285}</span></span>
+<span id="cb29-259"><a href="#cb29-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-260"><a href="#cb29-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-261"><a href="#cb29-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Builder (`_schema.py`) {#sec-python-schema}</span></span>
+<span id="cb29-262"><a href="#cb29-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> is an immutable fluent builder. Each method returns a **new** builder instance, leaving the original unchanged. This makes it safe to branch schema definitions from a common base:</span>
+<span id="cb29-264"><a href="#cb29-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-265"><a href="#cb29-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=35 end-line=72}</span></span>
+<span id="cb29-266"><a href="#cb29-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-267"><a href="#cb29-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-268"><a href="#cb29-268" aria-hidden="true" tabindex="-1"></a>The builder accumulates <span class="in">`SchemaOp`</span> objects (matching the Rust <span class="in">`BuildOp`</span> tagged enum). Each mutation method creates a new instance with the new operation appended. On <span class="in">`.build()`</span>, it packs the accumulated operations as MessagePack, sends them to WASM, and wraps the returned handle:</span>
+<span id="cb29-269"><a href="#cb29-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-270"><a href="#cb29-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=376 end-line=412}</span></span>
+<span id="cb29-271"><a href="#cb29-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-272"><a href="#cb29-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-273"><a href="#cb29-273" aria-hidden="true" tabindex="-1"></a><span class="fu">### `BuiltSchema`</span></span>
+<span id="cb29-274"><a href="#cb29-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-275"><a href="#cb29-275" aria-hidden="true" tabindex="-1"></a><span class="in">`BuiltSchema`</span> is the validated result. It holds both a <span class="in">`WasmHandle`</span> (for passing to migration functions) and a local <span class="in">`SchemaData`</span> snapshot (for introspection without crossing the WASM boundary):</span>
+<span id="cb29-276"><a href="#cb29-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-277"><a href="#cb29-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=420 end-line=529}</span></span>
+<span id="cb29-278"><a href="#cb29-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-279"><a href="#cb29-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-280"><a href="#cb29-280" aria-hidden="true" tabindex="-1"></a>The <span class="in">`data`</span> property returns the full <span class="in">`SchemaData`</span> TypedDict. Convenience properties <span class="in">`protocol`</span>, <span class="in">`vertices`</span>, and <span class="in">`edges`</span> provide direct access to the most commonly used fields.</span>
+<span id="cb29-281"><a href="#cb29-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Builder (`_migration.py`) {#sec-python-migration}</span></span>
+<span id="cb29-283"><a href="#cb29-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-284"><a href="#cb29-284" aria-hidden="true" tabindex="-1"></a><span class="in">`MigrationBuilder`</span> follows the same immutable fluent pattern. It accumulates vertex mappings, edge mappings, and resolvers:</span>
+<span id="cb29-285"><a href="#cb29-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-286"><a href="#cb29-286" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_migration.py" start-line=36 end-line=84}</span></span>
+<span id="cb29-287"><a href="#cb29-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-288"><a href="#cb29-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-289"><a href="#cb29-289" aria-hidden="true" tabindex="-1"></a>Three mutation methods build up the migration specification:</span>
+<span id="cb29-290"><a href="#cb29-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-291"><a href="#cb29-291" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`map(src_vertex, tgt_vertex)`** -- Map a source vertex to a target vertex.</span>
+<span id="cb29-292"><a href="#cb29-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`map_edge(src_edge, tgt_edge)`** -- Map a source edge to a target edge.</span>
+<span id="cb29-293"><a href="#cb29-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`resolve(src_kind, tgt_kind, resolved_edge)`** -- Add a resolver for ancestor-contraction ambiguity.</span>
+<span id="cb29-294"><a href="#cb29-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-295"><a href="#cb29-295" aria-hidden="true" tabindex="-1"></a>The <span class="in">`compile()`</span> method packs the mapping and sends it to the <span class="in">`compile_migration`</span> WASM entry point. The result is a <span class="in">`CompiledMigration`</span> with three data-path methods:</span>
+<span id="cb29-296"><a href="#cb29-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-297"><a href="#cb29-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_migration.py" start-line=226 end-line=390}</span></span>
+<span id="cb29-298"><a href="#cb29-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-299"><a href="#cb29-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-300"><a href="#cb29-300" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`lift(record)`** -- Forward-only transformation. The hot path: data goes through WASM as MessagePack bytes with no intermediate Python-heap allocation.</span>
+<span id="cb29-301"><a href="#cb29-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`get(record)`** -- Bidirectional get: extract a projected view and an opaque complement.</span>
+<span id="cb29-302"><a href="#cb29-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`put(view, complement)`** -- Bidirectional put: restore a full record from a (possibly modified) view and the complement from <span class="in">`get`</span>.</span>
+<span id="cb29-303"><a href="#cb29-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-304"><a href="#cb29-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb29-305"><a href="#cb29-305" aria-hidden="true" tabindex="-1"></a>The <span class="in">`complement`</span> from <span class="in">`get()`</span> is an opaque <span class="in">`bytes`</span> object. It captures the data discarded by the forward projection, enabling lossless round-tripping. Treat it as a black box---its internal format is a MessagePack-encoded Rust <span class="in">`Complement`</span> struct.</span>
+<span id="cb29-306"><a href="#cb29-306" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-307"><a href="#cb29-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-308"><a href="#cb29-308" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module-level Functions</span></span>
+<span id="cb29-309"><a href="#cb29-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-310"><a href="#cb29-310" aria-hidden="true" tabindex="-1"></a>Two additional functions are exported at module level:</span>
+<span id="cb29-311"><a href="#cb29-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-312"><a href="#cb29-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src, tgt, spec, wasm)`** -- Validate that a migration specification satisfies all protocol-derived existence conditions.</span>
+<span id="cb29-313"><a href="#cb29-313" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose_migrations(m1, m2, wasm)`** -- Compose two compiled migrations into one. The resulting migration is equivalent to applying *m1* first, then *m2*.</span>
+<span id="cb29-314"><a href="#cb29-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens API (`_lens.py`) {#sec-python-lens}</span></span>
+<span id="cb29-316"><a href="#cb29-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-317"><a href="#cb29-317" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_lens.py`</span> module provides three handle classes for bidirectional schema transformations: <span class="in">`ProtolensChainHandle`</span> for schema-independent lens families, <span class="in">`LensHandle`</span> for concrete lenses, and <span class="in">`SymmetricLensHandle`</span> for symmetric bidirectional sync.</span>
+<span id="cb29-318"><a href="#cb29-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-319"><a href="#cb29-319" aria-hidden="true" tabindex="-1"></a><span class="in">`ProtolensChainHandle`</span> wraps a WASM-side protolens chain and can be instantiated against a concrete schema to produce a <span class="in">`LensHandle`</span>:</span>
+<span id="cb29-320"><a href="#cb29-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-321"><a href="#cb29-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_lens.py" start-line=36 end-line=128}</span></span>
+<span id="cb29-322"><a href="#cb29-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-323"><a href="#cb29-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-324"><a href="#cb29-324" aria-hidden="true" tabindex="-1"></a><span class="in">`LensHandle`</span> wraps a concrete lens with <span class="in">`get`</span>, <span class="in">`put`</span>, and law-checking operations:</span>
+<span id="cb29-325"><a href="#cb29-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-326"><a href="#cb29-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_lens.py" start-line=370 end-line=480}</span></span>
+<span id="cb29-327"><a href="#cb29-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-328"><a href="#cb29-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-329"><a href="#cb29-329" aria-hidden="true" tabindex="-1"></a>Key methods:</span>
+<span id="cb29-330"><a href="#cb29-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-331"><a href="#cb29-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.auto_generate(schema1, schema2, wasm)`** -- Auto-generate a protolens chain between two schemas.</span>
+<span id="cb29-332"><a href="#cb29-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.instantiate(schema)`** -- Instantiate the chain against a concrete schema.</span>
+<span id="cb29-333"><a href="#cb29-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.compose(other)`** -- Compose with another chain.</span>
+<span id="cb29-334"><a href="#cb29-334" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.fuse()`** -- Fuse all steps into a single protolens.</span>
+<span id="cb29-335"><a href="#cb29-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ProtolensChainHandle.lift(morphism_bytes)`** -- Lift along a theory morphism.</span>
+<span id="cb29-336"><a href="#cb29-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.auto_generate(schema1, schema2, wasm)`** -- Auto-generate and instantiate a lens.</span>
+<span id="cb29-337"><a href="#cb29-337" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.get(record)`** -- Forward projection: extract view and complement.</span>
+<span id="cb29-338"><a href="#cb29-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.put(view, complement)`** -- Backward put: restore from view and complement.</span>
+<span id="cb29-339"><a href="#cb29-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.check_laws(instance)`** -- Verify GetPut and PutGet laws.</span>
+<span id="cb29-340"><a href="#cb29-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-341"><a href="#cb29-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Hierarchy (`_errors.py`) {#sec-python-errors}</span></span>
+<span id="cb29-342"><a href="#cb29-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-343"><a href="#cb29-343" aria-hidden="true" tabindex="-1"></a>The SDK defines a four-class error hierarchy, all extending <span class="in">`PanprotoError`</span>:</span>
+<span id="cb29-344"><a href="#cb29-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-345"><a href="#cb29-345" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_errors.py" start-line=31 end-line=127}</span></span>
+<span id="cb29-346"><a href="#cb29-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-347"><a href="#cb29-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-348"><a href="#cb29-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`PanprotoError`** -- Base exception for all panproto errors. Stores the <span class="in">`message`</span> as an attribute.</span>
+<span id="cb29-349"><a href="#cb29-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`WasmError`** -- Errors from the WASM boundary (load failures, call failures, disposed handles).</span>
+<span id="cb29-350"><a href="#cb29-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaValidationError`** -- Schema building errors, with a <span class="in">`tuple[str, ...]`</span> of individual error strings.</span>
+<span id="cb29-351"><a href="#cb29-351" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationError`** -- Migration compilation or composition errors.</span>
+<span id="cb29-352"><a href="#cb29-352" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceCheckError`** -- Existence check failures, bundling the full <span class="in">`ExistenceReport`</span>.</span>
+<span id="cb29-353"><a href="#cb29-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-354"><a href="#cb29-354" aria-hidden="true" tabindex="-1"></a>All leaf exception classes are decorated with <span class="in">`@final`</span> to prevent subclassing. Each exception class uses <span class="in">`__slots__`</span> for memory efficiency and provides a custom <span class="in">`__repr__`</span> for better debug output.</span>
+<span id="cb29-355"><a href="#cb29-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-356"><a href="#cb29-356" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `Panproto` Class {#sec-python-panproto}</span></span>
+<span id="cb29-357"><a href="#cb29-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-358"><a href="#cb29-358" aria-hidden="true" tabindex="-1"></a><span class="in">`Panproto`</span> is the main entry point. It loads the WASM module and provides the top-level API:</span>
+<span id="cb29-359"><a href="#cb29-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-360"><a href="#cb29-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_panproto.py" start-line=40 end-line=68}</span></span>
+<span id="cb29-361"><a href="#cb29-361" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-362"><a href="#cb29-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-363"><a href="#cb29-363" aria-hidden="true" tabindex="-1"></a>Key methods:</span>
+<span id="cb29-364"><a href="#cb29-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-365"><a href="#cb29-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`load(wasm_path?)`** -- Synchronous factory. Reads the WASM binary (bundled by default) and returns a ready instance.</span>
+<span id="cb29-366"><a href="#cb29-366" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protocol(name)`** -- Get or auto-register a built-in protocol (<span class="in">`"atproto"`</span>, <span class="in">`"sql"`</span>, <span class="in">`"protobuf"`</span>, <span class="in">`"graphql"`</span>, <span class="in">`"json-schema"`</span>). Custom protocols must be registered first with <span class="in">`define_protocol`</span>.</span>
+<span id="cb29-367"><a href="#cb29-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`define_protocol(spec)`** -- Register a custom protocol specification.</span>
+<span id="cb29-368"><a href="#cb29-368" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`migration(src, tgt)`** -- Start building a migration between two schemas.</span>
+<span id="cb29-369"><a href="#cb29-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src, tgt, builder)`** -- Validate a migration against protocol-derived existence conditions.</span>
+<span id="cb29-370"><a href="#cb29-370" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose(m1, m2)`** -- Compose two compiled migrations into one.</span>
+<span id="cb29-371"><a href="#cb29-371" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff(old, new)`** -- Compute a structural diff between two schemas.</span>
+<span id="cb29-372"><a href="#cb29-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-373"><a href="#cb29-373" aria-hidden="true" tabindex="-1"></a><span class="in">`Panproto`</span> implements the context-manager protocol. When the <span class="in">`with`</span> block exits, it releases all cached protocol handles:</span>
+<span id="cb29-374"><a href="#cb29-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-375"><a href="#cb29-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_panproto.py" start-line=638 end-line=656}</span></span>
+<span id="cb29-376"><a href="#cb29-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-377"><a href="#cb29-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-378"><a href="#cb29-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Enrichment</span></span>
+<span id="cb29-379"><a href="#cb29-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-380"><a href="#cb29-380" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaBuilder`</span> supports enrichment through constraints, which encode defaults, coercions, and merge policies:</span>
+<span id="cb29-381"><a href="#cb29-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-382"><a href="#cb29-382" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-383"><a href="#cb29-383" aria-hidden="true" tabindex="-1"></a><span class="co"># Add constraints to encode enriched schema properties</span></span>
+<span id="cb29-384"><a href="#cb29-384" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> (</span>
+<span id="cb29-385"><a href="#cb29-385" aria-hidden="true" tabindex="-1"></a>    protocol.schema()</span>
+<span id="cb29-386"><a href="#cb29-386" aria-hidden="true" tabindex="-1"></a>    .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb29-387"><a href="#cb29-387" aria-hidden="true" tabindex="-1"></a>    .vertex(<span class="st">"post:body.text"</span>, <span class="st">"string"</span>)</span>
+<span id="cb29-388"><a href="#cb29-388" aria-hidden="true" tabindex="-1"></a>    .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.text"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"text"</span>})</span>
+<span id="cb29-389"><a href="#cb29-389" aria-hidden="true" tabindex="-1"></a>    .constraint(<span class="st">"post:body.text"</span>, <span class="st">"maxLength"</span>, <span class="st">"3000"</span>)   <span class="co"># refinement type</span></span>
+<span id="cb29-390"><a href="#cb29-390" aria-hidden="true" tabindex="-1"></a>    .constraint(<span class="st">"post:body.text"</span>, <span class="st">"minLength"</span>, <span class="st">"1"</span>)       <span class="co"># lower bound</span></span>
+<span id="cb29-391"><a href="#cb29-391" aria-hidden="true" tabindex="-1"></a>    .build()</span>
+<span id="cb29-392"><a href="#cb29-392" aria-hidden="true" tabindex="-1"></a>) <span class="im">as</span> schema:</span>
+<span id="cb29-393"><a href="#cb29-393" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> schema.data[<span class="st">"constraints"</span>][<span class="st">"post:body.text"</span>][<span class="dv">0</span>][<span class="st">"sort"</span>] <span class="op">==</span> <span class="st">"maxLength"</span></span>
+<span id="cb29-394"><a href="#cb29-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-395"><a href="#cb29-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-396"><a href="#cb29-396" aria-hidden="true" tabindex="-1"></a>Constraints serve triple duty: they encode refinement types (value bounds), default behaviors (when a field has a known initial value), and coercion hints (when a field can be safely converted between representations). The protocol's <span class="in">`constraint_sorts`</span> list determines which constraint sorts are recognized during compatibility checking.</span>
+<span id="cb29-397"><a href="#cb29-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-398"><a href="#cb29-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Analysis</span></span>
+<span id="cb29-399"><a href="#cb29-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-400"><a href="#cb29-400" aria-hidden="true" tabindex="-1"></a>The SDK provides analysis capabilities through the diff/classify pipeline:</span>
+<span id="cb29-401"><a href="#cb29-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-402"><a href="#cb29-402" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-403"><a href="#cb29-403" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute structural diff</span></span>
+<span id="cb29-404"><a href="#cb29-404" aria-hidden="true" tabindex="-1"></a>diff_report <span class="op">=</span> pp.diff(old_schema, new_schema)</span>
+<span id="cb29-405"><a href="#cb29-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-406"><a href="#cb29-406" aria-hidden="true" tabindex="-1"></a><span class="co"># Classify into breaking vs. non-breaking</span></span>
+<span id="cb29-407"><a href="#cb29-407" aria-hidden="true" tabindex="-1"></a>compat <span class="op">=</span> pp.classify(diff_report)</span>
+<span id="cb29-408"><a href="#cb29-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-409"><a href="#cb29-409" aria-hidden="true" tabindex="-1"></a><span class="co"># Coverage: fraction of source vertices surviving in target</span></span>
+<span id="cb29-410"><a href="#cb29-410" aria-hidden="true" tabindex="-1"></a>total_changes <span class="op">=</span> <span class="bu">len</span>(compat[<span class="st">"breaking"</span>]) <span class="op">+</span> <span class="bu">len</span>(compat[<span class="st">"non_breaking"</span>])</span>
+<span id="cb29-411"><a href="#cb29-411" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> total_changes <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb29-412"><a href="#cb29-412" aria-hidden="true" tabindex="-1"></a>    coverage <span class="op">=</span> <span class="bu">len</span>(compat[<span class="st">"non_breaking"</span>]) <span class="op">/</span> total_changes</span>
+<span id="cb29-413"><a href="#cb29-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-414"><a href="#cb29-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-415"><a href="#cb29-415" aria-hidden="true" tabindex="-1"></a>For optic classification, the protolens chain structure reveals whether a migration is an isomorphism (lossless, rename-only), a lens (lossy, drops data), or more complex:</span>
+<span id="cb29-416"><a href="#cb29-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-417"><a href="#cb29-417" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-418"><a href="#cb29-418" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> ProtolensChainHandle</span>
+<span id="cb29-419"><a href="#cb29-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-420"><a href="#cb29-420" aria-hidden="true" tabindex="-1"></a><span class="co"># Auto-generate protolens</span></span>
+<span id="cb29-421"><a href="#cb29-421" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ProtolensChainHandle.auto_generate(schema1, schema2, wasm) <span class="im">as</span> chain:</span>
+<span id="cb29-422"><a href="#cb29-422" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fuse to analyze the composed transform</span></span>
+<span id="cb29-423"><a href="#cb29-423" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> chain.fuse() <span class="im">as</span> fused:</span>
+<span id="cb29-424"><a href="#cb29-424" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Serialize to inspect the transform structure</span></span>
+<span id="cb29-425"><a href="#cb29-425" aria-hidden="true" tabindex="-1"></a>        spec <span class="op">=</span> fused.to_json()</span>
+<span id="cb29-426"><a href="#cb29-426" aria-hidden="true" tabindex="-1"></a>        <span class="co"># spec["complement_constructor"] == "Empty" means isomorphism</span></span>
+<span id="cb29-427"><a href="#cb29-427" aria-hidden="true" tabindex="-1"></a>        <span class="co"># "DroppedSortData" in complement means lens</span></span>
+<span id="cb29-428"><a href="#cb29-428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-429"><a href="#cb29-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-430"><a href="#cb29-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## GAT Engine Access</span></span>
+<span id="cb29-431"><a href="#cb29-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-432"><a href="#cb29-432" aria-hidden="true" tabindex="-1"></a>The SDK provides direct access to the GAT engine for theory construction and composition:</span>
+<span id="cb29-433"><a href="#cb29-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-434"><a href="#cb29-434" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-435"><a href="#cb29-435" aria-hidden="true" tabindex="-1"></a><span class="co"># Create theories via WASM</span></span>
+<span id="cb29-436"><a href="#cb29-436" aria-hidden="true" tabindex="-1"></a>theory_spec <span class="op">=</span> {</span>
+<span id="cb29-437"><a href="#cb29-437" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"ThGraph"</span>,</span>
+<span id="cb29-438"><a href="#cb29-438" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sorts"</span>: [</span>
+<span id="cb29-439"><a href="#cb29-439" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"Vertex"</span>, <span class="st">"params"</span>: []},</span>
+<span id="cb29-440"><a href="#cb29-440" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"Edge"</span>, <span class="st">"params"</span>: []},</span>
+<span id="cb29-441"><a href="#cb29-441" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb29-442"><a href="#cb29-442" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ops"</span>: [</span>
+<span id="cb29-443"><a href="#cb29-443" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"src"</span>, <span class="st">"inputs"</span>: [[<span class="st">"e"</span>, <span class="st">"Edge"</span>]], <span class="st">"output"</span>: <span class="st">"Vertex"</span>},</span>
+<span id="cb29-444"><a href="#cb29-444" aria-hidden="true" tabindex="-1"></a>        {<span class="st">"name"</span>: <span class="st">"tgt"</span>, <span class="st">"inputs"</span>: [[<span class="st">"e"</span>, <span class="st">"Edge"</span>]], <span class="st">"output"</span>: <span class="st">"Vertex"</span>},</span>
+<span id="cb29-445"><a href="#cb29-445" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb29-446"><a href="#cb29-446" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eqs"</span>: [],</span>
+<span id="cb29-447"><a href="#cb29-447" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-448"><a href="#cb29-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-449"><a href="#cb29-449" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pp.create_theory(theory_spec) <span class="im">as</span> th_graph:</span>
+<span id="cb29-450"><a href="#cb29-450" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compose theories via colimit</span></span>
+<span id="cb29-451"><a href="#cb29-451" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pp.colimit_theories(th_graph, th_constraint, shared) <span class="im">as</span> composed:</span>
+<span id="cb29-452"><a href="#cb29-452" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># use composed theory</span></span>
+<span id="cb29-453"><a href="#cb29-453" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-454"><a href="#cb29-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-455"><a href="#cb29-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS Integration</span></span>
+<span id="cb29-456"><a href="#cb29-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-457"><a href="#cb29-457" aria-hidden="true" tabindex="-1"></a>The SDK exposes version control operations for schemas and data:</span>
+<span id="cb29-458"><a href="#cb29-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-459"><a href="#cb29-459" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-460"><a href="#cb29-460" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a repository</span></span>
+<span id="cb29-461"><a href="#cb29-461" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pp.vcs_init(<span class="st">"atproto"</span>) <span class="im">as</span> repo:</span>
+<span id="cb29-462"><a href="#cb29-462" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stage and commit schema changes</span></span>
+<span id="cb29-463"><a href="#cb29-463" aria-hidden="true" tabindex="-1"></a>    pp.vcs_add(repo, schema)</span>
+<span id="cb29-464"><a href="#cb29-464" aria-hidden="true" tabindex="-1"></a>    commit_hash <span class="op">=</span> pp.vcs_commit(repo, <span class="st">"add post schema"</span>, <span class="st">"author@example.com"</span>)</span>
+<span id="cb29-465"><a href="#cb29-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-466"><a href="#cb29-466" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Query history</span></span>
+<span id="cb29-467"><a href="#cb29-467" aria-hidden="true" tabindex="-1"></a>    log <span class="op">=</span> pp.vcs_log(repo, count<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb29-468"><a href="#cb29-468" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> pp.vcs_status(repo)</span>
+<span id="cb29-469"><a href="#cb29-469" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-470"><a href="#cb29-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-471"><a href="#cb29-471" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage Pattern</span></span>
+<span id="cb29-472"><a href="#cb29-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-473"><a href="#cb29-473" aria-hidden="true" tabindex="-1"></a>A typical SDK session:</span>
+<span id="cb29-474"><a href="#cb29-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-475"><a href="#cb29-475" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb29-476"><a href="#cb29-476" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> Panproto</span>
+<span id="cb29-477"><a href="#cb29-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-478"><a href="#cb29-478" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize (loads WASM)</span></span>
+<span id="cb29-479"><a href="#cb29-479" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Panproto.load() <span class="im">as</span> pp:</span>
+<span id="cb29-480"><a href="#cb29-480" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get a protocol</span></span>
+<span id="cb29-481"><a href="#cb29-481" aria-hidden="true" tabindex="-1"></a>    atproto <span class="op">=</span> pp.protocol(<span class="st">"atproto"</span>)</span>
+<span id="cb29-482"><a href="#cb29-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-483"><a href="#cb29-483" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build schemas</span></span>
+<span id="cb29-484"><a href="#cb29-484" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> (</span>
+<span id="cb29-485"><a href="#cb29-485" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
+<span id="cb29-486"><a href="#cb29-486" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
+<span id="cb29-487"><a href="#cb29-487" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb29-488"><a href="#cb29-488" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
+<span id="cb29-489"><a href="#cb29-489" aria-hidden="true" tabindex="-1"></a>        .build()</span>
+<span id="cb29-490"><a href="#cb29-490" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> old_schema, (</span>
+<span id="cb29-491"><a href="#cb29-491" aria-hidden="true" tabindex="-1"></a>        atproto.schema()</span>
+<span id="cb29-492"><a href="#cb29-492" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post"</span>, <span class="st">"record"</span>, {<span class="st">"nsid"</span>: <span class="st">"app.bsky.feed.post"</span>})</span>
+<span id="cb29-493"><a href="#cb29-493" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body"</span>, <span class="st">"object"</span>)</span>
+<span id="cb29-494"><a href="#cb29-494" aria-hidden="true" tabindex="-1"></a>        .vertex(<span class="st">"post:body.tags"</span>, <span class="st">"array"</span>)</span>
+<span id="cb29-495"><a href="#cb29-495" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post"</span>, <span class="st">"post:body"</span>, <span class="st">"record-schema"</span>)</span>
+<span id="cb29-496"><a href="#cb29-496" aria-hidden="true" tabindex="-1"></a>        .edge(<span class="st">"post:body"</span>, <span class="st">"post:body.tags"</span>, <span class="st">"prop"</span>, {<span class="st">"name"</span>: <span class="st">"tags"</span>})</span>
+<span id="cb29-497"><a href="#cb29-497" aria-hidden="true" tabindex="-1"></a>        .build()</span>
+<span id="cb29-498"><a href="#cb29-498" aria-hidden="true" tabindex="-1"></a>    ) <span class="im">as</span> new_schema:</span>
+<span id="cb29-499"><a href="#cb29-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-500"><a href="#cb29-500" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compile migration</span></span>
+<span id="cb29-501"><a href="#cb29-501" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> (</span>
+<span id="cb29-502"><a href="#cb29-502" aria-hidden="true" tabindex="-1"></a>            pp.migration(old_schema, new_schema)</span>
+<span id="cb29-503"><a href="#cb29-503" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post"</span>, <span class="st">"post"</span>)</span>
+<span id="cb29-504"><a href="#cb29-504" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">map</span>(<span class="st">"post:body"</span>, <span class="st">"post:body"</span>)</span>
+<span id="cb29-505"><a href="#cb29-505" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">compile</span>()</span>
+<span id="cb29-506"><a href="#cb29-506" aria-hidden="true" tabindex="-1"></a>        ) <span class="im">as</span> migration:</span>
+<span id="cb29-507"><a href="#cb29-507" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Transform records</span></span>
+<span id="cb29-508"><a href="#cb29-508" aria-hidden="true" tabindex="-1"></a>            result <span class="op">=</span> migration.lift({<span class="st">"text"</span>: <span class="st">"hello"</span>})</span>
+<span id="cb29-509"><a href="#cb29-509" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb29-510"><a href="#cb29-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-511"><a href="#cb29-511" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb29-512"><a href="#cb29-512" aria-hidden="true" tabindex="-1"></a>The <span class="in">`with`</span> statement ensures all WASM handles are freed when the block exits. Nested <span class="in">`with`</span> blocks (or the parenthesized multi-context form shown above) are the Python equivalent of TypeScript's <span class="in">`using`</span> keyword. If you need to manage handle lifetimes more flexibly, call <span class="in">`.close()`</span> manually or use <span class="in">`contextlib.ExitStack`</span>.</span>
+<span id="cb29-513"><a href="#cb29-513" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb29-514"><a href="#cb29-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-515"><a href="#cb29-515" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions {#sec-python-conventions}</span></span>
+<span id="cb29-516"><a href="#cb29-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-517"><a href="#cb29-517" aria-hidden="true" tabindex="-1"></a>The Python SDK enforces the following project conventions:</span>
+<span id="cb29-518"><a href="#cb29-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-519"><a href="#cb29-519" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Python 3.13+** -- The minimum supported version. The SDK uses PEP 695 type aliases, structural pattern matching, parenthesized context managers, and other 3.13 features.</span>
+<span id="cb29-520"><a href="#cb29-520" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PEP 695 type statements** -- All type aliases use the <span class="in">`type`</span> keyword syntax rather than <span class="in">`TypeAlias`</span>.</span>
+<span id="cb29-521"><a href="#cb29-521" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Strict pyright** -- <span class="in">`typeCheckingMode = "strict"`</span> with <span class="in">`reportMissingTypeStubs = false`</span>. All public and private functions have complete type annotations.</span>
+<span id="cb29-522"><a href="#cb29-522" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ruff** -- Lint and format with <span class="in">`target-version = "py313"`</span> and <span class="in">`line-length = 99`</span>. The enabled rule sets include pyflakes, pycodestyle, isort, pep8-naming, pyupgrade, bugbear, builtins shadowing, comprehensions, simplify, type-checking imports, and ruff-specific rules.</span>
+<span id="cb29-523"><a href="#cb29-523" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**numpy docstrings** -- All public classes and functions use the numpy docstring convention with <span class="in">`Parameters`</span>, <span class="in">`Returns`</span>, <span class="in">`Raises`</span>, and <span class="in">`Examples`</span> sections.</span>
+<span id="cb29-524"><a href="#cb29-524" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Immutable builders** -- <span class="in">`SchemaBuilder`</span> and <span class="in">`MigrationBuilder`</span> return new instances on every mutation. Internal state uses tuples and frozen dicts.</span>
+<span id="cb29-525"><a href="#cb29-525" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`__slots__` everywhere** -- All classes define <span class="in">`__slots__`</span> for memory efficiency and to catch attribute typos.</span>
+<span id="cb29-526"><a href="#cb29-526" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`@final` leaf classes** -- All concrete classes that should not be subclassed are decorated with <span class="in">`@final`</span>.</span>
+<span id="cb29-527"><a href="#cb29-527" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Underscore-prefixed private modules** -- All implementation modules use the <span class="in">`_`</span> prefix. The public API surface is defined in <span class="in">`__init__.py`</span> via <span class="in">`__all__`</span>.</span>
+<span id="cb29-528"><a href="#cb29-528" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**MIT license** -- Consistent with the rest of the panproto project.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

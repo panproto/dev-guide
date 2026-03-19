@@ -583,7 +583,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#protocol-variant" id="toc-protocol-variant" class="nav-link" data-scroll-target="#protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</a></li>
   </ul></li>
   <li><a href="#sec-commit-extensions" id="toc-sec-commit-extensions" class="nav-link" data-scroll-target="#sec-commit-extensions"><span class="header-section-number">21.2</span> CommitObject extensions</a></li>
-  <li><a href="#sec-data-hash-functions" id="toc-sec-data-hash-functions" class="nav-link" data-scroll-target="#sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for new types</a></li>
+  <li><a href="#sec-data-hash-functions" id="toc-sec-data-hash-functions" class="nav-link" data-scroll-target="#sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for data types</a></li>
   <li><a href="#sec-data-mig-algorithms" id="toc-sec-data-mig-algorithms" class="nav-link" data-scroll-target="#sec-data-mig-algorithms"><span class="header-section-number">21.4</span> data_mig.rs: migrate_forward/backward algorithms</a>
   <ul class="collapse">
   <li><a href="#migrate_forward" id="toc-migrate_forward" class="nav-link" data-scroll-target="#migrate_forward"><span class="header-section-number">21.4.1</span> migrate_forward</a></li>
@@ -671,7 +671,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="protocol-variant" class="level3" data-number="21.1.3">
 <h3 data-number="21.1.3" class="anchored" data-anchor-id="protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</h3>
-<p>The <code>Protocol</code> variant stores a complete <code>panproto_protocols::Protocol</code> value. This is the same struct used throughout the codebase—no wrapper or subset. Serialization uses the existing <code>serde</code> implementation with MessagePack encoding.</p>
+<p>The <code>Protocol</code> variant stores a complete <code>panproto_protocols::Protocol</code> value. This is the same struct used throughout the codebase—no wrapper or subset. Serialization uses the <code>serde</code> implementation with MessagePack encoding.</p>
 </section>
 </section>
 <section id="sec-commit-extensions" class="level2" data-number="21.2">
@@ -711,9 +711,9 @@ Note
 </div>
 </section>
 <section id="sec-data-hash-functions" class="level2" data-number="21.3">
-<h2 data-number="21.3" class="anchored" data-anchor-id="sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for new types</h2>
+<h2 data-number="21.3" class="anchored" data-anchor-id="sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for data types</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/hash.rs</code></p>
-<p>Content addressing requires a canonical serialization. The existing <code>hash_object</code> function dispatches on the <code>Object</code> variant. Three new arms handle the new types:</p>
+<p>Content addressing requires a canonical serialization. The <code>hash_object</code> function dispatches on the <code>Object</code> variant. Three arms handle these types:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">Object::</span>DataSet(ds) <span class="op">=&gt;</span> <span class="op">{</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    buf<span class="op">.</span>extend_from_slice(<span class="st">b"dataset</span><span class="sc">\0</span><span class="st">"</span>)<span class="op">;</span></span>
@@ -894,7 +894,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code>Index</code> is serialized as JSON to <code>.panproto/index.json</code>. The new fields use <code>serde(default)</code> on <code>staged_data</code> (defaults to empty vec) but <code>staged_protocol</code> is <code>Option&lt;Protocol&gt;</code> (defaults to <code>None</code>). This means old index files missing these fields will deserialize with empty data staging, but the <code>Index</code> struct itself is a breaking change because the <code>CommitObject</code> it produces now requires the new fields.</p>
+<p>The <code>Index</code> is serialized as JSON to <code>.panproto/index.json</code>. The <code>staged_data</code> field uses <code>serde(default)</code> (defaults to empty vec) and <code>staged_protocol</code> is <code>Option&lt;Protocol&gt;</code> (defaults to <code>None</code>).</p>
 </div>
 </div>
 
@@ -1439,7 +1439,7 @@ Note
 <span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="fu">### Protocol variant</span></span>
 <span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Protocol`</span> variant stores a complete <span class="in">`panproto_protocols::Protocol`</span> value. This is the same struct used throughout the codebase---no wrapper or subset. Serialization uses the existing <span class="in">`serde`</span> implementation with MessagePack encoding.</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Protocol`</span> variant stores a complete <span class="in">`panproto_protocols::Protocol`</span> value. This is the same struct used throughout the codebase---no wrapper or subset. Serialization uses the <span class="in">`serde`</span> implementation with MessagePack encoding.</span>
 <span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## CommitObject extensions {#sec-commit-extensions}</span></span>
 <span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a></span>
@@ -1471,11 +1471,11 @@ Note
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>These fields are not <span class="in">`serde(default)`</span>. Existing serialized commits will fail to deserialize. This is a breaking change. Repositories created before this version must be re-initialized.</span>
 <span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hash functions: canonical forms for new types {#sec-data-hash-functions}</span></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hash functions: canonical forms for data types {#sec-data-hash-functions}</span></span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/hash.rs`</span></span>
 <span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>Content addressing requires a canonical serialization. The existing <span class="in">`hash_object`</span> function dispatches on the <span class="in">`Object`</span> variant. Three new arms handle the new types:</span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>Content addressing requires a canonical serialization. The <span class="in">`hash_object`</span> function dispatches on the <span class="in">`Object`</span> variant. Three arms handle these types:</span>
 <span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
 <span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>Object<span class="sc">::</span><span class="fu">DataSet</span>(ds) <span class="sc">=&gt;</span> {</span>
@@ -1659,7 +1659,7 @@ Note
 <span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a>Only one protocol can be staged per commit. Calling <span class="in">`add_protocol`</span> twice overwrites the first.</span>
 <span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a>:::{.callout-note}</span>
-<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Index`</span> is serialized as JSON to <span class="in">`.panproto/index.json`</span>. The new fields use <span class="in">`serde(default)`</span> on <span class="in">`staged_data`</span> (defaults to empty vec) but <span class="in">`staged_protocol`</span> is <span class="in">`Option&lt;Protocol&gt;`</span> (defaults to <span class="in">`None`</span>). This means old index files missing these fields will deserialize with empty data staging, but the <span class="in">`Index`</span> struct itself is a breaking change because the <span class="in">`CommitObject`</span> it produces now requires the new fields.</span>
+<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Index`</span> is serialized as JSON to <span class="in">`.panproto/index.json`</span>. The <span class="in">`staged_data`</span> field uses <span class="in">`serde(default)`</span> (defaults to empty vec) and <span class="in">`staged_protocol`</span> is <span class="in">`Option&lt;Protocol&gt;`</span> (defaults to <span class="in">`None`</span>).</span>
 <span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

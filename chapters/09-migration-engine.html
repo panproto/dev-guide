@@ -664,6 +664,7 @@ window.Quarto = {
   <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">9.12</span> Error Handling</a></li>
   <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">9.13</span> Module Map</a></li>
   <li><a href="#testing-strategy" id="toc-testing-strategy" class="nav-link" data-scroll-target="#testing-strategy"><span class="header-section-number">9.14</span> Testing Strategy</a></li>
+  <li><a href="#sec-coverage-analysis" id="toc-sec-coverage-analysis" class="nav-link" data-scroll-target="#sec-coverage-analysis"><span class="header-section-number">9.15</span> Coverage Analysis (Partiality)</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/09-migration-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -728,35 +729,35 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="36"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 35;"><span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>allow<span class="at">(</span><span class="pp">clippy::</span>type_complexity<span class="at">)]</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span>with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec"</span><span class="at">)]</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> hyper_resolver<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span>Name<span class="op">&gt;</span>)<span class="op">,</span> (Name<span class="op">,</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span>)<span class="op">&gt;,</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Migration <span class="op">{</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an identity migration for the given schema vertex and edge sets.</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Every vertex maps to itself and every edge maps to itself.</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> identity(vertices<span class="op">:</span> <span class="op">&amp;</span>[Name]<span class="op">,</span> edges<span class="op">:</span> <span class="op">&amp;</span>[Edge]) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span> <span class="op">=</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>v<span class="op">|</span> (v<span class="op">.</span>clone()<span class="op">,</span> v<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;</span> <span class="op">=</span> edges<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>e<span class="op">|</span> (e<span class="op">.</span>clone()<span class="op">,</span> e<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">,</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">,</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            hyper_resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty migration (no mappings).</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Expression-based resolvers for enriched migrations.</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> with <span class="op">=</span> <span class="st">"panproto_schema::serde_helpers::map_as_vec_default"</span><span class="at">)]</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> expr_resolvers<span class="op">:</span> HashMap<span class="op">&lt;</span>(Name<span class="op">,</span> Name)<span class="op">,</span> <span class="pp">panproto_expr::</span>Expr<span class="op">&gt;,</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Migration <span class="op">{</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an identity migration for the given schema vertex and edge sets.</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Every vertex maps to itself and every edge maps to itself.</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> identity(vertices<span class="op">:</span> <span class="op">&amp;</span>[Name]<span class="op">,</span> edges<span class="op">:</span> <span class="op">&amp;</span>[Edge]) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> vertex_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;</span> <span class="op">=</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            vertices<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>v<span class="op">|</span> (v<span class="op">.</span>clone()<span class="op">,</span> v<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> edge_map<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;</span> <span class="op">=</span> edges<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>e<span class="op">|</span> (e<span class="op">.</span>clone()<span class="op">,</span> e<span class="op">.</span>clone()))<span class="op">.</span>collect()<span class="op">;</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            vertex_map<span class="op">,</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            edge_map<span class="op">,</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            hyper_edge_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            label_map<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>            hyper_resolver<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>            expr_resolvers<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty migration (no mappings).</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>Migration::identity</code> is the starting point for incremental migration construction—begin with identity and then override specific entries to express the desired transformation. It also serves as the unit element for composition: composing any migration with the identity yields the original migration.</p>
 <p><code>Migration::empty</code> serves as the zero element when building migrations programmatically. It is primarily useful in test scaffolding or when constructing migrations from combinators where the initial state has no mappings.</p>
 </section>
@@ -1187,6 +1188,18 @@ Important
 </ul>
 <p>The test suite is intentionally structured so that each test constructs its own minimal schema pair and migration from scratch, avoiding shared test fixtures that could mask bugs through accidental coupling. See Chapter 17 for the project-wide testing conventions.</p>
 <p>Property-based tests (using <code>proptest</code>) supplement the hand-crafted cases, generating random schemas and migrations to verify invariants like “composing a migration with its inverse yields an identity migration” and “existence checking accepts the identity migration for any schema.”</p>
+</section>
+<section id="sec-coverage-analysis" class="level2" data-number="9.15">
+<h2 data-number="9.15" class="anchored" data-anchor-id="sec-coverage-analysis"><span class="header-section-number">9.15</span> Coverage Analysis (Partiality)</h2>
+<p><strong>File</strong>: <code>crates/panproto-mig/src/coverage.rs</code></p>
+<p>Not every record can survive every migration. A coercion from string to int fails on non-numeric strings. A constraint tightening rejects values that violate the new constraint. The <code>check_coverage</code> function provides dry-run capability: it attempts the migration on each record individually and reports which succeed and which fail, without modifying any data.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CoverageReport <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> total_records<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> successful<span class="op">:</span> <span class="dt">usize</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> failed<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>PartialFailure<span class="op">&gt;,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> coverage_ratio<span class="op">:</span> <span class="dt">f64</span><span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each <code>PartialFailure</code> records the failing record’s ID and the reason: <code>ConstraintViolation</code>, <code>MissingRequiredField</code>, <code>TypeMismatch</code>, or <code>ExprEvalFailed</code>. This integrates with the CLI’s <code>schema migrate --dry-run</code> command, which prints a coverage report before committing to the migration.</p>
 
 
 <!-- -->
@@ -1686,326 +1699,343 @@ Ehrig, Hartmut, Karsten Ehrig, Ulrike Prange, and Gabriele Taentzer. 2006. <em>F
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-mig --- The Migration Engine {#sec-migration-engine}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-mig`</span> crate is the core migration engine for panproto. It computes, validates, and applies schema migrations---transforming instances from one schema version to another while preserving data integrity through theory morphisms. This chapter walks through the full migration pipeline, from specification to execution.</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>panproto derives its validation rules from the protocol's algebraic theory rather than hardcoding them, making the same engine work across all 60+ supported protocols.</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>The crate lives at <span class="in">`crates/panproto-mig`</span> and is published as <span class="in">`panproto-mig`</span> on crates.io. It depends on <span class="in">`panproto-schema`</span> for schema types, <span class="in">`panproto-gat`</span> for theory types, and <span class="in">`panproto-inst`</span> for compiled migration and instance types.</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Migration Struct</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Migration`</span> describes a mapping between two schemas. It encodes the graph morphism (vertex and edge maps), hyper-edge maps for protocols with multi-arity relations, and resolvers for disambiguation when intermediate vertices are contracted.</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/migration.rs" start-line=13 end-line=34}</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>The six fields break down into three logical groups:</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>**Core morphism.** The <span class="in">`vertex_map`</span> and <span class="in">`edge_map`</span> fields define the fundamental graph morphism from source schema to target schema. Every source vertex that should survive in the target gets an entry in <span class="in">`vertex_map`</span>; vertices absent from the map are dropped. Similarly, <span class="in">`edge_map`</span> records how source edges correspond to target edges.</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>**Hyper-edge morphism.** The <span class="in">`hyper_edge_map`</span> and <span class="in">`label_map`</span> fields handle protocols whose schema theories include the <span class="in">`HyperEdge`</span> sort (a type in a formal theory, not a sorting operation) --- Group B protocols such as SQL, Parquet, and Cassandra). A hyper-edge connects multiple vertices via labeled positions, so the mapping must track both the hyper-edge identity and the label assignments.</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>**Contraction resolvers.** The <span class="in">`resolver`</span> and <span class="in">`hyper_resolver`</span> fields handle the case where a migration contracts intermediate vertices. For example, if a schema has the path <span class="in">`A -&gt; B -&gt; C`</span> and the migration drops <span class="in">`B`</span>, the resulting schema connects <span class="in">`A`</span> directly to <span class="in">`C`</span>. But there may be multiple edges between <span class="in">`A`</span> and <span class="in">`C`</span> in the target---the resolver records which one to use. The <span class="in">`hyper_resolver`</span> does the same for hyper-edge contraction, additionally providing label remaps.</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identity and Empty Migrations</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>Two constructors cover the common base cases: an identity migration that maps everything to itself, and an empty migration with no mappings at all.</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/migration.rs" start-line=36 end-line=67}</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">`Migration::identity`</span> is the starting point for incremental migration construction---begin with identity and then override specific entries to express the desired transformation. It also serves as the unit element for composition: composing any migration with the identity yields the original migration.</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="in">`Migration::empty`</span> serves as the zero element when building migrations programmatically. It is primarily useful in test scaffolding or when constructing migrations from combinators where the initial state has no mappings.</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Migration Pipeline</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>The full pipeline for applying a migration follows five stages:</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    participant User</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    participant Mig as Migration</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    participant Exist as check_existence</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    participant Comp as compile()</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    participant CM as CompiledMigration</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    participant Lift as lift_wtype / lift_functor</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Mig: define vertex_map, edge_map, ...</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    Mig-&gt;&gt;Exist: check_existence(protocol, src, tgt, mig, registry)</span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    Exist--&gt;&gt;Mig: ExistenceReport { valid, errors }</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    Mig-&gt;&gt;Comp: compile(src, tgt, migration)</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    Comp--&gt;&gt;CM: CompiledMigration</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    CM-&gt;&gt;Lift: lift_wtype(instance, compiled) <span class="ot">or</span> lift_functor(...)</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    Lift--&gt;&gt;User: transformed instance</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Existence checking** (<span class="in">`check_existence`</span>): validates that the migration is well-formed with respect to the protocol's theories.</span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compilation** (<span class="in">`compile`</span>): pre-computes surviving sets, remapping tables, and resolvers for fast per-record application.</span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Lifting** (<span class="in">`lift_wtype`</span>, <span class="in">`lift_functor`</span>): applies the compiled migration to concrete tree or table instances.</span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Composition** (<span class="in">`compose`</span>): chains two sequential migrations into a single equivalent migration.</span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Inversion** (<span class="in">`invert`</span>): constructs the inverse migration when the original is bijective.</span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>Stages 1--3 form the critical path for applying a single migration. Stages 4 and 5 are used when managing sequences of migrations or implementing rollback capabilities.</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory-Derived Existence Checking</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>The existence checker is one of the most distinctive parts of panproto's migration engine. Rather than hardcoding a fixed set of validation rules, <span class="in">`check_existence`</span> inspects the protocol's schema and instance theory sorts at runtime to determine which checks apply. The validation rules are derived from the structure of the protocol's theory, so adding a new protocol with novel theory composition requires no code changes to <span class="in">`panproto-mig`</span>.^<span class="co">[</span><span class="ot">Rather than hardcoding validation rules, panproto derives them from the protocol's theory structure --- checking constraints only when the theory declares a Constraint sort, checking hyper-edge signatures only when the theory declares a HyperEdge sort. This approach is inspired by the double-pushout rewriting framework [@ehrig2006], where validation conditions are derived from the structure of the rule rather than enumerated by hand.</span><span class="co">]</span></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="fu">### ExistenceReport and check_existence</span></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ExistenceReport`</span> struct carries the validation result, and <span class="in">`check_existence`</span> is the entry point:</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/existence.rs" start-line=17 end-line=94}</span></span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Theory Inspection Works</span></span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>The function looks up the protocol's schema theory and instance theory from a registry, then queries for specific sorts to decide which validation checks to run:</span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Always checked** (regardless of theory structure): vertex map validity, edge map validity, kind consistency. These are fundamental properties of any graph morphism---they must hold for every protocol.</span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Constraint` sort present in schema theory**: enables constraint compatibility checking. The target schema must not impose strictly tighter constraints than the source. For example, reducing <span class="in">`maxLength`</span> from 3000 to 300 means existing data with 3000-character strings would violate the new constraint.</span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`HyperEdge` sort present in schema theory**: enables two additional checks. *Signature coherence* verifies that mapped hyper-edges have compatible label-to-vertex assignments. *Simultaneity* verifies that all labels in a target hyper-edge reference surviving vertices---you cannot have a SQL foreign key that references a dropped table.</span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Node` sort present in instance theory**: enables reachability risk detection for tree instances. When intermediate vertices are dropped, subtrees that were connected through those vertices may become disconnected from the root, producing orphaned data.</span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>    A[check_existence] --&gt; B{Schema theory lookup}</span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>    B --&gt; C[Always: vertex <span class="fu">map</span> validity]</span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>    B --&gt; D[Always: edge <span class="fu">map</span> validity]</span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>    B --&gt; E[Always: kind consistency]</span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>    B --&gt; F{Constraint <span class="fu">sort</span>?}</span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>    F --&gt;|Yes| G[Constraint compatibility]</span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    F --&gt;|No| H[Skip]</span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>    B --&gt; I{HyperEdge <span class="fu">sort</span>?}</span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>    I --&gt;|Yes| J[Signature coherence]</span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>    I --&gt;|Yes| K[Simultaneity]</span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>    I --&gt;|No| L[Skip]</span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>    A --&gt; M{Instance theory lookup}</span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>    M --&gt; N{Node <span class="fu">sort</span>?}</span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>    N --&gt;|Yes| O[Reachability risks]</span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>    N --&gt;|No| P[Skip]</span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>A protocol whose schema theory has both <span class="in">`Constraint`</span> and <span class="in">`HyperEdge`</span> sorts (like SQL) will get all conditional checks; a protocol with neither (like a minimal custom protocol) will only get the universal checks.</span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint Compatibility in Detail</span></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>The constraint compatibility check deserves special attention because it is the most subtle. When the schema theory has a <span class="in">`Constraint`</span> sort, the checker verifies two properties:</span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**No tightening**: for each mapped vertex, every constraint in the target must not be strictly more restrictive than the corresponding constraint in the source. For upper-bound constraints (<span class="in">`maxLength`</span>, <span class="in">`maxSize`</span>, <span class="in">`maximum`</span>), a smaller target value is tighter. For lower-bound constraints (<span class="in">`minLength`</span>, <span class="in">`minimum`</span>), a larger target value is tighter.</span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**No missing required fields**: if the target schema marks an edge as required for a vertex, the source must have a corresponding edge (possibly via the edge map) that maps to it. Adding a required field with no default is a migration obstruction.</span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reachability in Detail</span></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>The reachability check applies only when the instance theory has a <span class="in">`Node`</span> sort (tree instances). It approximates whether dropping vertices will disconnect subtrees from the root by checking, for each surviving non-root vertex, whether it has at least one incoming edge from another surviving vertex in the source schema. If a vertex's only path from the root passes through a dropped vertex, the checker emits a <span class="in">`ReachabilityRisk`</span> warning.</span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>The reachability check is an *approximation*. It verifies that each surviving vertex has a surviving parent, but it does not compute full transitive reachability from the root. In practice this is sufficient for the tree-structured instances that tree theories model, but pathological graphs with long chains of dropped vertices could produce false negatives.</span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Compilation</span></span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>The <span class="in">`compile`</span> function translates a <span class="in">`Migration`</span> specification into a <span class="in">`CompiledMigration`</span>---a form optimized for per-record application. Compilation pre-computes:</span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Surviving vertex set**: the image of <span class="in">`vertex_map`</span> in the target schema. Only nodes anchored at these vertices will be kept during lifting.</span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Surviving edge set**: the image of <span class="in">`edge_map`</span>. Only arcs corresponding to these edges will be preserved.</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Vertex and edge remap tables**: maps from source IDs to target IDs. These allow the lifter to update anchors and edge labels in O(1) per element.</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Resolver copies**: the contraction resolvers carried forward for use during lifting. When the lifter encounters two surviving nodes that were not directly connected in the source, it consults the resolver to determine which target edge to use.</span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>The compiled form enables <span class="in">`lift_wtype`</span> and <span class="in">`lift_functor`</span> to process each record in O(nodes) time without re-deriving the migration structure on every invocation. For high-throughput scenarios (e.g., migrating millions of ATProto records), this separation between compilation and execution is critical for performance.</span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>If your migration has already passed existence checking, compilation will not fail unless the migration references vertices or edges absent from the target schema (which existence checking should have caught). Always run existence checking first---it produces much more informative error messages than compilation failures.</span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lifting</span></span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>Lifting applies a compiled migration to a concrete instance. panproto supports two lifting modes corresponding to the two families of instance theories:</span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tree Lifting</span></span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_wtype`</span> handles tree-shaped instances used by JSON-like, XML-like, and document protocols:</span>
-<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Walks the source instance's node tree from the root.</span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each node, checks whether its anchor vertex is in the surviving set.</span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If surviving: remaps the anchor to its target vertex ID and copies the node to the result.</span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If dropped: omits the node. Any children anchored at surviving vertices are re-parented using the resolver.</span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Rebuilds the arc list and fan list based on surviving nodes and the edge remap table.</span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>The resolver is critical during step 4. When a dropped intermediate vertex <span class="in">`B`</span> sat between <span class="in">`A`</span> and <span class="in">`C`</span>, the lifter needs to create a direct arc from <span class="in">`A`</span> to <span class="in">`C`</span>. If multiple edges exist between <span class="in">`A`</span> and <span class="in">`C`</span> in the target schema, the resolver disambiguates.</span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### Table Lifting</span></span>
-<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_functor`</span> handles tabular instances used by relational and columnar protocols:</span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Iterates over tables in the source instance.</span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each table, checks whether its anchor vertex is in the surviving set.</span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If surviving: copies all rows, remapping foreign keys according to the vertex remap table and dropping columns for non-surviving edges.</span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If dropped: omits the entire table.</span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>Both lifting functions delegate to the corresponding <span class="in">`restrict`</span> operations in <span class="in">`panproto-inst`</span>, which provide the low-level tree/table manipulation.</span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Composition and Inversion</span></span>
-<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a><span class="fu">### Composition</span></span>
-<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>Composition chains two migrations $m_1: S_1 \to S_2$ and $m_2: S_2 \to S_3$ into a single migration $m_2 \circ m_1: S_1 \to S_3$. The composed vertex map is the functional composition of the two vertex maps: for each source vertex $v$ in $S_1$, the composed map sends $v$ to $m_2(m_1(v))$. The edge and hyper-edge maps compose similarly.</span>
-<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>Resolvers from both migrations are merged, with $m_2$'s resolvers taking precedence when keys overlap. This is correct because the second migration's resolvers encode decisions about the final target schema, which take precedence over the intermediate schema's structure.</span>
-<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>Composition is associative: $(m_3 \circ m_2) \circ m_1 = m_3 \circ (m_2 \circ m_1)$. Combined with the identity migration as the unit, this makes migrations composable in the expected way.^<span class="co">[</span><span class="ot">Formally, migrations form a category---the *migration category* over a fixed protocol.</span><span class="co">]</span></span>
-<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inversion</span></span>
-<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a>Inversion constructs $m^{-1}: S_2 \to S_1$ from a migration $m: S_1 \to S_2$, but only when $m$ is bijective. Specifically, it requires:</span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Injectivity of vertex_map**: no two source vertices map to the same target vertex. If <span class="in">`user.name`</span> and <span class="in">`user.displayName`</span> both map to <span class="in">`user.label`</span>, the inverse cannot know which to restore.</span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Surjectivity of vertex_map**: every target vertex has a preimage. If the target has a vertex that no source vertex maps to, the inverse has no source for it.</span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The same conditions on <span class="in">`edge_map`</span> and <span class="in">`hyper_edge_map`</span>.</span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>If any condition fails, <span class="in">`invert`</span> returns an <span class="in">`InvertError`</span> identifying the specific obstruction.</span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>Inversion requires bijectivity. A migration that drops vertices or contracts edges is not invertible. Use the lens system (@sec-lenses) when you need round-trip transformations for non-bijective mappings.</span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type-Checked Migration Derivation</span></span>
-<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>When the VCS <span class="in">`schema add`</span> command auto-derives a migration from a schema diff, the derived migration undergoes GAT-level validation before it is staged. This validation is performed by the <span class="in">`gat_validate`</span> module in <span class="in">`panproto-vcs`</span>, which checks two properties of the derived migration:</span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### Migration Structure Validation</span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>The <span class="in">`validate_migration`</span> function inspects the derived migration's vertex and edge maps for structural coherence:</span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Non-empty vertex map**: a migration that maps zero vertices is flagged with a warning (it may indicate the diff algorithm failed to match vertices across schema versions).</span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Edge endpoint coherence**: for each mapped edge <span class="in">`(old_edge -&gt; new_edge)`</span>, the function verifies that the new edge's source and target vertices are in the vertex map's image. If an edge maps to endpoints that are not themselves mapped, the migration may be inconsistent.</span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>These checks produce warnings (stored in <span class="in">`GatDiagnostics::migration_warnings`</span>) rather than hard errors, because some legitimate migrations intentionally drop vertices while retaining edges to surviving neighbors.</span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Equation Validation</span></span>
-<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>The <span class="in">`validate_theory_equations`</span> function runs <span class="in">`typecheck_theory`</span> on the protocol's schema theory. This catches malformed equations that could arise from theory composition or inheritance. The <span class="in">`validate_schema_equations`</span> function goes further: it builds a model from the schema and runs <span class="in">`check_model_with_options`</span> to verify that the schema satisfies the protocol theory's equations.</span>
-<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>If either check finds errors, the staging pipeline marks the migration as <span class="in">`ValidationStatus::Invalid`</span> and populates the <span class="in">`gat_diagnostics`</span> field of the staged schema. The subsequent <span class="in">`schema commit`</span> will be blocked unless <span class="in">`--skip-verify`</span> is passed.</span>
-<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a><span class="fu">### Integration with auto_mig</span></span>
-<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>The <span class="in">`auto_mig::derive_migration`</span> function produces a <span class="in">`Migration`</span> struct from a schema diff. The VCS <span class="in">`Repository::add`</span> method calls this function, then immediately runs GAT validation on the result:</span>
-<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a><span class="in">schema diff -&gt; auto_mig::derive_migration -&gt; gat_validate::validate_migration -&gt; stage</span></span>
-<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>If the auto-derived migration maps very few vertices (less than half of the old schema's vertices), the pipeline falls back to <span class="in">`find_best_morphism`</span> from <span class="in">`panproto-mig`</span>'s homomorphism search, which uses a more expensive but more thorough algorithm to find the best vertex correspondence.</span>
-<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coherence Checking in compose_path</span></span>
-<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a>When the VCS merge algorithm composes migration paths through different branch histories, it must verify that the composed path is coherent -- that the composed maps commute with all operations.^<span class="co">[</span><span class="ot">The composed migration path must produce the same result regardless of which order the individual steps are applied. In categorical terms, this is the naturality condition for natural transformations between the composed morphisms.</span><span class="co">]</span></span>
-<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_natural_transformation`</span> function from <span class="in">`panproto-gat`</span> is used at two points in the merge pipeline:</span>
-<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Three-way merge verification**: after computing the merged schema, the merge algorithm constructs compatible families of maps^<span class="co">[</span><span class="ot">These are families of maps that are compatible with all operations in the theory --- meaning the maps commute with every operation. In the categorical literature, these are called natural transformations. See the tutorial's [Appendix A](https://panproto.dev/tutorial/appendices/A-formal-foundations.html).</span><span class="co">]</span> from the "ours" and "theirs" migration morphisms to the merge result. These must commute with all operations for the merge to be semantically correct.</span>
-<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Rebase coherence**: when rebasing a chain of commits onto a new base, each replayed commit's migration is composed with the base migration. The <span class="in">`vertical_compose`</span> function chains these maps, and <span class="in">`check_natural_transformation`</span> validates each composed result.</span>
-<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>The merge result struct includes a <span class="in">`pullback_overlap`</span> field that reports the shared structure^<span class="co">[</span><span class="ot">The shared structure is the set of elements that both branches agree on --- elements that map to the same thing in the merge base. Categorically, this is a pullback.</span><span class="co">]</span> of the two branch theories over the merge base theory. Non-empty overlap indicates shared structure that both branches modified, which requires careful reconciliation.</span>
-<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## Worked Example: Renaming a Field</span></span>
-<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a>To make the pipeline concrete, consider renaming the <span class="in">`text`</span> field to <span class="in">`content`</span> in a schema with vertices <span class="in">`{body, body.text}`</span> and an edge <span class="in">`body -&gt; body.text`</span> with name <span class="in">`"text"`</span>.</span>
-<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a>**Step 1: Define the migration.**</span>
-<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a>The <span class="in">`vertex_map`</span> maps <span class="in">`body`</span> to <span class="in">`body`</span> and <span class="in">`body.text`</span> to <span class="in">`body.content`</span>. The <span class="in">`edge_map`</span> maps the old edge to a new edge with name <span class="in">`"content"`</span>. No resolvers are needed because no vertices are dropped.</span>
-<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a>**Step 2: Check existence.**</span>
-<span id="cb5-242"><a href="#cb5-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-243"><a href="#cb5-243" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span> looks up the protocol's schema theory. If the theory has a <span class="in">`Constraint`</span> sort, it verifies that any constraints on <span class="in">`body.text`</span> are compatible with the constraints on <span class="in">`body.content`</span> in the target. Since this is a rename (same kind, same constraints), all checks pass.</span>
-<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a>**Step 3: Compile.**</span>
-<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a><span class="in">`compile`</span> produces a <span class="in">`CompiledMigration`</span> with:</span>
-<span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`surviving_verts`</span>: <span class="in">`{body, body.content}`</span></span>
-<span id="cb5-250"><a href="#cb5-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`surviving_edges`</span>: <span class="in">`{body -&gt; body.content (content)}`</span></span>
-<span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`vertex_remap`</span>: <span class="in">`{body.text -&gt; body.content}`</span></span>
-<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`edge_remap`</span>: old edge maps to new edge</span>
-<span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a>**Step 4: Lift.**</span>
-<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_wtype`</span> walks the source instance. Nodes anchored at <span class="in">`body`</span> keep their anchor. Nodes anchored at <span class="in">`body.text`</span> have their anchor remapped to <span class="in">`body.content`</span>. Arcs are updated to use the new edge. The result is a valid instance under the target schema.</span>
-<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>This is a bijective migration, so <span class="in">`invert`</span> would also succeed, producing a migration that renames <span class="in">`content`</span> back to <span class="in">`text`</span>.</span>
-<span id="cb5-259"><a href="#cb5-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-260"><a href="#cb5-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interaction with Other Crates</span></span>
-<span id="cb5-261"><a href="#cb5-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-262"><a href="#cb5-262" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-mig`</span> sits at the center of panproto's architecture:</span>
-<span id="cb5-263"><a href="#cb5-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-264"><a href="#cb5-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-schema`** provides the <span class="in">`Schema`</span>, <span class="in">`Edge`</span>, and <span class="in">`Protocol`</span> types that migrations operate on.</span>
-<span id="cb5-265"><a href="#cb5-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-gat`** provides the <span class="in">`Theory`</span> type used for existence checking and the merge function used by <span class="in">`panproto-protocols`</span>.^<span class="co">[</span><span class="ot">This merge combines two theories along their shared structure, producing a combined theory with all declarations from both. Categorically, this is a colimit (pushout).</span><span class="co">]</span></span>
-<span id="cb5-266"><a href="#cb5-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-inst`** provides <span class="in">`CompiledMigration`</span>, <span class="in">`WInstance`</span>, and the <span class="in">`wtype_restrict`</span>/<span class="in">`functor_restrict`</span> operations that lifting delegates to.</span>
-<span id="cb5-267"><a href="#cb5-267" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-lens`** wraps <span class="in">`CompiledMigration`</span> in a <span class="in">`Lens`</span> and adds complement tracking for non-bijective transformations.</span>
-<span id="cb5-268"><a href="#cb5-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-check`** uses <span class="in">`diff`</span> to detect changes between schemas, which can be combined with migration information.</span>
-<span id="cb5-269"><a href="#cb5-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-270"><a href="#cb5-270" aria-hidden="true" tabindex="-1"></a>Understanding these dependencies helps when debugging: if existence checking fails, the issue is in the migration specification or the theory registry. If compilation fails, the issue is in the schema. If lifting fails, the issue is in the instance or the compiled migration.</span>
-<span id="cb5-271"><a href="#cb5-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-272"><a href="#cb5-272" aria-hidden="true" tabindex="-1"></a><span class="fu">## Performance Considerations</span></span>
-<span id="cb5-273"><a href="#cb5-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-274"><a href="#cb5-274" aria-hidden="true" tabindex="-1"></a>The migration pipeline is designed for throughput:</span>
-<span id="cb5-275"><a href="#cb5-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-276"><a href="#cb5-276" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Existence checking** is O(|vertex_map| + |edge_map| + |hyper_edge_map|) for the universal checks, plus O(|constraints|) for the conditional constraint check and O(|hyper_edges| * |labels|) for the conditional signature coherence check. This is fast even for large schemas.</span>
-<span id="cb5-277"><a href="#cb5-277" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compilation** is O(|migration|) and happens once per schema version pair.</span>
-<span id="cb5-278"><a href="#cb5-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lifting** is O(|instance nodes|) per record, with hash-map lookups for remap and resolver operations. For tree instances, this is a single tree traversal. For table instances, this is a single pass over rows.</span>
-<span id="cb5-279"><a href="#cb5-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Composition** is O(|vertex_map| + |edge_map|) and happens once when chaining migrations.</span>
-<span id="cb5-280"><a href="#cb5-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-281"><a href="#cb5-281" aria-hidden="true" tabindex="-1"></a>For batch migration scenarios (e.g., migrating a million ATProto records from schema v1 to v2), the cost is dominated by lifting, which is linear in the total data size.</span>
-<span id="cb5-282"><a href="#cb5-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-283"><a href="#cb5-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
-<span id="cb5-284"><a href="#cb5-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-285"><a href="#cb5-285" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-mig`</span> error types are designed to provide actionable diagnostics:</span>
-<span id="cb5-286"><a href="#cb5-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-287"><a href="#cb5-287" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceError`**: includes variants for <span class="in">`WellFormedness`</span> (invalid vertex/edge references), <span class="in">`ConstraintTightened`</span>, <span class="in">`RequiredFieldMissing`</span>, <span class="in">`KindInconsistency`</span>, <span class="in">`SignatureCoherence`</span>, <span class="in">`Simultaneity`</span>, <span class="in">`ReachabilityRisk`</span>, and <span class="in">`EdgeMissing`</span>. Each variant carries enough context to identify the exact source of the problem.</span>
-<span id="cb5-288"><a href="#cb5-288" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ComposeError`**: reports when composition fails due to incompatible intermediate schemas.</span>
-<span id="cb5-289"><a href="#cb5-289" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`InvertError`**: identifies the specific bijectivity violation (non-injective vertex map, non-surjective edge map, etc.).</span>
-<span id="cb5-290"><a href="#cb5-290" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LiftError`**: reports runtime failures during instance transformation.</span>
-<span id="cb5-291"><a href="#cb5-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-292"><a href="#cb5-292" aria-hidden="true" tabindex="-1"></a>All error types implement <span class="in">`Display`</span> for human-readable messages and <span class="in">`Serialize`</span>/<span class="in">`Deserialize`</span> for machine consumption.</span>
-<span id="cb5-293"><a href="#cb5-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-294"><a href="#cb5-294" aria-hidden="true" tabindex="-1"></a>For a hands-on walkthrough of building and applying migrations, see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/05-migration-by-hand.html)</span>.</span>
-<span id="cb5-295"><a href="#cb5-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-296"><a href="#cb5-296" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
-<span id="cb5-297"><a href="#cb5-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-298"><a href="#cb5-298" aria-hidden="true" tabindex="-1"></a>The crate is organized into the following modules:</span>
-<span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Exports <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`migration`</span> <span class="pp">|</span> <span class="in">`Migration`</span> <span class="pp">|</span> Migration specification type with vertex/edge/hyper-edge maps and resolvers <span class="pp">|</span></span>
-<span id="cb5-303"><a href="#cb5-303" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`existence`</span> <span class="pp">|</span> <span class="in">`ExistenceReport`</span>, <span class="in">`check_existence`</span> <span class="pp">|</span> Theory-derived validation of migration well-formedness <span class="pp">|</span></span>
-<span id="cb5-304"><a href="#cb5-304" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compile`</span> <span class="pp">|</span> <span class="in">`compile`</span> <span class="pp">|</span> Pre-computation of surviving sets and remap tables <span class="pp">|</span></span>
-<span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift`</span> <span class="pp">|</span> <span class="in">`lift_wtype`</span>, <span class="in">`lift_functor`</span> <span class="pp">|</span> Instance transformation for tree and table instances <span class="pp">|</span></span>
-<span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose`</span> <span class="pp">|</span> <span class="in">`compose`</span> <span class="pp">|</span> Sequential composition of two migrations <span class="pp">|</span></span>
-<span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`invert`</span> <span class="pp">|</span> <span class="in">`invert`</span> <span class="pp">|</span> Construction of inverse migrations for bijective mappings <span class="pp">|</span></span>
-<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error`</span> <span class="pp">|</span> <span class="in">`ExistenceError`</span>, <span class="in">`ComposeError`</span>, <span class="in">`InvertError`</span>, <span class="in">`LiftError`</span>, <span class="in">`MigError`</span> <span class="pp">|</span> Error types for each pipeline stage <span class="pp">|</span></span>
-<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a>All public types are re-exported from the crate root, so consumers can write <span class="in">`use panproto_mig::Migration`</span> without navigating the module structure.</span>
-<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-312"><a href="#cb5-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Strategy</span></span>
-<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-314"><a href="#cb5-314" aria-hidden="true" tabindex="-1"></a>The crate's test suite covers each pipeline stage independently:</span>
-<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Existence checking tests** verify that specific error variants are produced for known-bad migrations (constraint tightening, kind inconsistency, required field missing, etc.). Each test constructs a minimal schema pair and migration, registers the appropriate theories, and asserts that the expected error variant appears in the report.</span>
-<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compilation tests** verify that surviving sets and remap tables are computed correctly for various migration shapes.</span>
-<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lifting tests** use small hand-crafted instances to verify that nodes are correctly dropped, remapped, and re-parented.</span>
-<span id="cb5-319"><a href="#cb5-319" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Composition tests** verify that composing two migrations produces the same result as applying them sequentially.</span>
-<span id="cb5-320"><a href="#cb5-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Inversion tests** verify that invertible migrations round-trip correctly and that non-invertible migrations produce the expected <span class="in">`InvertError`</span>.</span>
-<span id="cb5-321"><a href="#cb5-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-322"><a href="#cb5-322" aria-hidden="true" tabindex="-1"></a>The test suite is intentionally structured so that each test constructs its own minimal schema pair and migration from scratch, avoiding shared test fixtures that could mask bugs through accidental coupling. See Chapter 17 for the project-wide testing conventions.</span>
-<span id="cb5-323"><a href="#cb5-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-324"><a href="#cb5-324" aria-hidden="true" tabindex="-1"></a>Property-based tests (using <span class="in">`proptest`</span>) supplement the hand-crafted cases, generating random schemas and migrations to verify invariants like "composing a migration with its inverse yields an identity migration" and "existence checking accepts the identity migration for any schema."</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-mig --- The Migration Engine {#sec-migration-engine}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-mig`</span> crate is the core migration engine for panproto. It computes, validates, and applies schema migrations---transforming instances from one schema version to another while preserving data integrity through theory morphisms. This chapter walks through the full migration pipeline, from specification to execution.</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>panproto derives its validation rules from the protocol's algebraic theory rather than hardcoding them, making the same engine work across all 60+ supported protocols.</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>The crate lives at <span class="in">`crates/panproto-mig`</span> and is published as <span class="in">`panproto-mig`</span> on crates.io. It depends on <span class="in">`panproto-schema`</span> for schema types, <span class="in">`panproto-gat`</span> for theory types, and <span class="in">`panproto-inst`</span> for compiled migration and instance types.</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Migration Struct</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Migration`</span> describes a mapping between two schemas. It encodes the graph morphism (vertex and edge maps), hyper-edge maps for protocols with multi-arity relations, and resolvers for disambiguation when intermediate vertices are contracted.</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/migration.rs" start-line=13 end-line=34}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>The six fields break down into three logical groups:</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>**Core morphism.** The <span class="in">`vertex_map`</span> and <span class="in">`edge_map`</span> fields define the fundamental graph morphism from source schema to target schema. Every source vertex that should survive in the target gets an entry in <span class="in">`vertex_map`</span>; vertices absent from the map are dropped. Similarly, <span class="in">`edge_map`</span> records how source edges correspond to target edges.</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>**Hyper-edge morphism.** The <span class="in">`hyper_edge_map`</span> and <span class="in">`label_map`</span> fields handle protocols whose schema theories include the <span class="in">`HyperEdge`</span> sort (a type in a formal theory, not a sorting operation) --- Group B protocols such as SQL, Parquet, and Cassandra). A hyper-edge connects multiple vertices via labeled positions, so the mapping must track both the hyper-edge identity and the label assignments.</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>**Contraction resolvers.** The <span class="in">`resolver`</span> and <span class="in">`hyper_resolver`</span> fields handle the case where a migration contracts intermediate vertices. For example, if a schema has the path <span class="in">`A -&gt; B -&gt; C`</span> and the migration drops <span class="in">`B`</span>, the resulting schema connects <span class="in">`A`</span> directly to <span class="in">`C`</span>. But there may be multiple edges between <span class="in">`A`</span> and <span class="in">`C`</span> in the target---the resolver records which one to use. The <span class="in">`hyper_resolver`</span> does the same for hyper-edge contraction, additionally providing label remaps.</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="fu">### Identity and Empty Migrations</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>Two constructors cover the common base cases: an identity migration that maps everything to itself, and an empty migration with no mappings at all.</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/migration.rs" start-line=36 end-line=67}</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">`Migration::identity`</span> is the starting point for incremental migration construction---begin with identity and then override specific entries to express the desired transformation. It also serves as the unit element for composition: composing any migration with the identity yields the original migration.</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">`Migration::empty`</span> serves as the zero element when building migrations programmatically. It is primarily useful in test scaffolding or when constructing migrations from combinators where the initial state has no mappings.</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Migration Pipeline</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>The full pipeline for applying a migration follows five stages:</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    participant User</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    participant Mig as Migration</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    participant Exist as check_existence</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    participant Comp as compile()</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    participant CM as CompiledMigration</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    participant Lift as lift_wtype / lift_functor</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    User-&gt;&gt;Mig: define vertex_map, edge_map, ...</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    Mig-&gt;&gt;Exist: check_existence(protocol, src, tgt, mig, registry)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    Exist--&gt;&gt;Mig: ExistenceReport { valid, errors }</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    Mig-&gt;&gt;Comp: compile(src, tgt, migration)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    Comp--&gt;&gt;CM: CompiledMigration</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    CM-&gt;&gt;Lift: lift_wtype(instance, compiled) <span class="ot">or</span> lift_functor(...)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    Lift--&gt;&gt;User: transformed instance</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Existence checking** (<span class="in">`check_existence`</span>): validates that the migration is well-formed with respect to the protocol's theories.</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compilation** (<span class="in">`compile`</span>): pre-computes surviving sets, remapping tables, and resolvers for fast per-record application.</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Lifting** (<span class="in">`lift_wtype`</span>, <span class="in">`lift_functor`</span>): applies the compiled migration to concrete tree or table instances.</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Composition** (<span class="in">`compose`</span>): chains two sequential migrations into a single equivalent migration.</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Inversion** (<span class="in">`invert`</span>): constructs the inverse migration when the original is bijective.</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>Stages 1--3 form the critical path for applying a single migration. Stages 4 and 5 are used when managing sequences of migrations or implementing rollback capabilities.</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory-Derived Existence Checking</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>The existence checker is one of the most distinctive parts of panproto's migration engine. Rather than hardcoding a fixed set of validation rules, <span class="in">`check_existence`</span> inspects the protocol's schema and instance theory sorts at runtime to determine which checks apply. The validation rules are derived from the structure of the protocol's theory, so adding a new protocol with novel theory composition requires no code changes to <span class="in">`panproto-mig`</span>.^<span class="co">[</span><span class="ot">Rather than hardcoding validation rules, panproto derives them from the protocol's theory structure --- checking constraints only when the theory declares a Constraint sort, checking hyper-edge signatures only when the theory declares a HyperEdge sort. This approach is inspired by the double-pushout rewriting framework [@ehrig2006], where validation conditions are derived from the structure of the rule rather than enumerated by hand.</span><span class="co">]</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="fu">### ExistenceReport and check_existence</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ExistenceReport`</span> struct carries the validation result, and <span class="in">`check_existence`</span> is the entry point:</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-mig/src/existence.rs" start-line=17 end-line=94}</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="fu">### How Theory Inspection Works</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>The function looks up the protocol's schema theory and instance theory from a registry, then queries for specific sorts to decide which validation checks to run:</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Always checked** (regardless of theory structure): vertex map validity, edge map validity, kind consistency. These are fundamental properties of any graph morphism---they must hold for every protocol.</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Constraint` sort present in schema theory**: enables constraint compatibility checking. The target schema must not impose strictly tighter constraints than the source. For example, reducing <span class="in">`maxLength`</span> from 3000 to 300 means existing data with 3000-character strings would violate the new constraint.</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`HyperEdge` sort present in schema theory**: enables two additional checks. *Signature coherence* verifies that mapped hyper-edges have compatible label-to-vertex assignments. *Simultaneity* verifies that all labels in a target hyper-edge reference surviving vertices---you cannot have a SQL foreign key that references a dropped table.</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Node` sort present in instance theory**: enables reachability risk detection for tree instances. When intermediate vertices are dropped, subtrees that were connected through those vertices may become disconnected from the root, producing orphaned data.</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>    A[check_existence] --&gt; B{Schema theory lookup}</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>    B --&gt; C[Always: vertex <span class="fu">map</span> validity]</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>    B --&gt; D[Always: edge <span class="fu">map</span> validity]</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>    B --&gt; E[Always: kind consistency]</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>    B --&gt; F{Constraint <span class="fu">sort</span>?}</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>    F --&gt;|Yes| G[Constraint compatibility]</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>    F --&gt;|No| H[Skip]</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    B --&gt; I{HyperEdge <span class="fu">sort</span>?}</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    I --&gt;|Yes| J[Signature coherence]</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>    I --&gt;|Yes| K[Simultaneity]</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>    I --&gt;|No| L[Skip]</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>    A --&gt; M{Instance theory lookup}</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>    M --&gt; N{Node <span class="fu">sort</span>?}</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    N --&gt;|Yes| O[Reachability risks]</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>    N --&gt;|No| P[Skip]</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>A protocol whose schema theory has both <span class="in">`Constraint`</span> and <span class="in">`HyperEdge`</span> sorts (like SQL) will get all conditional checks; a protocol with neither (like a minimal custom protocol) will only get the universal checks.</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint Compatibility in Detail</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>The constraint compatibility check deserves special attention because it is the most subtle. When the schema theory has a <span class="in">`Constraint`</span> sort, the checker verifies two properties:</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**No tightening**: for each mapped vertex, every constraint in the target must not be strictly more restrictive than the corresponding constraint in the source. For upper-bound constraints (<span class="in">`maxLength`</span>, <span class="in">`maxSize`</span>, <span class="in">`maximum`</span>), a smaller target value is tighter. For lower-bound constraints (<span class="in">`minLength`</span>, <span class="in">`minimum`</span>), a larger target value is tighter.</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**No missing required fields**: if the target schema marks an edge as required for a vertex, the source must have a corresponding edge (possibly via the edge map) that maps to it. Adding a required field with no default is a migration obstruction.</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reachability in Detail</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>The reachability check applies only when the instance theory has a <span class="in">`Node`</span> sort (tree instances). It approximates whether dropping vertices will disconnect subtrees from the root by checking, for each surviving non-root vertex, whether it has at least one incoming edge from another surviving vertex in the source schema. If a vertex's only path from the root passes through a dropped vertex, the checker emits a <span class="in">`ReachabilityRisk`</span> warning.</span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>The reachability check is an *approximation*. It verifies that each surviving vertex has a surviving parent, but it does not compute full transitive reachability from the root. In practice this is sufficient for the tree-structured instances that tree theories model, but pathological graphs with long chains of dropped vertices could produce false negatives.</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Compilation</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>The <span class="in">`compile`</span> function translates a <span class="in">`Migration`</span> specification into a <span class="in">`CompiledMigration`</span>---a form optimized for per-record application. Compilation pre-computes:</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Surviving vertex set**: the image of <span class="in">`vertex_map`</span> in the target schema. Only nodes anchored at these vertices will be kept during lifting.</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Surviving edge set**: the image of <span class="in">`edge_map`</span>. Only arcs corresponding to these edges will be preserved.</span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Vertex and edge remap tables**: maps from source IDs to target IDs. These allow the lifter to update anchors and edge labels in O(1) per element.</span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Resolver copies**: the contraction resolvers carried forward for use during lifting. When the lifter encounters two surviving nodes that were not directly connected in the source, it consults the resolver to determine which target edge to use.</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>The compiled form enables <span class="in">`lift_wtype`</span> and <span class="in">`lift_functor`</span> to process each record in O(nodes) time without re-deriving the migration structure on every invocation. For high-throughput scenarios (e.g., migrating millions of ATProto records), this separation between compilation and execution is critical for performance.</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>If your migration has already passed existence checking, compilation will not fail unless the migration references vertices or edges absent from the target schema (which existence checking should have caught). Always run existence checking first---it produces much more informative error messages than compilation failures.</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lifting</span></span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>Lifting applies a compiled migration to a concrete instance. panproto supports two lifting modes corresponding to the two families of instance theories:</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Tree Lifting</span></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_wtype`</span> handles tree-shaped instances used by JSON-like, XML-like, and document protocols:</span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Walks the source instance's node tree from the root.</span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each node, checks whether its anchor vertex is in the surviving set.</span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If surviving: remaps the anchor to its target vertex ID and copies the node to the result.</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If dropped: omits the node. Any children anchored at surviving vertices are re-parented using the resolver.</span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Rebuilds the arc list and fan list based on surviving nodes and the edge remap table.</span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>The resolver is critical during step 4. When a dropped intermediate vertex <span class="in">`B`</span> sat between <span class="in">`A`</span> and <span class="in">`C`</span>, the lifter needs to create a direct arc from <span class="in">`A`</span> to <span class="in">`C`</span>. If multiple edges exist between <span class="in">`A`</span> and <span class="in">`C`</span> in the target schema, the resolver disambiguates.</span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### Table Lifting</span></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_functor`</span> handles tabular instances used by relational and columnar protocols:</span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Iterates over tables in the source instance.</span>
+<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For each table, checks whether its anchor vertex is in the surviving set.</span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If surviving: copies all rows, remapping foreign keys according to the vertex remap table and dropping columns for non-surviving edges.</span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If dropped: omits the entire table.</span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>Both lifting functions delegate to the corresponding <span class="in">`restrict`</span> operations in <span class="in">`panproto-inst`</span>, which provide the low-level tree/table manipulation.</span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Composition and Inversion</span></span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a><span class="fu">### Composition</span></span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a>Composition chains two migrations $m_1: S_1 \to S_2$ and $m_2: S_2 \to S_3$ into a single migration $m_2 \circ m_1: S_1 \to S_3$. The composed vertex map is the functional composition of the two vertex maps: for each source vertex $v$ in $S_1$, the composed map sends $v$ to $m_2(m_1(v))$. The edge and hyper-edge maps compose similarly.</span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a>Resolvers from both migrations are merged, with $m_2$'s resolvers taking precedence when keys overlap. This is correct because the second migration's resolvers encode decisions about the final target schema, which take precedence over the intermediate schema's structure.</span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a>Composition is associative: $(m_3 \circ m_2) \circ m_1 = m_3 \circ (m_2 \circ m_1)$. Combined with the identity migration as the unit, this makes migrations composable in the expected way.^<span class="co">[</span><span class="ot">Formally, migrations form a category---the *migration category* over a fixed protocol.</span><span class="co">]</span></span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inversion</span></span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a>Inversion constructs $m^{-1}: S_2 \to S_1$ from a migration $m: S_1 \to S_2$, but only when $m$ is bijective. Specifically, it requires:</span>
+<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Injectivity of vertex_map**: no two source vertices map to the same target vertex. If <span class="in">`user.name`</span> and <span class="in">`user.displayName`</span> both map to <span class="in">`user.label`</span>, the inverse cannot know which to restore.</span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Surjectivity of vertex_map**: every target vertex has a preimage. If the target has a vertex that no source vertex maps to, the inverse has no source for it.</span>
+<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The same conditions on <span class="in">`edge_map`</span> and <span class="in">`hyper_edge_map`</span>.</span>
+<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a>If any condition fails, <span class="in">`invert`</span> returns an <span class="in">`InvertError`</span> identifying the specific obstruction.</span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>Inversion requires bijectivity. A migration that drops vertices or contracts edges is not invertible. Use the lens system (@sec-lenses) when you need round-trip transformations for non-bijective mappings.</span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type-Checked Migration Derivation</span></span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a>When the VCS <span class="in">`schema add`</span> command auto-derives a migration from a schema diff, the derived migration undergoes GAT-level validation before it is staged. This validation is performed by the <span class="in">`gat_validate`</span> module in <span class="in">`panproto-vcs`</span>, which checks two properties of the derived migration:</span>
+<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="fu">### Migration Structure Validation</span></span>
+<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>The <span class="in">`validate_migration`</span> function inspects the derived migration's vertex and edge maps for structural coherence:</span>
+<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Non-empty vertex map**: a migration that maps zero vertices is flagged with a warning (it may indicate the diff algorithm failed to match vertices across schema versions).</span>
+<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Edge endpoint coherence**: for each mapped edge <span class="in">`(old_edge -&gt; new_edge)`</span>, the function verifies that the new edge's source and target vertices are in the vertex map's image. If an edge maps to endpoints that are not themselves mapped, the migration may be inconsistent.</span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>These checks produce warnings (stored in <span class="in">`GatDiagnostics::migration_warnings`</span>) rather than hard errors, because some legitimate migrations intentionally drop vertices while retaining edges to surviving neighbors.</span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory Equation Validation</span></span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a>The <span class="in">`validate_theory_equations`</span> function runs <span class="in">`typecheck_theory`</span> on the protocol's schema theory. This catches malformed equations that could arise from theory composition or inheritance. The <span class="in">`validate_schema_equations`</span> function goes further: it builds a model from the schema and runs <span class="in">`check_model_with_options`</span> to verify that the schema satisfies the protocol theory's equations.</span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a>If either check finds errors, the staging pipeline marks the migration as <span class="in">`ValidationStatus::Invalid`</span> and populates the <span class="in">`gat_diagnostics`</span> field of the staged schema. The subsequent <span class="in">`schema commit`</span> will be blocked unless <span class="in">`--skip-verify`</span> is passed.</span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a><span class="fu">### Integration with auto_mig</span></span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a>The <span class="in">`auto_mig::derive_migration`</span> function produces a <span class="in">`Migration`</span> struct from a schema diff. The VCS <span class="in">`Repository::add`</span> method calls this function, then immediately runs GAT validation on the result:</span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a><span class="in">schema diff -&gt; auto_mig::derive_migration -&gt; gat_validate::validate_migration -&gt; stage</span></span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>If the auto-derived migration maps very few vertices (less than half of the old schema's vertices), the pipeline falls back to <span class="in">`find_best_morphism`</span> from <span class="in">`panproto-mig`</span>'s homomorphism search, which uses a more expensive but more thorough algorithm to find the best vertex correspondence.</span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coherence Checking in compose_path</span></span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a>When the VCS merge algorithm composes migration paths through different branch histories, it must verify that the composed path is coherent -- that the composed maps commute with all operations.^<span class="co">[</span><span class="ot">The composed migration path must produce the same result regardless of which order the individual steps are applied. In categorical terms, this is the naturality condition for natural transformations between the composed morphisms.</span><span class="co">]</span></span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_natural_transformation`</span> function from <span class="in">`panproto-gat`</span> is used at two points in the merge pipeline:</span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Three-way merge verification**: after computing the merged schema, the merge algorithm constructs compatible families of maps^<span class="co">[</span><span class="ot">These are families of maps that are compatible with all operations in the theory --- meaning the maps commute with every operation. In the categorical literature, these are called natural transformations. See the tutorial's [Appendix A](https://panproto.dev/tutorial/appendices/A-formal-foundations.html).</span><span class="co">]</span> from the "ours" and "theirs" migration morphisms to the merge result. These must commute with all operations for the merge to be semantically correct.</span>
+<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Rebase coherence**: when rebasing a chain of commits onto a new base, each replayed commit's migration is composed with the base migration. The <span class="in">`vertical_compose`</span> function chains these maps, and <span class="in">`check_natural_transformation`</span> validates each composed result.</span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a>The merge result struct includes a <span class="in">`pullback_overlap`</span> field that reports the shared structure^<span class="co">[</span><span class="ot">The shared structure is the set of elements that both branches agree on --- elements that map to the same thing in the merge base. Categorically, this is a pullback.</span><span class="co">]</span> of the two branch theories over the merge base theory. Non-empty overlap indicates shared structure that both branches modified, which requires careful reconciliation.</span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## Worked Example: Renaming a Field</span></span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>To make the pipeline concrete, consider renaming the <span class="in">`text`</span> field to <span class="in">`content`</span> in a schema with vertices <span class="in">`{body, body.text}`</span> and an edge <span class="in">`body -&gt; body.text`</span> with name <span class="in">`"text"`</span>.</span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>**Step 1: Define the migration.**</span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>The <span class="in">`vertex_map`</span> maps <span class="in">`body`</span> to <span class="in">`body`</span> and <span class="in">`body.text`</span> to <span class="in">`body.content`</span>. The <span class="in">`edge_map`</span> maps the old edge to a new edge with name <span class="in">`"content"`</span>. No resolvers are needed because no vertices are dropped.</span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>**Step 2: Check existence.**</span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span> looks up the protocol's schema theory. If the theory has a <span class="in">`Constraint`</span> sort, it verifies that any constraints on <span class="in">`body.text`</span> are compatible with the constraints on <span class="in">`body.content`</span> in the target. Since this is a rename (same kind, same constraints), all checks pass.</span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>**Step 3: Compile.**</span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a><span class="in">`compile`</span> produces a <span class="in">`CompiledMigration`</span> with:</span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`surviving_verts`</span>: <span class="in">`{body, body.content}`</span></span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`surviving_edges`</span>: <span class="in">`{body -&gt; body.content (content)}`</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`vertex_remap`</span>: <span class="in">`{body.text -&gt; body.content}`</span></span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`edge_remap`</span>: old edge maps to new edge</span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>**Step 4: Lift.**</span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a><span class="in">`lift_wtype`</span> walks the source instance. Nodes anchored at <span class="in">`body`</span> keep their anchor. Nodes anchored at <span class="in">`body.text`</span> have their anchor remapped to <span class="in">`body.content`</span>. Arcs are updated to use the new edge. The result is a valid instance under the target schema.</span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>This is a bijective migration, so <span class="in">`invert`</span> would also succeed, producing a migration that renames <span class="in">`content`</span> back to <span class="in">`text`</span>.</span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interaction with Other Crates</span></span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-mig`</span> sits at the center of panproto's architecture:</span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-schema`** provides the <span class="in">`Schema`</span>, <span class="in">`Edge`</span>, and <span class="in">`Protocol`</span> types that migrations operate on.</span>
+<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-gat`** provides the <span class="in">`Theory`</span> type used for existence checking and the merge function used by <span class="in">`panproto-protocols`</span>.^<span class="co">[</span><span class="ot">This merge combines two theories along their shared structure, producing a combined theory with all declarations from both. Categorically, this is a colimit (pushout).</span><span class="co">]</span></span>
+<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-inst`** provides <span class="in">`CompiledMigration`</span>, <span class="in">`WInstance`</span>, and the <span class="in">`wtype_restrict`</span>/<span class="in">`functor_restrict`</span> operations that lifting delegates to.</span>
+<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-lens`** wraps <span class="in">`CompiledMigration`</span> in a <span class="in">`Lens`</span> and adds complement tracking for non-bijective transformations.</span>
+<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`panproto-check`** uses <span class="in">`diff`</span> to detect changes between schemas, which can be combined with migration information.</span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>Understanding these dependencies helps when debugging: if existence checking fails, the issue is in the migration specification or the theory registry. If compilation fails, the issue is in the schema. If lifting fails, the issue is in the instance or the compiled migration.</span>
+<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a><span class="fu">## Performance Considerations</span></span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>The migration pipeline is designed for throughput:</span>
+<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Existence checking** is O(|vertex_map| + |edge_map| + |hyper_edge_map|) for the universal checks, plus O(|constraints|) for the conditional constraint check and O(|hyper_edges| * |labels|) for the conditional signature coherence check. This is fast even for large schemas.</span>
+<span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compilation** is O(|migration|) and happens once per schema version pair.</span>
+<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lifting** is O(|instance nodes|) per record, with hash-map lookups for remap and resolver operations. For tree instances, this is a single tree traversal. For table instances, this is a single pass over rows.</span>
+<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Composition** is O(|vertex_map| + |edge_map|) and happens once when chaining migrations.</span>
+<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a>For batch migration scenarios (e.g., migrating a million ATProto records from schema v1 to v2), the cost is dominated by lifting, which is linear in the total data size.</span>
+<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-mig`</span> error types are designed to provide actionable diagnostics:</span>
+<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceError`**: includes variants for <span class="in">`WellFormedness`</span> (invalid vertex/edge references), <span class="in">`ConstraintTightened`</span>, <span class="in">`RequiredFieldMissing`</span>, <span class="in">`KindInconsistency`</span>, <span class="in">`SignatureCoherence`</span>, <span class="in">`Simultaneity`</span>, <span class="in">`ReachabilityRisk`</span>, and <span class="in">`EdgeMissing`</span>. Each variant carries enough context to identify the exact source of the problem.</span>
+<span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ComposeError`**: reports when composition fails due to incompatible intermediate schemas.</span>
+<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`InvertError`**: identifies the specific bijectivity violation (non-injective vertex map, non-surjective edge map, etc.).</span>
+<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LiftError`**: reports runtime failures during instance transformation.</span>
+<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a>All error types implement <span class="in">`Display`</span> for human-readable messages and <span class="in">`Serialize`</span>/<span class="in">`Deserialize`</span> for machine consumption.</span>
+<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>For a hands-on walkthrough of building and applying migrations, see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/05-migration-by-hand.html)</span>.</span>
+<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
+<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a>The crate is organized into the following modules:</span>
+<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Exports <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`migration`</span> <span class="pp">|</span> <span class="in">`Migration`</span> <span class="pp">|</span> Migration specification type with vertex/edge/hyper-edge maps and resolvers <span class="pp">|</span></span>
+<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`existence`</span> <span class="pp">|</span> <span class="in">`ExistenceReport`</span>, <span class="in">`check_existence`</span> <span class="pp">|</span> Theory-derived validation of migration well-formedness <span class="pp">|</span></span>
+<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compile`</span> <span class="pp">|</span> <span class="in">`compile`</span> <span class="pp">|</span> Pre-computation of surviving sets and remap tables <span class="pp">|</span></span>
+<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift`</span> <span class="pp">|</span> <span class="in">`lift_wtype`</span>, <span class="in">`lift_functor`</span> <span class="pp">|</span> Instance transformation for tree and table instances <span class="pp">|</span></span>
+<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose`</span> <span class="pp">|</span> <span class="in">`compose`</span> <span class="pp">|</span> Sequential composition of two migrations <span class="pp">|</span></span>
+<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`invert`</span> <span class="pp">|</span> <span class="in">`invert`</span> <span class="pp">|</span> Construction of inverse migrations for bijective mappings <span class="pp">|</span></span>
+<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error`</span> <span class="pp">|</span> <span class="in">`ExistenceError`</span>, <span class="in">`ComposeError`</span>, <span class="in">`InvertError`</span>, <span class="in">`LiftError`</span>, <span class="in">`MigError`</span> <span class="pp">|</span> Error types for each pipeline stage <span class="pp">|</span></span>
+<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a>All public types are re-exported from the crate root, so consumers can write <span class="in">`use panproto_mig::Migration`</span> without navigating the module structure.</span>
+<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Strategy</span></span>
+<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a>The crate's test suite covers each pipeline stage independently:</span>
+<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Existence checking tests** verify that specific error variants are produced for known-bad migrations (constraint tightening, kind inconsistency, required field missing, etc.). Each test constructs a minimal schema pair and migration, registers the appropriate theories, and asserts that the expected error variant appears in the report.</span>
+<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Compilation tests** verify that surviving sets and remap tables are computed correctly for various migration shapes.</span>
+<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lifting tests** use small hand-crafted instances to verify that nodes are correctly dropped, remapped, and re-parented.</span>
+<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Composition tests** verify that composing two migrations produces the same result as applying them sequentially.</span>
+<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Inversion tests** verify that invertible migrations round-trip correctly and that non-invertible migrations produce the expected <span class="in">`InvertError`</span>.</span>
+<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>The test suite is intentionally structured so that each test constructs its own minimal schema pair and migration from scratch, avoiding shared test fixtures that could mask bugs through accidental coupling. See Chapter 17 for the project-wide testing conventions.</span>
+<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>Property-based tests (using <span class="in">`proptest`</span>) supplement the hand-crafted cases, generating random schemas and migrations to verify invariants like "composing a migration with its inverse yields an identity migration" and "existence checking accepts the identity migration for any schema."</span>
+<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coverage Analysis (Partiality) {#sec-coverage-analysis}</span></span>
+<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-mig/src/coverage.rs`</span></span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>Not every record can survive every migration. A coercion from string to int fails on non-numeric strings. A constraint tightening rejects values that violate the new constraint. The <span class="in">`check_coverage`</span> function provides dry-run capability: it attempts the migration on each record individually and reports which succeed and which fail, without modifying any data.</span>
+<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>pub struct CoverageReport {</span>
+<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>    pub total_records<span class="sc">:</span> usize,</span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>    pub successful<span class="sc">:</span> usize,</span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>    pub failed<span class="sc">:</span> Vec<span class="sc">&lt;</span>PartialFailure<span class="sc">&gt;</span>,</span>
+<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>    pub coverage_ratio<span class="sc">:</span> f64,</span>
+<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>Each <span class="in">`PartialFailure`</span> records the failing record's ID and the reason: <span class="in">`ConstraintViolation`</span>, <span class="in">`MissingRequiredField`</span>, <span class="in">`TypeMismatch`</span>, or <span class="in">`ExprEvalFailed`</span>. This integrates with the CLI's <span class="in">`schema migrate --dry-run`</span> command, which prints a coverage report before committing to the migration.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

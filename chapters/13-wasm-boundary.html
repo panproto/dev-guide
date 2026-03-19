@@ -588,7 +588,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#define_protocol" id="toc-define_protocol" class="nav-link" data-scroll-target="#define_protocol"><span class="header-section-number">13.5.1</span> <code>define_protocol</code></a></li>
   <li><a href="#build_schema" id="toc-build_schema" class="nav-link" data-scroll-target="#build_schema"><span class="header-section-number">13.5.2</span> <code>build_schema</code></a></li>
-  <li><a href="#all-ten-entry-points" id="toc-all-ten-entry-points" class="nav-link" data-scroll-target="#all-ten-entry-points"><span class="header-section-number">13.5.3</span> All Ten Entry Points</a></li>
+  <li><a href="#all-entry-points" id="toc-all-entry-points" class="nav-link" data-scroll-target="#all-entry-points"><span class="header-section-number">13.5.3</span> All Entry Points</a></li>
   </ul></li>
   <li><a href="#data-flow-js-to-rust-and-back" id="toc-data-flow-js-to-rust-and-back" class="nav-link" data-scroll-target="#data-flow-js-to-rust-and-back"><span class="header-section-number">13.6</span> Data Flow: JS to Rust and Back</a></li>
   <li><a href="#slab-lifecycle" id="toc-slab-lifecycle" class="nav-link" data-scroll-target="#slab-lifecycle"><span class="header-section-number">13.7</span> Slab Lifecycle</a></li>
@@ -620,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The <code>panproto-wasm</code> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes exactly ten <code>#[wasm_bindgen]</code> entry points. Every structured value crossing the boundary is serialized as MessagePack bytes – never as a JS object graph. This chapter explains why, and walks through the implementation.</p>
+<p>The <code>panproto-wasm</code> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes <code>#[wasm_bindgen]</code> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes – never as a JS object graph. This chapter explains why, and walks through the implementation.</p>
 <section id="design-rationale" class="level2" data-number="13.1">
 <h2 data-number="13.1" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">13.1</span> Design Rationale</h2>
 <p>Two design decisions shape the entire WASM boundary:</p>
@@ -884,9 +884,11 @@ Note
 <span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(<span class="pp">std::sync::Arc::</span>new(schema))))</span>
 <span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="all-ten-entry-points" class="level3" data-number="13.5.3">
-<h3 data-number="13.5.3" class="anchored" data-anchor-id="all-ten-entry-points"><span class="header-section-number">13.5.3</span> All Ten Entry Points</h3>
-<p>The complete set of WASM entry points, with their Rust signatures:</p>
+<section id="all-entry-points" class="level3" data-number="13.5.3">
+<h3 data-number="13.5.3" class="anchored" data-anchor-id="all-entry-points"><span class="header-section-number">13.5.3</span> All Entry Points</h3>
+<p>The WASM boundary exposes far more than the original ten entry points. The complete set is organized into six categories.</p>
+<section id="core-schema-and-migration" class="level4" data-number="13.5.3.1">
+<h4 data-number="13.5.3.1" class="anchored" data-anchor-id="core-schema-and-migration"><span class="header-section-number">13.5.3.1</span> Core Schema and Migration</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -942,14 +944,429 @@ Note
 <td>Migration handle</td>
 </tr>
 <tr class="odd">
+<td><code>free_handle</code></td>
+<td><code>(handle: u32)</code></td>
+<td>(void)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="schema-analysis" class="level4" data-number="13.5.3.2">
+<h4 data-number="13.5.3.2" class="anchored" data-anchor-id="schema-analysis"><span class="header-section-number">13.5.3.2</span> Schema Analysis</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry Point</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td><code>diff_schemas</code></td>
 <td><code>(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;</code></td>
 <td>MessagePack diff</td>
 </tr>
 <tr class="even">
-<td><code>free_handle</code></td>
-<td><code>(handle: u32)</code></td>
-<td>(void)</td>
+<td><code>diff_schemas_full</code></td>
+<td><code>(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;</code></td>
+<td>Full MessagePack diff with all fields</td>
+</tr>
+<tr class="odd">
+<td><code>classify_diff</code></td>
+<td><code>(proto: u32, diff_bytes: &amp;[u8]) -&gt; Vec&lt;u8&gt;</code></td>
+<td>MessagePack compat report</td>
+</tr>
+<tr class="even">
+<td><code>report_text</code></td>
+<td><code>(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;</code></td>
+<td>Human-readable text</td>
+</tr>
+<tr class="odd">
+<td><code>report_json</code></td>
+<td><code>(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;</code></td>
+<td>JSON string</td>
+</tr>
+<tr class="even">
+<td><code>normalize_schema</code></td>
+<td><code>(schema_handle: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Normalized schema handle</td>
+</tr>
+<tr class="odd">
+<td><code>validate_schema</code></td>
+<td><code>(schema_handle: u32, proto: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack validation report</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="json-and-instance-operations" class="level4" data-number="13.5.3.3">
+<h4 data-number="13.5.3.3" class="anchored" data-anchor-id="json-and-instance-operations"><span class="header-section-number">13.5.3.3</span> JSON and Instance Operations</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry Point</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>lift_json</code></td>
+<td><code>(migration: u32, json_bytes: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack lifted JSON</td>
+</tr>
+<tr class="even">
+<td><code>get_json</code></td>
+<td><code>(migration: u32, json_bytes: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack view+complement</td>
+</tr>
+<tr class="odd">
+<td><code>put_json</code></td>
+<td><code>(migration: u32, view: &amp;[u8], complement: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack restored JSON</td>
+</tr>
+<tr class="even">
+<td><code>validate_instance</code></td>
+<td><code>(schema: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack validation report</td>
+</tr>
+<tr class="odd">
+<td><code>instance_to_json</code></td>
+<td><code>(schema: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack JSON bytes</td>
+</tr>
+<tr class="even">
+<td><code>json_to_instance</code></td>
+<td><code>(schema: u32, json: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack instance bytes</td>
+</tr>
+<tr class="odd">
+<td><code>json_to_instance_with_root</code></td>
+<td><code>(schema: u32, json: &amp;[u8], root: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack instance bytes</td>
+</tr>
+<tr class="even">
+<td><code>instance_element_count</code></td>
+<td><code>(instance: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Node count</td>
+</tr>
+<tr class="odd">
+<td><code>parse_instance</code></td>
+<td><code>(registry: u32, format: &amp;str, data: &amp;[u8], ...) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack instance bytes</td>
+</tr>
+<tr class="even">
+<td><code>emit_instance</code></td>
+<td><code>(registry: u32, format: &amp;str, instance: &amp;[u8], ...) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>Serialized output bytes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="protolens-and-lens-operations" class="level4" data-number="13.5.3.4">
+<h4 data-number="13.5.3.4" class="anchored" data-anchor-id="protolens-and-lens-operations"><span class="header-section-number">13.5.3.4</span> Protolens and Lens Operations</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry Point</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>auto_generate_protolens</code></td>
+<td><code>(schema1: u32, schema2: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="even">
+<td><code>check_lens_laws</code></td>
+<td><code>(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack law check</td>
+</tr>
+<tr class="odd">
+<td><code>check_get_put</code></td>
+<td><code>(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack law check</td>
+</tr>
+<tr class="even">
+<td><code>check_put_get</code></td>
+<td><code>(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack law check</td>
+</tr>
+<tr class="odd">
+<td><code>invert_migration</code></td>
+<td><code>(mapping: &amp;[u8], src: u32, tgt: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack inverse</td>
+</tr>
+<tr class="even">
+<td><code>compose_lenses</code></td>
+<td><code>(l1: u32, l2: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Migration handle</td>
+</tr>
+<tr class="odd">
+<td><code>instantiate_protolens</code></td>
+<td><code>(chain: u32, schema: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Migration handle</td>
+</tr>
+<tr class="even">
+<td><code>protolens_complement_spec</code></td>
+<td><code>(chain: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack spec</td>
+</tr>
+<tr class="odd">
+<td><code>protolens_from_diff</code></td>
+<td><code>(diff: &amp;[u8], s1: u32, s2: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="even">
+<td><code>protolens_compose</code></td>
+<td><code>(c1: u32, c2: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="odd">
+<td><code>protolens_chain_to_json</code></td>
+<td><code>(chain: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>JSON bytes</td>
+</tr>
+<tr class="even">
+<td><code>protolens_from_json</code></td>
+<td><code>(json: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="odd">
+<td><code>protolens_fuse</code></td>
+<td><code>(chain: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="even">
+<td><code>protolens_lift</code></td>
+<td><code>(chain: u32, morphism: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="odd">
+<td><code>protolens_check_applicability</code></td>
+<td><code>(chain: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack report</td>
+</tr>
+<tr class="even">
+<td><code>protolens_fleet</code></td>
+<td><code>(chain: u32, schemas: &amp;[u32]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack fleet result</td>
+</tr>
+<tr class="odd">
+<td><code>apply_protolens_step</code></td>
+<td><code>(protolens: &amp;[u8], schema: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Schema handle</td>
+</tr>
+<tr class="even">
+<td><code>factorize_morphism</code></td>
+<td><code>(morphism: &amp;[u8], domain: u32, codomain: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>ProtolensChain handle</td>
+</tr>
+<tr class="odd">
+<td><code>symmetric_lens_from_schemas</code></td>
+<td><code>(s1: u32, s2: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>SymmetricLens handle</td>
+</tr>
+<tr class="even">
+<td><code>symmetric_lens_sync</code></td>
+<td><code>(lens: u32, dir: &amp;str, data: &amp;[u8], state: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack sync result</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="gat-engine" class="level4" data-number="13.5.3.5">
+<h4 data-number="13.5.3.5" class="anchored" data-anchor-id="gat-engine"><span class="header-section-number">13.5.3.5</span> GAT Engine</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry Point</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>create_theory</code></td>
+<td><code>(spec: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Theory handle</td>
+</tr>
+<tr class="even">
+<td><code>colimit_theories</code></td>
+<td><code>(t1: u32, t2: u32, shared: u32) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Theory handle</td>
+</tr>
+<tr class="odd">
+<td><code>check_morphism</code></td>
+<td><code>(morphism: &amp;[u8], domain: u32, codomain: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="even">
+<td><code>migrate_model</code></td>
+<td><code>(model: &amp;[u8], morphism: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack model</td>
+</tr>
+<tr class="odd">
+<td><code>list_builtin_protocols</code></td>
+<td><code>() -&gt; Vec&lt;u8&gt;</code></td>
+<td>MessagePack protocol list</td>
+</tr>
+<tr class="even">
+<td><code>get_builtin_protocol</code></td>
+<td><code>(name: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack protocol</td>
+</tr>
+<tr class="odd">
+<td><code>register_io_protocols</code></td>
+<td><code>() -&gt; u32</code></td>
+<td>Registry handle</td>
+</tr>
+<tr class="even">
+<td><code>list_io_protocols</code></td>
+<td><code>(registry: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack list</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="vcs-and-data-versioning" class="level4" data-number="13.5.3.6">
+<h4 data-number="13.5.3.6" class="anchored" data-anchor-id="vcs-and-data-versioning"><span class="header-section-number">13.5.3.6</span> VCS and Data Versioning</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry Point</th>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>vcs_init</code></td>
+<td><code>(protocol_name: &amp;[u8]) -&gt; u32</code></td>
+<td>Repo handle</td>
+</tr>
+<tr class="even">
+<td><code>vcs_add</code></td>
+<td><code>(repo: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack add result</td>
+</tr>
+<tr class="odd">
+<td><code>vcs_commit</code></td>
+<td><code>(repo: u32, message: &amp;[u8], author: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack commit hash</td>
+</tr>
+<tr class="even">
+<td><code>vcs_log</code></td>
+<td><code>(repo: u32, count: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack log entries</td>
+</tr>
+<tr class="odd">
+<td><code>vcs_status</code></td>
+<td><code>(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack status</td>
+</tr>
+<tr class="even">
+<td><code>vcs_diff</code></td>
+<td><code>(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack diff</td>
+</tr>
+<tr class="odd">
+<td><code>vcs_branch</code></td>
+<td><code>(repo: u32, name: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="even">
+<td><code>vcs_checkout</code></td>
+<td><code>(repo: u32, target: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="odd">
+<td><code>vcs_merge</code></td>
+<td><code>(repo: u32, branch: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="even">
+<td><code>vcs_stash</code></td>
+<td><code>(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="odd">
+<td><code>vcs_stash_pop</code></td>
+<td><code>(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack result</td>
+</tr>
+<tr class="even">
+<td><code>vcs_blame</code></td>
+<td><code>(repo: u32, vertex: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack blame info</td>
+</tr>
+<tr class="odd">
+<td><code>store_dataset</code></td>
+<td><code>(schema: u32, data: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Dataset handle</td>
+</tr>
+<tr class="even">
+<td><code>get_dataset</code></td>
+<td><code>(dataset: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack dataset</td>
+</tr>
+<tr class="odd">
+<td><code>migrate_dataset_forward</code></td>
+<td><code>(dataset: u32, migration: u32, ...) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Dataset handle</td>
+</tr>
+<tr class="even">
+<td><code>migrate_dataset_backward</code></td>
+<td><code>(dataset: u32, migration: u32, ...) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Dataset handle</td>
+</tr>
+<tr class="odd">
+<td><code>check_dataset_staleness</code></td>
+<td><code>(dataset: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack staleness</td>
+</tr>
+<tr class="even">
+<td><code>store_protocol_definition</code></td>
+<td><code>(protocol: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;</code></td>
+<td>Handle</td>
+</tr>
+<tr class="odd">
+<td><code>get_protocol_definition</code></td>
+<td><code>(handle: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack protocol</td>
+</tr>
+<tr class="even">
+<td><code>get_migration_complement</code></td>
+<td><code>(complement: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;</code></td>
+<td>MessagePack complement</td>
 </tr>
 </tbody>
 </table>
@@ -963,9 +1380,10 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>check_existence</code> and <code>diff_schemas</code> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where “failure” is an expected, structured result.</p>
+<p><code>check_existence</code>, <code>diff_schemas</code>, and <code>diff_schemas_full</code> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where “failure” is an expected, structured result.</p>
 </div>
 </div>
+</section>
 </section>
 </section>
 <section id="data-flow-js-to-rust-and-back" class="level2" data-number="13.6">
@@ -1543,7 +1961,7 @@ Tip
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-wasm --- The WASM Boundary {#sec-wasm-boundary}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-wasm`</span> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes exactly ten <span class="in">`#[wasm_bindgen]`</span> entry points. Every structured value crossing the boundary is serialized as MessagePack bytes -- never as a JS object graph. This chapter explains why, and walks through the implementation.</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-wasm`</span> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes <span class="in">`#[wasm_bindgen]`</span> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes -- never as a JS object graph. This chapter explains why, and walks through the implementation.</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1608,92 +2026,183 @@ Tip
 <span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=100 end-line=171}</span></span>
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### All Ten Entry Points</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### All Entry Points</span></span>
 <span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>The complete set of WASM entry points, with their Rust signatures:</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>The WASM boundary exposes far more than the original ten entry points. The complete set is organized into six categories.</span>
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`define_protocol`</span> <span class="pp">|</span> <span class="in">`(spec: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Protocol handle <span class="pp">|</span></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`build_schema`</span> <span class="pp">|</span> <span class="in">`(proto: u32, ops: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Schema handle <span class="pp">|</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_existence`</span> <span class="pp">|</span> <span class="in">`(proto: u32, src: u32, tgt: u32, mapping: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack report <span class="pp">|</span></span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compile_migration`</span> <span class="pp">|</span> <span class="in">`(src: u32, tgt: u32, mapping: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, record: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack record <span class="pp">|</span></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, record: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack view+complement <span class="pp">|</span></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`put_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, view: &amp;[u8], complement: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack record <span class="pp">|</span></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose_migrations`</span> <span class="pp">|</span> <span class="in">`(m1: u32, m2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack diff <span class="pp">|</span></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`free_handle`</span> <span class="pp">|</span> <span class="in">`(handle: u32)`</span> <span class="pp">|</span> (void) <span class="pp">|</span></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span> and <span class="in">`diff_schemas`</span> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where "failure" is an expected, structured result.</span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Flow: JS to Rust and Back</span></span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>The following diagram shows the complete lifecycle of a call across the WASM boundary:</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>    participant JS as TypeScript SDK</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    participant Pack as packToWasm (msgpack)</span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    participant WB as wasm_bindgen</span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>    participant Rust as panproto-wasm</span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>    participant Unpack as unpackFromWasm</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>    JS-&gt;&gt;Pack: structured JS value</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    Pack-&gt;&gt;WB: Uint8Array</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>    WB-&gt;&gt;Rust: &amp;[u8] (zero-copy view)</span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: <span class="fu">rmp_serde::from_slice</span> → typed Rust struct</span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: perform operation</span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: <span class="fu">rmp_serde::to_vec</span> → Vec&lt;u8&gt;</span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;WB: Vec&lt;u8&gt;</span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>    WB-&gt;&gt;JS: Uint8Array</span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>    JS-&gt;&gt;Unpack: Uint8Array</span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>    Unpack-&gt;&gt;JS: structured JS value</span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Core Schema and Migration</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`define_protocol`</span> <span class="pp">|</span> <span class="in">`(spec: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Protocol handle <span class="pp">|</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`build_schema`</span> <span class="pp">|</span> <span class="in">`(proto: u32, ops: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Schema handle <span class="pp">|</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_existence`</span> <span class="pp">|</span> <span class="in">`(proto: u32, src: u32, tgt: u32, mapping: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack report <span class="pp">|</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compile_migration`</span> <span class="pp">|</span> <span class="in">`(src: u32, tgt: u32, mapping: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, record: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack record <span class="pp">|</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, record: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack view+complement <span class="pp">|</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`put_record`</span> <span class="pp">|</span> <span class="in">`(migration: u32, view: &amp;[u8], complement: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack record <span class="pp">|</span></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose_migrations`</span> <span class="pp">|</span> <span class="in">`(m1: u32, m2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`free_handle`</span> <span class="pp">|</span> <span class="in">`(handle: u32)`</span> <span class="pp">|</span> (void) <span class="pp">|</span></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Schema Analysis</span></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack diff <span class="pp">|</span></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas_full`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> Full MessagePack diff with all fields <span class="pp">|</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`classify_diff`</span> <span class="pp">|</span> <span class="in">`(proto: u32, diff_bytes: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack compat report <span class="pp">|</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report_text`</span> <span class="pp">|</span> <span class="in">`(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;`</span> <span class="pp">|</span> Human-readable text <span class="pp">|</span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report_json`</span> <span class="pp">|</span> <span class="in">`(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;`</span> <span class="pp">|</span> JSON string <span class="pp">|</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`normalize_schema`</span> <span class="pp">|</span> <span class="in">`(schema_handle: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Normalized schema handle <span class="pp">|</span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`validate_schema`</span> <span class="pp">|</span> <span class="in">`(schema_handle: u32, proto: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack validation report <span class="pp">|</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="fu">#### JSON and Instance Operations</span></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`lift_json`</span> <span class="pp">|</span> <span class="in">`(migration: u32, json_bytes: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack lifted JSON <span class="pp">|</span></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_json`</span> <span class="pp">|</span> <span class="in">`(migration: u32, json_bytes: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack view+complement <span class="pp">|</span></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`put_json`</span> <span class="pp">|</span> <span class="in">`(migration: u32, view: &amp;[u8], complement: &amp;[u8], root_vertex: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack restored JSON <span class="pp">|</span></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`validate_instance`</span> <span class="pp">|</span> <span class="in">`(schema: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack validation report <span class="pp">|</span></span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`instance_to_json`</span> <span class="pp">|</span> <span class="in">`(schema: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack JSON bytes <span class="pp">|</span></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`json_to_instance`</span> <span class="pp">|</span> <span class="in">`(schema: u32, json: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack instance bytes <span class="pp">|</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`json_to_instance_with_root`</span> <span class="pp">|</span> <span class="in">`(schema: u32, json: &amp;[u8], root: &amp;str) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack instance bytes <span class="pp">|</span></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`instance_element_count`</span> <span class="pp">|</span> <span class="in">`(instance: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Node count <span class="pp">|</span></span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`parse_instance`</span> <span class="pp">|</span> <span class="in">`(registry: u32, format: &amp;str, data: &amp;[u8], ...) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack instance bytes <span class="pp">|</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`emit_instance`</span> <span class="pp">|</span> <span class="in">`(registry: u32, format: &amp;str, instance: &amp;[u8], ...) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> Serialized output bytes <span class="pp">|</span></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Protolens and Lens Operations</span></span>
 <span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>The key property is that <span class="in">`wasm_bindgen`</span> passes byte slices as zero-copy views into WASM linear memory. The only copies happen during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## Slab Lifecycle</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>Handles follow a simple lifecycle. Freed slots are reused on subsequent allocations:</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>stateDiagram-v2</span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>    [<span class="ot">*</span>] --&gt; Allocated: alloc(resource)</span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>    Allocated --&gt; InUse: with_resource(handle, f)</span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>    InUse --&gt; Allocated: callback returns</span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    Allocated --&gt; Freed: free(handle)</span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    Freed --&gt; Allocated: alloc reuses slot</span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>    Freed --&gt; [<span class="ot">*</span>]</span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>On the TypeScript side, <span class="in">`WasmHandle`</span> wraps each raw <span class="in">`u32`</span> handle and calls <span class="in">`free_handle`</span> in its <span class="in">`Symbol.dispose`</span> implementation. A <span class="in">`FinalizationRegistry`</span> acts as a safety net: if a <span class="in">`WasmHandle`</span> is garbage-collected without being disposed, the registry calls <span class="in">`free_handle`</span> to prevent leaks.</span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>Errors are represented as <span class="in">`WasmError`</span> variants (an internal <span class="in">`thiserror`</span> enum) and converted to <span class="in">`JsError`</span> at the boundary via <span class="in">`Into`</span>. The JS side receives them as standard <span class="in">`Error`</span> objects. The five error variants are:</span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DeserializationFailed`</span> -- MessagePack input could not be decoded</span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`InvalidHandle`</span> -- the <span class="in">`u32`</span> index does not point to a live resource</span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`TypeMismatch`</span> -- the resource at a handle is the wrong variant (e.g., expected Protocol, got Schema)</span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`SchemaBuildFailed`</span> -- a <span class="in">`SchemaBuilder`</span> operation failed validation</span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MigrationFailed`</span> / <span class="in">`LiftFailed`</span> / <span class="in">`PutFailed`</span> -- runtime operation errors</span>
-<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a New Entry Point</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>To add a new WASM entry point:</span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add a <span class="in">`#[wasm_bindgen] pub fn`</span> to <span class="in">`crates/panproto-wasm/src/api.rs`</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>If the function needs a new resource type, add a variant to <span class="in">`Resource`</span> in <span class="in">`slab.rs`</span> and a corresponding <span class="in">`as_*`</span> extractor</span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Add the TypeScript signature to <span class="in">`WasmExports`</span> in <span class="in">`sdk/typescript/src/types.ts`</span></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Wrap the call in a typed method on the appropriate SDK class</span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Add an integration test in <span class="in">`tests/integration/tests/wasm_boundary.rs`</span></span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_existence`</span> entry point demonstrates the pattern for functions that should never throw across the boundary: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</span>
-<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`auto_generate_protolens`</span> <span class="pp">|</span> <span class="in">`(schema1: u32, schema2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_lens_laws`</span> <span class="pp">|</span> <span class="in">`(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack law check <span class="pp">|</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_get_put`</span> <span class="pp">|</span> <span class="in">`(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack law check <span class="pp">|</span></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_put_get`</span> <span class="pp">|</span> <span class="in">`(migration: u32, instance: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack law check <span class="pp">|</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`invert_migration`</span> <span class="pp">|</span> <span class="in">`(mapping: &amp;[u8], src: u32, tgt: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack inverse <span class="pp">|</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`compose_lenses`</span> <span class="pp">|</span> <span class="in">`(l1: u32, l2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`instantiate_protolens`</span> <span class="pp">|</span> <span class="in">`(chain: u32, schema: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Migration handle <span class="pp">|</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_complement_spec`</span> <span class="pp">|</span> <span class="in">`(chain: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack spec <span class="pp">|</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_from_diff`</span> <span class="pp">|</span> <span class="in">`(diff: &amp;[u8], s1: u32, s2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_compose`</span> <span class="pp">|</span> <span class="in">`(c1: u32, c2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_chain_to_json`</span> <span class="pp">|</span> <span class="in">`(chain: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> JSON bytes <span class="pp">|</span></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_from_json`</span> <span class="pp">|</span> <span class="in">`(json: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_fuse`</span> <span class="pp">|</span> <span class="in">`(chain: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_lift`</span> <span class="pp">|</span> <span class="in">`(chain: u32, morphism: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_check_applicability`</span> <span class="pp">|</span> <span class="in">`(chain: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack report <span class="pp">|</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`protolens_fleet`</span> <span class="pp">|</span> <span class="in">`(chain: u32, schemas: &amp;[u32]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack fleet result <span class="pp">|</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`apply_protolens_step`</span> <span class="pp">|</span> <span class="in">`(protolens: &amp;[u8], schema: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Schema handle <span class="pp">|</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`factorize_morphism`</span> <span class="pp">|</span> <span class="in">`(morphism: &amp;[u8], domain: u32, codomain: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> ProtolensChain handle <span class="pp">|</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`symmetric_lens_from_schemas`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> SymmetricLens handle <span class="pp">|</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`symmetric_lens_sync`</span> <span class="pp">|</span> <span class="in">`(lens: u32, dir: &amp;str, data: &amp;[u8], state: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack sync result <span class="pp">|</span></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a><span class="fu">#### GAT Engine</span></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`create_theory`</span> <span class="pp">|</span> <span class="in">`(spec: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Theory handle <span class="pp">|</span></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`colimit_theories`</span> <span class="pp">|</span> <span class="in">`(t1: u32, t2: u32, shared: u32) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Theory handle <span class="pp">|</span></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_morphism`</span> <span class="pp">|</span> <span class="in">`(morphism: &amp;[u8], domain: u32, codomain: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`migrate_model`</span> <span class="pp">|</span> <span class="in">`(model: &amp;[u8], morphism: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack model <span class="pp">|</span></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`list_builtin_protocols`</span> <span class="pp">|</span> <span class="in">`() -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack protocol list <span class="pp">|</span></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_builtin_protocol`</span> <span class="pp">|</span> <span class="in">`(name: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack protocol <span class="pp">|</span></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`register_io_protocols`</span> <span class="pp">|</span> <span class="in">`() -&gt; u32`</span> <span class="pp">|</span> Registry handle <span class="pp">|</span></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`list_io_protocols`</span> <span class="pp">|</span> <span class="in">`(registry: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack list <span class="pp">|</span></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="fu">#### VCS and Data Versioning</span></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_init`</span> <span class="pp">|</span> <span class="in">`(protocol_name: &amp;[u8]) -&gt; u32`</span> <span class="pp">|</span> Repo handle <span class="pp">|</span></span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_add`</span> <span class="pp">|</span> <span class="in">`(repo: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack add result <span class="pp">|</span></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_commit`</span> <span class="pp">|</span> <span class="in">`(repo: u32, message: &amp;[u8], author: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack commit hash <span class="pp">|</span></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_log`</span> <span class="pp">|</span> <span class="in">`(repo: u32, count: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack log entries <span class="pp">|</span></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_status`</span> <span class="pp">|</span> <span class="in">`(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack status <span class="pp">|</span></span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_diff`</span> <span class="pp">|</span> <span class="in">`(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack diff <span class="pp">|</span></span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_branch`</span> <span class="pp">|</span> <span class="in">`(repo: u32, name: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_checkout`</span> <span class="pp">|</span> <span class="in">`(repo: u32, target: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_merge`</span> <span class="pp">|</span> <span class="in">`(repo: u32, branch: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_stash`</span> <span class="pp">|</span> <span class="in">`(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_stash_pop`</span> <span class="pp">|</span> <span class="in">`(repo: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack result <span class="pp">|</span></span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`vcs_blame`</span> <span class="pp">|</span> <span class="in">`(repo: u32, vertex: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack blame info <span class="pp">|</span></span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`store_dataset`</span> <span class="pp">|</span> <span class="in">`(schema: u32, data: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Dataset handle <span class="pp">|</span></span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_dataset`</span> <span class="pp">|</span> <span class="in">`(dataset: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack dataset <span class="pp">|</span></span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`migrate_dataset_forward`</span> <span class="pp">|</span> <span class="in">`(dataset: u32, migration: u32, ...) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Dataset handle <span class="pp">|</span></span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`migrate_dataset_backward`</span> <span class="pp">|</span> <span class="in">`(dataset: u32, migration: u32, ...) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Dataset handle <span class="pp">|</span></span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`check_dataset_staleness`</span> <span class="pp">|</span> <span class="in">`(dataset: u32, schema: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack staleness <span class="pp">|</span></span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`store_protocol_definition`</span> <span class="pp">|</span> <span class="in">`(protocol: &amp;[u8]) -&gt; Result&lt;u32, JsError&gt;`</span> <span class="pp">|</span> Handle <span class="pp">|</span></span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_protocol_definition`</span> <span class="pp">|</span> <span class="in">`(handle: u32) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack protocol <span class="pp">|</span></span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_migration_complement`</span> <span class="pp">|</span> <span class="in">`(complement: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack complement <span class="pp">|</span></span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span>, <span class="in">`diff_schemas`</span>, and <span class="in">`diff_schemas_full`</span> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where "failure" is an expected, structured result.</span>
+<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Flow: JS to Rust and Back</span></span>
+<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a>The following diagram shows the complete lifecycle of a call across the WASM boundary:</span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a>    participant JS as TypeScript SDK</span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>    participant Pack as packToWasm (msgpack)</span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>    participant WB as wasm_bindgen</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a>    participant Rust as panproto-wasm</span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>    participant Unpack as unpackFromWasm</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a>    JS-&gt;&gt;Pack: structured JS value</span>
+<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a>    Pack-&gt;&gt;WB: Uint8Array</span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a>    WB-&gt;&gt;Rust: &amp;[u8] (zero-copy view)</span>
+<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: <span class="fu">rmp_serde::from_slice</span> → typed Rust struct</span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: perform operation</span>
+<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;Rust: <span class="fu">rmp_serde::to_vec</span> → Vec&lt;u8&gt;</span>
+<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>    Rust-&gt;&gt;WB: Vec&lt;u8&gt;</span>
+<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a>    WB-&gt;&gt;JS: Uint8Array</span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a>    JS-&gt;&gt;Unpack: Uint8Array</span>
+<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>    Unpack-&gt;&gt;JS: structured JS value</span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>The key property is that <span class="in">`wasm_bindgen`</span> passes byte slices as zero-copy views into WASM linear memory. The only copies happen during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</span>
+<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Slab Lifecycle</span></span>
+<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>Handles follow a simple lifecycle. Freed slots are reused on subsequent allocations:</span>
+<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a>stateDiagram-v2</span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>    [<span class="ot">*</span>] --&gt; Allocated: alloc(resource)</span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a>    Allocated --&gt; InUse: with_resource(handle, f)</span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>    InUse --&gt; Allocated: callback returns</span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>    Allocated --&gt; Freed: free(handle)</span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>    Freed --&gt; Allocated: alloc reuses slot</span>
+<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a>    Freed --&gt; [<span class="ot">*</span>]</span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a>On the TypeScript side, <span class="in">`WasmHandle`</span> wraps each raw <span class="in">`u32`</span> handle and calls <span class="in">`free_handle`</span> in its <span class="in">`Symbol.dispose`</span> implementation. A <span class="in">`FinalizationRegistry`</span> acts as a safety net: if a <span class="in">`WasmHandle`</span> is garbage-collected without being disposed, the registry calls <span class="in">`free_handle`</span> to prevent leaks.</span>
+<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>Errors are represented as <span class="in">`WasmError`</span> variants (an internal <span class="in">`thiserror`</span> enum) and converted to <span class="in">`JsError`</span> at the boundary via <span class="in">`Into`</span>. The JS side receives them as standard <span class="in">`Error`</span> objects. The five error variants are:</span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DeserializationFailed`</span> -- MessagePack input could not be decoded</span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`InvalidHandle`</span> -- the <span class="in">`u32`</span> index does not point to a live resource</span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`TypeMismatch`</span> -- the resource at a handle is the wrong variant (e.g., expected Protocol, got Schema)</span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`SchemaBuildFailed`</span> -- a <span class="in">`SchemaBuilder`</span> operation failed validation</span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MigrationFailed`</span> / <span class="in">`LiftFailed`</span> / <span class="in">`PutFailed`</span> -- runtime operation errors</span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a New Entry Point</span></span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>To add a new WASM entry point:</span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add a <span class="in">`#[wasm_bindgen] pub fn`</span> to <span class="in">`crates/panproto-wasm/src/api.rs`</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>If the function needs a new resource type, add a variant to <span class="in">`Resource`</span> in <span class="in">`slab.rs`</span> and a corresponding <span class="in">`as_*`</span> extractor</span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Add the TypeScript signature to <span class="in">`WasmExports`</span> in <span class="in">`sdk/typescript/src/types.ts`</span></span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Wrap the call in a typed method on the appropriate SDK class</span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Add an integration test in <span class="in">`tests/integration/tests/wasm_boundary.rs`</span></span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_existence`</span> entry point demonstrates the pattern for functions that should never throw across the boundary: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

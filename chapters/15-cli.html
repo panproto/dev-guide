@@ -645,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="schema-validate" class="level3" data-number="16.1.1">
 <h3 data-number="16.1.1" class="anchored" data-anchor-id="schema-validate"><span class="header-section-number">16.1.1</span> <code>schema validate</code></h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> validate <span class="at">--protocol</span> atproto schema.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Loads the schema from JSON, resolves the protocol by name, and runs protocol-aware validation. In addition to structural validation, <code>schema validate</code> now also type-checks the protocol’s schema theory equations via <code>gat_validate::validate_theory_equations</code>. Exits with code 1 on failure. Calls <code>panproto_core::schema::validate</code>.</p>
+<p>Loads the schema from JSON, resolves the protocol by name, and runs protocol-aware validation. In addition to structural validation, <code>schema validate</code> type-checks the protocol’s schema theory equations via <code>gat_validate::validate_theory_equations</code>. Exits with code 1 on failure. Calls <code>panproto_core::schema::validate</code>.</p>
 </section>
 <section id="schema-check" class="level3" data-number="16.1.2">
 <h3 data-number="16.1.2" class="anchored" data-anchor-id="schema-check"><span class="header-section-number">16.1.2</span> <code>schema check</code></h3>
@@ -1354,7 +1354,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> validate <span class="at">--protocol</span> atproto schema.json</span>
 <span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>Loads the schema from JSON, resolves the protocol by name, and runs protocol-aware validation. In addition to structural validation, <span class="in">`schema validate`</span> now also type-checks the protocol's schema theory equations via <span class="in">`gat_validate::validate_theory_equations`</span>. Exits with code 1 on failure. Calls <span class="in">`panproto_core::schema::validate`</span>.</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>Loads the schema from JSON, resolves the protocol by name, and runs protocol-aware validation. In addition to structural validation, <span class="in">`schema validate`</span> type-checks the protocol's schema theory equations via <span class="in">`gat_validate::validate_theory_equations`</span>. Exits with code 1 on failure. Calls <span class="in">`panproto_core::schema::validate`</span>.</span>
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="fu">### `schema check`</span></span>
 <span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>

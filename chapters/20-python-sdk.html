@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>15&nbsp; panproto — The Python SDK – panproto: Developer Guide</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,19 +72,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../chapters/14-typescript-sdk.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f1aadacce99040138bbb613f9330654f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-8b4baf804e461d9b72633f0de59a0cac.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-dbc92dda8186f57fa2e333fbb71d6a9d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-67ec4aabe8467e78f93de3725ae3d67e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-aafb03ca45b9c5aa290c66b7a437bb31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ffa0eef5ebcb8616de356e02b78e2eb3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -816,89 +818,89 @@ Tip
 <section id="wasmhandle" class="level3" data-number="15.4.2">
 <h3 data-number="15.4.2" class="anchored" data-anchor-id="wasmhandle"><span class="header-section-number">15.4.2</span> <code>WasmHandle</code></h3>
 <p>Every WASM-side resource is wrapped in a <code>WasmHandle</code>, which implements the context-manager protocol for use with <code>with</code> statements:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="1102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 1101;"><span id="cb4-1102"><a href="#cb4-1102" aria-hidden="true" tabindex="-1"></a><span class="at">@final</span></span>
-<span id="cb4-1103"><a href="#cb4-1103" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WasmHandle:</span>
-<span id="cb4-1104"><a href="#cb4-1104" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Disposable wrapper around a WASM opaque handle.</span></span>
-<span id="cb4-1105"><a href="#cb4-1105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1106"><a href="#cb4-1106" aria-hidden="true" tabindex="-1"></a><span class="co">    Implements the context-manager protocol for use with ``with`` statements.</span></span>
-<span id="cb4-1107"><a href="#cb4-1107" aria-hidden="true" tabindex="-1"></a><span class="co">    A ``weakref.finalize`` safety net ensures the underlying WASM resource is</span></span>
-<span id="cb4-1108"><a href="#cb4-1108" aria-hidden="true" tabindex="-1"></a><span class="co">    freed even if the handle is garbage-collected without being explicitly</span></span>
-<span id="cb4-1109"><a href="#cb4-1109" aria-hidden="true" tabindex="-1"></a><span class="co">    closed.</span></span>
-<span id="cb4-1110"><a href="#cb4-1110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1111"><a href="#cb4-1111" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb4-1112"><a href="#cb4-1112" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb4-1113"><a href="#cb4-1113" aria-hidden="true" tabindex="-1"></a><span class="co">    handle : int</span></span>
-<span id="cb4-1114"><a href="#cb4-1114" aria-hidden="true" tabindex="-1"></a><span class="co">        The raw WASM handle id returned by an allocation call.</span></span>
-<span id="cb4-1115"><a href="#cb4-1115" aria-hidden="true" tabindex="-1"></a><span class="co">    wasm : WasmModule</span></span>
-<span id="cb4-1116"><a href="#cb4-1116" aria-hidden="true" tabindex="-1"></a><span class="co">        The module that owns this handle (used for ``free_handle``).</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="1102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 1101;"><span id="cb4-1102"><a href="#cb4-1102" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_migration_complement(<span class="va">self</span>, complement_bytes: <span class="bu">bytes</span>) <span class="op">-&gt;</span> <span class="bu">bytes</span>:</span>
+<span id="cb4-1103"><a href="#cb4-1103" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Get the complement from a forward migration result.</span></span>
+<span id="cb4-1104"><a href="#cb4-1104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1105"><a href="#cb4-1105" aria-hidden="true" tabindex="-1"></a><span class="co">        Parameters</span></span>
+<span id="cb4-1106"><a href="#cb4-1106" aria-hidden="true" tabindex="-1"></a><span class="co">        ----------</span></span>
+<span id="cb4-1107"><a href="#cb4-1107" aria-hidden="true" tabindex="-1"></a><span class="co">        complement_bytes : bytes</span></span>
+<span id="cb4-1108"><a href="#cb4-1108" aria-hidden="true" tabindex="-1"></a><span class="co">            Raw complement data.</span></span>
+<span id="cb4-1109"><a href="#cb4-1109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1110"><a href="#cb4-1110" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns</span></span>
+<span id="cb4-1111"><a href="#cb4-1111" aria-hidden="true" tabindex="-1"></a><span class="co">        -------</span></span>
+<span id="cb4-1112"><a href="#cb4-1112" aria-hidden="true" tabindex="-1"></a><span class="co">        bytes</span></span>
+<span id="cb4-1113"><a href="#cb4-1113" aria-hidden="true" tabindex="-1"></a><span class="co">            MessagePack-encoded complement data.</span></span>
+<span id="cb4-1114"><a href="#cb4-1114" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb4-1115"><a href="#cb4-1115" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="va">self</span>._call(<span class="st">"get_migration_complement"</span>, complement_bytes)</span>
+<span id="cb4-1116"><a href="#cb4-1116" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">bytes</span>(result)  <span class="co"># type: ignore[arg-type]</span></span>
 <span id="cb4-1117"><a href="#cb4-1117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1118"><a href="#cb4-1118" aria-hidden="true" tabindex="-1"></a><span class="co">    Examples</span></span>
-<span id="cb4-1119"><a href="#cb4-1119" aria-hidden="true" tabindex="-1"></a><span class="co">    --------</span></span>
-<span id="cb4-1120"><a href="#cb4-1120" aria-hidden="true" tabindex="-1"></a><span class="co">    &gt;&gt;&gt; with WasmHandle(raw_id, wasm) as h:</span></span>
-<span id="cb4-1121"><a href="#cb4-1121" aria-hidden="true" tabindex="-1"></a><span class="co">    ...     use(h.id)</span></span>
-<span id="cb4-1122"><a href="#cb4-1122" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb4-1123"><a href="#cb4-1123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1124"><a href="#cb4-1124" aria-hidden="true" tabindex="-1"></a>    <span class="va">__slots__</span> <span class="op">=</span> (<span class="st">"__weakref__"</span>, <span class="st">"_disposed"</span>, <span class="st">"_finalizer"</span>, <span class="st">"_handle"</span>, <span class="st">"_wasm"</span>)</span>
-<span id="cb4-1125"><a href="#cb4-1125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1126"><a href="#cb4-1126" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, handle: <span class="bu">int</span>, wasm: WasmModule) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb4-1127"><a href="#cb4-1127" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._handle: <span class="bu">int</span> <span class="op">=</span> handle</span>
-<span id="cb4-1128"><a href="#cb4-1128" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._wasm: WasmModule <span class="op">=</span> wasm</span>
-<span id="cb4-1129"><a href="#cb4-1129" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._disposed: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb4-1130"><a href="#cb4-1130" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Safety net: if this object is GC'd without being closed, free the</span></span>
-<span id="cb4-1131"><a href="#cb4-1131" aria-hidden="true" tabindex="-1"></a>        <span class="co"># underlying WASM resource.</span></span>
-<span id="cb4-1132"><a href="#cb4-1132" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._finalizer <span class="op">=</span> weakref.finalize(</span>
-<span id="cb4-1133"><a href="#cb4-1133" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>,</span>
-<span id="cb4-1134"><a href="#cb4-1134" aria-hidden="true" tabindex="-1"></a>            _free_handle_safe,</span>
-<span id="cb4-1135"><a href="#cb4-1135" aria-hidden="true" tabindex="-1"></a>            wasm,</span>
-<span id="cb4-1136"><a href="#cb4-1136" aria-hidden="true" tabindex="-1"></a>            handle,</span>
-<span id="cb4-1137"><a href="#cb4-1137" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-1138"><a href="#cb4-1138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1139"><a href="#cb4-1139" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
-<span id="cb4-1140"><a href="#cb4-1140" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="bu">id</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb4-1141"><a href="#cb4-1141" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""The raw WASM handle id.</span></span>
+<span id="cb4-1118"><a href="#cb4-1118" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> free_handle(<span class="va">self</span>, handle: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-1119"><a href="#cb4-1119" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Release a WASM-side resource.</span></span>
+<span id="cb4-1120"><a href="#cb4-1120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1121"><a href="#cb4-1121" aria-hidden="true" tabindex="-1"></a><span class="co">        Parameters</span></span>
+<span id="cb4-1122"><a href="#cb4-1122" aria-hidden="true" tabindex="-1"></a><span class="co">        ----------</span></span>
+<span id="cb4-1123"><a href="#cb4-1123" aria-hidden="true" tabindex="-1"></a><span class="co">        handle : int</span></span>
+<span id="cb4-1124"><a href="#cb4-1124" aria-hidden="true" tabindex="-1"></a><span class="co">            The opaque handle to free.</span></span>
+<span id="cb4-1125"><a href="#cb4-1125" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb4-1126"><a href="#cb4-1126" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._call(<span class="st">"free_handle"</span>, handle)</span>
+<span id="cb4-1127"><a href="#cb4-1127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1128"><a href="#cb4-1128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1129"><a href="#cb4-1129" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------------------</span></span>
+<span id="cb4-1130"><a href="#cb4-1130" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle wrapper</span></span>
+<span id="cb4-1131"><a href="#cb4-1131" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------------------</span></span>
+<span id="cb4-1132"><a href="#cb4-1132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1133"><a href="#cb4-1133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1134"><a href="#cb4-1134" aria-hidden="true" tabindex="-1"></a><span class="at">@final</span></span>
+<span id="cb4-1135"><a href="#cb4-1135" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WasmHandle:</span>
+<span id="cb4-1136"><a href="#cb4-1136" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Disposable wrapper around a WASM opaque handle.</span></span>
+<span id="cb4-1137"><a href="#cb4-1137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1138"><a href="#cb4-1138" aria-hidden="true" tabindex="-1"></a><span class="co">    Implements the context-manager protocol for use with ``with`` statements.</span></span>
+<span id="cb4-1139"><a href="#cb4-1139" aria-hidden="true" tabindex="-1"></a><span class="co">    A ``weakref.finalize`` safety net ensures the underlying WASM resource is</span></span>
+<span id="cb4-1140"><a href="#cb4-1140" aria-hidden="true" tabindex="-1"></a><span class="co">    freed even if the handle is garbage-collected without being explicitly</span></span>
+<span id="cb4-1141"><a href="#cb4-1141" aria-hidden="true" tabindex="-1"></a><span class="co">    closed.</span></span>
 <span id="cb4-1142"><a href="#cb4-1142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1143"><a href="#cb4-1143" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns</span></span>
-<span id="cb4-1144"><a href="#cb4-1144" aria-hidden="true" tabindex="-1"></a><span class="co">        -------</span></span>
-<span id="cb4-1145"><a href="#cb4-1145" aria-hidden="true" tabindex="-1"></a><span class="co">        int</span></span>
-<span id="cb4-1146"><a href="#cb4-1146" aria-hidden="true" tabindex="-1"></a><span class="co">            Opaque handle integer for passing to WASM calls.</span></span>
-<span id="cb4-1147"><a href="#cb4-1147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1148"><a href="#cb4-1148" aria-hidden="true" tabindex="-1"></a><span class="co">        Raises</span></span>
-<span id="cb4-1149"><a href="#cb4-1149" aria-hidden="true" tabindex="-1"></a><span class="co">        ------</span></span>
-<span id="cb4-1150"><a href="#cb4-1150" aria-hidden="true" tabindex="-1"></a><span class="co">        WasmError</span></span>
-<span id="cb4-1151"><a href="#cb4-1151" aria-hidden="true" tabindex="-1"></a><span class="co">            If this handle has already been disposed.</span></span>
-<span id="cb4-1152"><a href="#cb4-1152" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
-<span id="cb4-1153"><a href="#cb4-1153" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>._disposed:</span>
-<span id="cb4-1154"><a href="#cb4-1154" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> WasmError(<span class="st">"Attempted to use a disposed WasmHandle"</span>)</span>
-<span id="cb4-1155"><a href="#cb4-1155" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._handle</span>
-<span id="cb4-1156"><a href="#cb4-1156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1157"><a href="#cb4-1157" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
-<span id="cb4-1158"><a href="#cb4-1158" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> disposed(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb4-1159"><a href="#cb4-1159" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Whether this handle has been disposed.</span></span>
-<span id="cb4-1160"><a href="#cb4-1160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1161"><a href="#cb4-1161" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns</span></span>
-<span id="cb4-1162"><a href="#cb4-1162" aria-hidden="true" tabindex="-1"></a><span class="co">        -------</span></span>
-<span id="cb4-1163"><a href="#cb4-1163" aria-hidden="true" tabindex="-1"></a><span class="co">        bool</span></span>
-<span id="cb4-1164"><a href="#cb4-1164" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
-<span id="cb4-1165"><a href="#cb4-1165" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._disposed</span>
-<span id="cb4-1166"><a href="#cb4-1166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1167"><a href="#cb4-1167" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> close(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb4-1168"><a href="#cb4-1168" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Release the underlying WASM resource.</span></span>
-<span id="cb4-1169"><a href="#cb4-1169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1170"><a href="#cb4-1170" aria-hidden="true" tabindex="-1"></a><span class="co">        Safe to call multiple times; subsequent calls are no-ops.</span></span>
-<span id="cb4-1171"><a href="#cb4-1171" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
-<span id="cb4-1172"><a href="#cb4-1172" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>._disposed:</span>
-<span id="cb4-1173"><a href="#cb4-1173" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cb4-1174"><a href="#cb4-1174" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._disposed <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb4-1175"><a href="#cb4-1175" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Detach the GC safety net so it won't fire during garbage collection,</span></span>
-<span id="cb4-1176"><a href="#cb4-1176" aria-hidden="true" tabindex="-1"></a>        <span class="co"># then free the handle directly.</span></span>
-<span id="cb4-1177"><a href="#cb4-1177" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._finalizer.detach()</span>
-<span id="cb4-1178"><a href="#cb4-1178" aria-hidden="true" tabindex="-1"></a>        _free_handle_safe(<span class="va">self</span>._wasm, <span class="va">self</span>._handle)</span>
+<span id="cb4-1143"><a href="#cb4-1143" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb4-1144"><a href="#cb4-1144" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb4-1145"><a href="#cb4-1145" aria-hidden="true" tabindex="-1"></a><span class="co">    handle : int</span></span>
+<span id="cb4-1146"><a href="#cb4-1146" aria-hidden="true" tabindex="-1"></a><span class="co">        The raw WASM handle id returned by an allocation call.</span></span>
+<span id="cb4-1147"><a href="#cb4-1147" aria-hidden="true" tabindex="-1"></a><span class="co">    wasm : WasmModule</span></span>
+<span id="cb4-1148"><a href="#cb4-1148" aria-hidden="true" tabindex="-1"></a><span class="co">        The module that owns this handle (used for ``free_handle``).</span></span>
+<span id="cb4-1149"><a href="#cb4-1149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1150"><a href="#cb4-1150" aria-hidden="true" tabindex="-1"></a><span class="co">    Examples</span></span>
+<span id="cb4-1151"><a href="#cb4-1151" aria-hidden="true" tabindex="-1"></a><span class="co">    --------</span></span>
+<span id="cb4-1152"><a href="#cb4-1152" aria-hidden="true" tabindex="-1"></a><span class="co">    &gt;&gt;&gt; with WasmHandle(raw_id, wasm) as h:</span></span>
+<span id="cb4-1153"><a href="#cb4-1153" aria-hidden="true" tabindex="-1"></a><span class="co">    ...     use(h.id)</span></span>
+<span id="cb4-1154"><a href="#cb4-1154" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-1155"><a href="#cb4-1155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1156"><a href="#cb4-1156" aria-hidden="true" tabindex="-1"></a>    <span class="va">__slots__</span> <span class="op">=</span> (<span class="st">"__weakref__"</span>, <span class="st">"_disposed"</span>, <span class="st">"_finalizer"</span>, <span class="st">"_handle"</span>, <span class="st">"_wasm"</span>)</span>
+<span id="cb4-1157"><a href="#cb4-1157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1158"><a href="#cb4-1158" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, handle: <span class="bu">int</span>, wasm: WasmModule) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-1159"><a href="#cb4-1159" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._handle: <span class="bu">int</span> <span class="op">=</span> handle</span>
+<span id="cb4-1160"><a href="#cb4-1160" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._wasm: WasmModule <span class="op">=</span> wasm</span>
+<span id="cb4-1161"><a href="#cb4-1161" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._disposed: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb4-1162"><a href="#cb4-1162" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Safety net: if this object is GC'd without being closed, free the</span></span>
+<span id="cb4-1163"><a href="#cb4-1163" aria-hidden="true" tabindex="-1"></a>        <span class="co"># underlying WASM resource.</span></span>
+<span id="cb4-1164"><a href="#cb4-1164" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._finalizer <span class="op">=</span> weakref.finalize(</span>
+<span id="cb4-1165"><a href="#cb4-1165" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>,</span>
+<span id="cb4-1166"><a href="#cb4-1166" aria-hidden="true" tabindex="-1"></a>            _free_handle_safe,</span>
+<span id="cb4-1167"><a href="#cb4-1167" aria-hidden="true" tabindex="-1"></a>            wasm,</span>
+<span id="cb4-1168"><a href="#cb4-1168" aria-hidden="true" tabindex="-1"></a>            handle,</span>
+<span id="cb4-1169"><a href="#cb4-1169" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-1170"><a href="#cb4-1170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1171"><a href="#cb4-1171" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb4-1172"><a href="#cb4-1172" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="bu">id</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb4-1173"><a href="#cb4-1173" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""The raw WASM handle id.</span></span>
+<span id="cb4-1174"><a href="#cb4-1174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-1175"><a href="#cb4-1175" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns</span></span>
+<span id="cb4-1176"><a href="#cb4-1176" aria-hidden="true" tabindex="-1"></a><span class="co">        -------</span></span>
+<span id="cb4-1177"><a href="#cb4-1177" aria-hidden="true" tabindex="-1"></a><span class="co">        int</span></span>
+<span id="cb4-1178"><a href="#cb4-1178" aria-hidden="true" tabindex="-1"></a><span class="co">            Opaque handle integer for passing to WASM calls.</span></span>
 <span id="cb4-1179"><a href="#cb4-1179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1180"><a href="#cb4-1180" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__enter__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> WasmHandle:</span>
-<span id="cb4-1181"><a href="#cb4-1181" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
-<span id="cb4-1182"><a href="#cb4-1182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-1183"><a href="#cb4-1183" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__exit__</span>(<span class="va">self</span>, <span class="op">*</span>_: <span class="bu">object</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb4-1184"><a href="#cb4-1184" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.close()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-1180"><a href="#cb4-1180" aria-hidden="true" tabindex="-1"></a><span class="co">        Raises</span></span>
+<span id="cb4-1181"><a href="#cb4-1181" aria-hidden="true" tabindex="-1"></a><span class="co">        ------</span></span>
+<span id="cb4-1182"><a href="#cb4-1182" aria-hidden="true" tabindex="-1"></a><span class="co">        WasmError</span></span>
+<span id="cb4-1183"><a href="#cb4-1183" aria-hidden="true" tabindex="-1"></a><span class="co">            If this handle has already been disposed.</span></span>
+<span id="cb4-1184"><a href="#cb4-1184" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Two layers of safety prevent handle leaks:</p>
 <ol type="1">
 <li><strong>Context manager (<code>with</code> / explicit <code>.close()</code>)</strong> – Deterministic cleanup. Called automatically on block exit or manually by the consumer.</li>
@@ -922,41 +924,41 @@ Important
 <section id="load_wasm" class="level3" data-number="15.4.3">
 <h3 data-number="15.4.3" class="anchored" data-anchor-id="load_wasm"><span class="header-section-number">15.4.3</span> <code>load_wasm</code></h3>
 <p>The <code>load_wasm</code> factory reads a <code>.wasm</code> binary from disk, creates a <code>wasmtime.Engine</code>, <code>Store</code>, <code>Module</code>, and <code>Linker</code>, instantiates the module with WASI imports, and returns a ready <code>WasmModule</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="1227"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 1226;"><span id="cb5-1227"><a href="#cb5-1227" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_wasm(path: <span class="bu">str</span> <span class="op">|</span> Path) <span class="op">-&gt;</span> WasmModule:</span>
-<span id="cb5-1228"><a href="#cb5-1228" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Load a panproto WASM binary from a file path.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="1227"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 1226;"><span id="cb5-1227"><a href="#cb5-1227" aria-hidden="true" tabindex="-1"></a>    Used by ``weakref.finalize`` so that GC<span class="st">'d handles are still cleaned up</span></span>
+<span id="cb5-1228"><a href="#cb5-1228" aria-hidden="true" tabindex="-1"></a><span class="er">    even if the WASM module has already been torn down.</span></span>
 <span id="cb5-1229"><a href="#cb5-1229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-1230"><a href="#cb5-1230" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb5-1231"><a href="#cb5-1231" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb5-1232"><a href="#cb5-1232" aria-hidden="true" tabindex="-1"></a><span class="co">    path : str | Path</span></span>
-<span id="cb5-1233"><a href="#cb5-1233" aria-hidden="true" tabindex="-1"></a><span class="co">        Filesystem path to the ``.wasm`` binary.</span></span>
-<span id="cb5-1234"><a href="#cb5-1234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-1235"><a href="#cb5-1235" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
-<span id="cb5-1236"><a href="#cb5-1236" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
-<span id="cb5-1237"><a href="#cb5-1237" aria-hidden="true" tabindex="-1"></a><span class="co">    WasmModule</span></span>
-<span id="cb5-1238"><a href="#cb5-1238" aria-hidden="true" tabindex="-1"></a><span class="co">        An initialized WASM module ready for use.</span></span>
+<span id="cb5-1230"><a href="#cb5-1230" aria-hidden="true" tabindex="-1"></a>    Parameters</span>
+<span id="cb5-1231"><a href="#cb5-1231" aria-hidden="true" tabindex="-1"></a>    <span class="op">----------</span></span>
+<span id="cb5-1232"><a href="#cb5-1232" aria-hidden="true" tabindex="-1"></a>    wasm : WasmModule</span>
+<span id="cb5-1233"><a href="#cb5-1233" aria-hidden="true" tabindex="-1"></a>        The owning WASM module.</span>
+<span id="cb5-1234"><a href="#cb5-1234" aria-hidden="true" tabindex="-1"></a>    handle : <span class="bu">int</span></span>
+<span id="cb5-1235"><a href="#cb5-1235" aria-hidden="true" tabindex="-1"></a>        The handle to free.</span>
+<span id="cb5-1236"><a href="#cb5-1236" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-1237"><a href="#cb5-1237" aria-hidden="true" tabindex="-1"></a><span class="co">    with contextlib.suppress(Exception):</span></span>
+<span id="cb5-1238"><a href="#cb5-1238" aria-hidden="true" tabindex="-1"></a><span class="co">        wasm.free_handle(handle)</span></span>
 <span id="cb5-1239"><a href="#cb5-1239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-1240"><a href="#cb5-1240" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises</span></span>
-<span id="cb5-1241"><a href="#cb5-1241" aria-hidden="true" tabindex="-1"></a><span class="co">    ------</span></span>
-<span id="cb5-1242"><a href="#cb5-1242" aria-hidden="true" tabindex="-1"></a><span class="co">    WasmError</span></span>
-<span id="cb5-1243"><a href="#cb5-1243" aria-hidden="true" tabindex="-1"></a><span class="co">        If the file cannot be read or the WASM module cannot be instantiated.</span></span>
-<span id="cb5-1244"><a href="#cb5-1244" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb5-1245"><a href="#cb5-1245" aria-hidden="true" tabindex="-1"></a>    resolved <span class="op">=</span> Path(path)</span>
-<span id="cb5-1246"><a href="#cb5-1246" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb5-1247"><a href="#cb5-1247" aria-hidden="true" tabindex="-1"></a>        wasm_bytes <span class="op">=</span> resolved.read_bytes()</span>
-<span id="cb5-1248"><a href="#cb5-1248" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">OSError</span> <span class="im">as</span> exc:</span>
-<span id="cb5-1249"><a href="#cb5-1249" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> WasmError(<span class="ss">f"Failed to read WASM file </span><span class="sc">{</span>resolved<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>exc<span class="sc">}</span><span class="ss">"</span>) <span class="im">from</span> exc</span>
+<span id="cb5-1240"><a href="#cb5-1240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-1241"><a href="#cb5-1241" aria-hidden="true" tabindex="-1"></a><span class="co">def create_handle(raw_handle: int, wasm: WasmModule) -&gt; WasmHandle:</span></span>
+<span id="cb5-1242"><a href="#cb5-1242" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span>Wrap a raw WASM handle <span class="kw">in</span> a managed :<span class="kw">class</span>:`WasmHandle`.</span>
+<span id="cb5-1243"><a href="#cb5-1243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-1244"><a href="#cb5-1244" aria-hidden="true" tabindex="-1"></a>    Parameters</span>
+<span id="cb5-1245"><a href="#cb5-1245" aria-hidden="true" tabindex="-1"></a>    <span class="op">----------</span></span>
+<span id="cb5-1246"><a href="#cb5-1246" aria-hidden="true" tabindex="-1"></a>    raw_handle : <span class="bu">int</span></span>
+<span id="cb5-1247"><a href="#cb5-1247" aria-hidden="true" tabindex="-1"></a>        The u32 handle returned by a WASM allocation call.</span>
+<span id="cb5-1248"><a href="#cb5-1248" aria-hidden="true" tabindex="-1"></a>    wasm : WasmModule</span>
+<span id="cb5-1249"><a href="#cb5-1249" aria-hidden="true" tabindex="-1"></a>        The owning WASM module.</span>
 <span id="cb5-1250"><a href="#cb5-1250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-1251"><a href="#cb5-1251" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb5-1252"><a href="#cb5-1252" aria-hidden="true" tabindex="-1"></a>        engine <span class="op">=</span> wasmtime.Engine()</span>
-<span id="cb5-1253"><a href="#cb5-1253" aria-hidden="true" tabindex="-1"></a>        store <span class="op">=</span> wasmtime.Store(engine)</span>
-<span id="cb5-1254"><a href="#cb5-1254" aria-hidden="true" tabindex="-1"></a>        module <span class="op">=</span> wasmtime.Module(engine, wasm_bytes)</span>
-<span id="cb5-1255"><a href="#cb5-1255" aria-hidden="true" tabindex="-1"></a>        linker <span class="op">=</span> wasmtime.Linker(engine)</span>
-<span id="cb5-1256"><a href="#cb5-1256" aria-hidden="true" tabindex="-1"></a>        linker.define_wasi()</span>
-<span id="cb5-1257"><a href="#cb5-1257" aria-hidden="true" tabindex="-1"></a>        instance <span class="op">=</span> linker.instantiate(store, module)</span>
-<span id="cb5-1258"><a href="#cb5-1258" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
-<span id="cb5-1259"><a href="#cb5-1259" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> WasmError(<span class="ss">f"Failed to instantiate WASM module from </span><span class="sc">{</span>resolved<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>exc<span class="sc">}</span><span class="ss">"</span>) <span class="im">from</span> exc</span>
-<span id="cb5-1260"><a href="#cb5-1260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-1261"><a href="#cb5-1261" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> WasmModule(instance, store)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-1251"><a href="#cb5-1251" aria-hidden="true" tabindex="-1"></a>    Returns</span>
+<span id="cb5-1252"><a href="#cb5-1252" aria-hidden="true" tabindex="-1"></a>    <span class="op">-------</span></span>
+<span id="cb5-1253"><a href="#cb5-1253" aria-hidden="true" tabindex="-1"></a>    WasmHandle</span>
+<span id="cb5-1254"><a href="#cb5-1254" aria-hidden="true" tabindex="-1"></a>        A managed, disposable wrapper around the handle.</span>
+<span id="cb5-1255"><a href="#cb5-1255" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-1256"><a href="#cb5-1256" aria-hidden="true" tabindex="-1"></a><span class="co">    return WasmHandle(raw_handle, wasm)</span></span>
+<span id="cb5-1257"><a href="#cb5-1257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-1258"><a href="#cb5-1258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-1259"><a href="#cb5-1259" aria-hidden="true" tabindex="-1"></a><span class="co">def load_wasm(path: str | Path) -&gt; WasmModule:</span></span>
+<span id="cb5-1260"><a href="#cb5-1260" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span>Load a panproto WASM binary <span class="im">from</span> a <span class="bu">file</span> path.</span>
+<span id="cb5-1261"><a href="#cb5-1261" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Unlike the TypeScript SDK’s async <code>init()</code>, the Python factory is synchronous—<code>wasmtime-py</code> loads modules on the calling thread.</p>
 </section>
 </section>
@@ -2110,25 +2112,25 @@ Note
 <li><strong><code>diff(old, new)</code></strong> – Compute a structural diff between two schemas.</li>
 </ul>
 <p><code>Panproto</code> implements the context-manager protocol. When the <code>with</code> block exits, it releases all cached protocol handles:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-startfrom="638"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 637;"><span id="cb22-638"><a href="#cb22-638" aria-hidden="true" tabindex="-1"></a>            The source schema.</span>
-<span id="cb22-639"><a href="#cb22-639" aria-hidden="true" tabindex="-1"></a>        to_schema : BuiltSchema</span>
-<span id="cb22-640"><a href="#cb22-640" aria-hidden="true" tabindex="-1"></a>            The target schema.</span>
-<span id="cb22-641"><a href="#cb22-641" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-642"><a href="#cb22-642" aria-hidden="true" tabindex="-1"></a>        Returns</span>
-<span id="cb22-643"><a href="#cb22-643" aria-hidden="true" tabindex="-1"></a>        <span class="op">-------</span></span>
-<span id="cb22-644"><a href="#cb22-644" aria-hidden="true" tabindex="-1"></a>        <span class="bu">tuple</span>[DataSetHandle, <span class="bu">bytes</span>]</span>
-<span id="cb22-645"><a href="#cb22-645" aria-hidden="true" tabindex="-1"></a>            A <span class="bu">tuple</span> of (new_data_handle, complement_bytes).</span>
-<span id="cb22-646"><a href="#cb22-646" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
-<span id="cb22-647"><a href="#cb22-647" aria-hidden="true" tabindex="-1"></a><span class="co">        return data.migrate_forward(from_schema, to_schema)</span></span>
-<span id="cb22-648"><a href="#cb22-648" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-649"><a href="#cb22-649" aria-hidden="true" tabindex="-1"></a><span class="co">    # ------------------------------------------------------------------</span></span>
-<span id="cb22-650"><a href="#cb22-650" aria-hidden="true" tabindex="-1"></a><span class="co">    # Context manager / cleanup</span></span>
-<span id="cb22-651"><a href="#cb22-651" aria-hidden="true" tabindex="-1"></a><span class="co">    # ------------------------------------------------------------------</span></span>
-<span id="cb22-652"><a href="#cb22-652" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-653"><a href="#cb22-653" aria-hidden="true" tabindex="-1"></a><span class="co">    def close(self) -&gt; None:</span></span>
-<span id="cb22-654"><a href="#cb22-654" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span>Release <span class="bu">all</span> WASM resources held by this instance.</span>
-<span id="cb22-655"><a href="#cb22-655" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-656"><a href="#cb22-656" aria-hidden="true" tabindex="-1"></a>        Disposes <span class="bu">all</span> cached protocols. After this call the instance must</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-startfrom="638"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 637;"><span id="cb22-638"><a href="#cb22-638" aria-hidden="true" tabindex="-1"></a>        against different concrete schemas.</span>
+<span id="cb22-639"><a href="#cb22-639" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-640"><a href="#cb22-640" aria-hidden="true" tabindex="-1"></a>        Parameters</span>
+<span id="cb22-641"><a href="#cb22-641" aria-hidden="true" tabindex="-1"></a>        <span class="op">----------</span></span>
+<span id="cb22-642"><a href="#cb22-642" aria-hidden="true" tabindex="-1"></a>        from_schema : BuiltSchema</span>
+<span id="cb22-643"><a href="#cb22-643" aria-hidden="true" tabindex="-1"></a>            The source schema.</span>
+<span id="cb22-644"><a href="#cb22-644" aria-hidden="true" tabindex="-1"></a>        to_schema : BuiltSchema</span>
+<span id="cb22-645"><a href="#cb22-645" aria-hidden="true" tabindex="-1"></a>            The target schema.</span>
+<span id="cb22-646"><a href="#cb22-646" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-647"><a href="#cb22-647" aria-hidden="true" tabindex="-1"></a>        Returns</span>
+<span id="cb22-648"><a href="#cb22-648" aria-hidden="true" tabindex="-1"></a>        <span class="op">-------</span></span>
+<span id="cb22-649"><a href="#cb22-649" aria-hidden="true" tabindex="-1"></a>        ProtolensChainHandle</span>
+<span id="cb22-650"><a href="#cb22-650" aria-hidden="true" tabindex="-1"></a>            A handle <span class="cf">for</span> the generated chain.</span>
+<span id="cb22-651"><a href="#cb22-651" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-652"><a href="#cb22-652" aria-hidden="true" tabindex="-1"></a>        Raises</span>
+<span id="cb22-653"><a href="#cb22-653" aria-hidden="true" tabindex="-1"></a>        <span class="op">------</span></span>
+<span id="cb22-654"><a href="#cb22-654" aria-hidden="true" tabindex="-1"></a>        WasmError</span>
+<span id="cb22-655"><a href="#cb22-655" aria-hidden="true" tabindex="-1"></a>            If chain generation fails.</span>
+<span id="cb22-656"><a href="#cb22-656" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="schema-enrichment" class="level2" data-number="15.13">
 <h2 data-number="15.13" class="anchored" data-anchor-id="schema-enrichment"><span class="header-section-number">15.13</span> Schema Enrichment</h2>

@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>23&nbsp; Expression Parser &amp; Query Engine – panproto: Developer Guide</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/30-polynomial-operations.html" rel="next">
+<link href="../chapters/23-field-transforms.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-dbc92dda8186f57fa2e333fbb71d6a9d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ffa0eef5ebcb8616de356e02b78e2eb3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/29-expression-engine.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat: The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema: Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst: Instances and the Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig: The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens: Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols: Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm: The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code>: The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code>: The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-expr-crate-layout" id="toc-sec-expr-crate-layout" class="nav-link active" data-scroll-target="#sec-expr-crate-layout"><span class="header-section-number">23.1</span> Crate layout</a>
+  <ul class="collapse">
+  <li><a href="#panproto-expr" id="toc-panproto-expr" class="nav-link" data-scroll-target="#panproto-expr"><span class="header-section-number">23.1.1</span> panproto-expr</a></li>
+  <li><a href="#panproto-expr-parser" id="toc-panproto-expr-parser" class="nav-link" data-scroll-target="#panproto-expr-parser"><span class="header-section-number">23.1.2</span> panproto-expr-parser</a></li>
+  </ul></li>
+  <li><a href="#sec-builtin-ops" id="toc-sec-builtin-ops" class="nav-link" data-scroll-target="#sec-builtin-ops"><span class="header-section-number">23.2</span> The BuiltinOp system</a>
+  <ul class="collapse">
+  <li><a href="#graph-traversal-builtins" id="toc-graph-traversal-builtins" class="nav-link" data-scroll-target="#graph-traversal-builtins"><span class="header-section-number">23.2.1</span> Graph traversal builtins</a></li>
+  </ul></li>
+  <li><a href="#sec-instance-eval" id="toc-sec-instance-eval" class="nav-link" data-scroll-target="#sec-instance-eval"><span class="header-section-number">23.3</span> Instance-aware evaluation</a>
+  <ul class="collapse">
+  <li><a href="#apply_graph_builtin" id="toc-apply_graph_builtin" class="nav-link" data-scroll-target="#apply_graph_builtin"><span class="header-section-number">23.3.1</span> apply_graph_builtin</a></li>
+  <li><a href="#node-reference-resolution" id="toc-node-reference-resolution" class="nav-link" data-scroll-target="#node-reference-resolution"><span class="header-section-number">23.3.2</span> Node reference resolution</a></li>
+  <li><a href="#node_to_literal" id="toc-node_to_literal" class="nav-link" data-scroll-target="#node_to_literal"><span class="header-section-number">23.3.3</span> node_to_literal</a></li>
+  </ul></li>
+  <li><a href="#sec-poly-ops" id="toc-sec-poly-ops" class="nav-link" data-scroll-target="#sec-poly-ops"><span class="header-section-number">23.4</span> Polynomial operations (poly.rs)</a>
+  <ul class="collapse">
+  <li><a href="#fiber_at_anchor" id="toc-fiber_at_anchor" class="nav-link" data-scroll-target="#fiber_at_anchor"><span class="header-section-number">23.4.1</span> fiber_at_anchor</a></li>
+  <li><a href="#fiber_decomposition" id="toc-fiber_decomposition" class="nav-link" data-scroll-target="#fiber_decomposition"><span class="header-section-number">23.4.2</span> fiber_decomposition</a></li>
+  <li><a href="#fiber_with_predicate" id="toc-fiber_with_predicate" class="nav-link" data-scroll-target="#fiber_with_predicate"><span class="header-section-number">23.4.3</span> fiber_with_predicate</a></li>
+  <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by"><span class="header-section-number">23.4.4</span> group_by</a></li>
+  <li><a href="#join" id="toc-join" class="nav-link" data-scroll-target="#join"><span class="header-section-number">23.4.5</span> join</a></li>
+  </ul></li>
+  <li><a href="#sec-query-engine" id="toc-sec-query-engine" class="nav-link" data-scroll-target="#sec-query-engine"><span class="header-section-number">23.5</span> Declarative query engine (query.rs)</a>
+  <ul class="collapse">
+  <li><a href="#instancequery-struct" id="toc-instancequery-struct" class="nav-link" data-scroll-target="#instancequery-struct"><span class="header-section-number">23.5.1</span> InstanceQuery struct</a></li>
+  <li><a href="#execution-pipeline" id="toc-execution-pipeline" class="nav-link" data-scroll-target="#execution-pipeline"><span class="header-section-number">23.5.2</span> Execution pipeline</a></li>
+  <li><a href="#querymatch-result" id="toc-querymatch-result" class="nav-link" data-scroll-target="#querymatch-result"><span class="header-section-number">23.5.3</span> QueryMatch result</a></li>
+  <li><a href="#helper-functions" id="toc-helper-functions" class="nav-link" data-scroll-target="#helper-functions"><span class="header-section-number">23.5.4</span> Helper functions</a></li>
+  </ul></li>
+  <li><a href="#sec-parser-detail" id="toc-sec-parser-detail" class="nav-link" data-scroll-target="#sec-parser-detail"><span class="header-section-number">23.6</span> The parser in detail</a>
+  <ul class="collapse">
+  <li><a href="#operator-precedence-table" id="toc-operator-precedence-table" class="nav-link" data-scroll-target="#operator-precedence-table"><span class="header-section-number">23.6.1</span> Operator precedence table</a></li>
+  <li><a href="#desugaring-rules" id="toc-desugaring-rules" class="nav-link" data-scroll-target="#desugaring-rules"><span class="header-section-number">23.6.2</span> Desugaring rules</a></li>
+  <li><a href="#builtin-name-resolution" id="toc-builtin-name-resolution" class="nav-link" data-scroll-target="#builtin-name-resolution"><span class="header-section-number">23.6.3</span> Builtin name resolution</a></li>
+  </ul></li>
+  <li><a href="#sec-expr-vcs" id="toc-sec-expr-vcs" class="nav-link" data-scroll-target="#sec-expr-vcs"><span class="header-section-number">23.7</span> VCS integration</a>
+  <ul class="collapse">
+  <li><a href="#storage-api" id="toc-storage-api" class="nav-link" data-scroll-target="#storage-api"><span class="header-section-number">23.7.1</span> Storage API</a></li>
+  <li><a href="#hash-computation" id="toc-hash-computation" class="nav-link" data-scroll-target="#hash-computation"><span class="header-section-number">23.7.2</span> Hash computation</a></li>
+  </ul></li>
+  <li><a href="#sec-expr-wasm" id="toc-sec-expr-wasm" class="nav-link" data-scroll-target="#sec-expr-wasm"><span class="header-section-number">23.8</span> WASM boundary</a>
+  <ul class="collapse">
+  <li><a href="#parse_expr" id="toc-parse_expr" class="nav-link" data-scroll-target="#parse_expr"><span class="header-section-number">23.8.1</span> parse_expr</a></li>
+  <li><a href="#eval_func_expr" id="toc-eval_func_expr" class="nav-link" data-scroll-target="#eval_func_expr"><span class="header-section-number">23.8.2</span> eval_func_expr</a></li>
+  <li><a href="#execute_query" id="toc-execute_query" class="nav-link" data-scroll-target="#execute_query"><span class="header-section-number">23.8.3</span> execute_query</a></li>
+  </ul></li>
+  <li><a href="#sec-expr-source" id="toc-sec-expr-source" class="nav-link" data-scroll-target="#sec-expr-source"><span class="header-section-number">23.9</span> Source locations</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/29-expression-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/29-expression-engine.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-expression-engine" class="quarto-section-identifier"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>panproto includes a pure functional expression language and a declarative query engine for operating on W-type instances. The expression engine spans two crates (<code>panproto-expr</code> and <code>panproto-expr-parser</code>) and integrates with the instance layer (<code>panproto-inst</code>), the VCS (<code>panproto-vcs</code>), and the WASM boundary (<code>panproto-wasm</code>).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the user-facing walkthrough of value-dependent migration (which uses expressions for field transforms), see <a href="https://panproto.dev/tutorial/chapters/20-value-dependent-transforms.html">the tutorial</a>.</p>
+</div>
+</div>
+<section id="sec-expr-crate-layout" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="sec-expr-crate-layout"><span class="header-section-number">23.1</span> Crate layout</h2>
+<p>The expression system is split across two crates with a clear boundary: <code>panproto-expr</code> defines the AST and evaluator (no parser dependency), while <code>panproto-expr-parser</code> defines the surface syntax.</p>
+<section id="panproto-expr" class="level3" data-number="23.1.1">
+<h3 data-number="23.1.1" class="anchored" data-anchor-id="panproto-expr"><span class="header-section-number">23.1.1</span> panproto-expr</h3>
+<p>This crate provides the core computational substrate. Its modules are:</p>
+<div id="tbl-expr-modules" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-expr-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.1: <code>panproto-expr</code> modules.
+</figcaption>
+<div aria-describedby="tbl-expr-modules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>expr.rs</code></td>
+<td><code>Expr</code> enum (11 variants), <code>Pattern</code> enum (6 variants), <code>BuiltinOp</code> enum (50 operations)</td>
+</tr>
+<tr class="even">
+<td><code>literal.rs</code></td>
+<td><code>Literal</code> type (Int, Float, Str, Bool, Null, Record, List, Closure)</td>
+</tr>
+<tr class="odd">
+<td><code>eval.rs</code></td>
+<td>Call-by-value evaluator with step/depth limits (<code>EvalConfig</code>)</td>
+</tr>
+<tr class="even">
+<td><code>env.rs</code></td>
+<td><code>Env</code> type: immutable variable bindings backed by <code>FxHashMap&lt;Arc&lt;str&gt;, Literal&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>builtin.rs</code></td>
+<td><code>apply_builtin</code> dispatch for all non-graph builtins</td>
+</tr>
+<tr class="even">
+<td><code>subst.rs</code></td>
+<td><code>substitute</code>, <code>free_vars</code>, <code>pattern_vars</code> for symbolic manipulation</td>
+</tr>
+<tr class="odd">
+<td><code>error.rs</code></td>
+<td><code>ExprError</code> enum covering type mismatches, arity errors, unbound variables, and resource limits</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The <code>Expr</code> enum is the canonical AST representation used throughout panproto. All variants derive <code>Serialize</code>/<code>Deserialize</code>, making expressions content-addressable and portable across the WASM boundary:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Expr <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    Var(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    Lam(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    App(<span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    Lit(Literal)<span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    Record(<span class="dt">Vec</span><span class="op">&lt;</span>(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> <span class="dt">Self</span>)<span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    List(<span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    Field(<span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">Index</span>(<span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    Match <span class="op">{</span> scrutinee<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> arms<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="bu">Pattern</span><span class="op">,</span> <span class="dt">Self</span>)<span class="op">&gt;</span> <span class="op">},</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    Let <span class="op">{</span> name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span> value<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> body<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span> <span class="op">},</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    Builtin(BuiltinOp<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="panproto-expr-parser" class="level3" data-number="23.1.2">
+<h3 data-number="23.1.2" class="anchored" data-anchor-id="panproto-expr-parser"><span class="header-section-number">23.1.2</span> panproto-expr-parser</h3>
+<p>This crate provides the Haskell-style surface syntax. It has four modules:</p>
+<p><strong><code>token.rs</code></strong>: A <code>logos</code>-based token enum with 50+ token kinds. Keywords (<code>do</code>, <code>let</code>, <code>where</code>, <code>if</code>, <code>then</code>, <code>else</code>, <code>case</code>, <code>of</code>, <code>guard</code>, <code>not</code>, <code>mod</code>, <code>div</code>, <code>otherwise</code>) are recognized during lexing. Three virtual token kinds (<code>Indent</code>, <code>Dedent</code>, <code>Newline</code>) are reserved for the layout pass.</p>
+<p><strong><code>lexer.rs</code></strong>: Two-pass tokenization. The first pass runs <code>logos</code> for fast regex-based tokenization. The second pass (<code>insert_layout</code>) implements GHC-style layout insertion: when a layout keyword (<code>let</code>, <code>where</code>, <code>do</code>, <code>of</code>) is followed by a newline with increased indentation, an <code>Indent</code> token is inserted. When indentation decreases, <code>Dedent</code> tokens are inserted. Equal indentation within a layout block produces <code>Newline</code> tokens. If the layout keyword is followed by <code>{</code>, layout insertion is suppressed (explicit delimiters).</p>
+<p><strong><code>parser.rs</code></strong>: A chumsky 1.0 parser combining recursive descent with Pratt precedence parsing. Layout tokens are consumed as block delimiters alongside explicit braces.</p>
+<p><strong><code>pretty.rs</code></strong>: Precedence-aware pretty printer that minimizes parentheses. Designed to round-trip: <code>parse(tokenize(pretty_print(&amp;e))) == e</code> for well-formed expressions.</p>
+</section>
+</section>
+<section id="sec-builtin-ops" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="sec-builtin-ops"><span class="header-section-number">23.2</span> The BuiltinOp system</h2>
+<p><code>BuiltinOp</code> is a 50-variant enum organized into nine domains:</p>
+<div id="tbl-builtin-domains" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-builtin-domains-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.2: <code>BuiltinOp</code> domains.
+</figcaption>
+<div aria-describedby="tbl-builtin-domains-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 25%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Domain</th>
+<th>Count</th>
+<th>Operations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Arithmetic</td>
+<td>7</td>
+<td><code>Add</code>, <code>Sub</code>, <code>Mul</code>, <code>Div</code>, <code>Mod</code>, <code>Neg</code>, <code>Abs</code></td>
+</tr>
+<tr class="even">
+<td>Rounding</td>
+<td>2</td>
+<td><code>Floor</code>, <code>Ceil</code></td>
+</tr>
+<tr class="odd">
+<td>Comparison</td>
+<td>6</td>
+<td><code>Eq</code>, <code>Neq</code>, <code>Lt</code>, <code>Lte</code>, <code>Gt</code>, <code>Gte</code></td>
+</tr>
+<tr class="even">
+<td>Boolean</td>
+<td>3</td>
+<td><code>And</code>, <code>Or</code>, <code>Not</code></td>
+</tr>
+<tr class="odd">
+<td>String</td>
+<td>10</td>
+<td><code>Concat</code>, <code>Len</code>, <code>Slice</code>, <code>Upper</code>, <code>Lower</code>, <code>Trim</code>, <code>Split</code>, <code>Join</code>, <code>Replace</code>, <code>Contains</code></td>
+</tr>
+<tr class="even">
+<td>List</td>
+<td>9</td>
+<td><code>Map</code>, <code>Filter</code>, <code>Fold</code>, <code>Append</code>, <code>Head</code>, <code>Tail</code>, <code>Reverse</code>, <code>FlatMap</code>, <code>Length</code></td>
+</tr>
+<tr class="odd">
+<td>Record</td>
+<td>4</td>
+<td><code>MergeRecords</code>, <code>Keys</code>, <code>Values</code>, <code>HasField</code></td>
+</tr>
+<tr class="even">
+<td>Type coercion</td>
+<td>6</td>
+<td><code>IntToFloat</code>, <code>FloatToInt</code>, <code>IntToStr</code>, <code>FloatToStr</code>, <code>StrToInt</code>, <code>StrToFloat</code></td>
+</tr>
+<tr class="odd">
+<td>Type inspection</td>
+<td>3</td>
+<td><code>TypeOf</code>, <code>IsNull</code>, <code>IsList</code></td>
+</tr>
+<tr class="even">
+<td>Graph traversal</td>
+<td>5</td>
+<td><code>Edge</code>, <code>Children</code>, <code>HasEdge</code>, <code>EdgeCount</code>, <code>Anchor</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Every builtin has a fixed arity enforced by <code>BuiltinOp::arity()</code>. The arity is either 1 (unary), 2 (binary), or 3 (ternary; only <code>Slice</code>, <code>Replace</code>, and <code>Fold</code>). The evaluator checks arity before dispatch: if the argument count doesn’t match, evaluation fails with <code>ExprError::ArityMismatch</code>.</p>
+<p>Higher-order builtins (<code>Map</code>, <code>Filter</code>, <code>Fold</code>, <code>FlatMap</code>) receive special treatment in the evaluator. Instead of evaluating all arguments eagerly and dispatching to <code>apply_builtin</code>, the evaluator handles them directly: it evaluates the list argument, then iterates over its elements, applying the function argument via <code>apply_closure</code> for each element. This avoids materializing closures as <code>Literal</code> values before use and enables proper step-counting per iteration.</p>
+<section id="graph-traversal-builtins" class="level3" data-number="23.2.1">
+<h3 data-number="23.2.1" class="anchored" data-anchor-id="graph-traversal-builtins"><span class="header-section-number">23.2.1</span> Graph traversal builtins</h3>
+<p>The five graph builtins (<code>Edge</code>, <code>Children</code>, <code>HasEdge</code>, <code>EdgeCount</code>, <code>Anchor</code>) require an instance context that the standard evaluator does not have. In the standard <code>panproto_expr::eval</code>, these return <code>Literal::Null</code>. They are meaningful only when evaluated through <code>eval_with_instance</code> in <code>panproto-inst</code>.</p>
+</section>
+</section>
+<section id="sec-instance-eval" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="sec-instance-eval"><span class="header-section-number">23.3</span> Instance-aware evaluation</h2>
+<p><code>instance_env.rs</code> in <code>panproto-inst</code> provides <code>eval_with_instance</code>, which intercepts graph builtins and resolves them against a <code>WInstance</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> eval_with_instance(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    expr<span class="op">:</span> <span class="op">&amp;</span>Expr<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    env<span class="op">:</span> <span class="op">&amp;</span><span class="pp">panproto_expr::</span>Env<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    config<span class="op">:</span> <span class="op">&amp;</span>EvalConfig<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    context_node_id<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Literal<span class="op">,</span> <span class="pp">panproto_expr::</span>ExprError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The function pattern-matches on <code>Expr::Builtin(op, args)</code> where <code>op</code> is a graph builtin. It evaluates arguments recursively (through <code>eval_with_instance</code>, so nested graph builtins work), then dispatches to <code>apply_graph_builtin</code>. For all non-graph expressions, it falls through to the standard <code>panproto_expr::eval</code>.</p>
+<section id="apply_graph_builtin" class="level3" data-number="23.3.1">
+<h3 data-number="23.3.1" class="anchored" data-anchor-id="apply_graph_builtin"><span class="header-section-number">23.3.1</span> apply_graph_builtin</h3>
+<p>Each graph builtin resolves against the instance’s arc and node maps:</p>
+<div id="tbl-graph-builtins" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-graph-builtins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.3: Graph builtin behavior.
+</figcaption>
+<div aria-describedby="tbl-graph-builtins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 36%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Builtin</th>
+<th>Signature</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Edge</code></td>
+<td><code>(node_ref, edge_kind) -&gt; value</code></td>
+<td>Finds the first arc matching the source node and edge kind, returns the target node as a Record literal</td>
+</tr>
+<tr class="even">
+<td><code>Children</code></td>
+<td><code>(node_ref) -&gt; [value]</code></td>
+<td>Collects all arc targets from the source node</td>
+</tr>
+<tr class="odd">
+<td><code>HasEdge</code></td>
+<td><code>(node_ref, edge_kind) -&gt; bool</code></td>
+<td>Checks if any arc matches</td>
+</tr>
+<tr class="even">
+<td><code>EdgeCount</code></td>
+<td><code>(node_ref) -&gt; int</code></td>
+<td>Counts outgoing arcs</td>
+</tr>
+<tr class="odd">
+<td><code>Anchor</code></td>
+<td><code>(node_ref) -&gt; string</code></td>
+<td>Returns the node’s schema anchor name</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="node-reference-resolution" class="level3" data-number="23.3.2">
+<h3 data-number="23.3.2" class="anchored" data-anchor-id="node-reference-resolution"><span class="header-section-number">23.3.2</span> Node reference resolution</h3>
+<p><code>resolve_node_ref</code> converts a <code>Literal</code> to a <code>u32</code> node ID. It accepts two forms: an integer literal (direct node ID) or the string <code>"self"</code> (resolved to the <code>context_node_id</code> parameter). This allows expressions like <code>edge("self", "body")</code> to traverse from the current node without knowing its numeric ID.</p>
+</section>
+<section id="node_to_literal" class="level3" data-number="23.3.3">
+<h3 data-number="23.3.3" class="anchored" data-anchor-id="node_to_literal"><span class="header-section-number">23.3.3</span> node_to_literal</h3>
+<p><code>node_to_literal</code> converts a <code>WInstance</code> node into a <code>Literal::Record</code> for use in expression results. The record includes:</p>
+<ul>
+<li><code>_id</code>: the node’s numeric ID as <code>Literal::Int</code></li>
+<li><code>_anchor</code>: the node’s schema anchor as <code>Literal::Str</code></li>
+<li>All entries from <code>extra_fields</code>, converted via <code>value_to_expr_literal</code> (the same conversion used by field transforms; see <a href="23-field-transforms.html#tbl-value-to-literal" class="quarto-xref">Table&nbsp;<span>22.2</span></a> in the field transforms chapter)</li>
+</ul>
+</section>
+</section>
+<section id="sec-poly-ops" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="sec-poly-ops"><span class="header-section-number">23.4</span> Polynomial operations (poly.rs)</h2>
+<p><code>poly.rs</code> in <code>panproto-inst</code> exposes operations that arise from treating schemas as polynomial functors and instances as their initial algebras (W-types). These operations are derived from the adjoint triple <span class="math inline">\(\Sigma \dashv \Delta \dashv \Pi\)</span> applied to the polynomial interpretation.</p>
+<section id="fiber_at_anchor" class="level3" data-number="23.4.1">
+<h3 data-number="23.4.1" class="anchored" data-anchor-id="fiber_at_anchor"><span class="header-section-number">23.4.1</span> fiber_at_anchor</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> fiber_at_anchor(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    target_anchor<span class="op">:</span> <span class="op">&amp;</span>Name<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Given a compiled migration <span class="math inline">\(m : S \to T\)</span> and a target anchor <span class="math inline">\(a\)</span> in <span class="math inline">\(T\)</span>, returns all source node IDs whose remapped anchor equals <span class="math inline">\(a\)</span>. This is the <span class="math inline">\(\Delta_f\)</span> operation (pullback along <span class="math inline">\(f\)</span>) applied to a representable presheaf (a single point).</p>
+</section>
+<section id="fiber_decomposition" class="level3" data-number="23.4.2">
+<h3 data-number="23.4.2" class="anchored" data-anchor-id="fiber_decomposition"><span class="header-section-number">23.4.2</span> fiber_decomposition</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> fiber_decomposition(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> FxHashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Computes fibers for all target anchors simultaneously. The result is a partition of source nodes: every node appears in exactly one fiber.</p>
+</section>
+<section id="fiber_with_predicate" class="level3" data-number="23.4.3">
+<h3 data-number="23.4.3" class="anchored" data-anchor-id="fiber_with_predicate"><span class="header-section-number">23.4.3</span> fiber_with_predicate</h3>
+<p>Combines <code>fiber_at_anchor</code> with a value predicate. Computes <span class="math inline">\(f^{-1}(a) \cap \{x \mid \text{pred}(x)\}\)</span>. The predicate is evaluated against each node’s <code>extra_fields</code> using <code>build_env_from_extra_fields</code>. Additional variables <code>_value</code> (if present) and <code>_anchor</code> are bound for each node.</p>
+</section>
+<section id="group_by" class="level3" data-number="23.4.4">
+<h3 data-number="23.4.4" class="anchored" data-anchor-id="group_by"><span class="header-section-number">23.4.4</span> group_by</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> group_by(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> FxHashMap<span class="op">&lt;</span>Name<span class="op">,</span> WInstance<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Partitions source nodes by their migration image, returning a sub-instance for each target anchor. Internal arcs between nodes in the same fiber are preserved. This is the dependent product <span class="math inline">\(\Pi_f\)</span> computed explicitly on trees.</p>
+</section>
+<section id="join" class="level3" data-number="23.4.5">
+<h3 data-number="23.4.5" class="anchored" data-anchor-id="join"><span class="header-section-number">23.4.5</span> join</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> join(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    left<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    right<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    left_compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    right_compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span>)<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Given two instances <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> with migrations to a shared target <span class="math inline">\(C\)</span>, computes the pullback <span class="math inline">\(A \times_C B\)</span>: all pairs <span class="math inline">\((a, b)\)</span> where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> map to the same target anchor. The implementation decomposes both instances into fibers, then takes the Cartesian product of fibers at each shared anchor.</p>
+</section>
+</section>
+<section id="sec-query-engine" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="sec-query-engine"><span class="header-section-number">23.5</span> Declarative query engine (query.rs)</h2>
+<p><code>query.rs</code> in <code>panproto-inst</code> provides a declarative query interface over W-type instances. An <code>InstanceQuery</code> describes what to find; <code>execute</code> runs the pipeline.</p>
+<section id="instancequery-struct" class="level3" data-number="23.5.1">
+<h3 data-number="23.5.1" class="anchored" data-anchor-id="instancequery-struct"><span class="header-section-number">23.5.1</span> InstanceQuery struct</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> InstanceQuery <span class="op">{</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> anchor<span class="op">:</span> Name<span class="op">,</span>                    <span class="co">// vertex kind to select</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> predicate<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Expr<span class="op">&gt;,</span>         <span class="co">// filter expression</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> group_by<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span>        <span class="co">// partition field</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> project<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;&gt;,</span>    <span class="co">// field subset</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> limit<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;,</span>           <span class="co">// max results</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> path<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Name<span class="op">&gt;,</span>                 <span class="co">// edge traversal path</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>All fields except <code>anchor</code> are optional. The struct derives <code>Serialize</code>/<code>Deserialize</code>, so queries can cross the WASM boundary via MessagePack.</p>
+</section>
+<section id="execution-pipeline" class="level3" data-number="23.5.2">
+<h3 data-number="23.5.2" class="anchored" data-anchor-id="execution-pipeline"><span class="header-section-number">23.5.2</span> Execution pipeline</h3>
+<p><code>execute</code> applies five stages in order:</p>
+<ol type="1">
+<li><strong>Anchor filter</strong>: collect all nodes whose <code>anchor</code> matches <code>query.anchor</code>.</li>
+<li><strong>Path navigation</strong>: if <code>query.path</code> is non-empty, follow edges. Each path element is an edge kind; <code>navigate_path</code> iterates, collecting all arc targets matching the edge kind at each step. The result replaces the candidate set.</li>
+<li><strong>Predicate evaluation</strong>: for each candidate, <code>build_node_env</code> constructs an expression environment from the node’s <code>extra_fields</code>, <code>_anchor</code>, <code>_id</code>, and <code>_value</code>. The predicate is evaluated via <code>panproto_expr::eval</code>. Nodes whose predicate returns anything other than <code>Literal::Bool(true)</code> are excluded.</li>
+<li><strong>Limit</strong>: truncate results to <code>query.limit</code>.</li>
+<li><strong>Projection</strong>: <code>project_fields</code> restricts each node’s fields to the specified subset, or returns all fields if no projection is specified.</li>
+</ol>
+</section>
+<section id="querymatch-result" class="level3" data-number="23.5.3">
+<h3 data-number="23.5.3" class="anchored" data-anchor-id="querymatch-result"><span class="header-section-number">23.5.3</span> QueryMatch result</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> QueryMatch <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> node_id<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> anchor<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> value<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>FieldPresence<span class="op">&gt;,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> fields<span class="op">:</span> FxHashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> Value<span class="op">&gt;,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="helper-functions" class="level3" data-number="23.5.4">
+<h3 data-number="23.5.4" class="anchored" data-anchor-id="helper-functions"><span class="header-section-number">23.5.4</span> Helper functions</h3>
+<p><strong><code>navigate_path</code></strong>: iterates over a sequence of edge kinds, using the instance’s arc list to follow edges. At each step, the current node set is replaced by all targets reachable via matching arcs.</p>
+<p><strong><code>build_node_env</code></strong>: constructs a <code>panproto_expr::Env</code> by calling <code>build_env_from_extra_fields</code> (the same function used by field transforms) and adding <code>_anchor</code>, <code>_id</code>, and <code>_value</code> bindings.</p>
+<p><strong><code>project_fields</code></strong>: when a projection list is provided, copies only the named fields into the output map. Missing fields are silently omitted.</p>
+</section>
+</section>
+<section id="sec-parser-detail" class="level2" data-number="23.6">
+<h2 data-number="23.6" class="anchored" data-anchor-id="sec-parser-detail"><span class="header-section-number">23.6</span> The parser in detail</h2>
+<section id="operator-precedence-table" class="level3" data-number="23.6.1">
+<h3 data-number="23.6.1" class="anchored" data-anchor-id="operator-precedence-table"><span class="header-section-number">23.6.1</span> Operator precedence table</h3>
+<p>The Pratt parser defines nine precedence levels. Higher levels bind more tightly:</p>
+<div id="tbl-operator-precedence" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-operator-precedence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;23.4: Operator precedence table.
+</figcaption>
+<div aria-describedby="tbl-operator-precedence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 31%">
+<col style="width: 24%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Associativity</th>
+<th>Operators</th>
+<th>Desugars to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Left</td>
+<td><code>&amp;</code> (pipe)</td>
+<td><code>App(rhs, lhs)</code> (reverse application)</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Left</td>
+<td><code>\|\|</code></td>
+<td><code>Builtin(Or, ...)</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Left</td>
+<td><code>&amp;&amp;</code></td>
+<td><code>Builtin(And, ...)</code></td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Right</td>
+<td><code>==</code>, <code>/=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></td>
+<td><code>Builtin(Eq\|Neq\|Lt\|Lte\|Gt\|Gte, ...)</code></td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Right</td>
+<td><code>++</code></td>
+<td><code>Builtin(Concat, ...)</code></td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Left</td>
+<td><code>+</code>, <code>-</code></td>
+<td><code>Builtin(Add\|Sub, ...)</code></td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>Left</td>
+<td><code>*</code>, <code>/</code>, <code>%</code>, <code>mod</code>, <code>div</code></td>
+<td><code>Builtin(Mul\|Div\|Mod, ...)</code></td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>Prefix</td>
+<td><code>-</code> (unary), <code>not</code></td>
+<td><code>Builtin(Neg\|Not, ...)</code></td>
+</tr>
+<tr class="odd">
+<td>10+</td>
+<td>Left</td>
+<td>juxtaposition (application)</td>
+<td><code>App(func, arg)</code> or <code>Builtin(op, args)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Postfix operations (<code>.field</code> and <code>-&gt;edge</code>) bind tighter than application. They are parsed as a left-fold over the <code>atom</code> parser, before the Pratt parser sees the expression.</p>
+</section>
+<section id="desugaring-rules" class="level3" data-number="23.6.2">
+<h3 data-number="23.6.2" class="anchored" data-anchor-id="desugaring-rules"><span class="header-section-number">23.6.2</span> Desugaring rules</h3>
+<p>The parser transforms several surface syntax forms into core <code>Expr</code> constructors:</p>
+<p><strong>List comprehensions</strong> desugar to nested <code>FlatMap</code> and <code>Match</code>:</p>
+<pre><code>[e | x &lt;- xs, pred]</code></pre>
+<p>becomes</p>
+<pre><code>flatMap(xs, \x -&gt; match pred { True -&gt; [e]; _ -&gt; [] })</code></pre>
+<p>Guards become pattern matches on <code>True</code>/<code>Wildcard</code>, and generators become <code>FlatMap</code> with a lambda binding. Multiple qualifiers are folded right-to-left.</p>
+<p><strong>Do-notation</strong> desugars to nested <code>FlatMap</code> and <code>Let</code>:</p>
+<pre><code>do
+  x &lt;- source
+  let y = f x
+  g x y</code></pre>
+<p>becomes</p>
+<pre><code>flatMap(source, \x -&gt; let y = f x in g x y)</code></pre>
+<p>Bind statements (<code>x &lt;- e</code>) become <code>FlatMap</code>; <code>let</code> statements become <code>Let</code> bindings; bare expressions become <code>FlatMap</code> with a wildcard binding.</p>
+<p><strong>Where clauses</strong> desugar to <code>Let</code> bindings wrapping the main body:</p>
+<pre><code>body where x = e1; y = e2</code></pre>
+<p>becomes</p>
+<pre><code>let x = e1 in let y = e2 in body</code></pre>
+<p><strong>Multi-parameter lambdas</strong> desugar to nested <code>Lam</code>:</p>
+<pre><code>\x y z -&gt; body</code></pre>
+<p>becomes</p>
+<pre><code>Lam("x", Lam("y", Lam("z", body)))</code></pre>
+<p>Pattern parameters (anything other than <code>Var</code> or <code>Wildcard</code>) generate a fresh variable with an immediate <code>Match</code>.</p>
+<p><strong>If/then/else</strong> desugars to <code>Match</code> with a Bool pattern:</p>
+<pre><code>if cond then a else b</code></pre>
+<p>becomes</p>
+<pre><code>Match { scrutinee: cond, arms: [(Lit(Bool(true)), a), (Wildcard, b)] }</code></pre>
+<p><strong>Infix operators</strong> desugar to <code>Builtin</code> applications, as shown in the precedence table.</p>
+<p><strong>Edge traversal</strong> <code>x -&gt; y</code> desugars to <code>Builtin(Edge, [x, Lit(Str("y"))])</code>. This is parsed as a postfix operation on atoms, making <code>doc -&gt; layers -&gt; annotations</code> a left-associative chain of <code>Edge</code> calls.</p>
+</section>
+<section id="builtin-name-resolution" class="level3" data-number="23.6.3">
+<h3 data-number="23.6.3" class="anchored" data-anchor-id="builtin-name-resolution"><span class="header-section-number">23.6.3</span> Builtin name resolution</h3>
+<p>When the parser encounters juxtaposition (function application), <code>resolve_application</code> checks whether the function position is a <code>Var</code> whose name matches a builtin. If so, it emits <code>Builtin(op, [arg])</code> instead of <code>App(Var(name), arg)</code>. On subsequent applications, if the <code>Builtin</code> has fewer arguments than its arity, the new argument is appended. This means <code>add 1 2</code> parses directly as <code>Builtin(Add, [Lit(1), Lit(2)])</code> without going through curried application.</p>
+<p>Both snake_case and camelCase names are accepted for multi-word builtins (e.g., <code>flat_map</code> and <code>flatMap</code> both resolve to <code>FlatMap</code>).</p>
+</section>
+</section>
+<section id="sec-expr-vcs" class="level2" data-number="23.7">
+<h2 data-number="23.7" class="anchored" data-anchor-id="sec-expr-vcs"><span class="header-section-number">23.7</span> VCS integration</h2>
+<p>Expressions participate in panproto’s content-addressed object store via the <code>Object::Expr</code> variant in <code>panproto-vcs</code>.</p>
+<section id="storage-api" class="level3" data-number="23.7.1">
+<h3 data-number="23.7.1" class="anchored" data-anchor-id="storage-api"><span class="header-section-number">23.7.1</span> Storage API</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> store_expr(store<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">dyn</span> Store<span class="op">,</span> expr<span class="op">:</span> <span class="op">&amp;</span>Expr) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>ObjectId<span class="op">,</span> VcsError<span class="op">&gt;;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> load_expr(store<span class="op">:</span> <span class="op">&amp;</span><span class="kw">dyn</span> Store<span class="op">,</span> id<span class="op">:</span> <span class="op">&amp;</span>ObjectId) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Expr<span class="op">,</span> VcsError<span class="op">&gt;;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>store_expr</code> wraps the expression in <code>Object::Expr(Box::new(expr.clone()))</code> and calls <code>store.put(&amp;object)</code>. The store serializes the object with MessagePack, hashes it with blake3, and stores the bytes keyed by the hash. If an identical expression already exists, the operation returns the existing ID (content-addressing makes storage idempotent).</p>
+<p><code>load_expr</code> retrieves the object by ID and pattern-matches on <code>Object::Expr</code>. If the object exists but has a different type, it returns <code>VcsError::WrongObjectType</code>.</p>
+</section>
+<section id="hash-computation" class="level3" data-number="23.7.2">
+<h3 data-number="23.7.2" class="anchored" data-anchor-id="hash-computation"><span class="header-section-number">23.7.2</span> Hash computation</h3>
+<p>The VCS hashes <code>Object::Expr</code> via <code>hash::hash_expr</code>, which serializes the <code>Expr</code> with MessagePack and computes a blake3 digest. This means two structurally identical expressions always produce the same <code>ObjectId</code>, regardless of when or where they were created.</p>
+<p>Expressions are leaf objects in the VCS DAG: they have no outgoing references to other objects. The garbage collector (<code>gc.rs</code>) treats them as terminal nodes during reachability analysis.</p>
+</section>
+</section>
+<section id="sec-expr-wasm" class="level2" data-number="23.8">
+<h2 data-number="23.8" class="anchored" data-anchor-id="sec-expr-wasm"><span class="header-section-number">23.8</span> WASM boundary</h2>
+<p>Three WASM exports in <code>panproto-wasm/src/api.rs</code> expose the expression engine to JavaScript/TypeScript:</p>
+<section id="parse_expr" class="level3" data-number="23.8.1">
+<h3 data-number="23.8.1" class="anchored" data-anchor-id="parse_expr"><span class="header-section-number">23.8.1</span> parse_expr</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> parse_expr(source<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> JsError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Takes a surface syntax string, tokenizes it with <code>panproto_expr_parser::tokenize</code>, parses it with <code>panproto_expr_parser::parse</code>, and returns the resulting <code>Expr</code> as MessagePack bytes. Errors from either the lexer or parser are surfaced as <code>JsError</code>.</p>
+</section>
+<section id="eval_func_expr" class="level3" data-number="23.8.2">
+<h3 data-number="23.8.2" class="anchored" data-anchor-id="eval_func_expr"><span class="header-section-number">23.8.2</span> eval_func_expr</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> eval_func_expr(expr_bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]<span class="op">,</span> env_bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> JsError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Evaluates a functional expression (lambda calculus with builtins) against a provided environment. Both inputs and the output are MessagePack-encoded. The environment is deserialized as <code>Vec&lt;(String, Literal)&gt;</code> and converted to an <code>Env</code>.</p>
+<p>This function is distinct from <code>eval_expr</code> (which evaluates GAT terms against a theory). <code>eval_func_expr</code> operates purely in the expression language; <code>eval_expr</code> operates in the schema-level term language.</p>
+</section>
+<section id="execute_query" class="level3" data-number="23.8.3">
+<h3 data-number="23.8.3" class="anchored" data-anchor-id="execute_query"><span class="header-section-number">23.8.3</span> execute_query</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>wasm_bindgen<span class="at">]</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> execute_query(query_bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]<span class="op">,</span> instance_bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> JsError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Deserializes an <code>InstanceQuery</code> and a <code>WInstance</code> from MessagePack, runs <code>inst::execute_query</code>, and serializes the results back. Each <code>QueryMatch</code> is converted to a JSON object with <code>node_id</code>, <code>anchor</code>, <code>value</code>, and <code>fields</code> keys before MessagePack encoding.</p>
+</section>
+</section>
+<section id="sec-expr-source" class="level2" data-number="23.9">
+<h2 data-number="23.9" class="anchored" data-anchor-id="sec-expr-source"><span class="header-section-number">23.9</span> Source locations</h2>
+<p>The types and functions described in this chapter are spread across four crates:</p>
+<p><strong><code>crates/panproto-expr/src/</code></strong>:</p>
+<ul>
+<li><code>expr.rs</code>: <code>Expr</code>, <code>Pattern</code>, <code>BuiltinOp</code> enums and <code>BuiltinOp::arity()</code></li>
+<li><code>eval.rs</code>: <code>eval</code>, <code>EvalConfig</code>, step/depth-limited evaluator</li>
+<li><code>env.rs</code>: <code>Env</code> type</li>
+<li><code>builtin.rs</code>: <code>apply_builtin</code> dispatch</li>
+</ul>
+<p><strong><code>crates/panproto-expr-parser/src/</code></strong>:</p>
+<ul>
+<li><code>token.rs</code>: <code>Token</code> enum, <code>Span</code>, <code>Spanned</code></li>
+<li><code>lexer.rs</code>: <code>tokenize</code>, <code>insert_layout</code>, <code>LexError</code></li>
+<li><code>parser.rs</code>: <code>parse</code>, <code>resolve_builtin</code>, Pratt parser, all desugaring functions</li>
+<li><code>pretty.rs</code>: <code>pretty_print</code>, precedence-aware serialization</li>
+</ul>
+<p><strong><code>crates/panproto-inst/src/</code></strong>:</p>
+<ul>
+<li><code>instance_env.rs</code>: <code>eval_with_instance</code>, <code>apply_graph_builtin</code>, <code>resolve_node_ref</code>, <code>node_to_literal</code></li>
+<li><code>poly.rs</code>: <code>fiber_at_anchor</code>, <code>fiber_decomposition</code>, <code>fiber_with_predicate</code>, <code>group_by</code>, <code>join</code></li>
+<li><code>query.rs</code>: <code>InstanceQuery</code>, <code>QueryMatch</code>, <code>execute</code>, <code>navigate_path</code>, <code>build_node_env</code>, <code>project_fields</code></li>
+</ul>
+<p><strong><code>crates/panproto-vcs/src/</code></strong>:</p>
+<ul>
+<li><code>expr.rs</code>: <code>store_expr</code>, <code>load_expr</code></li>
+<li><code>object.rs</code>: <code>Object::Expr</code> variant</li>
+</ul>
+<p><strong><code>crates/panproto-wasm/src/</code></strong>:</p>
+<ul>
+<li><code>api.rs</code>: <code>parse_expr</code>, <code>eval_func_expr</code>, <code>execute_query</code></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.dev\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/23-field-transforms.html" class="pagination-link" aria-label="Field Transform Architecture">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/30-polynomial-operations.html" class="pagination-link" aria-label="Polynomial Operations">
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Expression Parser &amp; Query Engine {#sec-expression-engine}</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>panproto includes a pure functional expression language and a declarative query engine for operating on W-type instances. The expression engine spans two crates (<span class="in">`panproto-expr`</span> and <span class="in">`panproto-expr-parser`</span>) and integrates with the instance layer (<span class="in">`panproto-inst`</span>), the VCS (<span class="in">`panproto-vcs`</span>), and the WASM boundary (<span class="in">`panproto-wasm`</span>).</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>For the user-facing walkthrough of value-dependent migration (which uses expressions for field transforms), see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/20-value-dependent-transforms.html)</span>.</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Crate layout {#sec-expr-crate-layout}</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>The expression system is split across two crates with a clear boundary: <span class="in">`panproto-expr`</span> defines the AST and evaluator (no parser dependency), while <span class="in">`panproto-expr-parser`</span> defines the surface syntax.</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### panproto-expr</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>This crate provides the core computational substrate. Its modules are:</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Contents <span class="pp">|</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|----------|</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`expr.rs`</span> <span class="pp">|</span> <span class="in">`Expr`</span> enum (11 variants), <span class="in">`Pattern`</span> enum (6 variants), <span class="in">`BuiltinOp`</span> enum (50 operations) <span class="pp">|</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`literal.rs`</span> <span class="pp">|</span> <span class="in">`Literal`</span> type (Int, Float, Str, Bool, Null, Record, List, Closure) <span class="pp">|</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`eval.rs`</span> <span class="pp">|</span> Call-by-value evaluator with step/depth limits (<span class="in">`EvalConfig`</span>) <span class="pp">|</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`env.rs`</span> <span class="pp">|</span> <span class="in">`Env`</span> type: immutable variable bindings backed by <span class="in">`FxHashMap&lt;Arc&lt;str&gt;, Literal&gt;`</span> <span class="pp">|</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`builtin.rs`</span> <span class="pp">|</span> <span class="in">`apply_builtin`</span> dispatch for all non-graph builtins <span class="pp">|</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`subst.rs`</span> <span class="pp">|</span> <span class="in">`substitute`</span>, <span class="in">`free_vars`</span>, <span class="in">`pattern_vars`</span> for symbolic manipulation <span class="pp">|</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error.rs`</span> <span class="pp">|</span> <span class="in">`ExprError`</span> enum covering type mismatches, arity errors, unbound variables, and resource limits <span class="pp">|</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>: <span class="in">`panproto-expr`</span> modules. {#tbl-expr-modules}</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Expr`</span> enum is the canonical AST representation used throughout panproto. All variants derive <span class="in">`Serialize`</span>/<span class="in">`Deserialize`</span>, making expressions content-addressable and portable across the WASM boundary:</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>pub enum Expr {</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Var</span>(Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>),</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Lam</span>(Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>, Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>),</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">App</span>(Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>, Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>),</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Lit</span>(Literal),</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Record</span>(Vec<span class="sc">&lt;</span>(Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>, Self)<span class="sc">&gt;</span>),</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">List</span>(Vec<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>),</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Field</span>(Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>, Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>),</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Index</span>(Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>, Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>),</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>    Match { scrutinee<span class="sc">:</span> Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>, arms<span class="sc">:</span> Vec<span class="sc">&lt;</span>(Pattern, Self)<span class="sc">&gt;</span> },</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>    Let { name<span class="sc">:</span> Arc<span class="sc">&lt;</span>str<span class="sc">&gt;</span>, value<span class="sc">:</span> Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>, body<span class="sc">:</span> Box<span class="sc">&lt;</span>Self<span class="sc">&gt;</span> },</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Builtin</span>(BuiltinOp, Vec<span class="sc">&lt;</span>Self<span class="sc">&gt;</span>),</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### panproto-expr-parser</span></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>This crate provides the Haskell-style surface syntax. It has four modules:</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>**`token.rs`**: A <span class="in">`logos`</span>-based token enum with 50+ token kinds. Keywords (<span class="in">`do`</span>, <span class="in">`let`</span>, <span class="in">`where`</span>, <span class="in">`if`</span>, <span class="in">`then`</span>, <span class="in">`else`</span>, <span class="in">`case`</span>, <span class="in">`of`</span>, <span class="in">`guard`</span>, <span class="in">`not`</span>, <span class="in">`mod`</span>, <span class="in">`div`</span>, <span class="in">`otherwise`</span>) are recognized during lexing. Three virtual token kinds (<span class="in">`Indent`</span>, <span class="in">`Dedent`</span>, <span class="in">`Newline`</span>) are reserved for the layout pass.</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>**`lexer.rs`**: Two-pass tokenization. The first pass runs <span class="in">`logos`</span> for fast regex-based tokenization. The second pass (<span class="in">`insert_layout`</span>) implements GHC-style layout insertion: when a layout keyword (<span class="in">`let`</span>, <span class="in">`where`</span>, <span class="in">`do`</span>, <span class="in">`of`</span>) is followed by a newline with increased indentation, an <span class="in">`Indent`</span> token is inserted. When indentation decreases, <span class="in">`Dedent`</span> tokens are inserted. Equal indentation within a layout block produces <span class="in">`Newline`</span> tokens. If the layout keyword is followed by <span class="in">`{`</span>, layout insertion is suppressed (explicit delimiters).</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>**`parser.rs`**: A chumsky 1.0 parser combining recursive descent with Pratt precedence parsing. Layout tokens are consumed as block delimiters alongside explicit braces.</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>**`pretty.rs`**: Precedence-aware pretty printer that minimizes parentheses. Designed to round-trip: <span class="in">`parse(tokenize(pretty_print(&amp;e))) == e`</span> for well-formed expressions.</span>
+<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## The BuiltinOp system {#sec-builtin-ops}</span></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a><span class="in">`BuiltinOp`</span> is a 50-variant enum organized into nine domains:</span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Domain <span class="pp">|</span> Count <span class="pp">|</span> Operations <span class="pp">|</span></span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|-------|------------|</span></span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Arithmetic <span class="pp">|</span> 7 <span class="pp">|</span> <span class="in">`Add`</span>, <span class="in">`Sub`</span>, <span class="in">`Mul`</span>, <span class="in">`Div`</span>, <span class="in">`Mod`</span>, <span class="in">`Neg`</span>, <span class="in">`Abs`</span> <span class="pp">|</span></span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Rounding <span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`Floor`</span>, <span class="in">`Ceil`</span> <span class="pp">|</span></span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Comparison <span class="pp">|</span> 6 <span class="pp">|</span> <span class="in">`Eq`</span>, <span class="in">`Neq`</span>, <span class="in">`Lt`</span>, <span class="in">`Lte`</span>, <span class="in">`Gt`</span>, <span class="in">`Gte`</span> <span class="pp">|</span></span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Boolean <span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`And`</span>, <span class="in">`Or`</span>, <span class="in">`Not`</span> <span class="pp">|</span></span>
+<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> String <span class="pp">|</span> 10 <span class="pp">|</span> <span class="in">`Concat`</span>, <span class="in">`Len`</span>, <span class="in">`Slice`</span>, <span class="in">`Upper`</span>, <span class="in">`Lower`</span>, <span class="in">`Trim`</span>, <span class="in">`Split`</span>, <span class="in">`Join`</span>, <span class="in">`Replace`</span>, <span class="in">`Contains`</span> <span class="pp">|</span></span>
+<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> List <span class="pp">|</span> 9 <span class="pp">|</span> <span class="in">`Map`</span>, <span class="in">`Filter`</span>, <span class="in">`Fold`</span>, <span class="in">`Append`</span>, <span class="in">`Head`</span>, <span class="in">`Tail`</span>, <span class="in">`Reverse`</span>, <span class="in">`FlatMap`</span>, <span class="in">`Length`</span> <span class="pp">|</span></span>
+<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Record <span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`MergeRecords`</span>, <span class="in">`Keys`</span>, <span class="in">`Values`</span>, <span class="in">`HasField`</span> <span class="pp">|</span></span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Type coercion <span class="pp">|</span> 6 <span class="pp">|</span> <span class="in">`IntToFloat`</span>, <span class="in">`FloatToInt`</span>, <span class="in">`IntToStr`</span>, <span class="in">`FloatToStr`</span>, <span class="in">`StrToInt`</span>, <span class="in">`StrToFloat`</span> <span class="pp">|</span></span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Type inspection <span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`TypeOf`</span>, <span class="in">`IsNull`</span>, <span class="in">`IsList`</span> <span class="pp">|</span></span>
+<span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Graph traversal <span class="pp">|</span> 5 <span class="pp">|</span> <span class="in">`Edge`</span>, <span class="in">`Children`</span>, <span class="in">`HasEdge`</span>, <span class="in">`EdgeCount`</span>, <span class="in">`Anchor`</span> <span class="pp">|</span></span>
+<span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a>: <span class="in">`BuiltinOp`</span> domains. {#tbl-builtin-domains}</span>
+<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a>Every builtin has a fixed arity enforced by <span class="in">`BuiltinOp::arity()`</span>. The arity is either 1 (unary), 2 (binary), or 3 (ternary; only <span class="in">`Slice`</span>, <span class="in">`Replace`</span>, and <span class="in">`Fold`</span>). The evaluator checks arity before dispatch: if the argument count doesn't match, evaluation fails with <span class="in">`ExprError::ArityMismatch`</span>.</span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>Higher-order builtins (<span class="in">`Map`</span>, <span class="in">`Filter`</span>, <span class="in">`Fold`</span>, <span class="in">`FlatMap`</span>) receive special treatment in the evaluator. Instead of evaluating all arguments eagerly and dispatching to <span class="in">`apply_builtin`</span>, the evaluator handles them directly: it evaluates the list argument, then iterates over its elements, applying the function argument via <span class="in">`apply_closure`</span> for each element. This avoids materializing closures as <span class="in">`Literal`</span> values before use and enables proper step-counting per iteration.</span>
+<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graph traversal builtins</span></span>
+<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a>The five graph builtins (<span class="in">`Edge`</span>, <span class="in">`Children`</span>, <span class="in">`HasEdge`</span>, <span class="in">`EdgeCount`</span>, <span class="in">`Anchor`</span>) require an instance context that the standard evaluator does not have. In the standard <span class="in">`panproto_expr::eval`</span>, these return <span class="in">`Literal::Null`</span>. They are meaningful only when evaluated through <span class="in">`eval_with_instance`</span> in <span class="in">`panproto-inst`</span>.</span>
+<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instance-aware evaluation {#sec-instance-eval}</span></span>
+<span id="cb23-87"><a href="#cb23-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-88"><a href="#cb23-88" aria-hidden="true" tabindex="-1"></a><span class="in">`instance_env.rs`</span> in <span class="in">`panproto-inst`</span> provides <span class="in">`eval_with_instance`</span>, which intercepts graph builtins and resolves them against a <span class="in">`WInstance`</span>:</span>
+<span id="cb23-89"><a href="#cb23-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-90"><a href="#cb23-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">eval_with_instance</span>(</span>
+<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a>    expr<span class="sc">:</span> <span class="er">&amp;</span>Expr,</span>
+<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>    env<span class="sc">:</span> <span class="er">&amp;</span>panproto_expr<span class="sc">::</span>Env,</span>
+<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a>    config<span class="sc">:</span> <span class="er">&amp;</span>EvalConfig,</span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a>    instance<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a>    context_node_id<span class="sc">:</span> Option<span class="sc">&lt;</span>u32<span class="sc">&gt;</span>,</span>
+<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Literal, panproto_expr<span class="sc">::</span>ExprError<span class="sc">&gt;</span></span>
+<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-99"><a href="#cb23-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-100"><a href="#cb23-100" aria-hidden="true" tabindex="-1"></a>The function pattern-matches on <span class="in">`Expr::Builtin(op, args)`</span> where <span class="in">`op`</span> is a graph builtin. It evaluates arguments recursively (through <span class="in">`eval_with_instance`</span>, so nested graph builtins work), then dispatches to <span class="in">`apply_graph_builtin`</span>. For all non-graph expressions, it falls through to the standard <span class="in">`panproto_expr::eval`</span>.</span>
+<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a><span class="fu">### apply_graph_builtin</span></span>
+<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a>Each graph builtin resolves against the instance's arc and node maps:</span>
+<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Builtin <span class="pp">|</span> Signature <span class="pp">|</span> Behavior <span class="pp">|</span></span>
+<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-----------|----------|</span></span>
+<span id="cb23-108"><a href="#cb23-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Edge`</span> <span class="pp">|</span> <span class="in">`(node_ref, edge_kind) -&gt; value`</span> <span class="pp">|</span> Finds the first arc matching the source node and edge kind, returns the target node as a Record literal <span class="pp">|</span></span>
+<span id="cb23-109"><a href="#cb23-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Children`</span> <span class="pp">|</span> <span class="in">`(node_ref) -&gt; [value]`</span> <span class="pp">|</span> Collects all arc targets from the source node <span class="pp">|</span></span>
+<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`HasEdge`</span> <span class="pp">|</span> <span class="in">`(node_ref, edge_kind) -&gt; bool`</span> <span class="pp">|</span> Checks if any arc matches <span class="pp">|</span></span>
+<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`EdgeCount`</span> <span class="pp">|</span> <span class="in">`(node_ref) -&gt; int`</span> <span class="pp">|</span> Counts outgoing arcs <span class="pp">|</span></span>
+<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Anchor`</span> <span class="pp">|</span> <span class="in">`(node_ref) -&gt; string`</span> <span class="pp">|</span> Returns the node's schema anchor name <span class="pp">|</span></span>
+<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a>: Graph builtin behavior. {#tbl-graph-builtins}</span>
+<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a><span class="fu">### Node reference resolution</span></span>
+<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a><span class="in">`resolve_node_ref`</span> converts a <span class="in">`Literal`</span> to a <span class="in">`u32`</span> node ID. It accepts two forms: an integer literal (direct node ID) or the string <span class="in">`"self"`</span> (resolved to the <span class="in">`context_node_id`</span> parameter). This allows expressions like <span class="in">`edge("self", "body")`</span> to traverse from the current node without knowing its numeric ID.</span>
+<span id="cb23-119"><a href="#cb23-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-120"><a href="#cb23-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### node_to_literal</span></span>
+<span id="cb23-121"><a href="#cb23-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-122"><a href="#cb23-122" aria-hidden="true" tabindex="-1"></a><span class="in">`node_to_literal`</span> converts a <span class="in">`WInstance`</span> node into a <span class="in">`Literal::Record`</span> for use in expression results. The record includes:</span>
+<span id="cb23-123"><a href="#cb23-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-124"><a href="#cb23-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`_id`</span>: the node's numeric ID as <span class="in">`Literal::Int`</span></span>
+<span id="cb23-125"><a href="#cb23-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`_anchor`</span>: the node's schema anchor as <span class="in">`Literal::Str`</span></span>
+<span id="cb23-126"><a href="#cb23-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All entries from <span class="in">`extra_fields`</span>, converted via <span class="in">`value_to_expr_literal`</span> (the same conversion used by field transforms; see @tbl-value-to-literal in the field transforms chapter)</span>
+<span id="cb23-127"><a href="#cb23-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-128"><a href="#cb23-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Polynomial operations (poly.rs) {#sec-poly-ops}</span></span>
+<span id="cb23-129"><a href="#cb23-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a><span class="in">`poly.rs`</span> in <span class="in">`panproto-inst`</span> exposes operations that arise from treating schemas as polynomial functors and instances as their initial algebras (W-types). These operations are derived from the adjoint triple $\Sigma \dashv \Delta \dashv \Pi$ applied to the polynomial interpretation.</span>
+<span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_at_anchor</span></span>
+<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">fiber_at_anchor</span>(</span>
+<span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a>    target_anchor<span class="sc">:</span> <span class="er">&amp;</span>Name,</span>
+<span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span></span>
+<span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-141"><a href="#cb23-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-142"><a href="#cb23-142" aria-hidden="true" tabindex="-1"></a>Given a compiled migration $m : S \to T$ and a target anchor $a$ in $T$, returns all source node IDs whose remapped anchor equals $a$. This is the $\Delta_f$ operation (pullback along $f$) applied to a representable presheaf (a single point).</span>
+<span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_decomposition</span></span>
+<span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">fiber_decomposition</span>(</span>
+<span id="cb23-148"><a href="#cb23-148" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb23-149"><a href="#cb23-149" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FxHashMap<span class="sc">&lt;</span>Name, Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span><span class="er">&gt;</span></span>
+<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a>Computes fibers for all target anchors simultaneously. The result is a partition of source nodes: every node appears in exactly one fiber.</span>
+<span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_with_predicate</span></span>
+<span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>Combines <span class="in">`fiber_at_anchor`</span> with a value predicate. Computes $f^{-1}(a) \cap <span class="sc">\{</span>x \mid \text{pred}(x)<span class="sc">\}</span>$. The predicate is evaluated against each node's <span class="in">`extra_fields`</span> using <span class="in">`build_env_from_extra_fields`</span>. Additional variables <span class="in">`_value`</span> (if present) and <span class="in">`_anchor`</span> are bound for each node.</span>
+<span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-159"><a href="#cb23-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### group_by</span></span>
+<span id="cb23-160"><a href="#cb23-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-161"><a href="#cb23-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-162"><a href="#cb23-162" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">group_by</span>(</span>
+<span id="cb23-163"><a href="#cb23-163" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb23-164"><a href="#cb23-164" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-165"><a href="#cb23-165" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FxHashMap<span class="sc">&lt;</span>Name, WInstance<span class="sc">&gt;</span></span>
+<span id="cb23-166"><a href="#cb23-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-167"><a href="#cb23-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-168"><a href="#cb23-168" aria-hidden="true" tabindex="-1"></a>Partitions source nodes by their migration image, returning a sub-instance for each target anchor. Internal arcs between nodes in the same fiber are preserved. This is the dependent product $\Pi_f$ computed explicitly on trees.</span>
+<span id="cb23-169"><a href="#cb23-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-170"><a href="#cb23-170" aria-hidden="true" tabindex="-1"></a><span class="fu">### join</span></span>
+<span id="cb23-171"><a href="#cb23-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-172"><a href="#cb23-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-173"><a href="#cb23-173" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">join</span>(</span>
+<span id="cb23-174"><a href="#cb23-174" aria-hidden="true" tabindex="-1"></a>    left<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-175"><a href="#cb23-175" aria-hidden="true" tabindex="-1"></a>    right<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb23-176"><a href="#cb23-176" aria-hidden="true" tabindex="-1"></a>    left_compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb23-177"><a href="#cb23-177" aria-hidden="true" tabindex="-1"></a>    right_compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb23-178"><a href="#cb23-178" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>(u32, u32)<span class="sc">&gt;</span></span>
+<span id="cb23-179"><a href="#cb23-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-180"><a href="#cb23-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-181"><a href="#cb23-181" aria-hidden="true" tabindex="-1"></a>Given two instances $A$ and $B$ with migrations to a shared target $C$, computes the pullback $A \times_C B$: all pairs $(a, b)$ where $a$ and $b$ map to the same target anchor. The implementation decomposes both instances into fibers, then takes the Cartesian product of fibers at each shared anchor.</span>
+<span id="cb23-182"><a href="#cb23-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-183"><a href="#cb23-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## Declarative query engine (query.rs) {#sec-query-engine}</span></span>
+<span id="cb23-184"><a href="#cb23-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-185"><a href="#cb23-185" aria-hidden="true" tabindex="-1"></a><span class="in">`query.rs`</span> in <span class="in">`panproto-inst`</span> provides a declarative query interface over W-type instances. An <span class="in">`InstanceQuery`</span> describes what to find; <span class="in">`execute`</span> runs the pipeline.</span>
+<span id="cb23-186"><a href="#cb23-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-187"><a href="#cb23-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### InstanceQuery struct</span></span>
+<span id="cb23-188"><a href="#cb23-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-189"><a href="#cb23-189" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-190"><a href="#cb23-190" aria-hidden="true" tabindex="-1"></a>pub struct InstanceQuery {</span>
+<span id="cb23-191"><a href="#cb23-191" aria-hidden="true" tabindex="-1"></a>    pub anchor<span class="sc">:</span> Name,                    <span class="sc">/</span><span class="er">/</span> vertex kind to select</span>
+<span id="cb23-192"><a href="#cb23-192" aria-hidden="true" tabindex="-1"></a>    pub predicate<span class="sc">:</span> Option<span class="sc">&lt;</span>Expr<span class="sc">&gt;</span>,         <span class="sc">/</span><span class="er">/</span> filter expression</span>
+<span id="cb23-193"><a href="#cb23-193" aria-hidden="true" tabindex="-1"></a>    pub group_by<span class="sc">:</span> Option<span class="sc">&lt;</span>String<span class="sc">&gt;</span>,        <span class="sc">/</span><span class="er">/</span> partition field</span>
+<span id="cb23-194"><a href="#cb23-194" aria-hidden="true" tabindex="-1"></a>    pub project<span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>String<span class="sc">&gt;</span><span class="er">&gt;</span>,    <span class="sc">/</span><span class="er">/</span> field subset</span>
+<span id="cb23-195"><a href="#cb23-195" aria-hidden="true" tabindex="-1"></a>    pub limit<span class="sc">:</span> Option<span class="sc">&lt;</span>usize<span class="sc">&gt;</span>,           <span class="sc">/</span><span class="er">/</span> max results</span>
+<span id="cb23-196"><a href="#cb23-196" aria-hidden="true" tabindex="-1"></a>    pub path<span class="sc">:</span> Vec<span class="sc">&lt;</span>Name<span class="sc">&gt;</span>,                 <span class="sc">/</span><span class="er">/</span> edge traversal path</span>
+<span id="cb23-197"><a href="#cb23-197" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-198"><a href="#cb23-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-199"><a href="#cb23-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-200"><a href="#cb23-200" aria-hidden="true" tabindex="-1"></a>All fields except <span class="in">`anchor`</span> are optional. The struct derives <span class="in">`Serialize`</span>/<span class="in">`Deserialize`</span>, so queries can cross the WASM boundary via MessagePack.</span>
+<span id="cb23-201"><a href="#cb23-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-202"><a href="#cb23-202" aria-hidden="true" tabindex="-1"></a><span class="fu">### Execution pipeline</span></span>
+<span id="cb23-203"><a href="#cb23-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-204"><a href="#cb23-204" aria-hidden="true" tabindex="-1"></a><span class="in">`execute`</span> applies five stages in order:</span>
+<span id="cb23-205"><a href="#cb23-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-206"><a href="#cb23-206" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Anchor filter**: collect all nodes whose <span class="in">`anchor`</span> matches <span class="in">`query.anchor`</span>.</span>
+<span id="cb23-207"><a href="#cb23-207" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Path navigation**: if <span class="in">`query.path`</span> is non-empty, follow edges. Each path element is an edge kind; <span class="in">`navigate_path`</span> iterates, collecting all arc targets matching the edge kind at each step. The result replaces the candidate set.</span>
+<span id="cb23-208"><a href="#cb23-208" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Predicate evaluation**: for each candidate, <span class="in">`build_node_env`</span> constructs an expression environment from the node's <span class="in">`extra_fields`</span>, <span class="in">`_anchor`</span>, <span class="in">`_id`</span>, and <span class="in">`_value`</span>. The predicate is evaluated via <span class="in">`panproto_expr::eval`</span>. Nodes whose predicate returns anything other than <span class="in">`Literal::Bool(true)`</span> are excluded.</span>
+<span id="cb23-209"><a href="#cb23-209" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Limit**: truncate results to <span class="in">`query.limit`</span>.</span>
+<span id="cb23-210"><a href="#cb23-210" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Projection**: <span class="in">`project_fields`</span> restricts each node's fields to the specified subset, or returns all fields if no projection is specified.</span>
+<span id="cb23-211"><a href="#cb23-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-212"><a href="#cb23-212" aria-hidden="true" tabindex="-1"></a><span class="fu">### QueryMatch result</span></span>
+<span id="cb23-213"><a href="#cb23-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-214"><a href="#cb23-214" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-215"><a href="#cb23-215" aria-hidden="true" tabindex="-1"></a>pub struct QueryMatch {</span>
+<span id="cb23-216"><a href="#cb23-216" aria-hidden="true" tabindex="-1"></a>    pub node_id<span class="sc">:</span> u32,</span>
+<span id="cb23-217"><a href="#cb23-217" aria-hidden="true" tabindex="-1"></a>    pub anchor<span class="sc">:</span> Name,</span>
+<span id="cb23-218"><a href="#cb23-218" aria-hidden="true" tabindex="-1"></a>    pub value<span class="sc">:</span> Option<span class="sc">&lt;</span>FieldPresence<span class="sc">&gt;</span>,</span>
+<span id="cb23-219"><a href="#cb23-219" aria-hidden="true" tabindex="-1"></a>    pub fields<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>String, Value<span class="sc">&gt;</span>,</span>
+<span id="cb23-220"><a href="#cb23-220" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-221"><a href="#cb23-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-222"><a href="#cb23-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-223"><a href="#cb23-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### Helper functions</span></span>
+<span id="cb23-224"><a href="#cb23-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-225"><a href="#cb23-225" aria-hidden="true" tabindex="-1"></a>**`navigate_path`**: iterates over a sequence of edge kinds, using the instance's arc list to follow edges. At each step, the current node set is replaced by all targets reachable via matching arcs.</span>
+<span id="cb23-226"><a href="#cb23-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-227"><a href="#cb23-227" aria-hidden="true" tabindex="-1"></a>**`build_node_env`**: constructs a <span class="in">`panproto_expr::Env`</span> by calling <span class="in">`build_env_from_extra_fields`</span> (the same function used by field transforms) and adding <span class="in">`_anchor`</span>, <span class="in">`_id`</span>, and <span class="in">`_value`</span> bindings.</span>
+<span id="cb23-228"><a href="#cb23-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-229"><a href="#cb23-229" aria-hidden="true" tabindex="-1"></a>**`project_fields`**: when a projection list is provided, copies only the named fields into the output map. Missing fields are silently omitted.</span>
+<span id="cb23-230"><a href="#cb23-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-231"><a href="#cb23-231" aria-hidden="true" tabindex="-1"></a><span class="fu">## The parser in detail {#sec-parser-detail}</span></span>
+<span id="cb23-232"><a href="#cb23-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-233"><a href="#cb23-233" aria-hidden="true" tabindex="-1"></a><span class="fu">### Operator precedence table</span></span>
+<span id="cb23-234"><a href="#cb23-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-235"><a href="#cb23-235" aria-hidden="true" tabindex="-1"></a>The Pratt parser defines nine precedence levels. Higher levels bind more tightly:</span>
+<span id="cb23-236"><a href="#cb23-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-237"><a href="#cb23-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Associativity <span class="pp">|</span> Operators <span class="pp">|</span> Desugars to <span class="pp">|</span></span>
+<span id="cb23-238"><a href="#cb23-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|--------------|-----------|-------------|</span></span>
+<span id="cb23-239"><a href="#cb23-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> Left <span class="pp">|</span> <span class="in">`&amp;`</span> (pipe) <span class="pp">|</span> <span class="in">`App(rhs, lhs)`</span> (reverse application) <span class="pp">|</span></span>
+<span id="cb23-240"><a href="#cb23-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> Left <span class="pp">|</span> <span class="in">`\|\|`</span> <span class="pp">|</span> <span class="in">`Builtin(Or, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-241"><a href="#cb23-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Left <span class="pp">|</span> <span class="in">`&amp;&amp;`</span> <span class="pp">|</span> <span class="in">`Builtin(And, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-242"><a href="#cb23-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> Right <span class="pp">|</span> <span class="in">`==`</span>, <span class="in">`/=`</span>, <span class="in">`&lt;`</span>, <span class="in">`&lt;=`</span>, <span class="in">`&gt;`</span>, <span class="in">`&gt;=`</span> <span class="pp">|</span> <span class="in">`Builtin(Eq\|Neq\|Lt\|Lte\|Gt\|Gte, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-243"><a href="#cb23-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6 <span class="pp">|</span> Right <span class="pp">|</span> <span class="in">`++`</span> <span class="pp">|</span> <span class="in">`Builtin(Concat, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-244"><a href="#cb23-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 7 <span class="pp">|</span> Left <span class="pp">|</span> <span class="in">`+`</span>, <span class="in">`-`</span> <span class="pp">|</span> <span class="in">`Builtin(Add\|Sub, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-245"><a href="#cb23-245" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 8 <span class="pp">|</span> Left <span class="pp">|</span> <span class="in">`*`</span>, <span class="in">`/`</span>, <span class="in">`%`</span>, <span class="in">`mod`</span>, <span class="in">`div`</span> <span class="pp">|</span> <span class="in">`Builtin(Mul\|Div\|Mod, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-246"><a href="#cb23-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 9 <span class="pp">|</span> Prefix <span class="pp">|</span> <span class="in">`-`</span> (unary), <span class="in">`not`</span> <span class="pp">|</span> <span class="in">`Builtin(Neg\|Not, ...)`</span> <span class="pp">|</span></span>
+<span id="cb23-247"><a href="#cb23-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 10+ <span class="pp">|</span> Left <span class="pp">|</span> juxtaposition (application) <span class="pp">|</span> <span class="in">`App(func, arg)`</span> or <span class="in">`Builtin(op, args)`</span> <span class="pp">|</span></span>
+<span id="cb23-248"><a href="#cb23-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-249"><a href="#cb23-249" aria-hidden="true" tabindex="-1"></a>: Operator precedence table. {#tbl-operator-precedence}</span>
+<span id="cb23-250"><a href="#cb23-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-251"><a href="#cb23-251" aria-hidden="true" tabindex="-1"></a>Postfix operations (<span class="in">`.field`</span> and <span class="in">`-&gt;edge`</span>) bind tighter than application. They are parsed as a left-fold over the <span class="in">`atom`</span> parser, before the Pratt parser sees the expression.</span>
+<span id="cb23-252"><a href="#cb23-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-253"><a href="#cb23-253" aria-hidden="true" tabindex="-1"></a><span class="fu">### Desugaring rules</span></span>
+<span id="cb23-254"><a href="#cb23-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-255"><a href="#cb23-255" aria-hidden="true" tabindex="-1"></a>The parser transforms several surface syntax forms into core <span class="in">`Expr`</span> constructors:</span>
+<span id="cb23-256"><a href="#cb23-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-257"><a href="#cb23-257" aria-hidden="true" tabindex="-1"></a>**List comprehensions** desugar to nested <span class="in">`FlatMap`</span> and <span class="in">`Match`</span>:</span>
+<span id="cb23-258"><a href="#cb23-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-259"><a href="#cb23-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-260"><a href="#cb23-260" aria-hidden="true" tabindex="-1"></a><span class="in">[e | x &lt;- xs, pred]</span></span>
+<span id="cb23-261"><a href="#cb23-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-262"><a href="#cb23-262" aria-hidden="true" tabindex="-1"></a>becomes</span>
+<span id="cb23-263"><a href="#cb23-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-264"><a href="#cb23-264" aria-hidden="true" tabindex="-1"></a><span class="in">flatMap(xs, \x -&gt; match pred { True -&gt; [e]; _ -&gt; [] })</span></span>
+<span id="cb23-265"><a href="#cb23-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-266"><a href="#cb23-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-267"><a href="#cb23-267" aria-hidden="true" tabindex="-1"></a>Guards become pattern matches on <span class="in">`True`</span>/<span class="in">`Wildcard`</span>, and generators become <span class="in">`FlatMap`</span> with a lambda binding. Multiple qualifiers are folded right-to-left.</span>
+<span id="cb23-268"><a href="#cb23-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-269"><a href="#cb23-269" aria-hidden="true" tabindex="-1"></a>**Do-notation** desugars to nested <span class="in">`FlatMap`</span> and <span class="in">`Let`</span>:</span>
+<span id="cb23-270"><a href="#cb23-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-271"><a href="#cb23-271" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-272"><a href="#cb23-272" aria-hidden="true" tabindex="-1"></a><span class="in">do</span></span>
+<span id="cb23-273"><a href="#cb23-273" aria-hidden="true" tabindex="-1"></a><span class="in">  x &lt;- source</span></span>
+<span id="cb23-274"><a href="#cb23-274" aria-hidden="true" tabindex="-1"></a><span class="in">  let y = f x</span></span>
+<span id="cb23-275"><a href="#cb23-275" aria-hidden="true" tabindex="-1"></a><span class="in">  g x y</span></span>
+<span id="cb23-276"><a href="#cb23-276" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-277"><a href="#cb23-277" aria-hidden="true" tabindex="-1"></a>becomes</span>
+<span id="cb23-278"><a href="#cb23-278" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-279"><a href="#cb23-279" aria-hidden="true" tabindex="-1"></a><span class="in">flatMap(source, \x -&gt; let y = f x in g x y)</span></span>
+<span id="cb23-280"><a href="#cb23-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-281"><a href="#cb23-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-282"><a href="#cb23-282" aria-hidden="true" tabindex="-1"></a>Bind statements (<span class="in">`x &lt;- e`</span>) become <span class="in">`FlatMap`</span>; <span class="in">`let`</span> statements become <span class="in">`Let`</span> bindings; bare expressions become <span class="in">`FlatMap`</span> with a wildcard binding.</span>
+<span id="cb23-283"><a href="#cb23-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-284"><a href="#cb23-284" aria-hidden="true" tabindex="-1"></a>**Where clauses** desugar to <span class="in">`Let`</span> bindings wrapping the main body:</span>
+<span id="cb23-285"><a href="#cb23-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-286"><a href="#cb23-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-287"><a href="#cb23-287" aria-hidden="true" tabindex="-1"></a><span class="in">body where x = e1; y = e2</span></span>
+<span id="cb23-288"><a href="#cb23-288" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-289"><a href="#cb23-289" aria-hidden="true" tabindex="-1"></a>becomes</span>
+<span id="cb23-290"><a href="#cb23-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-291"><a href="#cb23-291" aria-hidden="true" tabindex="-1"></a><span class="in">let x = e1 in let y = e2 in body</span></span>
+<span id="cb23-292"><a href="#cb23-292" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-293"><a href="#cb23-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-294"><a href="#cb23-294" aria-hidden="true" tabindex="-1"></a>**Multi-parameter lambdas** desugar to nested <span class="in">`Lam`</span>:</span>
+<span id="cb23-295"><a href="#cb23-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-296"><a href="#cb23-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-297"><a href="#cb23-297" aria-hidden="true" tabindex="-1"></a><span class="in">\x y z -&gt; body</span></span>
+<span id="cb23-298"><a href="#cb23-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-299"><a href="#cb23-299" aria-hidden="true" tabindex="-1"></a>becomes</span>
+<span id="cb23-300"><a href="#cb23-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-301"><a href="#cb23-301" aria-hidden="true" tabindex="-1"></a><span class="in">Lam("x", Lam("y", Lam("z", body)))</span></span>
+<span id="cb23-302"><a href="#cb23-302" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-303"><a href="#cb23-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-304"><a href="#cb23-304" aria-hidden="true" tabindex="-1"></a>Pattern parameters (anything other than <span class="in">`Var`</span> or <span class="in">`Wildcard`</span>) generate a fresh variable with an immediate <span class="in">`Match`</span>.</span>
+<span id="cb23-305"><a href="#cb23-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-306"><a href="#cb23-306" aria-hidden="true" tabindex="-1"></a>**If/then/else** desugars to <span class="in">`Match`</span> with a Bool pattern:</span>
+<span id="cb23-307"><a href="#cb23-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-308"><a href="#cb23-308" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-309"><a href="#cb23-309" aria-hidden="true" tabindex="-1"></a><span class="in">if cond then a else b</span></span>
+<span id="cb23-310"><a href="#cb23-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-311"><a href="#cb23-311" aria-hidden="true" tabindex="-1"></a>becomes</span>
+<span id="cb23-312"><a href="#cb23-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-313"><a href="#cb23-313" aria-hidden="true" tabindex="-1"></a><span class="in">Match { scrutinee: cond, arms: [(Lit(Bool(true)), a), (Wildcard, b)] }</span></span>
+<span id="cb23-314"><a href="#cb23-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-315"><a href="#cb23-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-316"><a href="#cb23-316" aria-hidden="true" tabindex="-1"></a>**Infix operators** desugar to <span class="in">`Builtin`</span> applications, as shown in the precedence table.</span>
+<span id="cb23-317"><a href="#cb23-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-318"><a href="#cb23-318" aria-hidden="true" tabindex="-1"></a>**Edge traversal** <span class="in">`x -&gt; y`</span> desugars to <span class="in">`Builtin(Edge, [x, Lit(Str("y"))])`</span>. This is parsed as a postfix operation on atoms, making <span class="in">`doc -&gt; layers -&gt; annotations`</span> a left-associative chain of <span class="in">`Edge`</span> calls.</span>
+<span id="cb23-319"><a href="#cb23-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-320"><a href="#cb23-320" aria-hidden="true" tabindex="-1"></a><span class="fu">### Builtin name resolution</span></span>
+<span id="cb23-321"><a href="#cb23-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-322"><a href="#cb23-322" aria-hidden="true" tabindex="-1"></a>When the parser encounters juxtaposition (function application), <span class="in">`resolve_application`</span> checks whether the function position is a <span class="in">`Var`</span> whose name matches a builtin. If so, it emits <span class="in">`Builtin(op, [arg])`</span> instead of <span class="in">`App(Var(name), arg)`</span>. On subsequent applications, if the <span class="in">`Builtin`</span> has fewer arguments than its arity, the new argument is appended. This means <span class="in">`add 1 2`</span> parses directly as <span class="in">`Builtin(Add, [Lit(1), Lit(2)])`</span> without going through curried application.</span>
+<span id="cb23-323"><a href="#cb23-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-324"><a href="#cb23-324" aria-hidden="true" tabindex="-1"></a>Both snake_case and camelCase names are accepted for multi-word builtins (e.g., <span class="in">`flat_map`</span> and <span class="in">`flatMap`</span> both resolve to <span class="in">`FlatMap`</span>).</span>
+<span id="cb23-325"><a href="#cb23-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-326"><a href="#cb23-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS integration {#sec-expr-vcs}</span></span>
+<span id="cb23-327"><a href="#cb23-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-328"><a href="#cb23-328" aria-hidden="true" tabindex="-1"></a>Expressions participate in panproto's content-addressed object store via the <span class="in">`Object::Expr`</span> variant in <span class="in">`panproto-vcs`</span>.</span>
+<span id="cb23-329"><a href="#cb23-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-330"><a href="#cb23-330" aria-hidden="true" tabindex="-1"></a><span class="fu">### Storage API</span></span>
+<span id="cb23-331"><a href="#cb23-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-332"><a href="#cb23-332" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-333"><a href="#cb23-333" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">store_expr</span>(store<span class="sc">:</span> <span class="er">&amp;</span>mut dyn Store, expr<span class="sc">:</span> <span class="er">&amp;</span>Expr) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>ObjectId, VcsError<span class="sc">&gt;</span>;</span>
+<span id="cb23-334"><a href="#cb23-334" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">load_expr</span>(store<span class="sc">:</span> <span class="er">&amp;</span>dyn Store, id<span class="sc">:</span> <span class="er">&amp;</span>ObjectId) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Expr, VcsError<span class="sc">&gt;</span>;</span>
+<span id="cb23-335"><a href="#cb23-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-336"><a href="#cb23-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-337"><a href="#cb23-337" aria-hidden="true" tabindex="-1"></a><span class="in">`store_expr`</span> wraps the expression in <span class="in">`Object::Expr(Box::new(expr.clone()))`</span> and calls <span class="in">`store.put(&amp;object)`</span>. The store serializes the object with MessagePack, hashes it with blake3, and stores the bytes keyed by the hash. If an identical expression already exists, the operation returns the existing ID (content-addressing makes storage idempotent).</span>
+<span id="cb23-338"><a href="#cb23-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-339"><a href="#cb23-339" aria-hidden="true" tabindex="-1"></a><span class="in">`load_expr`</span> retrieves the object by ID and pattern-matches on <span class="in">`Object::Expr`</span>. If the object exists but has a different type, it returns <span class="in">`VcsError::WrongObjectType`</span>.</span>
+<span id="cb23-340"><a href="#cb23-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-341"><a href="#cb23-341" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hash computation</span></span>
+<span id="cb23-342"><a href="#cb23-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-343"><a href="#cb23-343" aria-hidden="true" tabindex="-1"></a>The VCS hashes <span class="in">`Object::Expr`</span> via <span class="in">`hash::hash_expr`</span>, which serializes the <span class="in">`Expr`</span> with MessagePack and computes a blake3 digest. This means two structurally identical expressions always produce the same <span class="in">`ObjectId`</span>, regardless of when or where they were created.</span>
+<span id="cb23-344"><a href="#cb23-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-345"><a href="#cb23-345" aria-hidden="true" tabindex="-1"></a>Expressions are leaf objects in the VCS DAG: they have no outgoing references to other objects. The garbage collector (<span class="in">`gc.rs`</span>) treats them as terminal nodes during reachability analysis.</span>
+<span id="cb23-346"><a href="#cb23-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-347"><a href="#cb23-347" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary {#sec-expr-wasm}</span></span>
+<span id="cb23-348"><a href="#cb23-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-349"><a href="#cb23-349" aria-hidden="true" tabindex="-1"></a>Three WASM exports in <span class="in">`panproto-wasm/src/api.rs`</span> expose the expression engine to JavaScript/TypeScript:</span>
+<span id="cb23-350"><a href="#cb23-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-351"><a href="#cb23-351" aria-hidden="true" tabindex="-1"></a><span class="fu">### parse_expr</span></span>
+<span id="cb23-352"><a href="#cb23-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-353"><a href="#cb23-353" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-354"><a href="#cb23-354" aria-hidden="true" tabindex="-1"></a><span class="co">#[wasm_bindgen]</span></span>
+<span id="cb23-355"><a href="#cb23-355" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">parse_expr</span>(source<span class="sc">:</span> <span class="er">&amp;</span>str) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>u8<span class="sc">&gt;</span>, JsError<span class="sc">&gt;</span></span>
+<span id="cb23-356"><a href="#cb23-356" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-357"><a href="#cb23-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-358"><a href="#cb23-358" aria-hidden="true" tabindex="-1"></a>Takes a surface syntax string, tokenizes it with <span class="in">`panproto_expr_parser::tokenize`</span>, parses it with <span class="in">`panproto_expr_parser::parse`</span>, and returns the resulting <span class="in">`Expr`</span> as MessagePack bytes. Errors from either the lexer or parser are surfaced as <span class="in">`JsError`</span>.</span>
+<span id="cb23-359"><a href="#cb23-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-360"><a href="#cb23-360" aria-hidden="true" tabindex="-1"></a><span class="fu">### eval_func_expr</span></span>
+<span id="cb23-361"><a href="#cb23-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-362"><a href="#cb23-362" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-363"><a href="#cb23-363" aria-hidden="true" tabindex="-1"></a><span class="co">#[wasm_bindgen]</span></span>
+<span id="cb23-364"><a href="#cb23-364" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">eval_func_expr</span>(expr_bytes<span class="sc">:</span> <span class="er">&amp;</span>[u8], env_bytes<span class="sc">:</span> <span class="er">&amp;</span>[u8]) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>u8<span class="sc">&gt;</span>, JsError<span class="sc">&gt;</span></span>
+<span id="cb23-365"><a href="#cb23-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-366"><a href="#cb23-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-367"><a href="#cb23-367" aria-hidden="true" tabindex="-1"></a>Evaluates a functional expression (lambda calculus with builtins) against a provided environment. Both inputs and the output are MessagePack-encoded. The environment is deserialized as <span class="in">`Vec&lt;(String, Literal)&gt;`</span> and converted to an <span class="in">`Env`</span>.</span>
+<span id="cb23-368"><a href="#cb23-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-369"><a href="#cb23-369" aria-hidden="true" tabindex="-1"></a>This function is distinct from <span class="in">`eval_expr`</span> (which evaluates GAT terms against a theory). <span class="in">`eval_func_expr`</span> operates purely in the expression language; <span class="in">`eval_expr`</span> operates in the schema-level term language.</span>
+<span id="cb23-370"><a href="#cb23-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-371"><a href="#cb23-371" aria-hidden="true" tabindex="-1"></a><span class="fu">### execute_query</span></span>
+<span id="cb23-372"><a href="#cb23-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-373"><a href="#cb23-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb23-374"><a href="#cb23-374" aria-hidden="true" tabindex="-1"></a><span class="co">#[wasm_bindgen]</span></span>
+<span id="cb23-375"><a href="#cb23-375" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">execute_query</span>(query_bytes<span class="sc">:</span> <span class="er">&amp;</span>[u8], instance_bytes<span class="sc">:</span> <span class="er">&amp;</span>[u8]) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>u8<span class="sc">&gt;</span>, JsError<span class="sc">&gt;</span></span>
+<span id="cb23-376"><a href="#cb23-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-377"><a href="#cb23-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-378"><a href="#cb23-378" aria-hidden="true" tabindex="-1"></a>Deserializes an <span class="in">`InstanceQuery`</span> and a <span class="in">`WInstance`</span> from MessagePack, runs <span class="in">`inst::execute_query`</span>, and serializes the results back. Each <span class="in">`QueryMatch`</span> is converted to a JSON object with <span class="in">`node_id`</span>, <span class="in">`anchor`</span>, <span class="in">`value`</span>, and <span class="in">`fields`</span> keys before MessagePack encoding.</span>
+<span id="cb23-379"><a href="#cb23-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-380"><a href="#cb23-380" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-expr-source}</span></span>
+<span id="cb23-381"><a href="#cb23-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-382"><a href="#cb23-382" aria-hidden="true" tabindex="-1"></a>The types and functions described in this chapter are spread across four crates:</span>
+<span id="cb23-383"><a href="#cb23-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-384"><a href="#cb23-384" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-expr/src/`**:</span>
+<span id="cb23-385"><a href="#cb23-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-386"><a href="#cb23-386" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`expr.rs`</span>: <span class="in">`Expr`</span>, <span class="in">`Pattern`</span>, <span class="in">`BuiltinOp`</span> enums and <span class="in">`BuiltinOp::arity()`</span></span>
+<span id="cb23-387"><a href="#cb23-387" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`eval.rs`</span>: <span class="in">`eval`</span>, <span class="in">`EvalConfig`</span>, step/depth-limited evaluator</span>
+<span id="cb23-388"><a href="#cb23-388" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`env.rs`</span>: <span class="in">`Env`</span> type</span>
+<span id="cb23-389"><a href="#cb23-389" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`builtin.rs`</span>: <span class="in">`apply_builtin`</span> dispatch</span>
+<span id="cb23-390"><a href="#cb23-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-391"><a href="#cb23-391" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-expr-parser/src/`**:</span>
+<span id="cb23-392"><a href="#cb23-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-393"><a href="#cb23-393" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`token.rs`</span>: <span class="in">`Token`</span> enum, <span class="in">`Span`</span>, <span class="in">`Spanned`</span></span>
+<span id="cb23-394"><a href="#cb23-394" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`lexer.rs`</span>: <span class="in">`tokenize`</span>, <span class="in">`insert_layout`</span>, <span class="in">`LexError`</span></span>
+<span id="cb23-395"><a href="#cb23-395" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`parser.rs`</span>: <span class="in">`parse`</span>, <span class="in">`resolve_builtin`</span>, Pratt parser, all desugaring functions</span>
+<span id="cb23-396"><a href="#cb23-396" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pretty.rs`</span>: <span class="in">`pretty_print`</span>, precedence-aware serialization</span>
+<span id="cb23-397"><a href="#cb23-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-398"><a href="#cb23-398" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/`**:</span>
+<span id="cb23-399"><a href="#cb23-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-400"><a href="#cb23-400" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`instance_env.rs`</span>: <span class="in">`eval_with_instance`</span>, <span class="in">`apply_graph_builtin`</span>, <span class="in">`resolve_node_ref`</span>, <span class="in">`node_to_literal`</span></span>
+<span id="cb23-401"><a href="#cb23-401" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`poly.rs`</span>: <span class="in">`fiber_at_anchor`</span>, <span class="in">`fiber_decomposition`</span>, <span class="in">`fiber_with_predicate`</span>, <span class="in">`group_by`</span>, <span class="in">`join`</span></span>
+<span id="cb23-402"><a href="#cb23-402" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`query.rs`</span>: <span class="in">`InstanceQuery`</span>, <span class="in">`QueryMatch`</span>, <span class="in">`execute`</span>, <span class="in">`navigate_path`</span>, <span class="in">`build_node_env`</span>, <span class="in">`project_fields`</span></span>
+<span id="cb23-403"><a href="#cb23-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-404"><a href="#cb23-404" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-vcs/src/`**:</span>
+<span id="cb23-405"><a href="#cb23-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-406"><a href="#cb23-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`expr.rs`</span>: <span class="in">`store_expr`</span>, <span class="in">`load_expr`</span></span>
+<span id="cb23-407"><a href="#cb23-407" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`object.rs`</span>: <span class="in">`Object::Expr`</span> variant</span>
+<span id="cb23-408"><a href="#cb23-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-409"><a href="#cb23-409" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-wasm/src/`**:</span>
+<span id="cb23-410"><a href="#cb23-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-411"><a href="#cb23-411" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`api.rs`</span>: <span class="in">`parse_expr`</span>, <span class="in">`eval_func_expr`</span>, <span class="in">`execute_query`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/29-expression-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>24&nbsp; Polynomial Operations – panproto: Developer Guide</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/29-expression-engine.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-dbc92dda8186f57fa2e333fbb71d6a9d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ffa0eef5ebcb8616de356e02b78e2eb3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/30-polynomial-operations.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat: The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema: Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst: Instances and the Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig: The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens: Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols: Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm: The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code>: The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code>: The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-fiber-ops" id="toc-sec-fiber-ops" class="nav-link active" data-scroll-target="#sec-fiber-ops"><span class="header-section-number">24.1</span> Fiber operations</a>
+  <ul class="collapse">
+  <li><a href="#fiber_at_anchor" id="toc-fiber_at_anchor" class="nav-link" data-scroll-target="#fiber_at_anchor"><span class="header-section-number">24.1.1</span> fiber_at_anchor</a></li>
+  <li><a href="#fiber_decomposition" id="toc-fiber_decomposition" class="nav-link" data-scroll-target="#fiber_decomposition"><span class="header-section-number">24.1.2</span> fiber_decomposition</a></li>
+  <li><a href="#fiber_with_predicate" id="toc-fiber_with_predicate" class="nav-link" data-scroll-target="#fiber_with_predicate"><span class="header-section-number">24.1.3</span> fiber_with_predicate</a></li>
+  <li><a href="#fiber_at_node" id="toc-fiber_at_node" class="nav-link" data-scroll-target="#fiber_at_node"><span class="header-section-number">24.1.4</span> fiber_at_node</a></li>
+  </ul></li>
+  <li><a href="#sec-complement-tracking" id="toc-sec-complement-tracking" class="nav-link" data-scroll-target="#sec-complement-tracking"><span class="header-section-number">24.2</span> Complement tracking</a>
+  <ul class="collapse">
+  <li><a href="#complement-struct" id="toc-complement-struct" class="nav-link" data-scroll-target="#complement-struct"><span class="header-section-number">24.2.1</span> Complement struct</a></li>
+  <li><a href="#droppednode" id="toc-droppednode" class="nav-link" data-scroll-target="#droppednode"><span class="header-section-number">24.2.2</span> DroppedNode</a></li>
+  <li><a href="#restrict_with_complement" id="toc-restrict_with_complement" class="nav-link" data-scroll-target="#restrict_with_complement"><span class="header-section-number">24.2.3</span> restrict_with_complement</a></li>
+  </ul></li>
+  <li><a href="#sec-section-construction" id="toc-sec-section-construction" class="nav-link" data-scroll-target="#sec-section-construction"><span class="header-section-number">24.3</span> Section construction</a>
+  <ul class="collapse">
+  <li><a href="#sectionenrichment" id="toc-sectionenrichment" class="nav-link" data-scroll-target="#sectionenrichment"><span class="header-section-number">24.3.1</span> SectionEnrichment</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">24.3.2</span> section()</a></li>
+  </ul></li>
+  <li><a href="#sec-group-by-join" id="toc-sec-group-by-join" class="nav-link" data-scroll-target="#sec-group-by-join"><span class="header-section-number">24.4</span> Group-by and join</a>
+  <ul class="collapse">
+  <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by"><span class="header-section-number">24.4.1</span> group_by</a></li>
+  <li><a href="#join" id="toc-join" class="nav-link" data-scroll-target="#join"><span class="header-section-number">24.4.2</span> join</a></li>
+  </ul></li>
+  <li><a href="#sec-internal-hom" id="toc-sec-internal-hom" class="nav-link" data-scroll-target="#sec-internal-hom"><span class="header-section-number">24.5</span> Internal hom</a>
+  <ul class="collapse">
+  <li><a href="#hom_schema" id="toc-hom_schema" class="nav-link" data-scroll-target="#hom_schema"><span class="header-section-number">24.5.1</span> hom_schema</a></li>
+  <li><a href="#curry_migration" id="toc-curry_migration" class="nav-link" data-scroll-target="#curry_migration"><span class="header-section-number">24.5.2</span> curry_migration</a></li>
+  <li><a href="#eval_hom" id="toc-eval_hom" class="nav-link" data-scroll-target="#eval_hom"><span class="header-section-number">24.5.3</span> eval_hom</a></li>
+  </ul></li>
+  <li><a href="#sec-lawvere-metric" id="toc-sec-lawvere-metric" class="nav-link" data-scroll-target="#sec-lawvere-metric"><span class="header-section-number">24.6</span> Lawvere metric</a>
+  <ul class="collapse">
+  <li><a href="#complement_cost-cost.rs" id="toc-complement_cost-cost.rs" class="nav-link" data-scroll-target="#complement_cost-cost.rs"><span class="header-section-number">24.6.1</span> complement_cost (cost.rs)</a></li>
+  <li><a href="#lensgraph-graph.rs" id="toc-lensgraph-graph.rs" class="nav-link" data-scroll-target="#lensgraph-graph.rs"><span class="header-section-number">24.6.2</span> LensGraph (graph.rs)</a></li>
+  </ul></li>
+  <li><a href="#sec-poly-wasm" id="toc-sec-poly-wasm" class="nav-link" data-scroll-target="#sec-poly-wasm"><span class="header-section-number">24.7</span> WASM boundary</a></li>
+  <li><a href="#sec-poly-typescript" id="toc-sec-poly-typescript" class="nav-link" data-scroll-target="#sec-poly-typescript"><span class="header-section-number">24.8</span> TypeScript SDK</a></li>
+  <li><a href="#sec-poly-source" id="toc-sec-poly-source" class="nav-link" data-scroll-target="#sec-poly-source"><span class="header-section-number">24.9</span> Source locations</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/30-polynomial-operations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/30-polynomial-operations.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-polynomial-operations" class="quarto-section-identifier"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>panproto treats schemas as polynomial endofunctors and instances as their initial algebras (W-types). This interpretation yields a family of derived operations from the adjoint triple <span class="math inline">\(\Sigma \dashv \Delta \dashv \Pi\)</span>: fibers, sections, group-by, join, and the internal hom. These operations live in three crate modules: <code>panproto-inst/src/poly.rs</code> (fiber, section, group-by, join), <code>panproto-inst/src/hom.rs</code> (internal hom), and <code>panproto-lens/src/graph.rs</code> (Lawvere metric).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the user-facing walkthrough of the internal hom and lens graph, see <a href="https://panproto.dev/tutorial/chapters/22-internal-hom-and-preferred-paths.html">the tutorial</a>.</p>
+</div>
+</div>
+<section id="sec-fiber-ops" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="sec-fiber-ops"><span class="header-section-number">24.1</span> Fiber operations</h2>
+<p>Fibers are the <span class="math inline">\(\Delta_f\)</span> operation (pullback along a migration <span class="math inline">\(f: S \to T\)</span>) applied to representable presheaves. Given a compiled migration and a target anchor, the fiber is the set of source nodes that map to that anchor.</p>
+<section id="fiber_at_anchor" class="level3" data-number="24.1.1">
+<h3 data-number="24.1.1" class="anchored" data-anchor-id="fiber_at_anchor"><span class="header-section-number">24.1.1</span> fiber_at_anchor</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> fiber_at_anchor(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    target_anchor<span class="op">:</span> <span class="op">&amp;</span>Name<span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Iterates over source nodes, keeping those whose anchor remaps to <code>target_anchor</code> via <code>compiled.vertex_remap</code>. Returns source node IDs. This is <span class="math inline">\(\Delta_f(\delta_w) = \{v \in S \mid f(v) = w\}\)</span>.</p>
+</section>
+<section id="fiber_decomposition" class="level3" data-number="24.1.2">
+<h3 data-number="24.1.2" class="anchored" data-anchor-id="fiber_decomposition"><span class="header-section-number">24.1.2</span> fiber_decomposition</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> fiber_decomposition(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> FxHashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Computes fibers for all target anchors simultaneously. The result is a partition: every source node appears in exactly one fiber. Implemented as a single pass over source nodes, grouping by remapped anchor.</p>
+</section>
+<section id="fiber_with_predicate" class="level3" data-number="24.1.3">
+<h3 data-number="24.1.3" class="anchored" data-anchor-id="fiber_with_predicate"><span class="header-section-number">24.1.3</span> fiber_with_predicate</h3>
+<p>Combines <code>fiber_at_anchor</code> with a value predicate. Computes <span class="math inline">\(f^{-1}(a) \cap \{x \mid \mathrm{pred}(x)\}\)</span>. The predicate is evaluated against each node’s <code>extra_fields</code> using <code>build_env_from_extra_fields</code>, with additional bindings for <code>_value</code> (if present) and <code>_anchor</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> predicate <span class="op">=</span> <span class="pp">Expr::</span>Builtin(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">BuiltinOp::</span>Gt<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">vec!</span>[<span class="pp">Expr::</span>Var(<span class="st">"confidence"</span><span class="op">.</span>into())<span class="op">,</span> <span class="pp">Expr::</span>Lit(<span class="pp">Literal::</span>Float(<span class="dv">0.8</span>))]<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> filtered <span class="op">=</span> fiber_with_predicate(<span class="op">&amp;</span>compiled<span class="op">,</span> <span class="op">&amp;</span>inst<span class="op">,</span> <span class="op">&amp;</span><span class="pp">Name::</span>from(<span class="st">"span"</span>)<span class="op">,</span> <span class="op">&amp;</span>predicate<span class="op">,</span> <span class="op">&amp;</span>config)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="fiber_at_node" class="level3" data-number="24.1.4">
+<h3 data-number="24.1.4" class="anchored" data-anchor-id="fiber_at_node"><span class="header-section-number">24.1.4</span> fiber_at_node</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> fiber_at_node(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    target<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    target_node_id<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    complement<span class="op">:</span> <span class="op">&amp;</span>Complement<span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Computes the fiber at a specific node ID in the restricted (target) instance, rather than at an anchor. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <code>Complement</code> that were contracted into the target node during ancestor contraction. Requires a <code>Complement</code> from <code>restrict_with_complement</code>.</p>
+</section>
+</section>
+<section id="sec-complement-tracking" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="sec-complement-tracking"><span class="header-section-number">24.2</span> Complement tracking</h2>
+<section id="complement-struct" class="level3" data-number="24.2.1">
+<h3 data-number="24.2.1" class="anchored" data-anchor-id="complement-struct"><span class="header-section-number">24.2.1</span> Complement struct</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Complement <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> dropped_nodes<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>DroppedNode<span class="op">&gt;,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> dropped_arcs<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span><span class="op">,</span> Edge)<span class="op">&gt;,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Records nodes and arcs that were removed during <code>restrict_with_complement</code>. Each <code>DroppedNode</code> stores the original node ID, its anchor, and the surviving node it was contracted into (if any).</p>
+</section>
+<section id="droppednode" class="level3" data-number="24.2.2">
+<h3 data-number="24.2.2" class="anchored" data-anchor-id="droppednode"><span class="header-section-number">24.2.2</span> DroppedNode</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> DroppedNode <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> original_id<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> anchor<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> contracted_into<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>contracted_into</code> field records the nearest surviving ancestor. This is <code>None</code> only for unreachable nodes.</p>
+</section>
+<section id="restrict_with_complement" class="level3" data-number="24.2.3">
+<h3 data-number="24.2.3" class="anchored" data-anchor-id="restrict_with_complement"><span class="header-section-number">24.2.3</span> restrict_with_complement</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> restrict_with_complement(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    src_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    migration<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>(WInstance<span class="op">,</span> Complement)<span class="op">,</span> RestrictError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A BFS-based restrict that produces both the restricted instance and a <code>Complement</code>. The BFS traversal tracks the nearest surviving ancestor for each node. Surviving nodes are remapped and have field transforms applied; non-surviving nodes are recorded in the complement.</p>
+<p>This is distinct from the <code>Complement</code> in <code>panproto-lens/src/asymmetric.rs</code>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <code>poly.rs</code> complement is a lighter-weight structure focused on fiber operations.</p>
+</section>
+</section>
+<section id="sec-section-construction" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="sec-section-construction"><span class="header-section-number">24.3</span> Section construction</h2>
+<p>A section of a projection <span class="math inline">\(p: S \to T\)</span> is a morphism <span class="math inline">\(s: T \to S\)</span> such that <span class="math inline">\(p \circ s = \mathrm{id}_T\)</span>. In instance terms: an annotation layer is a section that enriches a base document with additional structure that projects back to the original.</p>
+<section id="sectionenrichment" class="level3" data-number="24.3.1">
+<h3 data-number="24.3.1" class="anchored" data-anchor-id="sectionenrichment"><span class="header-section-number">24.3.1</span> SectionEnrichment</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> SectionEnrichment <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> base_node_id<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> anchor<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edge<span class="op">:</span> Edge<span class="op">,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> value<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>FieldPresence<span class="op">&gt;,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> extra_fields<span class="op">:</span> FxHashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> Value<span class="op">&gt;,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each enrichment specifies a new node to attach at a specific position in the base instance. The anchor must be a vertex in the source schema but not in the target schema (otherwise it would already be present in the base).</p>
+</section>
+<section id="section" class="level3" data-number="24.3.2">
+<h3 data-number="24.3.2" class="anchored" data-anchor-id="section"><span class="header-section-number">24.3.2</span> section()</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> section(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    base<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    projection<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    enrichments<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>SectionEnrichment<span class="op">&gt;,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>WInstance<span class="op">,</span> InstError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Constructs an S-instance from a T-instance (the base) plus enrichment nodes. The algorithm:</p>
+<ol type="1">
+<li>Copies base nodes, inverse-remapping anchors from target to source schema.</li>
+<li>Remaps arcs to use source-schema anchors.</li>
+<li>Adds enrichment nodes with fresh IDs, connected to base nodes via the specified edges.</li>
+</ol>
+<p>The roundtrip property: <code>restrict(section(base, projection, enrichments), projection) ≅ base</code>. The restricted section has the same nodes and anchors as the base.</p>
+</section>
+</section>
+<section id="sec-group-by-join" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="sec-group-by-join"><span class="header-section-number">24.4</span> Group-by and join</h2>
+<section id="group_by" class="level3" data-number="24.4.1">
+<h3 data-number="24.4.1" class="anchored" data-anchor-id="group_by"><span class="header-section-number">24.4.1</span> group_by</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> group_by(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    source<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> FxHashMap<span class="op">&lt;</span>Name<span class="op">,</span> WInstance<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Partitions source nodes by their migration image, returning a sub-instance for each target anchor. Internal arcs between nodes in the same fiber are preserved. This is the dependent product <span class="math inline">\(\Pi_f\)</span> computed explicitly on trees.</p>
+<p>Implementation: calls <code>fiber_decomposition</code>, then <code>extract_subinstance</code> for each fiber. <code>extract_subinstance</code> copies the specified nodes and retains only arcs where both endpoints are in the fiber.</p>
+</section>
+<section id="join" class="level3" data-number="24.4.2">
+<h3 data-number="24.4.2" class="anchored" data-anchor-id="join"><span class="header-section-number">24.4.2</span> join</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> join(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    left<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    right<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    left_compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    right_compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">u32</span><span class="op">,</span> <span class="dt">u32</span>)<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Given two instances A and B with migrations to a shared target C, computes the pullback <span class="math inline">\(A \times_C B\)</span>: all pairs <span class="math inline">\((a, b)\)</span> where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> map to the same target anchor.</p>
+<p>Implementation: decomposes both instances into fibers via <code>fiber_decomposition</code>, then takes the Cartesian product of fibers at each shared anchor. If A has 2 nodes in the <code>"span"</code> fiber and B has 3, the join produces 6 pairs for that anchor.</p>
+</section>
+</section>
+<section id="sec-internal-hom" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="sec-internal-hom"><span class="header-section-number">24.5</span> Internal hom</h2>
+<p>The internal hom <code>[S, T]</code> is a schema whose instances represent structure-preserving maps from S to T. Implemented in <code>panproto-inst/src/hom.rs</code>.</p>
+<section id="hom_schema" class="level3" data-number="24.5.1">
+<h3 data-number="24.5.1" class="anchored" data-anchor-id="hom_schema"><span class="header-section-number">24.5.1</span> hom_schema</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> hom_schema(source<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span> target<span class="op">:</span> <span class="op">&amp;</span>Schema) <span class="op">-&gt;</span> Schema</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For each source vertex <code>v</code>:</p>
+<ul>
+<li>Creates <code>choice_v</code> (kind <code>"hom_choice"</code>) with <code>maps_to</code> edges to all compatible target vertices (those sharing the same kind).</li>
+<li>Creates <code>backward_v_e</code> (kind <code>"hom_backward"</code>) for each outgoing edge <code>e</code> from <code>v</code>, with a <code>backward_for</code> edge from <code>choice_v</code>.</li>
+</ul>
+<p>Target vertices are included in the hom schema so that <code>maps_to</code> edges have valid endpoints. Compatibility is determined by the <code>kind</code> field on vertices.</p>
+</section>
+<section id="curry_migration" class="level3" data-number="24.5.2">
+<h3 data-number="24.5.2" class="anchored" data-anchor-id="curry_migration"><span class="header-section-number">24.5.2</span> curry_migration</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> curry_migration(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    source_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    hom_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> WInstance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Encodes a compiled migration as an instance of <code>[S, T]</code>. Creates a synthetic <code>hom_root</code> node, then for each entry in <code>vertex_remap</code>:</p>
+<ol type="1">
+<li>Creates a <code>choice_v</code> node.</li>
+<li>Creates a target vertex node and connects it via a <code>maps_to</code> arc.</li>
+<li>For each outgoing edge from the source vertex, creates a <code>backward_v_e</code> node with extra fields encoding the source and target edge metadata (<code>src_src</code>, <code>src_tgt</code>, <code>src_kind</code>, <code>src_name</code>, <code>tgt_kind</code>, <code>tgt_name</code>).</li>
+</ol>
+</section>
+<section id="eval_hom" class="level3" data-number="24.5.3">
+<h3 data-number="24.5.3" class="anchored" data-anchor-id="eval_hom"><span class="header-section-number">24.5.3</span> eval_hom</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> eval_hom(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    hom_instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    source_instance<span class="op">:</span> <span class="op">&amp;</span>WInstance<span class="op">,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    source_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    target_schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>WInstance<span class="op">,</span> InstError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Evaluates an instance of <code>[S, T]</code> against an instance of S to produce an instance of T. Three steps:</p>
+<ol type="1">
+<li>Extract vertex remap from choice nodes: scan for nodes with <code>choice_</code>-prefixed anchors, follow <code>maps_to</code> arcs to read the target anchor.</li>
+<li>Extract edge remap from backward nodes: scan for <code>backward_</code>-prefixed anchors, read source/target edge metadata from extra fields.</li>
+<li>Build a <code>CompiledMigration</code> and apply <code>wtype_restrict</code>.</li>
+</ol>
+<p>The roundtrip property: <code>eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)</code>.</p>
+</section>
+</section>
+<section id="sec-lawvere-metric" class="level2" data-number="24.6">
+<h2 data-number="24.6" class="anchored" data-anchor-id="sec-lawvere-metric"><span class="header-section-number">24.6</span> Lawvere metric</h2>
+<p>The Lawvere metric on lens graphs is implemented across two modules in <code>panproto-lens</code>.</p>
+<section id="complement_cost-cost.rs" class="level3" data-number="24.6.1">
+<h3 data-number="24.6.1" class="anchored" data-anchor-id="complement_cost-cost.rs"><span class="header-section-number">24.6.1</span> complement_cost (cost.rs)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> complement_cost(complement<span class="op">:</span> <span class="op">&amp;</span>ComplementConstructor) <span class="op">-&gt;</span> <span class="dt">f64</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Assigns a numeric cost to each <code>ComplementConstructor</code> variant:</p>
+<table class="table-striped caption-top table">
+<caption>Complement cost table.</caption>
+<thead>
+<tr class="header">
+<th>Variant</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Empty</code></td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td><code>DroppedSortData</code></td>
+<td>1.0</td>
+</tr>
+<tr class="odd">
+<td><code>DroppedOpData</code></td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td><code>AddedElement</code></td>
+<td>0.5</td>
+</tr>
+<tr class="odd">
+<td><code>NatTransKernel</code></td>
+<td>10.0</td>
+</tr>
+<tr class="even">
+<td><code>Composite(children)</code></td>
+<td><code>sum(children)</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>chain_cost</code> sums the complement costs of all steps in a <code>ProtolensChain</code>.</p>
+</section>
+<section id="lensgraph-graph.rs" class="level3" data-number="24.6.2">
+<h3 data-number="24.6.2" class="anchored" data-anchor-id="lensgraph-graph.rs"><span class="header-section-number">24.6.2</span> LensGraph (graph.rs)</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> LensGraph <span class="op">{</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    schemas<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Name<span class="op">&gt;,</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    schema_index<span class="op">:</span> FxHashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="dt">usize</span><span class="op">&gt;,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    edges<span class="op">:</span> FxHashMap<span class="op">&lt;</span>(<span class="dt">usize</span><span class="op">,</span> <span class="dt">usize</span>)<span class="op">,</span> (<span class="dt">f64</span><span class="op">,</span> ProtolensChain)<span class="op">&gt;,</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    distances<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">f64</span><span class="op">&gt;&gt;&gt;,</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    next<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;&gt;&gt;&gt;,</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A weighted directed graph of schemas. Key methods:</p>
+<ul>
+<li><strong><code>add_schema(name)</code></strong>: registers a schema, returns its index.</li>
+<li><strong><code>add_lens(src, tgt, chain)</code></strong>: adds an edge with cost <code>chain_cost(&amp;chain)</code>. Auto-adds schemas. Keeps the cheaper edge when duplicates exist. Invalidates cached distances.</li>
+<li><strong><code>compute_distances()</code></strong>: runs Floyd-Warshall. Initializes identity distances to 0, direct edges to their costs, then relaxes via the standard triple loop.</li>
+<li><strong><code>preferred_path(src, tgt)</code></strong>: reconstructs the shortest path from the <code>next</code> matrix. Returns <code>(cost, ProtolensChain)</code> by composing the chains along the path.</li>
+<li><strong><code>distance(src, tgt)</code></strong>: returns the shortest distance, or <code>f64::INFINITY</code> if unreachable or distances not yet computed.</li>
+</ul>
+<p>The Floyd-Warshall implementation is <span class="math inline">\(O(n^3)\)</span> where <span class="math inline">\(n\)</span> is the number of schemas. This is acceptable because lens graphs are typically small (tens of schemas, not thousands).</p>
+</section>
+</section>
+<section id="sec-poly-wasm" class="level2" data-number="24.7">
+<h2 data-number="24.7" class="anchored" data-anchor-id="sec-poly-wasm"><span class="header-section-number">24.7</span> WASM boundary</h2>
+<p>Five WASM exports in <code>panproto-wasm/src/api.rs</code> expose polynomial operations:</p>
+<table class="table-striped caption-top table">
+<caption>WASM exports for polynomial operations.</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 36%">
+<col style="width: 37%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Export</th>
+<th>Input (MessagePack)</th>
+<th>Output (MessagePack)</th>
+<th>Calls</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>fiber_at</code></td>
+<td>instance, migration, anchor name</td>
+<td><code>Vec&lt;u32&gt;</code></td>
+<td><code>inst::fiber_at_anchor</code></td>
+</tr>
+<tr class="even">
+<td><code>fiber_decomposition_wasm</code></td>
+<td>instance, migration</td>
+<td><code>HashMap&lt;Name, Vec&lt;u32&gt;&gt;</code></td>
+<td><code>inst::fiber_decomposition</code></td>
+</tr>
+<tr class="odd">
+<td><code>poly_hom</code></td>
+<td>source schema, target schema</td>
+<td>schema bytes</td>
+<td><code>hom::hom_schema</code></td>
+</tr>
+<tr class="even">
+<td><code>preferred_conversion_path</code></td>
+<td>edges, src name, tgt name</td>
+<td><code>(cost, chain)</code></td>
+<td><code>LensGraph::preferred_path</code></td>
+</tr>
+<tr class="odd">
+<td><code>conversion_distance</code></td>
+<td>edges, src name, tgt name</td>
+<td><code>f64</code></td>
+<td><code>LensGraph::distance</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>preferred_conversion_path</code> and <code>conversion_distance</code> both construct a <code>LensGraph</code> from the provided edges and call <code>compute_distances()</code> before querying. The graph is not cached across calls; each invocation builds it from scratch.</p>
+</section>
+<section id="sec-poly-typescript" class="level2" data-number="24.8">
+<h2 data-number="24.8" class="anchored" data-anchor-id="sec-poly-typescript"><span class="header-section-number">24.8</span> TypeScript SDK</h2>
+<p>The TypeScript SDK wraps these WASM exports in three modules:</p>
+<p><strong><code>fiber.ts</code></strong>: exports <code>fiberAt(instanceBytes, migrationBytes, anchor, wasm)</code> and <code>fiberDecomposition(instanceBytes, migrationBytes, wasm)</code>. Both serialize inputs as MessagePack, call the WASM function, and deserialize the result.</p>
+<p><strong><code>hom.ts</code></strong>: exports <code>polyHom(sourceBytes, targetBytes, wasm)</code>, returning the serialized hom schema.</p>
+<p><strong><code>graph.ts</code></strong>: exports <code>preferredPath(edges, src, tgt, wasm)</code> returning <code>{ cost: number, chain: ProtolensChain }</code>, and <code>distance(edges, src, tgt, wasm)</code> returning a number. The <code>GraphEdge</code> type describes an edge as <code>{ src: string, tgt: string, chain: ProtolensChain }</code>.</p>
+<p>All functions accept and return MessagePack-encoded bytes for the heavy data (instances, schemas, migrations). Schema and anchor names are passed as plain strings.</p>
+</section>
+<section id="sec-poly-source" class="level2" data-number="24.9">
+<h2 data-number="24.9" class="anchored" data-anchor-id="sec-poly-source"><span class="header-section-number">24.9</span> Source locations</h2>
+<p><strong><code>crates/panproto-inst/src/poly.rs</code></strong>:</p>
+<ul>
+<li><code>Complement</code>, <code>DroppedNode</code>, <code>SectionEnrichment</code> structs</li>
+<li><code>fiber_at_anchor</code>, <code>fiber_decomposition</code>, <code>fiber_with_predicate</code></li>
+<li><code>restrict_with_complement</code>, <code>fiber_at_node</code></li>
+<li><code>group_by</code>, <code>join</code>, <code>section</code></li>
+<li><code>extract_subinstance</code> (private)</li>
+</ul>
+<p><strong><code>crates/panproto-inst/src/hom.rs</code></strong>:</p>
+<ul>
+<li><code>hom_schema</code>, <code>curry_migration</code>, <code>eval_hom</code></li>
+<li><code>add_maps_to_edges</code>, <code>add_backward_vertices</code>, <code>edge_label</code> (private)</li>
+</ul>
+<p><strong><code>crates/panproto-lens/src/cost.rs</code></strong>:</p>
+<ul>
+<li><code>complement_cost</code>, <code>chain_cost</code></li>
+</ul>
+<p><strong><code>crates/panproto-lens/src/graph.rs</code></strong>:</p>
+<ul>
+<li><code>LensGraph</code>, <code>LensGraph::add_schema</code>, <code>LensGraph::add_lens</code></li>
+<li><code>LensGraph::compute_distances</code>, <code>LensGraph::preferred_path</code>, <code>LensGraph::distance</code></li>
+</ul>
+<p><strong><code>crates/panproto-wasm/src/api.rs</code></strong>:</p>
+<ul>
+<li><code>fiber_at</code>, <code>fiber_decomposition_wasm</code>, <code>poly_hom</code></li>
+<li><code>preferred_conversion_path</code>, <code>conversion_distance</code></li>
+</ul>
+<p><strong><code>sdk/typescript/src/</code></strong>:</p>
+<ul>
+<li><code>fiber.ts</code>: <code>fiberAt</code>, <code>fiberDecomposition</code></li>
+<li><code>hom.ts</code>: <code>polyHom</code></li>
+<li><code>graph.ts</code>: <code>preferredPath</code>, <code>distance</code></li>
+</ul>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.dev\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/29-expression-engine.html" class="pagination-link" aria-label="Expression Parser &amp; Query Engine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Polynomial Operations {#sec-polynomial-operations}</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>panproto treats schemas as polynomial endofunctors and instances as their initial algebras (W-types). This interpretation yields a family of derived operations from the adjoint triple $\Sigma \dashv \Delta \dashv \Pi$: fibers, sections, group-by, join, and the internal hom. These operations live in three crate modules: <span class="in">`panproto-inst/src/poly.rs`</span> (fiber, section, group-by, join), <span class="in">`panproto-inst/src/hom.rs`</span> (internal hom), and <span class="in">`panproto-lens/src/graph.rs`</span> (Lawvere metric).</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>For the user-facing walkthrough of the internal hom and lens graph, see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/22-internal-hom-and-preferred-paths.html)</span>.</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fiber operations {#sec-fiber-ops}</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>Fibers are the $\Delta_f$ operation (pullback along a migration $f: S \to T$) applied to representable presheaves. Given a compiled migration and a target anchor, the fiber is the set of source nodes that map to that anchor.</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_at_anchor</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">fiber_at_anchor</span>(</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    target_anchor<span class="sc">:</span> <span class="er">&amp;</span>Name,</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>Iterates over source nodes, keeping those whose anchor remaps to <span class="in">`target_anchor`</span> via <span class="in">`compiled.vertex_remap`</span>. Returns source node IDs. This is $\Delta_f(\delta_w) = <span class="sc">\{</span>v \in S \mid f(v) = w<span class="sc">\}</span>$.</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_decomposition</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">fiber_decomposition</span>(</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FxHashMap<span class="sc">&lt;</span>Name, Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span><span class="er">&gt;</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>Computes fibers for all target anchors simultaneously. The result is a partition: every source node appears in exactly one fiber. Implemented as a single pass over source nodes, grouping by remapped anchor.</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_with_predicate</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>Combines <span class="in">`fiber_at_anchor`</span> with a value predicate. Computes $f^{-1}(a) \cap <span class="sc">\{</span>x \mid \mathrm{pred}(x)<span class="sc">\}</span>$. The predicate is evaluated against each node's <span class="in">`extra_fields`</span> using <span class="in">`build_env_from_extra_fields`</span>, with additional bindings for <span class="in">`_value`</span> (if present) and <span class="in">`_anchor`</span>.</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>let predicate <span class="ot">=</span> Expr<span class="sc">::</span><span class="fu">Builtin</span>(</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>    BuiltinOp<span class="sc">::</span>Gt,</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>    vec<span class="sc">!</span>[Expr<span class="sc">::</span><span class="fu">Var</span>(<span class="st">"confidence"</span><span class="fu">.into</span>()), Expr<span class="sc">::</span><span class="fu">Lit</span>(Literal<span class="sc">::</span><span class="fu">Float</span>(<span class="fl">0.8</span>))],</span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>let filtered <span class="ot">=</span> <span class="fu">fiber_with_predicate</span>(<span class="sc">&amp;</span>compiled, <span class="sc">&amp;</span>inst, <span class="sc">&amp;</span>Name<span class="sc">::</span><span class="fu">from</span>(<span class="st">"span"</span>), <span class="sc">&amp;</span>predicate, <span class="sc">&amp;</span>config);</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### fiber_at_node</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">fiber_at_node</span>(</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    target<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>    target_node_id<span class="sc">:</span> u32,</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>    complement<span class="sc">:</span> <span class="er">&amp;</span>Complement,</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span></span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>Computes the fiber at a specific node ID in the restricted (target) instance, rather than at an anchor. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <span class="in">`Complement`</span> that were contracted into the target node during ancestor contraction. Requires a <span class="in">`Complement`</span> from <span class="in">`restrict_with_complement`</span>.</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement tracking {#sec-complement-tracking}</span></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### Complement struct</span></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>pub struct Complement {</span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>    pub dropped_nodes<span class="sc">:</span> Vec<span class="sc">&lt;</span>DroppedNode<span class="sc">&gt;</span>,</span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>    pub dropped_arcs<span class="sc">:</span> Vec<span class="sc">&lt;</span>(u32, u32, Edge)<span class="sc">&gt;</span>,</span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>Records nodes and arcs that were removed during <span class="in">`restrict_with_complement`</span>. Each <span class="in">`DroppedNode`</span> stores the original node ID, its anchor, and the surviving node it was contracted into (if any).</span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### DroppedNode</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>pub struct DroppedNode {</span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>    pub original_id<span class="sc">:</span> u32,</span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>    pub anchor<span class="sc">:</span> Name,</span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>    pub contracted_into<span class="sc">:</span> Option<span class="sc">&lt;</span>u32<span class="sc">&gt;</span>,</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>The <span class="in">`contracted_into`</span> field records the nearest surviving ancestor. This is <span class="in">`None`</span> only for unreachable nodes.</span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a><span class="fu">### restrict_with_complement</span></span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">restrict_with_complement</span>(</span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>    instance<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>    src_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>    migration<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>(WInstance, Complement), RestrictError<span class="sc">&gt;</span></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>A BFS-based restrict that produces both the restricted instance and a <span class="in">`Complement`</span>. The BFS traversal tracks the nearest surviving ancestor for each node. Surviving nodes are remapped and have field transforms applied; non-surviving nodes are recorded in the complement.</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>This is distinct from the <span class="in">`Complement`</span> in <span class="in">`panproto-lens/src/asymmetric.rs`</span>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <span class="in">`poly.rs`</span> complement is a lighter-weight structure focused on fiber operations.</span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Section construction {#sec-section-construction}</span></span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>A section of a projection $p: S \to T$ is a morphism $s: T \to S$ such that $p \circ s = \mathrm{id}_T$. In instance terms: an annotation layer is a section that enriches a base document with additional structure that projects back to the original.</span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### SectionEnrichment</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>pub struct SectionEnrichment {</span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>    pub base_node_id<span class="sc">:</span> u32,</span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a>    pub anchor<span class="sc">:</span> Name,</span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a>    pub edge<span class="sc">:</span> Edge,</span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a>    pub value<span class="sc">:</span> Option<span class="sc">&lt;</span>FieldPresence<span class="sc">&gt;</span>,</span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a>    pub extra_fields<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>String, Value<span class="sc">&gt;</span>,</span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>Each enrichment specifies a new node to attach at a specific position in the base instance. The anchor must be a vertex in the source schema but not in the target schema (otherwise it would already be present in the base).</span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="fu">### section()</span></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">section</span>(</span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a>    base<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a>    projection<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a>    enrichments<span class="sc">:</span> Vec<span class="sc">&lt;</span>SectionEnrichment<span class="sc">&gt;</span>,</span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>WInstance, InstError<span class="sc">&gt;</span></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>Constructs an S-instance from a T-instance (the base) plus enrichment nodes. The algorithm:</span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Copies base nodes, inverse-remapping anchors from target to source schema.</span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Remaps arcs to use source-schema anchors.</span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Adds enrichment nodes with fresh IDs, connected to base nodes via the specified edges.</span>
+<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a>The roundtrip property: <span class="in">`restrict(section(base, projection, enrichments), projection) ≅ base`</span>. The restricted section has the same nodes and anchors as the base.</span>
+<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a><span class="fu">## Group-by and join {#sec-group-by-join}</span></span>
+<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a><span class="fu">### group_by</span></span>
+<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-141"><a href="#cb17-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-142"><a href="#cb17-142" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">group_by</span>(</span>
+<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-144"><a href="#cb17-144" aria-hidden="true" tabindex="-1"></a>    source<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-145"><a href="#cb17-145" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FxHashMap<span class="sc">&lt;</span>Name, WInstance<span class="sc">&gt;</span></span>
+<span id="cb17-146"><a href="#cb17-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-147"><a href="#cb17-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-148"><a href="#cb17-148" aria-hidden="true" tabindex="-1"></a>Partitions source nodes by their migration image, returning a sub-instance for each target anchor. Internal arcs between nodes in the same fiber are preserved. This is the dependent product $\Pi_f$ computed explicitly on trees.</span>
+<span id="cb17-149"><a href="#cb17-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-150"><a href="#cb17-150" aria-hidden="true" tabindex="-1"></a>Implementation: calls <span class="in">`fiber_decomposition`</span>, then <span class="in">`extract_subinstance`</span> for each fiber. <span class="in">`extract_subinstance`</span> copies the specified nodes and retains only arcs where both endpoints are in the fiber.</span>
+<span id="cb17-151"><a href="#cb17-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-152"><a href="#cb17-152" aria-hidden="true" tabindex="-1"></a><span class="fu">### join</span></span>
+<span id="cb17-153"><a href="#cb17-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-154"><a href="#cb17-154" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-155"><a href="#cb17-155" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">join</span>(</span>
+<span id="cb17-156"><a href="#cb17-156" aria-hidden="true" tabindex="-1"></a>    left<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-157"><a href="#cb17-157" aria-hidden="true" tabindex="-1"></a>    right<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-158"><a href="#cb17-158" aria-hidden="true" tabindex="-1"></a>    left_compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-159"><a href="#cb17-159" aria-hidden="true" tabindex="-1"></a>    right_compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-160"><a href="#cb17-160" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>(u32, u32)<span class="sc">&gt;</span></span>
+<span id="cb17-161"><a href="#cb17-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-162"><a href="#cb17-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-163"><a href="#cb17-163" aria-hidden="true" tabindex="-1"></a>Given two instances A and B with migrations to a shared target C, computes the pullback $A \times_C B$: all pairs $(a, b)$ where $a$ and $b$ map to the same target anchor.</span>
+<span id="cb17-164"><a href="#cb17-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-165"><a href="#cb17-165" aria-hidden="true" tabindex="-1"></a>Implementation: decomposes both instances into fibers via <span class="in">`fiber_decomposition`</span>, then takes the Cartesian product of fibers at each shared anchor. If A has 2 nodes in the <span class="in">`"span"`</span> fiber and B has 3, the join produces 6 pairs for that anchor.</span>
+<span id="cb17-166"><a href="#cb17-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-167"><a href="#cb17-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Internal hom {#sec-internal-hom}</span></span>
+<span id="cb17-168"><a href="#cb17-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-169"><a href="#cb17-169" aria-hidden="true" tabindex="-1"></a>The internal hom <span class="in">`[S, T]`</span> is a schema whose instances represent structure-preserving maps from S to T. Implemented in <span class="in">`panproto-inst/src/hom.rs`</span>.</span>
+<span id="cb17-170"><a href="#cb17-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-171"><a href="#cb17-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### hom_schema</span></span>
+<span id="cb17-172"><a href="#cb17-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-173"><a href="#cb17-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-174"><a href="#cb17-174" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">hom_schema</span>(source<span class="sc">:</span> <span class="er">&amp;</span>Schema, target<span class="sc">:</span> <span class="er">&amp;</span>Schema) <span class="ot">-&gt;</span> Schema</span>
+<span id="cb17-175"><a href="#cb17-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-176"><a href="#cb17-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-177"><a href="#cb17-177" aria-hidden="true" tabindex="-1"></a>For each source vertex <span class="in">`v`</span>:</span>
+<span id="cb17-178"><a href="#cb17-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-179"><a href="#cb17-179" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Creates <span class="in">`choice_v`</span> (kind <span class="in">`"hom_choice"`</span>) with <span class="in">`maps_to`</span> edges to all compatible target vertices (those sharing the same kind).</span>
+<span id="cb17-180"><a href="#cb17-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Creates <span class="in">`backward_v_e`</span> (kind <span class="in">`"hom_backward"`</span>) for each outgoing edge <span class="in">`e`</span> from <span class="in">`v`</span>, with a <span class="in">`backward_for`</span> edge from <span class="in">`choice_v`</span>.</span>
+<span id="cb17-181"><a href="#cb17-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-182"><a href="#cb17-182" aria-hidden="true" tabindex="-1"></a>Target vertices are included in the hom schema so that <span class="in">`maps_to`</span> edges have valid endpoints. Compatibility is determined by the <span class="in">`kind`</span> field on vertices.</span>
+<span id="cb17-183"><a href="#cb17-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-184"><a href="#cb17-184" aria-hidden="true" tabindex="-1"></a><span class="fu">### curry_migration</span></span>
+<span id="cb17-185"><a href="#cb17-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-186"><a href="#cb17-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-187"><a href="#cb17-187" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">curry_migration</span>(</span>
+<span id="cb17-188"><a href="#cb17-188" aria-hidden="true" tabindex="-1"></a>    compiled<span class="sc">:</span> <span class="er">&amp;</span>CompiledMigration,</span>
+<span id="cb17-189"><a href="#cb17-189" aria-hidden="true" tabindex="-1"></a>    source_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-190"><a href="#cb17-190" aria-hidden="true" tabindex="-1"></a>    hom_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-191"><a href="#cb17-191" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> WInstance</span>
+<span id="cb17-192"><a href="#cb17-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-193"><a href="#cb17-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-194"><a href="#cb17-194" aria-hidden="true" tabindex="-1"></a>Encodes a compiled migration as an instance of <span class="in">`[S, T]`</span>. Creates a synthetic <span class="in">`hom_root`</span> node, then for each entry in <span class="in">`vertex_remap`</span>:</span>
+<span id="cb17-195"><a href="#cb17-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-196"><a href="#cb17-196" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Creates a <span class="in">`choice_v`</span> node.</span>
+<span id="cb17-197"><a href="#cb17-197" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Creates a target vertex node and connects it via a <span class="in">`maps_to`</span> arc.</span>
+<span id="cb17-198"><a href="#cb17-198" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>For each outgoing edge from the source vertex, creates a <span class="in">`backward_v_e`</span> node with extra fields encoding the source and target edge metadata (<span class="in">`src_src`</span>, <span class="in">`src_tgt`</span>, <span class="in">`src_kind`</span>, <span class="in">`src_name`</span>, <span class="in">`tgt_kind`</span>, <span class="in">`tgt_name`</span>).</span>
+<span id="cb17-199"><a href="#cb17-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-200"><a href="#cb17-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### eval_hom</span></span>
+<span id="cb17-201"><a href="#cb17-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-202"><a href="#cb17-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-203"><a href="#cb17-203" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">eval_hom</span>(</span>
+<span id="cb17-204"><a href="#cb17-204" aria-hidden="true" tabindex="-1"></a>    hom_instance<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-205"><a href="#cb17-205" aria-hidden="true" tabindex="-1"></a>    source_instance<span class="sc">:</span> <span class="er">&amp;</span>WInstance,</span>
+<span id="cb17-206"><a href="#cb17-206" aria-hidden="true" tabindex="-1"></a>    source_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-207"><a href="#cb17-207" aria-hidden="true" tabindex="-1"></a>    target_schema<span class="sc">:</span> <span class="er">&amp;</span>Schema,</span>
+<span id="cb17-208"><a href="#cb17-208" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Result<span class="sc">&lt;</span>WInstance, InstError<span class="sc">&gt;</span></span>
+<span id="cb17-209"><a href="#cb17-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-210"><a href="#cb17-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-211"><a href="#cb17-211" aria-hidden="true" tabindex="-1"></a>Evaluates an instance of <span class="in">`[S, T]`</span> against an instance of S to produce an instance of T. Three steps:</span>
+<span id="cb17-212"><a href="#cb17-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-213"><a href="#cb17-213" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Extract vertex remap from choice nodes: scan for nodes with <span class="in">`choice_`</span>-prefixed anchors, follow <span class="in">`maps_to`</span> arcs to read the target anchor.</span>
+<span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Extract edge remap from backward nodes: scan for <span class="in">`backward_`</span>-prefixed anchors, read source/target edge metadata from extra fields.</span>
+<span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Build a <span class="in">`CompiledMigration`</span> and apply <span class="in">`wtype_restrict`</span>.</span>
+<span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a>The roundtrip property: <span class="in">`eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)`</span>.</span>
+<span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lawvere metric {#sec-lawvere-metric}</span></span>
+<span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-221"><a href="#cb17-221" aria-hidden="true" tabindex="-1"></a>The Lawvere metric on lens graphs is implemented across two modules in <span class="in">`panproto-lens`</span>.</span>
+<span id="cb17-222"><a href="#cb17-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-223"><a href="#cb17-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### complement_cost (cost.rs)</span></span>
+<span id="cb17-224"><a href="#cb17-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-225"><a href="#cb17-225" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-226"><a href="#cb17-226" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">complement_cost</span>(complement<span class="sc">:</span> <span class="er">&amp;</span>ComplementConstructor) <span class="ot">-&gt;</span> f64</span>
+<span id="cb17-227"><a href="#cb17-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-228"><a href="#cb17-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-229"><a href="#cb17-229" aria-hidden="true" tabindex="-1"></a>Assigns a numeric cost to each <span class="in">`ComplementConstructor`</span> variant:</span>
+<span id="cb17-230"><a href="#cb17-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-231"><a href="#cb17-231" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variant <span class="pp">|</span> Cost <span class="pp">|</span></span>
+<span id="cb17-232"><a href="#cb17-232" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|------|</span></span>
+<span id="cb17-233"><a href="#cb17-233" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Empty`</span> <span class="pp">|</span> 0.0 <span class="pp">|</span></span>
+<span id="cb17-234"><a href="#cb17-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DroppedSortData`</span> <span class="pp">|</span> 1.0 <span class="pp">|</span></span>
+<span id="cb17-235"><a href="#cb17-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DroppedOpData`</span> <span class="pp">|</span> 1.0 <span class="pp">|</span></span>
+<span id="cb17-236"><a href="#cb17-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`AddedElement`</span> <span class="pp">|</span> 0.5 <span class="pp">|</span></span>
+<span id="cb17-237"><a href="#cb17-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`NatTransKernel`</span> <span class="pp">|</span> 10.0 <span class="pp">|</span></span>
+<span id="cb17-238"><a href="#cb17-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Composite(children)`</span> <span class="pp">|</span> <span class="in">`sum(children)`</span> <span class="pp">|</span></span>
+<span id="cb17-239"><a href="#cb17-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-240"><a href="#cb17-240" aria-hidden="true" tabindex="-1"></a>: Complement cost table. {.striped}</span>
+<span id="cb17-241"><a href="#cb17-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="in">`chain_cost`</span> sums the complement costs of all steps in a <span class="in">`ProtolensChain`</span>.</span>
+<span id="cb17-243"><a href="#cb17-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-244"><a href="#cb17-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### LensGraph (graph.rs)</span></span>
+<span id="cb17-245"><a href="#cb17-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-246"><a href="#cb17-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-247"><a href="#cb17-247" aria-hidden="true" tabindex="-1"></a>pub struct LensGraph {</span>
+<span id="cb17-248"><a href="#cb17-248" aria-hidden="true" tabindex="-1"></a>    schemas<span class="sc">:</span> Vec<span class="sc">&lt;</span>Name<span class="sc">&gt;</span>,</span>
+<span id="cb17-249"><a href="#cb17-249" aria-hidden="true" tabindex="-1"></a>    schema_index<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>Name, usize<span class="sc">&gt;</span>,</span>
+<span id="cb17-250"><a href="#cb17-250" aria-hidden="true" tabindex="-1"></a>    edges<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>(usize, usize), (f64, ProtolensChain)<span class="sc">&gt;</span>,</span>
+<span id="cb17-251"><a href="#cb17-251" aria-hidden="true" tabindex="-1"></a>    distances<span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>f64<span class="sc">&gt;</span><span class="er">&gt;&gt;</span>,</span>
+<span id="cb17-252"><a href="#cb17-252" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span><span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Option<span class="sc">&lt;</span>usize<span class="sc">&gt;</span><span class="er">&gt;&gt;&gt;</span>,</span>
+<span id="cb17-253"><a href="#cb17-253" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-254"><a href="#cb17-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-255"><a href="#cb17-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-256"><a href="#cb17-256" aria-hidden="true" tabindex="-1"></a>A weighted directed graph of schemas. Key methods:</span>
+<span id="cb17-257"><a href="#cb17-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-258"><a href="#cb17-258" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_schema(name)`**: registers a schema, returns its index.</span>
+<span id="cb17-259"><a href="#cb17-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_lens(src, tgt, chain)`**: adds an edge with cost <span class="in">`chain_cost(&amp;chain)`</span>. Auto-adds schemas. Keeps the cheaper edge when duplicates exist. Invalidates cached distances.</span>
+<span id="cb17-260"><a href="#cb17-260" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compute_distances()`**: runs Floyd-Warshall. Initializes identity distances to 0, direct edges to their costs, then relaxes via the standard triple loop.</span>
+<span id="cb17-261"><a href="#cb17-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`preferred_path(src, tgt)`**: reconstructs the shortest path from the <span class="in">`next`</span> matrix. Returns <span class="in">`(cost, ProtolensChain)`</span> by composing the chains along the path.</span>
+<span id="cb17-262"><a href="#cb17-262" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`distance(src, tgt)`**: returns the shortest distance, or <span class="in">`f64::INFINITY`</span> if unreachable or distances not yet computed.</span>
+<span id="cb17-263"><a href="#cb17-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-264"><a href="#cb17-264" aria-hidden="true" tabindex="-1"></a>The Floyd-Warshall implementation is $O(n^3)$ where $n$ is the number of schemas. This is acceptable because lens graphs are typically small (tens of schemas, not thousands).</span>
+<span id="cb17-265"><a href="#cb17-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-266"><a href="#cb17-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary {#sec-poly-wasm}</span></span>
+<span id="cb17-267"><a href="#cb17-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-268"><a href="#cb17-268" aria-hidden="true" tabindex="-1"></a>Five WASM exports in <span class="in">`panproto-wasm/src/api.rs`</span> expose polynomial operations:</span>
+<span id="cb17-269"><a href="#cb17-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-270"><a href="#cb17-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Export <span class="pp">|</span> Input (MessagePack) <span class="pp">|</span> Output (MessagePack) <span class="pp">|</span> Calls <span class="pp">|</span></span>
+<span id="cb17-271"><a href="#cb17-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------------------|----------------------|-------|</span></span>
+<span id="cb17-272"><a href="#cb17-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_at`</span> <span class="pp">|</span> instance, migration, anchor name <span class="pp">|</span> <span class="in">`Vec&lt;u32&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_at_anchor`</span> <span class="pp">|</span></span>
+<span id="cb17-273"><a href="#cb17-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_decomposition_wasm`</span> <span class="pp">|</span> instance, migration <span class="pp">|</span> <span class="in">`HashMap&lt;Name, Vec&lt;u32&gt;&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_decomposition`</span> <span class="pp">|</span></span>
+<span id="cb17-274"><a href="#cb17-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`poly_hom`</span> <span class="pp">|</span> source schema, target schema <span class="pp">|</span> schema bytes <span class="pp">|</span> <span class="in">`hom::hom_schema`</span> <span class="pp">|</span></span>
+<span id="cb17-275"><a href="#cb17-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`preferred_conversion_path`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`(cost, chain)`</span> <span class="pp">|</span> <span class="in">`LensGraph::preferred_path`</span> <span class="pp">|</span></span>
+<span id="cb17-276"><a href="#cb17-276" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`conversion_distance`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`f64`</span> <span class="pp">|</span> <span class="in">`LensGraph::distance`</span> <span class="pp">|</span></span>
+<span id="cb17-277"><a href="#cb17-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-278"><a href="#cb17-278" aria-hidden="true" tabindex="-1"></a>: WASM exports for polynomial operations. {.striped}</span>
+<span id="cb17-279"><a href="#cb17-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-280"><a href="#cb17-280" aria-hidden="true" tabindex="-1"></a><span class="in">`preferred_conversion_path`</span> and <span class="in">`conversion_distance`</span> both construct a <span class="in">`LensGraph`</span> from the provided edges and call <span class="in">`compute_distances()`</span> before querying. The graph is not cached across calls; each invocation builds it from scratch.</span>
+<span id="cb17-281"><a href="#cb17-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-282"><a href="#cb17-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## TypeScript SDK {#sec-poly-typescript}</span></span>
+<span id="cb17-283"><a href="#cb17-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-284"><a href="#cb17-284" aria-hidden="true" tabindex="-1"></a>The TypeScript SDK wraps these WASM exports in three modules:</span>
+<span id="cb17-285"><a href="#cb17-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-286"><a href="#cb17-286" aria-hidden="true" tabindex="-1"></a>**`fiber.ts`**: exports <span class="in">`fiberAt(instanceBytes, migrationBytes, anchor, wasm)`</span> and <span class="in">`fiberDecomposition(instanceBytes, migrationBytes, wasm)`</span>. Both serialize inputs as MessagePack, call the WASM function, and deserialize the result.</span>
+<span id="cb17-287"><a href="#cb17-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-288"><a href="#cb17-288" aria-hidden="true" tabindex="-1"></a>**`hom.ts`**: exports <span class="in">`polyHom(sourceBytes, targetBytes, wasm)`</span>, returning the serialized hom schema.</span>
+<span id="cb17-289"><a href="#cb17-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-290"><a href="#cb17-290" aria-hidden="true" tabindex="-1"></a>**`graph.ts`**: exports <span class="in">`preferredPath(edges, src, tgt, wasm)`</span> returning <span class="in">`{ cost: number, chain: ProtolensChain }`</span>, and <span class="in">`distance(edges, src, tgt, wasm)`</span> returning a number. The <span class="in">`GraphEdge`</span> type describes an edge as <span class="in">`{ src: string, tgt: string, chain: ProtolensChain }`</span>.</span>
+<span id="cb17-291"><a href="#cb17-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-292"><a href="#cb17-292" aria-hidden="true" tabindex="-1"></a>All functions accept and return MessagePack-encoded bytes for the heavy data (instances, schemas, migrations). Schema and anchor names are passed as plain strings.</span>
+<span id="cb17-293"><a href="#cb17-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-294"><a href="#cb17-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-poly-source}</span></span>
+<span id="cb17-295"><a href="#cb17-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-296"><a href="#cb17-296" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/poly.rs`**:</span>
+<span id="cb17-297"><a href="#cb17-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-298"><a href="#cb17-298" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Complement`</span>, <span class="in">`DroppedNode`</span>, <span class="in">`SectionEnrichment`</span> structs</span>
+<span id="cb17-299"><a href="#cb17-299" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at_anchor`</span>, <span class="in">`fiber_decomposition`</span>, <span class="in">`fiber_with_predicate`</span></span>
+<span id="cb17-300"><a href="#cb17-300" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`restrict_with_complement`</span>, <span class="in">`fiber_at_node`</span></span>
+<span id="cb17-301"><a href="#cb17-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`group_by`</span>, <span class="in">`join`</span>, <span class="in">`section`</span></span>
+<span id="cb17-302"><a href="#cb17-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`extract_subinstance`</span> (private)</span>
+<span id="cb17-303"><a href="#cb17-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-304"><a href="#cb17-304" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/hom.rs`**:</span>
+<span id="cb17-305"><a href="#cb17-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-306"><a href="#cb17-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom_schema`</span>, <span class="in">`curry_migration`</span>, <span class="in">`eval_hom`</span></span>
+<span id="cb17-307"><a href="#cb17-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`add_maps_to_edges`</span>, <span class="in">`add_backward_vertices`</span>, <span class="in">`edge_label`</span> (private)</span>
+<span id="cb17-308"><a href="#cb17-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-309"><a href="#cb17-309" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/cost.rs`**:</span>
+<span id="cb17-310"><a href="#cb17-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-311"><a href="#cb17-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`complement_cost`</span>, <span class="in">`chain_cost`</span></span>
+<span id="cb17-312"><a href="#cb17-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-313"><a href="#cb17-313" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/graph.rs`**:</span>
+<span id="cb17-314"><a href="#cb17-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-315"><a href="#cb17-315" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph`</span>, <span class="in">`LensGraph::add_schema`</span>, <span class="in">`LensGraph::add_lens`</span></span>
+<span id="cb17-316"><a href="#cb17-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph::compute_distances`</span>, <span class="in">`LensGraph::preferred_path`</span>, <span class="in">`LensGraph::distance`</span></span>
+<span id="cb17-317"><a href="#cb17-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-318"><a href="#cb17-318" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-wasm/src/api.rs`**:</span>
+<span id="cb17-319"><a href="#cb17-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-320"><a href="#cb17-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at`</span>, <span class="in">`fiber_decomposition_wasm`</span>, <span class="in">`poly_hom`</span></span>
+<span id="cb17-321"><a href="#cb17-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`preferred_conversion_path`</span>, <span class="in">`conversion_distance`</span></span>
+<span id="cb17-322"><a href="#cb17-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-323"><a href="#cb17-323" aria-hidden="true" tabindex="-1"></a>**`sdk/typescript/src/`**:</span>
+<span id="cb17-324"><a href="#cb17-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-325"><a href="#cb17-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber.ts`</span>: <span class="in">`fiberAt`</span>, <span class="in">`fiberDecomposition`</span></span>
+<span id="cb17-326"><a href="#cb17-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom.ts`</span>: <span class="in">`polyHom`</span></span>
+<span id="cb17-327"><a href="#cb17-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`graph.ts`</span>: <span class="in">`preferredPath`</span>, <span class="in">`distance`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/30-polynomial-operations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

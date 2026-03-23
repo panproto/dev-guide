@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>11&nbsp; panproto-check — Breaking Change Detection – panproto: Developer Guide</title>
+<title>11&nbsp; panproto-check: Breaking Change Detection – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -58,26 +58,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -135,6 +116,35 @@ div.csl-indent {
 <script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
 <link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -310,7 +320,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/11-breaking-changes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/11-breaking-changes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -409,61 +419,61 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat – The GAT Engine</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat: The GAT Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema – Schemas and Protocols</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema: Schemas and Protocols</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst – Instances and the Restrict Pipeline</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst: Instances and the Restrict Pipeline</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig — The Migration Engine</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig: The Migration Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens: Bidirectional Lenses</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols: Protocol Definitions</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm — The WASM Boundary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm: The WASM Boundary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code> — The TypeScript SDK</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code>: The TypeScript SDK</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code> — The Python SDK</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code>: The Python SDK</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -508,6 +518,18 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -522,19 +544,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -551,7 +573,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -568,31 +590,31 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -607,37 +629,33 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-breaking-change-detection-matters" id="toc-why-breaking-change-detection-matters" class="nav-link active" data-scroll-target="#why-breaking-change-detection-matters"><span class="header-section-number">11.1</span> Why Breaking Change Detection Matters</a></li>
-  <li><a href="#the-detection-pipeline" id="toc-the-detection-pipeline" class="nav-link" data-scroll-target="#the-detection-pipeline"><span class="header-section-number">11.2</span> The Detection Pipeline</a></li>
-  <li><a href="#structural-diffing" id="toc-structural-diffing" class="nav-link" data-scroll-target="#structural-diffing"><span class="header-section-number">11.3</span> Structural Diffing</a>
+  <li><a href="#structural-diffing" id="toc-structural-diffing" class="nav-link active" data-scroll-target="#structural-diffing"><span class="header-section-number">11.1</span> Structural Diffing</a>
   <ul class="collapse">
-  <li><a href="#schemadiff" id="toc-schemadiff" class="nav-link" data-scroll-target="#schemadiff"><span class="header-section-number">11.3.1</span> SchemaDiff</a></li>
-  <li><a href="#constraint-and-kind-changes" id="toc-constraint-and-kind-changes" class="nav-link" data-scroll-target="#constraint-and-kind-changes"><span class="header-section-number">11.3.2</span> Constraint and Kind Changes</a></li>
-  <li><a href="#extended-change-types" id="toc-extended-change-types" class="nav-link" data-scroll-target="#extended-change-types"><span class="header-section-number">11.3.3</span> Extended Change Types</a></li>
-  <li><a href="#the-diff-function" id="toc-the-diff-function" class="nav-link" data-scroll-target="#the-diff-function"><span class="header-section-number">11.3.4</span> The diff Function</a></li>
-  <li><a href="#what-diff-does-not-do" id="toc-what-diff-does-not-do" class="nav-link" data-scroll-target="#what-diff-does-not-do"><span class="header-section-number">11.3.5</span> What diff Does Not Do</a></li>
+  <li><a href="#schemadiff" id="toc-schemadiff" class="nav-link" data-scroll-target="#schemadiff"><span class="header-section-number">11.1.1</span> SchemaDiff</a></li>
+  <li><a href="#constraint-and-kind-changes" id="toc-constraint-and-kind-changes" class="nav-link" data-scroll-target="#constraint-and-kind-changes"><span class="header-section-number">11.1.2</span> Constraint and Kind Changes</a></li>
+  <li><a href="#extended-change-types" id="toc-extended-change-types" class="nav-link" data-scroll-target="#extended-change-types"><span class="header-section-number">11.1.3</span> Extended Change Types</a></li>
+  <li><a href="#the-diff-function" id="toc-the-diff-function" class="nav-link" data-scroll-target="#the-diff-function"><span class="header-section-number">11.1.4</span> The diff Function</a></li>
+  <li><a href="#what-diff-does-not-do" id="toc-what-diff-does-not-do" class="nav-link" data-scroll-target="#what-diff-does-not-do"><span class="header-section-number">11.1.5</span> What diff Does Not Do</a></li>
   </ul></li>
-  <li><a href="#protocol-aware-classification" id="toc-protocol-aware-classification" class="nav-link" data-scroll-target="#protocol-aware-classification"><span class="header-section-number">11.4</span> Protocol-Aware Classification</a>
+  <li><a href="#protocol-aware-classification" id="toc-protocol-aware-classification" class="nav-link" data-scroll-target="#protocol-aware-classification"><span class="header-section-number">11.2</span> Protocol-Aware Classification</a>
   <ul class="collapse">
-  <li><a href="#breaking-changes" id="toc-breaking-changes" class="nav-link" data-scroll-target="#breaking-changes"><span class="header-section-number">11.4.1</span> Breaking Changes</a></li>
-  <li><a href="#non-breaking-changes" id="toc-non-breaking-changes" class="nav-link" data-scroll-target="#non-breaking-changes"><span class="header-section-number">11.4.2</span> Non-Breaking Changes</a></li>
-  <li><a href="#constraint-direction" id="toc-constraint-direction" class="nav-link" data-scroll-target="#constraint-direction"><span class="header-section-number">11.4.3</span> Constraint Direction</a></li>
-  <li><a href="#compatibility-levels" id="toc-compatibility-levels" class="nav-link" data-scroll-target="#compatibility-levels"><span class="header-section-number">11.4.4</span> Compatibility Levels</a></li>
+  <li><a href="#breaking-changes" id="toc-breaking-changes" class="nav-link" data-scroll-target="#breaking-changes"><span class="header-section-number">11.2.1</span> Breaking Changes</a></li>
+  <li><a href="#non-breaking-changes" id="toc-non-breaking-changes" class="nav-link" data-scroll-target="#non-breaking-changes"><span class="header-section-number">11.2.2</span> Non-Breaking Changes</a></li>
+  <li><a href="#constraint-direction" id="toc-constraint-direction" class="nav-link" data-scroll-target="#constraint-direction"><span class="header-section-number">11.2.3</span> Constraint Direction</a></li>
+  <li><a href="#compatibility-levels" id="toc-compatibility-levels" class="nav-link" data-scroll-target="#compatibility-levels"><span class="header-section-number">11.2.4</span> Compatibility Levels</a></li>
   </ul></li>
-  <li><a href="#reporting" id="toc-reporting" class="nav-link" data-scroll-target="#reporting"><span class="header-section-number">11.5</span> Reporting</a>
+  <li><a href="#reporting" id="toc-reporting" class="nav-link" data-scroll-target="#reporting"><span class="header-section-number">11.3</span> Reporting</a>
   <ul class="collapse">
-  <li><a href="#text-reports" id="toc-text-reports" class="nav-link" data-scroll-target="#text-reports"><span class="header-section-number">11.5.1</span> Text Reports</a></li>
-  <li><a href="#json-reports" id="toc-json-reports" class="nav-link" data-scroll-target="#json-reports"><span class="header-section-number">11.5.2</span> JSON Reports</a></li>
-  <li><a href="#choosing-a-report-format" id="toc-choosing-a-report-format" class="nav-link" data-scroll-target="#choosing-a-report-format"><span class="header-section-number">11.5.3</span> Choosing a Report Format</a></li>
+  <li><a href="#text-reports" id="toc-text-reports" class="nav-link" data-scroll-target="#text-reports"><span class="header-section-number">11.3.1</span> Text Reports</a></li>
+  <li><a href="#json-reports" id="toc-json-reports" class="nav-link" data-scroll-target="#json-reports"><span class="header-section-number">11.3.2</span> JSON Reports</a></li>
+  <li><a href="#choosing-a-report-format" id="toc-choosing-a-report-format" class="nav-link" data-scroll-target="#choosing-a-report-format"><span class="header-section-number">11.3.3</span> Choosing a Report Format</a></li>
   </ul></li>
-  <li><a href="#relationship-to-migrations-and-lenses" id="toc-relationship-to-migrations-and-lenses" class="nav-link" data-scroll-target="#relationship-to-migrations-and-lenses"><span class="header-section-number">11.6</span> Relationship to Migrations and Lenses</a></li>
-  <li><a href="#theoretical-foundations" id="toc-theoretical-foundations" class="nav-link" data-scroll-target="#theoretical-foundations"><span class="header-section-number">11.7</span> Theoretical Foundations</a></li>
-  <li><a href="#worked-example-evaluating-an-atproto-schema-change" id="toc-worked-example-evaluating-an-atproto-schema-change" class="nav-link" data-scroll-target="#worked-example-evaluating-an-atproto-schema-change"><span class="header-section-number">11.8</span> Worked Example: Evaluating an ATProto Schema Change</a></li>
-  <li><a href="#integration-with-ci" id="toc-integration-with-ci" class="nav-link" data-scroll-target="#integration-with-ci"><span class="header-section-number">11.9</span> Integration with CI</a></li>
-  <li><a href="#performance-considerations" id="toc-performance-considerations" class="nav-link" data-scroll-target="#performance-considerations"><span class="header-section-number">11.10</span> Performance Considerations</a></li>
-  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">11.11</span> Error Handling</a></li>
-  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">11.12</span> Module Map</a></li>
-  <li><a href="#testing-strategy" id="toc-testing-strategy" class="nav-link" data-scroll-target="#testing-strategy"><span class="header-section-number">11.13</span> Testing Strategy</a></li>
+  <li><a href="#relationship-to-migrations-and-lenses" id="toc-relationship-to-migrations-and-lenses" class="nav-link" data-scroll-target="#relationship-to-migrations-and-lenses"><span class="header-section-number">11.4</span> Relationship to Migrations and Lenses</a></li>
+  <li><a href="#integration-with-ci" id="toc-integration-with-ci" class="nav-link" data-scroll-target="#integration-with-ci"><span class="header-section-number">11.5</span> Integration with CI</a></li>
+  <li><a href="#performance-considerations" id="toc-performance-considerations" class="nav-link" data-scroll-target="#performance-considerations"><span class="header-section-number">11.6</span> Performance Considerations</a></li>
+  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">11.7</span> Error Handling</a></li>
+  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">11.8</span> Module Map</a></li>
+  <li><a href="#testing-strategy" id="toc-testing-strategy" class="nav-link" data-scroll-target="#testing-strategy"><span class="header-section-number">11.9</span> Testing Strategy</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/11-breaking-changes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -645,9 +663,9 @@ div.csl-indent {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/11-breaking-changes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/11-breaking-changes.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-breaking-changes" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check — Breaking Change Detection</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-breaking-changes" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -664,17 +682,7 @@ div.csl-indent {
 </header>
 
 
-<p>The <code>panproto-check</code> crate analyzes schema evolution to determine whether a proposed change is backward-compatible. It produces detailed diagnostics when breaking changes are found, enabling CI pipelines and developer tooling to catch incompatible migrations before they reach production.</p>
-<p>This chapter covers the three-step detection pipeline: structural diffing, protocol-aware classification, and human/machine-readable reporting.</p>
-<p>The crate lives at <code>crates/panproto-check</code> and is published as <code>panproto-check</code> on crates.io. It depends on <code>panproto-schema</code> for schema and protocol types, <code>rustc-hash</code> for fast set operations, and <code>serde_json</code> for JSON report output.</p>
-<section id="why-breaking-change-detection-matters" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="why-breaking-change-detection-matters"><span class="header-section-number">11.1</span> Why Breaking Change Detection Matters</h2>
-<p>Schema evolution is routine in long-lived systems. An API adds a field, a database drops a column, a serialization format renames a message. Most of these changes are safe—existing consumers can ignore additions and tolerate relaxed constraints. But some changes are dangerous: removing a field that downstream consumers depend on, tightening a constraint that existing data violates, or changing a field’s type in an incompatible way.</p>
-<p>panproto’s breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <code>schema check</code> CLI command, and into programmatic workflows via the Rust and TypeScript APIs. Tools like <a href="https://buf.build/">Buf</a> provide similar capabilities for Protobuf; panproto generalizes this to all supported protocols.</p>
-</section>
-<section id="the-detection-pipeline" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="the-detection-pipeline"><span class="header-section-number">11.2</span> The Detection Pipeline</h2>
-<p>Breaking change detection follows a clean three-stage pipeline:</p>
+<p>The check pipeline is a three-stage function composition: <span class="math inline">\(\mathrm{report} \circ \mathrm{classify} \circ \mathrm{diff}\)</span>. Given two schemas <span class="math inline">\(S_1\)</span> and <span class="math inline">\(S_2\)</span> and a protocol <span class="math inline">\(P\)</span>, <code>diff</code> computes the structural delta, <code>classify</code> assigns severity based on <span class="math inline">\(P\)</span>’s edge rules and constraint sorts, and <code>report</code> renders the result. For example, removing a vertex is always breaking; adding a vertex is always non-breaking; tightening a constraint is breaking only when the protocol recognizes that constraint sort.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -695,18 +703,10 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<p>Each stage has a single responsibility:</p>
-<ol type="1">
-<li><strong><code>diff()</code></strong> compares two schemas structurally, recording every added, removed, or modified element. This stage is protocol-agnostic.</li>
-<li><strong><code>classify()</code></strong> interprets the diff through the protocol’s rules, separating breaking from non-breaking changes. This stage is protocol-aware.</li>
-<li><strong><code>report_text()</code> / <code>report_json()</code></strong> renders the classification into a human-readable summary or a machine-consumable JSON value. This stage is format-aware.</li>
-</ol>
-<p>The separation is intentional: the same <code>SchemaDiff</code> can be classified differently for different protocols, and the same <code>CompatReport</code> can be rendered in multiple formats. Each stage is independently testable.</p>
-</section>
-<section id="structural-diffing" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="structural-diffing"><span class="header-section-number">11.3</span> Structural Diffing</h2>
-<section id="schemadiff" class="level3" data-number="11.3.1">
-<h3 data-number="11.3.1" class="anchored" data-anchor-id="schemadiff"><span class="header-section-number">11.3.1</span> SchemaDiff</h3>
+<section id="structural-diffing" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="structural-diffing"><span class="header-section-number">11.1</span> Structural Diffing</h2>
+<section id="schemadiff" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="schemadiff"><span class="header-section-number">11.1.1</span> SchemaDiff</h3>
 <p>The <code>SchemaDiff</code> struct records every structural difference between two schema revisions:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="14"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 13;"><span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">/// A structural diff between two schemas.</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -790,10 +790,10 @@ div.csl-indent {
 <span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Nominal flag changes: `(vertex_id, old_value, new_value)`.</span></span>
 <span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> nominal_changes<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">bool</span><span class="op">,</span> <span class="dt">bool</span>)<span class="op">&gt;,</span></span>
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The struct captures changes across all 13 schema fields: vertices, edges, constraints, hyper-edges, required edges, NSIDs, variants, orderings, recursion points, usage modes, spans, and nominal flags. Each category is a simple collection; the diff does not assign severity to any change.</p>
+<p>The struct captures changes across all 13 schema fields: vertices, edges, constraints, hyper-edges, required edges, NSIDs, variants, orderings, recursion points, usage modes, spans, and nominal flags. Each category is a simple collection; the diff doesn’t assign severity to any change.</p>
 </section>
-<section id="constraint-and-kind-changes" class="level3" data-number="11.3.2">
-<h3 data-number="11.3.2" class="anchored" data-anchor-id="constraint-and-kind-changes"><span class="header-section-number">11.3.2</span> Constraint and Kind Changes</h3>
+<section id="constraint-and-kind-changes" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="constraint-and-kind-changes"><span class="header-section-number">11.1.2</span> Constraint and Kind Changes</h3>
 <p>Constraint changes are captured at a finer granularity through <code>ConstraintDiff</code>, <code>ConstraintChange</code>, and <code>KindChange</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="97"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 96;"><span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="co">/// Describes how constraints on a single vertex changed.</span></span>
 <span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
@@ -828,10 +828,10 @@ div.csl-indent {
 <span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> new_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>ConstraintDiff</code> records three sub-categories for each vertex: constraints that were added (present in new but not old), constraints that were removed (present in old but not new), and constraints whose value changed (present in both but with different values). The <code>ConstraintChange</code> struct captures the sort, old value, and new value for each changed constraint, providing enough information for the classifier to determine the direction of change.</p>
-<p><code>KindChange</code> records vertices whose <code>kind</code> field changed between versions—for example, a vertex that was <code>"string"</code> in the old schema but <code>"integer"</code> in the new schema.</p>
+<p><code>KindChange</code> records vertices whose <code>kind</code> field changed between versions (e.g., a vertex that was <code>"string"</code> in the old schema but <code>"integer"</code> in the new schema).</p>
 </section>
-<section id="extended-change-types" class="level3" data-number="11.3.3">
-<h3 data-number="11.3.3" class="anchored" data-anchor-id="extended-change-types"><span class="header-section-number">11.3.3</span> Extended Change Types</h3>
+<section id="extended-change-types" class="level3" data-number="11.1.3">
+<h3 data-number="11.1.3" class="anchored" data-anchor-id="extended-change-types"><span class="header-section-number">11.1.3</span> Extended Change Types</h3>
 <p>The diff also tracks fine-grained changes to hyper-edges, variants, recursion points, and spans:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="130"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 129;"><span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="co">/// Records changes to a hyper-edge's kind, signature, or parent label.</span></span>
 <span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> <span class="bu">PartialEq</span><span class="op">,</span> <span class="bu">Eq</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
@@ -885,9 +885,8 @@ div.csl-indent {
 <span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> right_change<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>(<span class="dt">String</span><span class="op">,</span> <span class="dt">String</span>)<span class="op">&gt;,</span></span>
 <span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="the-diff-function" class="level3" data-number="11.3.4">
-<h3 data-number="11.3.4" class="anchored" data-anchor-id="the-diff-function"><span class="header-section-number">11.3.4</span> The diff Function</h3>
-<p>The <code>diff</code> function computes this structural comparison:</p>
+<section id="the-diff-function" class="level3" data-number="11.1.4">
+<h3 data-number="11.1.4" class="anchored" data-anchor-id="the-diff-function"><span class="header-section-number">11.1.4</span> The diff Function</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="182"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 181;"><span id="cb4-182"><a href="#cb4-182" aria-hidden="true" tabindex="-1"></a><span class="co">/// Compute a structural diff between two schemas.</span></span>
 <span id="cb4-183"><a href="#cb4-183" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
 <span id="cb4-184"><a href="#cb4-184" aria-hidden="true" tabindex="-1"></a><span class="co">/// Compares every schema field: vertices, edges, constraints, hyper-edges,</span></span>
@@ -911,23 +910,22 @@ Note
 </div>
 </div>
 </section>
-<section id="what-diff-does-not-do" class="level3" data-number="11.3.5">
-<h3 data-number="11.3.5" class="anchored" data-anchor-id="what-diff-does-not-do"><span class="header-section-number">11.3.5</span> What diff Does Not Do</h3>
-<p>The diff is purely structural. It does not:</p>
+<section id="what-diff-does-not-do" class="level3" data-number="11.1.5">
+<h3 data-number="11.1.5" class="anchored" data-anchor-id="what-diff-does-not-do"><span class="header-section-number">11.1.5</span> What diff Does Not Do</h3>
+<p>The diff is purely structural. It doesn’t:</p>
 <ul>
-<li>Determine whether a change is breaking or non-breaking (that is <code>classify</code>’s job).</li>
-<li>Track renames (a rename appears as a removal + addition of different vertices/edges).</li>
+<li>Determine whether a change is breaking or non-breaking (that’s <code>classify</code>’s job).</li>
+<li>Track renames (a rename appears as a removal plus addition of different vertices/edges).</li>
 <li>Detect semantic equivalences (two schemas that are structurally different but semantically equivalent will produce a non-empty diff).</li>
 </ul>
 <p>If you need rename detection, use the migration engine (<a href="09-migration-engine.html" class="quarto-xref"><span>Chapter 9</span></a>) to compute an explicit mapping, then use <code>classify</code> on the migration’s implied diff.</p>
 </section>
 </section>
-<section id="protocol-aware-classification" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="protocol-aware-classification"><span class="header-section-number">11.4</span> Protocol-Aware Classification</h2>
-<p>Classification is where protocol semantics come into play. The <code>classify</code> function takes a <code>SchemaDiff</code> and a <code>Protocol</code> and determines the severity of each change based on the protocol’s edge rules and constraint sorts.</p>
-<section id="breaking-changes" class="level3" data-number="11.4.1">
-<h3 data-number="11.4.1" class="anchored" data-anchor-id="breaking-changes"><span class="header-section-number">11.4.1</span> Breaking Changes</h3>
-<p>The following changes are always or conditionally classified as breaking:</p>
+<section id="protocol-aware-classification" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="protocol-aware-classification"><span class="header-section-number">11.2</span> Protocol-Aware Classification</h2>
+<p>Classification is where protocol semantics enter. The <code>classify</code> function takes a <code>SchemaDiff</code> and a <code>Protocol</code> and determines the severity of each change based on the protocol’s edge rules and constraint sorts.</p>
+<section id="breaking-changes" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="breaking-changes"><span class="header-section-number">11.2.1</span> Breaking Changes</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -969,12 +967,12 @@ Note
 </tr>
 </tbody>
 </table>
-<p>Vertex removal is unconditionally breaking because any consumer relying on that vertex—reading a field, following an edge, anchoring a node—will fail.</p>
+<p>Vertex removal is unconditionally breaking because any consumer relying on that vertex (reading a field, following an edge, anchoring a node) will fail.</p>
 <p>Edge removal is protocol-dependent. The protocol’s <code>edge_rules</code> declare which edge kinds are structurally significant. For example, JSON Schema protocols declare <code>"prop"</code> edges as governed; SQL protocols declare <code>"fk"</code> (foreign key) edges. Removing a governed edge is breaking; removing an ungoverned edge (e.g., a metadata annotation) is not.</p>
-<p>Kind changes are unconditionally breaking. Changing a vertex from <code>"string"</code> to <code>"integer"</code> means that existing string data cannot be interpreted as integers without an explicit coercion.</p>
+<p>Kind changes are unconditionally breaking. Changing a vertex from <code>"string"</code> to <code>"integer"</code> means that existing string data can’t be interpreted as integers without an explicit coercion.</p>
 </section>
-<section id="non-breaking-changes" class="level3" data-number="11.4.2">
-<h3 data-number="11.4.2" class="anchored" data-anchor-id="non-breaking-changes"><span class="header-section-number">11.4.2</span> Non-Breaking Changes</h3>
+<section id="non-breaking-changes" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="non-breaking-changes"><span class="header-section-number">11.2.2</span> Non-Breaking Changes</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1005,16 +1003,29 @@ Note
 </tr>
 </tbody>
 </table>
-<p>Vertex and edge additions are the bread and butter of backward-compatible evolution. Adding an optional field to a JSON Schema, a new column to a SQL table, or a new message type to a Protobuf definition—all of these are non-breaking because existing consumers simply ignore the additions.</p>
-<p>Constraint relaxation is non-breaking because existing data was valid under the tighter constraint and therefore remains valid under the looser one. Raising <code>maxLength</code> from 300 to 3000, for example, does not invalidate any existing strings.</p>
+<p>Vertex and edge additions are the bread and butter of backward-compatible evolution. Adding an optional field to a JSON Schema, a new column to a SQL table, or a new message type to a Protobuf definition: all of these are non-breaking because existing consumers simply ignore the additions.</p>
+<p>Constraint relaxation is non-breaking because existing data was valid under the tighter constraint and therefore remains valid under the looser one. Raising <code>maxLength</code> from 300 to 3000, for example, doesn’t invalidate any existing strings.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>What about edge removal for an ungoverned edge kind?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the protocol doesn’t have an <code>EdgeRule</code> for the removed edge’s kind, the removal is classified as non-breaking. This is intentional: ungoverned edges are considered metadata or annotations, not structural contracts. If you want all edge removals to be breaking, add a catch-all edge rule to your protocol.</p>
+</div>
+</div>
 </section>
-<section id="constraint-direction" class="level3" data-number="11.4.3">
-<h3 data-number="11.4.3" class="anchored" data-anchor-id="constraint-direction"><span class="header-section-number">11.4.3</span> Constraint Direction</h3>
+<section id="constraint-direction" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="constraint-direction"><span class="header-section-number">11.2.3</span> Constraint Direction</h3>
 <p>For numeric constraints, the classification engine determines direction automatically:</p>
 <ul>
-<li><strong>Upper bounds</strong> (<code>maxLength</code>, <code>maxSize</code>, <code>maximum</code>, <code>maxGraphemes</code>): a <em>smaller</em> new value is tightening (breaking); a <em>larger</em> new value is relaxing (non-breaking).</li>
-<li><strong>Lower bounds</strong> (<code>minLength</code>, <code>minimum</code>): a <em>larger</em> new value is tightening (breaking); a <em>smaller</em> new value is relaxing (non-breaking).</li>
-<li><strong>Other constraints</strong>: any value change is treated as tightening (breaking), since the engine cannot infer the direction for arbitrary constraint sorts without additional metadata.</li>
+<li><strong>Upper bounds</strong> (<code>maxLength</code>, <code>maxSize</code>, <code>maximum</code>, <code>maxGraphemes</code>): a smaller new value is tightening (breaking); a larger new value is relaxing (non-breaking).</li>
+<li><strong>Lower bounds</strong> (<code>minLength</code>, <code>minimum</code>): a larger new value is tightening (breaking); a smaller new value is relaxing (non-breaking).</li>
+<li><strong>Other constraints</strong>: any value change is treated as tightening (breaking), since the engine can’t infer the direction for arbitrary constraint sorts without additional metadata.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1030,8 +1041,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="compatibility-levels" class="level3" data-number="11.4.4">
-<h3 data-number="11.4.4" class="anchored" data-anchor-id="compatibility-levels"><span class="header-section-number">11.4.4</span> Compatibility Levels</h3>
+<section id="compatibility-levels" class="level3" data-number="11.2.4">
+<h3 data-number="11.2.4" class="anchored" data-anchor-id="compatibility-levels"><span class="header-section-number">11.2.4</span> Compatibility Levels</h3>
 <p>The <code>CompatReport</code> assigns one of three implicit compatibility levels based on its contents:</p>
 <ul>
 <li><strong>Fully compatible</strong>: the <code>breaking</code> and <code>non_breaking</code> lists are both empty. The schemas are structurally identical.</li>
@@ -1048,16 +1059,16 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Classification is protocol-dependent. The same <code>SchemaDiff</code> can produce different <code>CompatReport</code> results for different protocols. For example, removing an edge with kind <code>"fk"</code> is breaking under the SQL protocol (which has an edge rule for foreign keys) but might be non-breaking under a protocol that does not govern that edge kind. Always pass the correct protocol to <code>classify</code>.</p>
+<p>Classification is protocol-dependent. The same <code>SchemaDiff</code> can produce different <code>CompatReport</code> results for different protocols. For example, removing an edge with kind <code>"fk"</code> is breaking under the SQL protocol (which has an edge rule for foreign keys) but might be non-breaking under a protocol that doesn’t govern that edge kind. Always pass the correct protocol to <code>classify</code>.</p>
 </div>
 </div>
 </section>
 </section>
-<section id="reporting" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="reporting"><span class="header-section-number">11.5</span> Reporting</h2>
+<section id="reporting" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="reporting"><span class="header-section-number">11.3</span> Reporting</h2>
 <p>The report module converts a <code>CompatReport</code> into output suitable for humans or machines.</p>
-<section id="text-reports" class="level3" data-number="11.5.1">
-<h3 data-number="11.5.1" class="anchored" data-anchor-id="text-reports"><span class="header-section-number">11.5.1</span> Text Reports</h3>
+<section id="text-reports" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="text-reports"><span class="header-section-number">11.3.1</span> Text Reports</h3>
 <p><code>report_text</code> produces a plain-text summary suitable for terminal display:</p>
 <ol type="1">
 <li>A compatibility verdict: <code>"COMPATIBLE: No breaking changes detected."</code> or <code>"INCOMPATIBLE: Breaking changes detected."</code></li>
@@ -1067,8 +1078,8 @@ Important
 </ol>
 <p>This is what the <code>schema check</code> CLI command displays by default.</p>
 </section>
-<section id="json-reports" class="level3" data-number="11.5.2">
-<h3 data-number="11.5.2" class="anchored" data-anchor-id="json-reports"><span class="header-section-number">11.5.2</span> JSON Reports</h3>
+<section id="json-reports" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="json-reports"><span class="header-section-number">11.3.2</span> JSON Reports</h3>
 <p><code>report_json</code> produces a <code>serde_json::Value</code> with three fields:</p>
 <ul>
 <li><code>compatible</code> (bool): whether the migration is backward-compatible.</li>
@@ -1077,13 +1088,26 @@ Important
 </ul>
 <p>This format is consumed by CI integrations (e.g., GitHub Actions annotations), the TypeScript SDK, and any tooling that needs machine-readable compatibility verdicts.</p>
 </section>
-<section id="choosing-a-report-format" class="level3" data-number="11.5.3">
-<h3 data-number="11.5.3" class="anchored" data-anchor-id="choosing-a-report-format"><span class="header-section-number">11.5.3</span> Choosing a Report Format</h3>
+<section id="choosing-a-report-format" class="level3" data-number="11.3.3">
+<h3 data-number="11.3.3" class="anchored" data-anchor-id="choosing-a-report-format"><span class="header-section-number">11.3.3</span> Choosing a Report Format</h3>
 <p>Use <code>report_text</code> for developer-facing output (CLI, pull request comments). Use <code>report_json</code> for machine-facing output (CI gates, automated migration generators, monitoring dashboards).</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>How do you integrate the JSON report with GitHub Actions?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Parse the JSON output and create inline annotations using the GitHub Checks API. The <code>breaking</code> array entries contain vertex IDs and edge descriptions that can be mapped back to source locations if your schema files have line-number metadata. See the CI chapter (Chapter 17) for a working example.</p>
+</div>
+</div>
 </section>
 </section>
-<section id="relationship-to-migrations-and-lenses" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="relationship-to-migrations-and-lenses"><span class="header-section-number">11.6</span> Relationship to Migrations and Lenses</h2>
+<section id="relationship-to-migrations-and-lenses" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="relationship-to-migrations-and-lenses"><span class="header-section-number">11.4</span> Relationship to Migrations and Lenses</h2>
 <p>Breaking change detection is complementary to the migration and lens systems:</p>
 <ul>
 <li><strong>Before migration</strong>: run <code>diff</code> + <code>classify</code> to determine whether a migration is safe. If the report says “breaking,” the developer knows to provide a migration with resolvers, supply default values, or use a lens with complement tracking.</li>
@@ -1092,92 +1116,38 @@ Important
 <li><strong>In documentation</strong>: the text report can be included in changelog entries or release notes to communicate the nature of schema changes to downstream consumers.</li>
 </ul>
 </section>
-<section id="theoretical-foundations" class="level2" data-number="11.7">
-<h2 data-number="11.7" class="anchored" data-anchor-id="theoretical-foundations"><span class="header-section-number">11.7</span> Theoretical Foundations</h2>
-<p>The distinction between breaking and non-breaking changes corresponds to the distinction between additive and subtractive graph morphisms.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> An additive change preserves all existing structure and extends it; a subtractive change may leave “dangling” references to removed elements.</p>
-<p>The protocol-dependent classification extends this by relativizing “structural significance” to the protocol’s edge rules. panproto checks compatibility against the protocol’s theory rather than a fixed set of rules, so new protocols participate in breaking change detection automatically once their edge rules and constraint sorts are defined.</p>
-<p>For a hands-on introduction to detecting breaking changes, see <a href="https://panproto.dev/tutorial/chapters/09-breaking-changes.html">the tutorial</a>.</p>
-</section>
-<section id="worked-example-evaluating-an-atproto-schema-change" class="level2" data-number="11.8">
-<h2 data-number="11.8" class="anchored" data-anchor-id="worked-example-evaluating-an-atproto-schema-change"><span class="header-section-number">11.8</span> Worked Example: Evaluating an ATProto Schema Change</h2>
-<p>Consider an ATProto lexicon change that:</p>
-<ol type="1">
-<li>Adds a new optional field <code>displayName</code> (vertex addition).</li>
-<li>Reduces <code>maxGraphemes</code> on the <code>description</code> field from 3000 to 300 (constraint tightening).</li>
-<li>Removes the deprecated <code>legacyId</code> field (vertex removal).</li>
-</ol>
-<p>Running the pipeline:</p>
-<p><strong>diff</strong> produces a <code>SchemaDiff</code> with:</p>
-<ul>
-<li><code>added_vertices</code>: <code>["post.displayName"]</code></li>
-<li><code>removed_vertices</code>: <code>["post.legacyId"]</code></li>
-<li><code>added_edges</code>: the edge from <code>post</code> to <code>post.displayName</code></li>
-<li><code>removed_edges</code>: the edge from <code>post</code> to <code>post.legacyId</code></li>
-<li><code>modified_constraints</code>: <code>maxGraphemes</code> on <code>post.description</code> changed from <code>"3000"</code> to <code>"300"</code></li>
-<li><code>kind_changes</code>: empty (no type changes)</li>
-</ul>
-<p><strong>classify</strong> with the ATProto protocol produces a <code>CompatReport</code> with:</p>
-<ul>
-<li><strong>Breaking changes</strong> (3):
-<ol type="1">
-<li><code>RemovedVertex { vertex_id: "post.legacyId" }</code></li>
-<li><code>RemovedEdge { src: "post", tgt: "post.legacyId", kind: "prop", name: Some("legacyId") }</code> (because <code>"prop"</code> is governed by ATProto’s edge rules)</li>
-<li><code>ConstraintTightened { vertex_id: "post.description", sort: "maxGraphemes", old_value: "3000", new_value: "300" }</code></li>
-</ol></li>
-<li><strong>Non-breaking changes</strong> (2):
-<ol type="1">
-<li><code>AddedVertex { vertex_id: "post.displayName" }</code></li>
-<li><code>AddedEdge { src: "post", tgt: "post.displayName", kind: "prop", name: Some("displayName") }</code></li>
-</ol></li>
-<li><code>compatible</code>: <code>false</code></li>
-</ul>
-<p><strong>report_text</strong> output:</p>
-<pre><code>INCOMPATIBLE: Breaking changes detected.
-
-Breaking changes (3):
-  1. Removed vertex: post.legacyId
-  2. Removed edge: post -&gt; post.legacyId (prop, "legacyId")
-  3. Constraint tightened: post.description maxGraphemes 3000 -&gt; 300
-
-Non-breaking changes (2):
-  1. Added vertex: post.displayName
-  2. Added edge: post -&gt; post.displayName (prop, "displayName")</code></pre>
-<p>This report tells the developer that they need to either revert the breaking changes or provide a migration/lens that handles the incompatibility.</p>
-</section>
-<section id="integration-with-ci" class="level2" data-number="11.9">
-<h2 data-number="11.9" class="anchored" data-anchor-id="integration-with-ci"><span class="header-section-number">11.9</span> Integration with CI</h2>
-<p>The <code>schema check</code> CLI command wraps this pipeline for use in CI:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="integration-with-ci" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="integration-with-ci"><span class="header-section-number">11.5</span> Integration with CI</h2>
+<p>The <code>schema check</code> CLI command wraps this pipeline:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Exit codes:</p>
 <ul>
 <li><code>0</code>: fully compatible or backward compatible.</li>
 <li><code>1</code>: breaking changes detected.</li>
 <li><code>2</code>: error (e.g., malformed schema, unknown protocol).</li>
 </ul>
-<p>For GitHub Actions, the JSON report can be parsed to create inline annotations on the pull request, highlighting the exact fields that changed and whether each change is breaking.</p>
 </section>
-<section id="performance-considerations" class="level2" data-number="11.10">
-<h2 data-number="11.10" class="anchored" data-anchor-id="performance-considerations"><span class="header-section-number">11.10</span> Performance Considerations</h2>
+<section id="performance-considerations" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="performance-considerations"><span class="header-section-number">11.6</span> Performance Considerations</h2>
 <p>The entire pipeline is designed to be fast enough for interactive use:</p>
 <ul>
-<li><strong><code>diff</code></strong> is O(|V_old| + |V_new| + |E_old| + |E_new| + |C_old| + |C_new|) where V, E, and C are vertex, edge, and constraint counts. For typical schemas with hundreds of vertices, this completes in microseconds.</li>
-<li><strong><code>classify</code></strong> is O(|diff changes|), iterating once over each change category.</li>
-<li><strong><code>report_text</code></strong> and <strong><code>report_json</code></strong> are O(|report entries|).</li>
+<li><strong><code>diff</code></strong> is <span class="math inline">\(O(|V_{\mathrm{old}}| + |V_{\mathrm{new}}| + |E_{\mathrm{old}}| + |E_{\mathrm{new}}| + |C_{\mathrm{old}}| + |C_{\mathrm{new}}|)\)</span> where <span class="math inline">\(V\)</span>, <span class="math inline">\(E\)</span>, and <span class="math inline">\(C\)</span> are vertex, edge, and constraint counts. For typical schemas with hundreds of vertices, this completes in microseconds.</li>
+<li><strong><code>classify</code></strong> is <span class="math inline">\(O(|\mathrm{diff}|)\)</span>, iterating once over each change category.</li>
+<li><strong><code>report_text</code></strong> and <strong><code>report_json</code></strong> are <span class="math inline">\(O(|\mathrm{report}|)\)</span>.</li>
 </ul>
 <p>The pipeline can be run on every commit in CI without measurable impact on build times.</p>
 </section>
-<section id="error-handling" class="level2" data-number="11.11">
-<h2 data-number="11.11" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">11.11</span> Error Handling</h2>
+<section id="error-handling" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">11.7</span> Error Handling</h2>
 <p>The <code>panproto-check</code> crate defines a <code>CheckError</code> type for failures that prevent the pipeline from completing:</p>
 <ul>
 <li>Schema deserialization failures (malformed input).</li>
 <li>Protocol lookup failures (unknown protocol name).</li>
 </ul>
-<p>A <code>CompatReport</code> with breaking changes is <em>not</em> an error—it is a successful analysis that found incompatibilities. The error types cover only cases where the analysis itself cannot be performed.</p>
+<p>A <code>CompatReport</code> with breaking changes is <em>not</em> an error. It’s a successful analysis that found incompatibilities. The error types cover only cases where the analysis itself can’t be performed.</p>
 </section>
-<section id="module-map" class="level2" data-number="11.12">
-<h2 data-number="11.12" class="anchored" data-anchor-id="module-map"><span class="header-section-number">11.12</span> Module Map</h2>
-<p>The crate is organized into the following modules:</p>
+<section id="module-map" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="module-map"><span class="header-section-number">11.8</span> Module Map</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -1216,32 +1186,18 @@ Non-breaking changes (2):
 </table>
 <p>All public types are re-exported from the crate root.</p>
 </section>
-<section id="testing-strategy" class="level2" data-number="11.13">
-<h2 data-number="11.13" class="anchored" data-anchor-id="testing-strategy"><span class="header-section-number">11.13</span> Testing Strategy</h2>
+<section id="testing-strategy" class="level2" data-number="11.9">
+<h2 data-number="11.9" class="anchored" data-anchor-id="testing-strategy"><span class="header-section-number">11.9</span> Testing Strategy</h2>
 <p>The test suite validates each pipeline stage:</p>
 <ul>
-<li><strong>Diff tests</strong> verify that specific structural changes (vertex addition/removal, edge addition/removal, constraint modification, kind change) produce the expected <code>SchemaDiff</code> entries. An important invariant is that diffing identical schemas produces an empty diff.</li>
-<li><strong>Classification tests</strong> verify that breaking and non-breaking changes are correctly assigned based on protocol edge rules and constraint sorts. Tests cover edge cases like removing an edge whose kind is not governed by any edge rule (should be non-breaking) and tightening a constraint whose sort is not recognized by the protocol (should be ignored).</li>
+<li><strong>Diff tests</strong> verify that specific structural changes (vertex addition/removal, edge addition/removal, constraint modification, kind change) produce the expected <code>SchemaDiff</code> entries. An important invariant: diffing identical schemas produces an empty diff.</li>
+<li><strong>Classification tests</strong> verify that breaking and non-breaking changes are correctly assigned based on protocol edge rules and constraint sorts. Tests cover edge cases like removing an edge whose kind isn’t governed by any edge rule (should be non-breaking) and tightening a constraint whose sort isn’t recognized by the protocol (should be ignored).</li>
 <li><strong>Report tests</strong> verify that text and JSON output formats are correctly structured and contain the expected information.</li>
 </ul>
 
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-ehrig2006" class="csl-entry" role="listitem">
-Ehrig, Hartmut, Karsten Ehrig, Ulrike Prange, and Gabriele Taentzer. 2006. <em>Fundamentals of Algebraic Graph Transformation</em>. Monographs in Theoretical Computer Science. Springer. <a href="https://doi.org/10.1007/3-540-31188-2">https://doi.org/10.1007/3-540-31188-2</a>.
-</div>
-<div id="ref-lack2005" class="csl-entry" role="listitem">
-Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive Categories.”</span> <em>RAIRO – Theoretical Informatics and Applications</em> 39 (3): 511–45. <a href="https://doi.org/10.1051/ita:2005028">https://doi.org/10.1051/ita:2005028</a>.
-</div>
-</div>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>An additive change only adds new elements (vertices, edges, constraints), so existing consumers are unaffected. A subtractive change removes elements, which can leave “dangling” references — edges pointing to deleted vertices, or data anchored to removed schema elements. In the double-pushout framework <span class="citation" data-cites="ehrig2006">(<a href="#ref-ehrig2006" role="doc-biblioref">Ehrig et al. 2006</a>)</span>, these correspond to open and non-open morphisms respectively; the formal correctness proof uses adhesive category properties <span class="citation" data-cites="lack2005">(<a href="#ref-lack2005" role="doc-biblioref">Lack and Sobociński 2005</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1711,313 +1667,238 @@ Lack, Stephen, and Paweł Sobociński. 2005. <span>“Adhesive and Quasiadhesive
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/10-lenses.html" class="pagination-link" aria-label="panproto-lens --- Bidirectional Lenses">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens — Bidirectional Lenses</span></span>
+      <a href="../chapters/10-lenses.html" class="pagination-link" aria-label="panproto-lens: Bidirectional Lenses">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens: Bidirectional Lenses</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/12-protocols.html" class="pagination-link" aria-label="panproto-protocols --- Protocol Definitions">
-        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols — Protocol Definitions</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/12-protocols.html" class="pagination-link" aria-label="panproto-protocols: Protocol Definitions">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols: Protocol Definitions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-check --- Breaking Change Detection {#sec-breaking-changes}</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-check`</span> crate analyzes schema evolution to determine whether a proposed change is backward-compatible. It produces detailed diagnostics when breaking changes are found, enabling CI pipelines and developer tooling to catch incompatible migrations before they reach production.</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>This chapter covers the three-step detection pipeline: structural diffing, protocol-aware classification, and human/machine-readable reporting.</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>The crate lives at <span class="in">`crates/panproto-check`</span> and is published as <span class="in">`panproto-check`</span> on crates.io. It depends on <span class="in">`panproto-schema`</span> for schema and protocol types, <span class="in">`rustc-hash`</span> for fast set operations, and <span class="in">`serde_json`</span> for JSON report output.</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why Breaking Change Detection Matters</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>Schema evolution is routine in long-lived systems. An API adds a field, a database drops a column, a serialization format renames a message. Most of these changes are safe---existing consumers can ignore additions and tolerate relaxed constraints. But some changes are dangerous: removing a field that downstream consumers depend on, tightening a constraint that existing data violates, or changing a field's type in an incompatible way.</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>panproto's breaking change detection automates the process of distinguishing safe from dangerous changes. It integrates into CI pipelines via the <span class="in">`schema check`</span> CLI command, and into programmatic workflows via the Rust and TypeScript APIs. Tools like <span class="co">[</span><span class="ot">Buf</span><span class="co">](https://buf.build/)</span> provide similar capabilities for Protobuf; panproto generalizes this to all supported protocols.</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Detection Pipeline</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>Breaking change detection follows a clean three-stage pipeline:</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    O[Old Schema] --&gt; D[diff]</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    N[New Schema] --&gt; D</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    D --&gt; SD[SchemaDiff]</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    SD --&gt; CL[classify]</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    P[Protocol] --&gt; CL</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    CL --&gt; CR[CompatReport]</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    CR --&gt; RT[report_text]</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    CR --&gt; RJ[report_json]</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>Each stage has a single responsibility:</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`diff()`** compares two schemas structurally, recording every added, removed, or modified element. This stage is protocol-agnostic.</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`classify()`** interprets the diff through the protocol's rules, separating breaking from non-breaking changes. This stage is protocol-aware.</span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`report_text()` / `report_json()`** renders the classification into a human-readable summary or a machine-consumable JSON value. This stage is format-aware.</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>The separation is intentional: the same <span class="in">`SchemaDiff`</span> can be classified differently for different protocols, and the same <span class="in">`CompatReport`</span> can be rendered in multiple formats. Each stage is independently testable.</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Structural Diffing</span></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="fu">### SchemaDiff</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaDiff`</span> struct records every structural difference between two schema revisions:</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=14 end-line=95}</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>The struct captures changes across all 13 schema fields: vertices, edges, constraints, hyper-edges, required edges, NSIDs, variants, orderings, recursion points, usage modes, spans, and nominal flags. Each category is a simple collection; the diff does not assign severity to any change.</span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint and Kind Changes</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>Constraint changes are captured at a finer granularity through <span class="in">`ConstraintDiff`</span>, <span class="in">`ConstraintChange`</span>, and <span class="in">`KindChange`</span>:</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=97 end-line=128}</span></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="in">`ConstraintDiff`</span> records three sub-categories for each vertex: constraints that were added (present in new but not old), constraints that were removed (present in old but not new), and constraints whose value changed (present in both but with different values). The <span class="in">`ConstraintChange`</span> struct captures the sort, old value, and new value for each changed constraint, providing enough information for the classifier to determine the direction of change.</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="in">`KindChange`</span> records vertices whose <span class="in">`kind`</span> field changed between versions---for example, a vertex that was <span class="in">`"string"`</span> in the old schema but <span class="in">`"integer"`</span> in the new schema.</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### Extended Change Types</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>The diff also tracks fine-grained changes to hyper-edges, variants, recursion points, and spans:</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=130 end-line=180}</span></span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### The diff Function</span></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>The <span class="in">`diff`</span> function computes this structural comparison:</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=182 end-line=189}</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>The function compares all schema fields using set operations. Output is deterministic: added and removed lists are sorted for consistent comparison in tests and CI.</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>The diff operates on panproto's graph-level schema representation, not on any protocol-specific format. A <span class="in">`SchemaDiff`</span> between two JSON Schema versions and a <span class="in">`SchemaDiff`</span> between two Protobuf versions have the same type and structure. Protocol-specific semantics only enter at the classification stage.</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="fu">### What diff Does Not Do</span></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>The diff is purely structural. It does not:</span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Determine whether a change is breaking or non-breaking (that is <span class="in">`classify`</span>'s job).</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Track renames (a rename appears as a removal + addition of different vertices/edges).</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Detect semantic equivalences (two schemas that are structurally different but semantically equivalent will produce a non-empty diff).</span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>If you need rename detection, use the migration engine (@sec-migration-engine) to compute an explicit mapping, then use <span class="in">`classify`</span> on the migration's implied diff.</span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol-Aware Classification</span></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>Classification is where protocol semantics come into play. The <span class="in">`classify`</span> function takes a <span class="in">`SchemaDiff`</span> and a <span class="in">`Protocol`</span> and determines the severity of each change based on the protocol's edge rules and constraint sorts.</span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Breaking Changes</span></span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>The following changes are always or conditionally classified as breaking:</span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Change <span class="pp">|</span> When Breaking <span class="pp">|</span> Rationale <span class="pp">|</span></span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Vertex removal <span class="pp">|</span> Always <span class="pp">|</span> Consumers depending on the vertex will fail <span class="pp">|</span></span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edge removal <span class="pp">|</span> When the edge kind matches a protocol edge rule <span class="pp">|</span> Protocol-governed edges are part of the structural contract <span class="pp">|</span></span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Kind change <span class="pp">|</span> Always <span class="pp">|</span> Existing data may not conform to the new kind <span class="pp">|</span></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint tightening <span class="pp">|</span> When the sort is recognized by the protocol <span class="pp">|</span> Existing data may violate the tighter constraint <span class="pp">|</span></span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint addition <span class="pp">|</span> When the sort is recognized by the protocol <span class="pp">|</span> Existing data may violate the new constraint <span class="pp">|</span></span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>Vertex removal is unconditionally breaking because any consumer relying on that vertex---reading a field, following an edge, anchoring a node---will fail.</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>Edge removal is protocol-dependent. The protocol's <span class="in">`edge_rules`</span> declare which edge kinds are structurally significant. For example, JSON Schema protocols declare <span class="in">`"prop"`</span> edges as governed; SQL protocols declare <span class="in">`"fk"`</span> (foreign key) edges. Removing a governed edge is breaking; removing an ungoverned edge (e.g., a metadata annotation) is not.</span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>Kind changes are unconditionally breaking. Changing a vertex from <span class="in">`"string"`</span> to <span class="in">`"integer"`</span> means that existing string data cannot be interpreted as integers without an explicit coercion.</span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### Non-Breaking Changes</span></span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Change <span class="pp">|</span> Rationale <span class="pp">|</span></span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Vertex addition <span class="pp">|</span> New consumers can use it; existing consumers ignore it <span class="pp">|</span></span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edge addition <span class="pp">|</span> Additive change; existing consumers are unaffected <span class="pp">|</span></span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint relaxation <span class="pp">|</span> Existing data remains valid under looser constraints <span class="pp">|</span></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint removal <span class="pp">|</span> Equivalent to maximally relaxing the constraint <span class="pp">|</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>Vertex and edge additions are the bread and butter of backward-compatible evolution. Adding an optional field to a JSON Schema, a new column to a SQL table, or a new message type to a Protobuf definition---all of these are non-breaking because existing consumers simply ignore the additions.</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>Constraint relaxation is non-breaking because existing data was valid under the tighter constraint and therefore remains valid under the looser one. Raising <span class="in">`maxLength`</span> from 300 to 3000, for example, does not invalidate any existing strings.</span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint Direction</span></span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>For numeric constraints, the classification engine determines direction automatically:</span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Upper bounds** (<span class="in">`maxLength`</span>, <span class="in">`maxSize`</span>, <span class="in">`maximum`</span>, <span class="in">`maxGraphemes`</span>): a *smaller* new value is tightening (breaking); a *larger* new value is relaxing (non-breaking).</span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lower bounds** (<span class="in">`minLength`</span>, <span class="in">`minimum`</span>): a *larger* new value is tightening (breaking); a *smaller* new value is relaxing (non-breaking).</span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Other constraints**: any value change is treated as tightening (breaking), since the engine cannot infer the direction for arbitrary constraint sorts without additional metadata.</span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>If your protocol defines custom constraint sorts with known directionality, you can extend the <span class="in">`is_constraint_tightened`</span> function in <span class="in">`classify.rs`</span> to handle them. Unrecognized sorts default to "any change is breaking," which is the conservative choice.</span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### Compatibility Levels</span></span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>The <span class="in">`CompatReport`</span> assigns one of three implicit compatibility levels based on its contents:</span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fully compatible**: the <span class="in">`breaking`</span> and <span class="in">`non_breaking`</span> lists are both empty. The schemas are structurally identical.</span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Backward compatible**: the <span class="in">`breaking`</span> list is empty but <span class="in">`non_breaking`</span> is not. Existing consumers are safe; new consumers can use the additions. The <span class="in">`compatible`</span> field is <span class="in">`true`</span>.</span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Breaking**: the <span class="in">`breaking`</span> list is non-empty. At least one change is incompatible. The <span class="in">`compatible`</span> field is <span class="in">`false`</span>.</span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>Classification is protocol-dependent. The same <span class="in">`SchemaDiff`</span> can produce different <span class="in">`CompatReport`</span> results for different protocols. For example, removing an edge with kind <span class="in">`"fk"`</span> is breaking under the SQL protocol (which has an edge rule for foreign keys) but might be non-breaking under a protocol that does not govern that edge kind. Always pass the correct protocol to <span class="in">`classify`</span>.</span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reporting</span></span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>The report module converts a <span class="in">`CompatReport`</span> into output suitable for humans or machines.</span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Text Reports</span></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="in">`report_text`</span> produces a plain-text summary suitable for terminal display:</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A compatibility verdict: <span class="in">`"COMPATIBLE: No breaking changes detected."`</span> or <span class="in">`"INCOMPATIBLE: Breaking changes detected."`</span></span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>An itemized list of breaking changes (if any), with a count header and numbered entries.</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>An itemized list of non-breaking changes (if any), with a count header and numbered entries.</span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If both lists are empty: <span class="in">`"No changes detected."`</span></span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>This is what the <span class="in">`schema check`</span> CLI command displays by default.</span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### JSON Reports</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="in">`report_json`</span> produces a <span class="in">`serde_json::Value`</span> with three fields:</span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`compatible`</span> (bool): whether the migration is backward-compatible.</span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`breaking`</span> (array): each entry describes a breaking change with its type and details.</span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`non_breaking`</span> (array): each entry describes a non-breaking change with its type and details.</span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>This format is consumed by CI integrations (e.g., GitHub Actions annotations), the TypeScript SDK, and any tooling that needs machine-readable compatibility verdicts.</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing a Report Format</span></span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`report_text`</span> for developer-facing output (CLI, pull request comments). Use <span class="in">`report_json`</span> for machine-facing output (CI gates, automated migration generators, monitoring dashboards).</span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Relationship to Migrations and Lenses</span></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>Breaking change detection is complementary to the migration and lens systems:</span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Before migration**: run <span class="in">`diff`</span> + <span class="in">`classify`</span> to determine whether a migration is safe. If the report says "breaking," the developer knows to provide a migration with resolvers, supply default values, or use a lens with complement tracking.</span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**With lenses**: the <span class="in">`RemoveField`</span> combinator in <span class="in">`panproto-lens`</span> always produces a non-empty complement. The check crate can confirm that the corresponding schema change is indeed breaking, validating that the lens is necessary and correctly scoped.</span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In CI**: the <span class="in">`schema check`</span> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In documentation**: the text report can be included in changelog entries or release notes to communicate the nature of schema changes to downstream consumers.</span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theoretical Foundations</span></span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>The distinction between breaking and non-breaking changes corresponds to the distinction between additive and subtractive graph morphisms.^<span class="co">[</span><span class="ot">An additive change only adds new elements (vertices, edges, constraints), so existing consumers are unaffected. A subtractive change removes elements, which can leave "dangling" references --- edges pointing to deleted vertices, or data anchored to removed schema elements. In the double-pushout framework [@ehrig2006], these correspond to open and non-open morphisms respectively; the formal correctness proof uses adhesive category properties [@lack2005].</span><span class="co">]</span> An additive change preserves all existing structure and extends it; a subtractive change may leave "dangling" references to removed elements.</span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>The protocol-dependent classification extends this by relativizing "structural significance" to the protocol's edge rules. panproto checks compatibility against the protocol's theory rather than a fixed set of rules, so new protocols participate in breaking change detection automatically once their edge rules and constraint sorts are defined.</span>
-<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>For a hands-on introduction to detecting breaking changes, see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/09-breaking-changes.html)</span>.</span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a><span class="fu">## Worked Example: Evaluating an ATProto Schema Change</span></span>
-<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>Consider an ATProto lexicon change that:</span>
-<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Adds a new optional field <span class="in">`displayName`</span> (vertex addition).</span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Reduces <span class="in">`maxGraphemes`</span> on the <span class="in">`description`</span> field from 3000 to 300 (constraint tightening).</span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Removes the deprecated <span class="in">`legacyId`</span> field (vertex removal).</span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>Running the pipeline:</span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>**diff** produces a <span class="in">`SchemaDiff`</span> with:</span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`added_vertices`</span>: <span class="in">`["post.displayName"]`</span></span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`removed_vertices`</span>: <span class="in">`["post.legacyId"]`</span></span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`added_edges`</span>: the edge from <span class="in">`post`</span> to <span class="in">`post.displayName`</span></span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`removed_edges`</span>: the edge from <span class="in">`post`</span> to <span class="in">`post.legacyId`</span></span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`modified_constraints`</span>: <span class="in">`maxGraphemes`</span> on <span class="in">`post.description`</span> changed from <span class="in">`"3000"`</span> to <span class="in">`"300"`</span></span>
-<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`kind_changes`</span>: empty (no type changes)</span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>**classify** with the ATProto protocol produces a <span class="in">`CompatReport`</span> with:</span>
-<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Breaking changes** (3):</span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a><span class="ss">    1. </span><span class="in">`RemovedVertex { vertex_id: "post.legacyId" }`</span></span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a><span class="ss">    2. </span><span class="in">`RemovedEdge { src: "post", tgt: "post.legacyId", kind: "prop", name: Some("legacyId") }`</span> (because <span class="in">`"prop"`</span> is governed by ATProto's edge rules)</span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a><span class="ss">    3. </span><span class="in">`ConstraintTightened { vertex_id: "post.description", sort: "maxGraphemes", old_value: "3000", new_value: "300" }`</span></span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Non-breaking changes** (2):</span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a><span class="ss">    1. </span><span class="in">`AddedVertex { vertex_id: "post.displayName" }`</span></span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a><span class="ss">    2. </span><span class="in">`AddedEdge { src: "post", tgt: "post.displayName", kind: "prop", name: Some("displayName") }`</span></span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`compatible`</span>: <span class="in">`false`</span></span>
-<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>**report_text** output:</span>
-<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a><span class="in">INCOMPATIBLE: Breaking changes detected.</span></span>
-<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a><span class="in">Breaking changes (3):</span></span>
-<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a><span class="in">  1. Removed vertex: post.legacyId</span></span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a><span class="in">  2. Removed edge: post -&gt; post.legacyId (prop, "legacyId")</span></span>
-<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a><span class="in">  3. Constraint tightened: post.description maxGraphemes 3000 -&gt; 300</span></span>
-<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a><span class="in">Non-breaking changes (2):</span></span>
-<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a><span class="in">  1. Added vertex: post.displayName</span></span>
-<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a><span class="in">  2. Added edge: post -&gt; post.displayName (prop, "displayName")</span></span>
-<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>This report tells the developer that they need to either revert the breaking changes or provide a migration/lens that handles the incompatibility.</span>
-<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Integration with CI</span></span>
-<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a>The <span class="in">`schema check`</span> CLI command wraps this pipeline for use in CI:</span>
-<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span>
-<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>Exit codes:</span>
-<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`0`</span>: fully compatible or backward compatible.</span>
-<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`1`</span>: breaking changes detected.</span>
-<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`2`</span>: error (e.g., malformed schema, unknown protocol).</span>
-<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>For GitHub Actions, the JSON report can be parsed to create inline annotations on the pull request, highlighting the exact fields that changed and whether each change is breaking.</span>
-<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Performance Considerations</span></span>
-<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>The entire pipeline is designed to be fast enough for interactive use:</span>
-<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff`** is O(|V_old| + |V_new| + |E_old| + |E_new| + |C_old| + |C_new|) where V, E, and C are vertex, edge, and constraint counts. For typical schemas with hundreds of vertices, this completes in microseconds.</span>
-<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`classify`** is O(|diff changes|), iterating once over each change category.</span>
-<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`report_text`** and **`report_json`** are O(|report entries|).</span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>The pipeline can be run on every commit in CI without measurable impact on build times.</span>
-<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
-<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-check`</span> crate defines a <span class="in">`CheckError`</span> type for failures that prevent the pipeline from completing:</span>
-<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Schema deserialization failures (malformed input).</span>
-<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Protocol lookup failures (unknown protocol name).</span>
-<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>A <span class="in">`CompatReport`</span> with breaking changes is *not* an error---it is a successful analysis that found incompatibilities. The error types cover only cases where the analysis itself cannot be performed.</span>
-<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
-<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>The crate is organized into the following modules:</span>
-<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Exports <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff`</span> <span class="pp">|</span> <span class="in">`SchemaDiff`</span>, <span class="in">`ConstraintDiff`</span>, <span class="in">`ConstraintChange`</span>, <span class="in">`KindChange`</span>, <span class="in">`diff`</span> <span class="pp">|</span> Protocol-agnostic structural diffing <span class="pp">|</span></span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`classify`</span> <span class="pp">|</span> <span class="in">`CompatReport`</span>, <span class="in">`BreakingChange`</span>, <span class="in">`NonBreakingChange`</span>, <span class="in">`classify`</span> <span class="pp">|</span> Protocol-aware severity classification <span class="pp">|</span></span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report`</span> <span class="pp">|</span> <span class="in">`report_text`</span>, <span class="in">`report_json`</span> <span class="pp">|</span> Human-readable and machine-readable output <span class="pp">|</span></span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error`</span> <span class="pp">|</span> <span class="in">`CheckError`</span> <span class="pp">|</span> Error types for pipeline failures <span class="pp">|</span></span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>All public types are re-exported from the crate root.</span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Strategy</span></span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>The test suite validates each pipeline stage:</span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Diff tests** verify that specific structural changes (vertex addition/removal, edge addition/removal, constraint modification, kind change) produce the expected <span class="in">`SchemaDiff`</span> entries. An important invariant is that diffing identical schemas produces an empty diff.</span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classification tests** verify that breaking and non-breaking changes are correctly assigned based on protocol edge rules and constraint sorts. Tests cover edge cases like removing an edge whose kind is not governed by any edge rule (should be non-breaking) and tightening a constraint whose sort is not recognized by the protocol (should be ignored).</span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Report tests** verify that text and JSON output formats are correctly structured and contain the expected information.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-check: Breaking Change Detection {#sec-breaking-changes}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The check pipeline is a three-stage function composition: $\mathrm{report} \circ \mathrm{classify} \circ \mathrm{diff}$. Given two schemas $S_1$ and $S_2$ and a protocol $P$, <span class="in">`diff`</span> computes the structural delta, <span class="in">`classify`</span> assigns severity based on $P$'s edge rules and constraint sorts, and <span class="in">`report`</span> renders the result. For example, removing a vertex is always breaking; adding a vertex is always non-breaking; tightening a constraint is breaking only when the protocol recognizes that constraint sort.</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    O[Old Schema] --&gt; D[diff]</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    N[New Schema] --&gt; D</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    D --&gt; SD[SchemaDiff]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    SD --&gt; CL[classify]</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    P[Protocol] --&gt; CL</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    CL --&gt; CR[CompatReport]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    CR --&gt; RT[report_text]</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    CR --&gt; RJ[report_json]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Structural Diffing</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### SchemaDiff</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaDiff`</span> struct records every structural difference between two schema revisions:</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=14 end-line=95}</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>The struct captures changes across all 13 schema fields: vertices, edges, constraints, hyper-edges, required edges, NSIDs, variants, orderings, recursion points, usage modes, spans, and nominal flags. Each category is a simple collection; the diff doesn't assign severity to any change.</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint and Kind Changes</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>Constraint changes are captured at a finer granularity through <span class="in">`ConstraintDiff`</span>, <span class="in">`ConstraintChange`</span>, and <span class="in">`KindChange`</span>:</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=97 end-line=128}</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="in">`ConstraintDiff`</span> records three sub-categories for each vertex: constraints that were added (present in new but not old), constraints that were removed (present in old but not new), and constraints whose value changed (present in both but with different values). The <span class="in">`ConstraintChange`</span> struct captures the sort, old value, and new value for each changed constraint, providing enough information for the classifier to determine the direction of change.</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="in">`KindChange`</span> records vertices whose <span class="in">`kind`</span> field changed between versions (e.g., a vertex that was <span class="in">`"string"`</span> in the old schema but <span class="in">`"integer"`</span> in the new schema).</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Extended Change Types</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>The diff also tracks fine-grained changes to hyper-edges, variants, recursion points, and spans:</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=130 end-line=180}</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="fu">### The diff Function</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-check/src/diff.rs" start-line=182 end-line=189}</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>The function compares all schema fields using set operations. Output is deterministic: added and removed lists are sorted for consistent comparison in tests and CI.</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>The diff operates on panproto's graph-level schema representation, not on any protocol-specific format. A <span class="in">`SchemaDiff`</span> between two JSON Schema versions and a <span class="in">`SchemaDiff`</span> between two Protobuf versions have the same type and structure. Protocol-specific semantics only enter at the classification stage.</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="fu">### What diff Does Not Do</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>The diff is purely structural. It doesn't:</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Determine whether a change is breaking or non-breaking (that's <span class="in">`classify`</span>'s job).</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Track renames (a rename appears as a removal plus addition of different vertices/edges).</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Detect semantic equivalences (two schemas that are structurally different but semantically equivalent will produce a non-empty diff).</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>If you need rename detection, use the migration engine (@sec-migration-engine) to compute an explicit mapping, then use <span class="in">`classify`</span> on the migration's implied diff.</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol-Aware Classification</span></span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>Classification is where protocol semantics enter. The <span class="in">`classify`</span> function takes a <span class="in">`SchemaDiff`</span> and a <span class="in">`Protocol`</span> and determines the severity of each change based on the protocol's edge rules and constraint sorts.</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="fu">### Breaking Changes</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Change <span class="pp">|</span> When Breaking <span class="pp">|</span> Rationale <span class="pp">|</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Vertex removal <span class="pp">|</span> Always <span class="pp">|</span> Consumers depending on the vertex will fail <span class="pp">|</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edge removal <span class="pp">|</span> When the edge kind matches a protocol edge rule <span class="pp">|</span> Protocol-governed edges are part of the structural contract <span class="pp">|</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Kind change <span class="pp">|</span> Always <span class="pp">|</span> Existing data may not conform to the new kind <span class="pp">|</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint tightening <span class="pp">|</span> When the sort is recognized by the protocol <span class="pp">|</span> Existing data may violate the tighter constraint <span class="pp">|</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint addition <span class="pp">|</span> When the sort is recognized by the protocol <span class="pp">|</span> Existing data may violate the new constraint <span class="pp">|</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>Vertex removal is unconditionally breaking because any consumer relying on that vertex (reading a field, following an edge, anchoring a node) will fail.</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>Edge removal is protocol-dependent. The protocol's <span class="in">`edge_rules`</span> declare which edge kinds are structurally significant. For example, JSON Schema protocols declare <span class="in">`"prop"`</span> edges as governed; SQL protocols declare <span class="in">`"fk"`</span> (foreign key) edges. Removing a governed edge is breaking; removing an ungoverned edge (e.g., a metadata annotation) is not.</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>Kind changes are unconditionally breaking. Changing a vertex from <span class="in">`"string"`</span> to <span class="in">`"integer"`</span> means that existing string data can't be interpreted as integers without an explicit coercion.</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### Non-Breaking Changes</span></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Change <span class="pp">|</span> Rationale <span class="pp">|</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Vertex addition <span class="pp">|</span> New consumers can use it; existing consumers ignore it <span class="pp">|</span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edge addition <span class="pp">|</span> Additive change; existing consumers are unaffected <span class="pp">|</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint relaxation <span class="pp">|</span> Existing data remains valid under looser constraints <span class="pp">|</span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Constraint removal <span class="pp">|</span> Equivalent to maximally relaxing the constraint <span class="pp">|</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>Vertex and edge additions are the bread and butter of backward-compatible evolution. Adding an optional field to a JSON Schema, a new column to a SQL table, or a new message type to a Protobuf definition: all of these are non-breaking because existing consumers simply ignore the additions.</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>Constraint relaxation is non-breaking because existing data was valid under the tighter constraint and therefore remains valid under the looser one. Raising <span class="in">`maxLength`</span> from 300 to 3000, for example, doesn't invalidate any existing strings.</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution}</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## What about edge removal for an ungoverned edge kind?</span></span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>If the protocol doesn't have an <span class="in">`EdgeRule`</span> for the removed edge's kind, the removal is classified as non-breaking. This is intentional: ungoverned edges are considered metadata or annotations, not structural contracts. If you want all edge removals to be breaking, add a catch-all edge rule to your protocol.</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="fu">### Constraint Direction</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>For numeric constraints, the classification engine determines direction automatically:</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Upper bounds** (<span class="in">`maxLength`</span>, <span class="in">`maxSize`</span>, <span class="in">`maximum`</span>, <span class="in">`maxGraphemes`</span>): a smaller new value is tightening (breaking); a larger new value is relaxing (non-breaking).</span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lower bounds** (<span class="in">`minLength`</span>, <span class="in">`minimum`</span>): a larger new value is tightening (breaking); a smaller new value is relaxing (non-breaking).</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Other constraints**: any value change is treated as tightening (breaking), since the engine can't infer the direction for arbitrary constraint sorts without additional metadata.</span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>If your protocol defines custom constraint sorts with known directionality, you can extend the <span class="in">`is_constraint_tightened`</span> function in <span class="in">`classify.rs`</span> to handle them. Unrecognized sorts default to "any change is breaking," which is the conservative choice.</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="fu">### Compatibility Levels</span></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>The <span class="in">`CompatReport`</span> assigns one of three implicit compatibility levels based on its contents:</span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fully compatible**: the <span class="in">`breaking`</span> and <span class="in">`non_breaking`</span> lists are both empty. The schemas are structurally identical.</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Backward compatible**: the <span class="in">`breaking`</span> list is empty but <span class="in">`non_breaking`</span> is not. Existing consumers are safe; new consumers can use the additions. The <span class="in">`compatible`</span> field is <span class="in">`true`</span>.</span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Breaking**: the <span class="in">`breaking`</span> list is non-empty. At least one change is incompatible. The <span class="in">`compatible`</span> field is <span class="in">`false`</span>.</span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>Classification is protocol-dependent. The same <span class="in">`SchemaDiff`</span> can produce different <span class="in">`CompatReport`</span> results for different protocols. For example, removing an edge with kind <span class="in">`"fk"`</span> is breaking under the SQL protocol (which has an edge rule for foreign keys) but might be non-breaking under a protocol that doesn't govern that edge kind. Always pass the correct protocol to <span class="in">`classify`</span>.</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reporting</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>The report module converts a <span class="in">`CompatReport`</span> into output suitable for humans or machines.</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### Text Reports</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="in">`report_text`</span> produces a plain-text summary suitable for terminal display:</span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>A compatibility verdict: <span class="in">`"COMPATIBLE: No breaking changes detected."`</span> or <span class="in">`"INCOMPATIBLE: Breaking changes detected."`</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>An itemized list of breaking changes (if any), with a count header and numbered entries.</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>An itemized list of non-breaking changes (if any), with a count header and numbered entries.</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If both lists are empty: <span class="in">`"No changes detected."`</span></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>This is what the <span class="in">`schema check`</span> CLI command displays by default.</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="fu">### JSON Reports</span></span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="in">`report_json`</span> produces a <span class="in">`serde_json::Value`</span> with three fields:</span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`compatible`</span> (bool): whether the migration is backward-compatible.</span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`breaking`</span> (array): each entry describes a breaking change with its type and details.</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`non_breaking`</span> (array): each entry describes a non-breaking change with its type and details.</span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>This format is consumed by CI integrations (e.g., GitHub Actions annotations), the TypeScript SDK, and any tooling that needs machine-readable compatibility verdicts.</span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing a Report Format</span></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`report_text`</span> for developer-facing output (CLI, pull request comments). Use <span class="in">`report_json`</span> for machine-facing output (CI gates, automated migration generators, monitoring dashboards).</span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution}</span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## How do you integrate the JSON report with GitHub Actions?</span></span>
+<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>Parse the JSON output and create inline annotations using the GitHub Checks API. The <span class="in">`breaking`</span> array entries contain vertex IDs and edge descriptions that can be mapped back to source locations if your schema files have line-number metadata. See the CI chapter (Chapter 17) for a working example.</span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Relationship to Migrations and Lenses</span></span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a>Breaking change detection is complementary to the migration and lens systems:</span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Before migration**: run <span class="in">`diff`</span> + <span class="in">`classify`</span> to determine whether a migration is safe. If the report says "breaking," the developer knows to provide a migration with resolvers, supply default values, or use a lens with complement tracking.</span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**With lenses**: the <span class="in">`RemoveField`</span> combinator in <span class="in">`panproto-lens`</span> always produces a non-empty complement. The check crate can confirm that the corresponding schema change is indeed breaking, validating that the lens is necessary and correctly scoped.</span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In CI**: the <span class="in">`schema check`</span> CLI command runs this pipeline and exits with a non-zero status on breaking changes, enabling automated gatekeeping. Pull requests that introduce breaking changes without an accompanying migration can be flagged automatically.</span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**In documentation**: the text report can be included in changelog entries or release notes to communicate the nature of schema changes to downstream consumers.</span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a><span class="fu">## Integration with CI</span></span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a>The <span class="in">`schema check`</span> CLI command wraps this pipeline:</span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a><span class="ex">schema</span> check <span class="at">--old</span> schema-v1.json <span class="at">--new</span> schema-v2.json <span class="at">--protocol</span> atproto</span>
+<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a>Exit codes:</span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`0`</span>: fully compatible or backward compatible.</span>
+<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`1`</span>: breaking changes detected.</span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`2`</span>: error (e.g., malformed schema, unknown protocol).</span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## Performance Considerations</span></span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a>The entire pipeline is designed to be fast enough for interactive use:</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`diff`** is $O(|V_{\mathrm{old}}| + |V_{\mathrm{new}}| + |E_{\mathrm{old}}| + |E_{\mathrm{new}}| + |C_{\mathrm{old}}| + |C_{\mathrm{new}}|)$ where $V$, $E$, and $C$ are vertex, edge, and constraint counts. For typical schemas with hundreds of vertices, this completes in microseconds.</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`classify`** is $O(|\mathrm{diff}|)$, iterating once over each change category.</span>
+<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`report_text`** and **`report_json`** are $O(|\mathrm{report}|)$.</span>
+<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a>The pipeline can be run on every commit in CI without measurable impact on build times.</span>
+<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-check`</span> crate defines a <span class="in">`CheckError`</span> type for failures that prevent the pipeline from completing:</span>
+<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Schema deserialization failures (malformed input).</span>
+<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Protocol lookup failures (unknown protocol name).</span>
+<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a>A <span class="in">`CompatReport`</span> with breaking changes is _not_ an error. It's a successful analysis that found incompatibilities. The error types cover only cases where the analysis itself can't be performed.</span>
+<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module Map</span></span>
+<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> Exports <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff`</span> <span class="pp">|</span> <span class="in">`SchemaDiff`</span>, <span class="in">`ConstraintDiff`</span>, <span class="in">`ConstraintChange`</span>, <span class="in">`KindChange`</span>, <span class="in">`diff`</span> <span class="pp">|</span> Protocol-agnostic structural diffing <span class="pp">|</span></span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`classify`</span> <span class="pp">|</span> <span class="in">`CompatReport`</span>, <span class="in">`BreakingChange`</span>, <span class="in">`NonBreakingChange`</span>, <span class="in">`classify`</span> <span class="pp">|</span> Protocol-aware severity classification <span class="pp">|</span></span>
+<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report`</span> <span class="pp">|</span> <span class="in">`report_text`</span>, <span class="in">`report_json`</span> <span class="pp">|</span> Human-readable and machine-readable output <span class="pp">|</span></span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`error`</span> <span class="pp">|</span> <span class="in">`CheckError`</span> <span class="pp">|</span> Error types for pipeline failures <span class="pp">|</span></span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>All public types are re-exported from the crate root.</span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Strategy</span></span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>The test suite validates each pipeline stage:</span>
+<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Diff tests** verify that specific structural changes (vertex addition/removal, edge addition/removal, constraint modification, kind change) produce the expected <span class="in">`SchemaDiff`</span> entries. An important invariant: diffing identical schemas produces an empty diff.</span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Classification tests** verify that breaking and non-breaking changes are correctly assigned based on protocol edge rules and constraint sorts. Tests cover edge cases like removing an edge whose kind isn't governed by any edge rule (should be non-breaking) and tightening a constraint whose sort isn't recognized by the protocol (should be ignored).</span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Report tests** verify that text and JSON output formats are correctly structured and contain the expected information.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

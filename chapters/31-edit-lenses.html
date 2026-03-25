@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>25&nbsp; Edit Lens Internals – panproto: Developer Guide</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/30-polynomial-operations.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-dbc92dda8186f57fa2e333fbb71d6a9d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee1364869a0ea6f86de9400b37a80109.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">panproto: Developer Guide</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/panproto/panproto/tree/main/dev-guide/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Getting Started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Welcome to panproto Development</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-first-contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Your First Contribution</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Development Environment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-building-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Building and Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-debugging-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Debugging and Profiling</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Architecture &amp; Internals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-architecture-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Architecture Overview</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-gat-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">panproto-gat: The GAT Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-schema-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">panproto-schema: Schemas and Protocols</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-instances-wtype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">panproto-inst: Instances and the Restrict Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-migration-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">panproto-mig: The Migration Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">panproto-lens: Bidirectional Lenses</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11-breaking-changes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">panproto-check: Breaking Change Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12-protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">panproto-protocols: Protocol Definitions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13-wasm-boundary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">panproto-wasm: The WASM Boundary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14-typescript-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title"><code>@panproto/core</code>: The TypeScript SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/20-python-sdk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title"><code>panproto</code>: The Python SDK</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/15-cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">panproto-cli</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21-vcs-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">VCS Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22-advanced-internals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/26-protolens-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Protolens Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/27-auto-lens-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/31-edit-lenses.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Contributing Process</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Project Operations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#editlens-struct" id="toc-editlens-struct" class="nav-link active" data-scroll-target="#editlens-struct"><span class="header-section-number">25.1</span> <code>EditLens</code> struct</a>
+  <ul class="collapse">
+  <li><a href="#construction-and-initialization" id="toc-construction-and-initialization" class="nav-link" data-scroll-target="#construction-and-initialization"><span class="header-section-number">25.1.1</span> Construction and initialization</a></li>
+  </ul></li>
+  <li><a href="#the-get_edit-translation" id="toc-the-get_edit-translation" class="nav-link" data-scroll-target="#the-get_edit-translation"><span class="header-section-number">25.2</span> The <code>get_edit</code> translation</a></li>
+  <li><a href="#the-put_edit-translation" id="toc-the-put_edit-translation" class="nav-link" data-scroll-target="#the-put_edit-translation"><span class="header-section-number">25.3</span> The <code>put_edit</code> translation</a></li>
+  <li><a href="#the-five-step-editpipeline" id="toc-the-five-step-editpipeline" class="nav-link" data-scroll-target="#the-five-step-editpipeline"><span class="header-section-number">25.4</span> The five-step <code>EditPipeline</code></a>
+  <ul class="collapse">
+  <li><a href="#step-1-anchor-survival" id="toc-step-1-anchor-survival" class="nav-link" data-scroll-target="#step-1-anchor-survival"><span class="header-section-number">25.4.1</span> Step 1: anchor survival</a></li>
+  <li><a href="#step-2-reachability" id="toc-step-2-reachability" class="nav-link" data-scroll-target="#step-2-reachability"><span class="header-section-number">25.4.2</span> Step 2: reachability</a></li>
+  <li><a href="#step-3-ancestor-contraction" id="toc-step-3-ancestor-contraction" class="nav-link" data-scroll-target="#step-3-ancestor-contraction"><span class="header-section-number">25.4.3</span> Step 3: ancestor contraction</a></li>
+  <li><a href="#step-4-edge-resolution" id="toc-step-4-edge-resolution" class="nav-link" data-scroll-target="#step-4-edge-resolution"><span class="header-section-number">25.4.4</span> Step 4: edge resolution</a></li>
+  <li><a href="#step-5-fan-reconstruction" id="toc-step-5-fan-reconstruction" class="nav-link" data-scroll-target="#step-5-fan-reconstruction"><span class="header-section-number">25.4.5</span> Step 5: fan reconstruction</a></li>
+  <li><a href="#forward-and-reverse" id="toc-forward-and-reverse" class="nav-link" data-scroll-target="#forward-and-reverse"><span class="header-section-number">25.4.6</span> Forward and reverse</a></li>
+  </ul></li>
+  <li><a href="#complement-state-machine-transitions" id="toc-complement-state-machine-transitions" class="nav-link" data-scroll-target="#complement-state-machine-transitions"><span class="header-section-number">25.5</span> Complement state machine transitions</a></li>
+  <li><a href="#edit-lens-law-verification" id="toc-edit-lens-law-verification" class="nav-link" data-scroll-target="#edit-lens-law-verification"><span class="header-section-number">25.6</span> Edit lens law verification</a>
+  <ul class="collapse">
+  <li><a href="#check_edit_consistency" id="toc-check_edit_consistency" class="nav-link" data-scroll-target="#check_edit_consistency"><span class="header-section-number">25.6.1</span> <code>check_edit_consistency</code></a></li>
+  <li><a href="#check_complement_coherence" id="toc-check_complement_coherence" class="nav-link" data-scroll-target="#check_complement_coherence"><span class="header-section-number">25.6.2</span> <code>check_complement_coherence</code></a></li>
+  </ul></li>
+  <li><a href="#optics-dispatch" id="toc-optics-dispatch" class="nav-link" data-scroll-target="#optics-dispatch"><span class="header-section-number">25.7</span> Optics dispatch</a></li>
+  <li><a href="#editprovenance" id="toc-editprovenance" class="nav-link" data-scroll-target="#editprovenance"><span class="header-section-number">25.8</span> <code>EditProvenance</code></a></li>
+  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">25.9</span> VCS integration</a>
+  <ul class="collapse">
+  <li><a href="#editlogobject" id="toc-editlogobject" class="nav-link" data-scroll-target="#editlogobject"><span class="header-section-number">25.9.1</span> <code>EditLogObject</code></a></li>
+  <li><a href="#incremental_migrate" id="toc-incremental_migrate" class="nav-link" data-scroll-target="#incremental_migrate"><span class="header-section-number">25.9.2</span> <code>incremental_migrate</code></a></li>
+  <li><a href="#encode_edit_log-decode_edit_log" id="toc-encode_edit_log-decode_edit_log" class="nav-link" data-scroll-target="#encode_edit_log-decode_edit_log"><span class="header-section-number">25.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></a></li>
+  </ul></li>
+  <li><a href="#error-types" id="toc-error-types" class="nav-link" data-scroll-target="#error-types"><span class="header-section-number">25.10</span> Error types</a></li>
+  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">25.11</span> Module map</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/31-edit-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-edit-lenses-internals" class="quarto-section-identifier"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The edit lens subsystem translates individual edits (patches) between schema versions, maintaining a stateful complement. This chapter covers the internal architecture: the <code>EditLens</code> struct, the five-step translation pipeline, complement state machine transitions, law verification, provenance tracking, and VCS integration.</p>
+<p>For the user-facing tutorial, see the <a href="https://panproto.dev/tutorial/chapters/23-edit-lenses.html">tutorial’s edit lenses chapter</a>.</p>
+<section id="editlens-struct" class="level2" data-number="25.1">
+<h2 data-number="25.1" class="anchored" data-anchor-id="editlens-struct"><span class="header-section-number">25.1</span> <code>EditLens</code> struct</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_lens.rs</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="31"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 30;"><span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::edit_provenance::</span>EditProvenance<span class="op">;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::optic::</span>OpticKind<span class="op">;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">/// An edit lens between source and view schemas.</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">/// Translates individual `TreeEdit` values through a migration,</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">/// maintaining a stateful complement that tracks discarded data.</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EditLens <span class="op">{</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The compiled migration driving structural translation.</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The source schema.</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> src_schema<span class="op">:</span> Schema<span class="op">,</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The target (view) schema.</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> tgt_schema<span class="op">:</span> Schema<span class="op">,</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The current complement state.</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> complement<span class="op">:</span> Complement<span class="op">,</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The protocol definition (carries the enriched theory).</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> protocol<span class="op">:</span> Protocol<span class="op">,</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Cached reverse vertex remap (target -&gt; source).</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span>(<span class="kw">crate</span>) reverse_vertex_remap<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> Name<span class="op">&gt;,</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Cached reverse edge remap (target -&gt; source).</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span>(<span class="kw">crate</span>) reverse_edge_remap<span class="op">:</span> HashMap<span class="op">&lt;</span>Edge<span class="op">,</span> Edge<span class="op">&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The fields:</p>
+<ul>
+<li><strong><code>compiled</code></strong>: the <code>CompiledMigration</code> from the underlying state-based lens. Carries the surviving vertex/edge sets, vertex remap, edge remap, resolver, and field transforms.</li>
+<li><strong><code>src_schema</code> / <code>tgt_schema</code></strong>: the source and target schemas.</li>
+<li><strong><code>complement</code></strong>: the current complement state, mutated by every <code>get_edit</code> and <code>put_edit</code> call.</li>
+<li><strong><code>protocol</code></strong>: the protocol definition, used to access directed equations and complement policies.</li>
+<li><strong><code>reverse_vertex_remap</code> / <code>reverse_edge_remap</code></strong>: precomputed inverse maps for the <code>put_edit</code> direction.</li>
+<li><strong><code>pipeline</code></strong>: an optional <code>EditPipeline</code> for the per-step incremental translation. Initialized by <code>initialize()</code>.</li>
+</ul>
+<section id="construction-and-initialization" class="level3" data-number="25.1.1">
+<h3 data-number="25.1.1" class="anchored" data-anchor-id="construction-and-initialization"><span class="header-section-number">25.1.1</span> Construction and initialization</h3>
+<p><code>EditLens::from_lens(lens, protocol)</code> constructs the edit lens from an existing state-based <code>Lens</code>. It builds the reverse remap tables by inverting the compiled migration’s vertex and edge maps. The complement starts empty.</p>
+<p><code>initialize(source)</code> performs a whole-state <code>get</code> on the source instance to populate the initial complement and creates the <code>EditPipeline</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="82"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 81;"><span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Initialize the complement from a whole-state `get` on the given source.</span></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// # Errors</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns an error if the underlying `get` fails.</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> initialize(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> source<span class="op">:</span> <span class="op">&amp;</span>WInstance) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>()<span class="op">,</span> EditLensError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> lens <span class="op">=</span> Lens <span class="op">{</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>            compiled<span class="op">:</span> <span class="kw">self</span><span class="op">.</span>compiled<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>            src_schema<span class="op">:</span> <span class="kw">self</span><span class="op">.</span>src_schema<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>            tgt_schema<span class="op">:</span> <span class="kw">self</span><span class="op">.</span>tgt_schema<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> (_<span class="op">,</span> complement) <span class="op">=</span> <span class="kw">crate</span><span class="pp">::</span>get(<span class="op">&amp;</span>lens<span class="op">,</span> source)</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">EditLensError::</span>TranslationFailed(e<span class="op">.</span>to_string()))<span class="op">?;</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>complement <span class="op">=</span> complement<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="the-get_edit-translation" class="level2" data-number="25.2">
+<h2 data-number="25.2" class="anchored" data-anchor-id="the-get_edit-translation"><span class="header-section-number">25.2</span> The <code>get_edit</code> translation</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_lens.rs</code></p>
+<p>Each <code>get_edit</code> call dispatches on the <code>TreeEdit</code> variant and applies the translation pipeline:</p>
+<ol type="1">
+<li><strong>Anchor survival</strong>: for <code>InsertNode</code>, check whether the node’s anchor (after vertex remap) is in <code>surviving_verts</code>. If not, the node and its edge are added to the complement, and <code>Identity</code> is returned.</li>
+<li><strong>Conditional survival</strong>: evaluate value-dependent predicates from <code>conditional_survival</code> on the node’s <code>extra_fields</code>. If the predicate returns <code>false</code>, the node is dropped to complement.</li>
+<li><strong>Structural remap</strong>: remap the node’s anchor via <code>vertex_remap</code> and the edge via <code>edge_remap</code>. Apply <code>FieldTransform</code> operations to surviving nodes’ fields.</li>
+<li><strong>Field transforms</strong>: for <code>SetField</code> edits, translate the field name (honoring <code>RenameField</code> transforms) and apply <code>ApplyExpr</code> transforms to values.</li>
+<li><strong>Complement update</strong>: update the complement based on which data was absorbed or released.</li>
+</ol>
+<p>For <code>SetField</code> targeting a complement node, the edit updates the complement’s copy of the node and returns <code>Identity</code>. For <code>DeleteNode</code> targeting a complement node, the node is removed from the complement.</p>
+<p>For <code>RelabelNode</code>, the lens handles four cases:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Was in complement?</th>
+<th>New anchor survives?</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Yes</td>
+<td>Yes</td>
+<td>Remove from complement, emit <code>InsertNode</code></td>
+</tr>
+<tr class="even">
+<td>Yes</td>
+<td>No</td>
+<td>Update complement node’s anchor, emit <code>Identity</code></td>
+</tr>
+<tr class="odd">
+<td>No</td>
+<td>Yes</td>
+<td>Emit <code>RelabelNode</code> with remapped anchor</td>
+</tr>
+<tr class="even">
+<td>No</td>
+<td>No</td>
+<td>Emit <code>DeleteNode</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-put_edit-translation" class="level2" data-number="25.3">
+<h2 data-number="25.3" class="anchored" data-anchor-id="the-put_edit-translation"><span class="header-section-number">25.3</span> The <code>put_edit</code> translation</h2>
+<p><code>put_edit</code> reverses <code>get_edit</code> using the precomputed <code>reverse_vertex_remap</code> and <code>reverse_edge_remap</code>. For <code>InsertNode</code>, the node and edge are un-remapped to source-schema coordinates. For <code>SetField</code>, the field name is translated backward through field transforms.</p>
+<p><code>put_edit</code> does not need to check anchor survival (the edit is already in view-schema coordinates, so all anchors are surviving by definition).</p>
+</section>
+<section id="the-five-step-editpipeline" class="level2" data-number="25.4">
+<h2 data-number="25.4" class="anchored" data-anchor-id="the-five-step-editpipeline"><span class="header-section-number">25.4</span> The five-step <code>EditPipeline</code></h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_pipeline.rs</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="19"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 18;"><span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// Incremental state for per-step edit translation.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// Initialized from an [`EditLens`] and source instance via a</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// whole-state pass, then processes individual edits incrementally.</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// The five pipeline steps correspond to the `wtype_restrict` stages:</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">/// 1. Anchor survival</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// 2. Reachability</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">/// 3. Ancestor contraction</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">/// 4. Edge resolution</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">/// 5. Fan reconstruction</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="at">)]</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EditPipeline <span class="op">{</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Incremental reachability tracking from root.</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> reachability<span class="op">:</span> ReachabilityIndex<span class="op">,</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    contraction<span class="op">:</span> ContractionTracker<span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    compiled<span class="op">:</span> CompiledMigration<span class="op">,</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="op">:</span> Schema<span class="op">,</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>EditPipeline</code> mirrors the five stages of <code>wtype_restrict</code> but operates incrementally on individual edits rather than whole instances.</p>
+<section id="step-1-anchor-survival" class="level3" data-number="25.4.1">
+<h3 data-number="25.4.1" class="anchored" data-anchor-id="step-1-anchor-survival"><span class="header-section-number">25.4.1</span> Step 1: anchor survival</h3>
+<p>Checks whether the edit targets a surviving vertex. Non-surviving <code>InsertNode</code> edits are absorbed into the complement. <code>DeleteNode</code> edits for complement nodes remove them from the complement. <code>SetField</code> edits for complement nodes update the complement’s copy.</p>
+</section>
+<section id="step-2-reachability" class="level3" data-number="25.4.2">
+<h3 data-number="25.4.2" class="anchored" data-anchor-id="step-2-reachability"><span class="header-section-number">25.4.2</span> Step 2: reachability</h3>
+<p>Uses the <code>ReachabilityIndex</code> to track which nodes can reach the root:</p>
+<ul>
+<li><code>InsertNode</code>: calls <code>insert_edge(parent, child)</code>, which BFS-marks the child’s subtree as reachable.</li>
+<li><code>DeleteNode</code>: calls <code>delete_edge(parent, child)</code>, which BFS-marks the subtree as unreachable if no alternate path to root exists.</li>
+<li><code>MoveSubtree</code>: removes the old edge and inserts the new one, cascading reachability updates.</li>
+</ul>
+<p><strong>File</strong>: <code>crates/panproto-inst/src/reachability.rs</code></p>
+<p>The <code>ReachabilityIndex</code> maintains a <code>reachable</code> set (backed by <code>FxHashSet</code>), plus parent/children adjacency maps. Updates are proportional to the affected subtree, not the whole instance.</p>
+</section>
+<section id="step-3-ancestor-contraction" class="level3" data-number="25.4.3">
+<h3 data-number="25.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction"><span class="header-section-number">25.4.3</span> Step 3: ancestor contraction</h3>
+<p>Uses the <code>ContractionTracker</code> to record which nodes have been contracted:</p>
+<ul>
+<li><code>ContractNode</code>: records the contraction via <code>ContractionTracker::contract</code>, including the original parent, children, and edge.</li>
+<li><code>InsertNode</code>: if the child was previously contracted, calls <code>expand</code> to undo the contraction.</li>
+</ul>
+<p><strong>File</strong>: <code>crates/panproto-inst/src/contraction.rs</code></p>
+<p>The <code>ContractionTracker</code> maps each contracted node to its <code>ContractionRecord</code> and tracks which surviving nodes absorbed which contracted nodes via the <code>absorptions</code> map.</p>
+</section>
+<section id="step-4-edge-resolution" class="level3" data-number="25.4.4">
+<h3 data-number="25.4.4" class="anchored" data-anchor-id="step-4-edge-resolution"><span class="header-section-number">25.4.4</span> Step 4: edge resolution</h3>
+<p>For edits that create arcs with <code>kind = "contracted"</code> (from contraction), the pipeline resolves the correct schema edge using <code>panproto_inst::resolve_edge</code> with the compiled migration’s resolver.</p>
+</section>
+<section id="step-5-fan-reconstruction" class="level3" data-number="25.4.5">
+<h3 data-number="25.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction"><span class="header-section-number">25.4.5</span> Step 5: fan reconstruction</h3>
+<p>Fans with dropped participants (parent or child in the complement) are absorbed into <code>complement.dropped_fans</code>. Fans whose participants all survive pass through.</p>
+</section>
+<section id="forward-and-reverse" class="level3" data-number="25.4.6">
+<h3 data-number="25.4.6" class="anchored" data-anchor-id="forward-and-reverse"><span class="header-section-number">25.4.6</span> Forward and reverse</h3>
+<p><code>translate_get</code> runs steps 1 through 5 in order. <code>translate_put</code> runs them in reverse order (5, 4, 3, 2, 1), mirroring the <code>put</code> operation’s reverse-step reconstruction.</p>
+</section>
+</section>
+<section id="complement-state-machine-transitions" class="level2" data-number="25.5">
+<h2 data-number="25.5" class="anchored" data-anchor-id="complement-state-machine-transitions"><span class="header-section-number">25.5</span> Complement state machine transitions</h2>
+<p>The complement is a <code>Complement</code> struct (from <code>panproto-lens/src/asymmetric.rs</code>) whose fields are mutated by each edit:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Edit</th>
+<th>Complement effect</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>InsertNode</code> (non-surviving)</td>
+<td>Node added to <code>dropped_nodes</code>, edge added to <code>dropped_arcs</code></td>
+</tr>
+<tr class="even">
+<td><code>DeleteNode</code> (in complement)</td>
+<td>Node removed from <code>dropped_nodes</code></td>
+</tr>
+<tr class="odd">
+<td><code>SetField</code> (complement node)</td>
+<td>Node’s <code>extra_fields</code> updated</td>
+</tr>
+<tr class="even">
+<td><code>RelabelNode</code> (complement -&gt; surviving)</td>
+<td>Node removed from complement, emitted as insert</td>
+</tr>
+<tr class="odd">
+<td><code>InsertFan</code> (dropped participant)</td>
+<td>Fan added to <code>dropped_fans</code></td>
+</tr>
+<tr class="even">
+<td><code>DeleteFan</code> (in complement)</td>
+<td>Fan removed from <code>dropped_fans</code></td>
+</tr>
+</tbody>
+</table>
+<p>The state machine invariant: after processing a sequence of edits <span class="math inline">\(e_1, \ldots, e_n\)</span>, the complement state is identical to the complement produced by applying all edits to the source and running a whole-state <code>get</code>.</p>
+</section>
+<section id="edit-lens-law-verification" class="level2" data-number="25.6">
+<h2 data-number="25.6" class="anchored" data-anchor-id="edit-lens-law-verification"><span class="header-section-number">25.6</span> Edit lens law verification</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_laws.rs</code></p>
+<section id="check_edit_consistency" class="level3" data-number="25.6.1">
+<h3 data-number="25.6.1" class="anchored" data-anchor-id="check_edit_consistency"><span class="header-section-number">25.6.1</span> <code>check_edit_consistency</code></h3>
+<p>Verifies the Consistency law by comparing two paths:</p>
+<ol type="1">
+<li><strong>Path 1</strong> (incremental): call <code>get_edit(edit)</code> on a clone of the lens, apply the result to the current view.</li>
+<li><strong>Path 2</strong> (batch): apply <code>edit</code> to the source, then run a whole-state <code>get</code>.</li>
+</ol>
+<p>Compares the resulting views node by node. Returns <code>EditLawViolation::Consistency</code> if node counts or anchors diverge.</p>
+</section>
+<section id="check_complement_coherence" class="level3" data-number="25.6.2">
+<h3 data-number="25.6.2" class="anchored" data-anchor-id="check_complement_coherence"><span class="header-section-number">25.6.2</span> <code>check_complement_coherence</code></h3>
+<p>Verifies the Complement coherence law:</p>
+<ol type="1">
+<li><strong>Path 1</strong>: call <code>get_edit(edit)</code> on a clone, inspect the resulting complement.</li>
+<li><strong>Path 2</strong>: apply <code>edit</code> to the source, run a whole-state <code>get</code>, inspect the complement.</li>
+</ol>
+<p>Compares <code>dropped_nodes</code> counts. Returns <code>EditLawViolation::ComplementCoherence</code> on mismatch.</p>
+</section>
+</section>
+<section id="optics-dispatch" class="level2" data-number="25.7">
+<h2 data-number="25.7" class="anchored" data-anchor-id="optics-dispatch"><span class="header-section-number">25.7</span> Optics dispatch</h2>
+<p>The <code>optic_kind()</code> classification from <code>panproto-lens/src/optic.rs</code> determines how the edit lens translates structural edits:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><code>OpticKind</code></th>
+<th>Translation strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Iso</code></td>
+<td>Direct remap (no complement interaction)</td>
+</tr>
+<tr class="even">
+<td><code>Lens</code></td>
+<td>Anchor survival + complement tracking</td>
+</tr>
+<tr class="odd">
+<td><code>Prism</code></td>
+<td>Variant tag routing</td>
+</tr>
+<tr class="even">
+<td><code>Affine</code></td>
+<td>Lens + Prism combined</td>
+</tr>
+<tr class="odd">
+<td><code>Traversal</code></td>
+<td>Array element mapping</td>
+</tr>
+</tbody>
+</table>
+<p>For <code>Iso</code> transformations, <code>get_edit</code> skips complement checks entirely.</p>
+</section>
+<section id="editprovenance" class="level2" data-number="25.8">
+<h2 data-number="25.8" class="anchored" data-anchor-id="editprovenance"><span class="header-section-number">25.8</span> <code>EditProvenance</code></h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_provenance.rs</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="16"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 15;"><span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EditProvenance <span class="op">{</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Description of the original source edit.</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> source_edit_desc<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Names of translation rules that fired during `get_edit`.</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> rules_applied<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;&gt;,</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Name of the complement policy that was consulted (if any).</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> policy_consulted<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;&gt;,</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Whether the translation was total (all constraints satisfied).</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> was_total<span class="op">:</span> <span class="dt">bool</span><span class="op">,</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Provenance is populated by <code>get_edit_with_provenance</code>, which wraps <code>get_edit</code> and records which rules fired. The <code>rules_applied</code> vector captures named rules (e.g., <code>"structural_remap"</code>, <code>"field_text"</code>). The <code>policy_consulted</code> field records which complement policy (from the schema’s policy sorts) was used. The <code>was_total</code> flag is <code>false</code> when a refinement constraint failed, indicating a partial translation.</p>
+<p><code>EditProvenance</code> derives <code>Serialize</code> and <code>Deserialize</code>, so provenance records can be stored alongside edit logs for auditing.</p>
+</section>
+<section id="vcs-integration" class="level2" data-number="25.9">
+<h2 data-number="25.9" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">25.9</span> VCS integration</h2>
+<section id="editlogobject" class="level3" data-number="25.9.1">
+<h3 data-number="25.9.1" class="anchored" data-anchor-id="editlogobject"><span class="header-section-number">25.9.1</span> <code>EditLogObject</code></h3>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/object.rs</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="148"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 147;"><span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="co">/// An edit log: a sequence of edits applied to a data set.</span></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="co">/// Edit logs are content-addressed by hashing the sequence of edits.</span></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="co">/// Two edit logs with the same edits hash to the same object, enabling</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a><span class="co">/// deduplication.</span></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EditLogObject <span class="op">{</span></span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The schema these edits apply to.</span></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The data set these edits were applied to.</span></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// MessagePack-encoded `Vec&lt;TreeEdit&gt;`.</span></span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edits<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Number of edits in the log.</span></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> edit_count<span class="op">:</span> <span class="dt">u64</span><span class="op">,</span></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Object ID of the complement state after all edits.</span></span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> final_complement<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>An <code>EditLogObject</code> is a content-addressed VCS object storing:</p>
+<ul>
+<li><code>schema_id</code>: the schema the edits apply to</li>
+<li><code>data_id</code>: the data set the edits were applied to</li>
+<li><code>edits</code>: MessagePack-encoded <code>Vec&lt;TreeEdit&gt;</code></li>
+<li><code>edit_count</code>: number of edits in the log</li>
+<li><code>final_complement</code>: the <code>ObjectId</code> of the complement state after all edits</li>
+</ul>
+<p><code>CommitObject</code> includes an <code>edit_log_ids: Vec&lt;ObjectId&gt;</code> field referencing any edit logs generated at that commit.</p>
+</section>
+<section id="incremental_migrate" class="level3" data-number="25.9.2">
+<h3 data-number="25.9.2" class="anchored" data-anchor-id="incremental_migrate"><span class="header-section-number">25.9.2</span> <code>incremental_migrate</code></h3>
+<p><strong>File</strong>: <code>crates/panproto-vcs/src/edit_mig.rs</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 12;"><span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// Translate a sequence of source edits through an edit lens.</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">/// Each edit is passed to [`EditLens::get_edit`]. Non-identity results</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// are collected into the output sequence.</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`VcsError::DataMigrationFailed`] if any edit translation fails.</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> incremental_migrate(</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    edits<span class="op">:</span> <span class="op">&amp;</span>[TreeEdit]<span class="op">,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    lens<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> EditLens<span class="op">,</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>TreeEdit<span class="op">&gt;,</span> VcsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> <span class="kw">mut</span> translated <span class="op">=</span> <span class="dt">Vec</span><span class="pp">::</span>with_capacity(edits<span class="op">.</span>len())<span class="op">;</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> edit <span class="kw">in</span> edits <span class="op">{</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> result <span class="op">=</span> lens</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>get_edit(edit<span class="op">.</span>clone())</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map_err(<span class="op">|</span>e<span class="op">|</span> <span class="pp">VcsError::</span>DataMigrationFailed <span class="op">{</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                reason<span class="op">:</span> e<span class="op">.</span>to_string()<span class="op">,</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">?;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">!</span>result<span class="op">.</span>is_identity() <span class="op">{</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>            translated<span class="op">.</span>push(result)<span class="op">;</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(translated)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Translates a sequence of source edits through an edit lens. Non-identity results are collected into the output. Returns <code>VcsError::DataMigrationFailed</code> if any translation fails.</p>
+</section>
+<section id="encode_edit_log-decode_edit_log" class="level3" data-number="25.9.3">
+<h3 data-number="25.9.3" class="anchored" data-anchor-id="encode_edit_log-decode_edit_log"><span class="header-section-number">25.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></h3>
+<p>Serialize and deserialize edit sequences as MessagePack bytes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="39"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 38;"><span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">/// Encode an edit sequence as `MessagePack` bytes.</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`VcsError::Serialization`] if encoding fails.</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> encode_edit_log(edits<span class="op">:</span> <span class="op">&amp;</span>[TreeEdit]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u8</span><span class="op">&gt;,</span> VcsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">rmp_serde::</span>to_vec(edits)<span class="op">?</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">/// Decode an edit sequence from `MessagePack` bytes.</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`VcsError::Serialization`] if decoding fails.</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> decode_edit_log(bytes<span class="op">:</span> <span class="op">&amp;</span>[<span class="dt">u8</span>]) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>TreeEdit<span class="op">&gt;,</span> VcsError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">rmp_serde::</span>from_slice(bytes)<span class="op">?</span>)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These are used by the CLI <code>schema data sync --edits</code> command to store edit logs in the VCS object store.</p>
+</section>
+</section>
+<section id="error-types" class="level2" data-number="25.10">
+<h2 data-number="25.10" class="anchored" data-anchor-id="error-types"><span class="header-section-number">25.10</span> Error types</h2>
+<p><strong>File</strong>: <code>crates/panproto-lens/src/edit_error.rs</code></p>
+<p><code>EditLensError</code> covers translation failures:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variant</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TranslationFailed</code></td>
+<td>General translation failure</td>
+</tr>
+<tr class="even">
+<td><code>PolicyConflict</code></td>
+<td>Complement policy conflict for a vertex kind</td>
+</tr>
+<tr class="odd">
+<td><code>NoInverse</code></td>
+<td>A directed equation has no inverse, needed for <code>put_edit</code></td>
+</tr>
+<tr class="even">
+<td><code>ComplementInconsistent</code></td>
+<td>Complement state does not match expected state</td>
+</tr>
+<tr class="odd">
+<td><code>Restrict</code></td>
+<td>Underlying <code>wtype_restrict</code> failed</td>
+</tr>
+<tr class="even">
+<td><code>EditApply</code></td>
+<td>An edit could not be applied to the instance</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-map" class="level2" data-number="25.11">
+<h2 data-number="25.11" class="anchored" data-anchor-id="module-map"><span class="header-section-number">25.11</span> Module map</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>edit_lens</code></td>
+<td><code>crates/panproto-lens/src/edit_lens.rs</code></td>
+<td><code>EditLens</code> struct, <code>get_edit</code>, <code>put_edit</code></td>
+</tr>
+<tr class="even">
+<td><code>edit_pipeline</code></td>
+<td><code>crates/panproto-lens/src/edit_pipeline.rs</code></td>
+<td>Five-step incremental pipeline</td>
+</tr>
+<tr class="odd">
+<td><code>edit_laws</code></td>
+<td><code>crates/panproto-lens/src/edit_laws.rs</code></td>
+<td>Consistency and coherence law verification</td>
+</tr>
+<tr class="even">
+<td><code>edit_provenance</code></td>
+<td><code>crates/panproto-lens/src/edit_provenance.rs</code></td>
+<td>Translation lineage tracking</td>
+</tr>
+<tr class="odd">
+<td><code>edit_error</code></td>
+<td><code>crates/panproto-lens/src/edit_error.rs</code></td>
+<td>Error types</td>
+</tr>
+<tr class="even">
+<td><code>tree_edit</code></td>
+<td><code>crates/panproto-inst/src/tree_edit.rs</code></td>
+<td><code>TreeEdit</code> monoid for W-type instances</td>
+</tr>
+<tr class="odd">
+<td><code>table_edit</code></td>
+<td><code>crates/panproto-inst/src/table_edit.rs</code></td>
+<td><code>TableEdit</code> monoid for functor instances</td>
+</tr>
+<tr class="even">
+<td><code>reachability</code></td>
+<td><code>crates/panproto-inst/src/reachability.rs</code></td>
+<td>Incremental <code>ReachabilityIndex</code></td>
+</tr>
+<tr class="odd">
+<td><code>contraction</code></td>
+<td><code>crates/panproto-inst/src/contraction.rs</code></td>
+<td>Incremental <code>ContractionTracker</code></td>
+</tr>
+<tr class="even">
+<td><code>edit_mig</code></td>
+<td><code>crates/panproto-vcs/src/edit_mig.rs</code></td>
+<td>VCS-level incremental migration</td>
+</tr>
+<tr class="odd">
+<td><code>cmd/data</code></td>
+<td><code>crates/panproto-cli/src/cmd/data.rs</code></td>
+<td><code>schema data sync</code> and <code>schema data status</code> CLI commands</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/panproto\.dev\/dev-guide\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/30-polynomial-operations.html" class="pagination-link" aria-label="Polynomial Operations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Edit Lens Internals {#sec-edit-lenses-internals}</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>The edit lens subsystem translates individual edits (patches) between schema versions, maintaining a stateful complement. This chapter covers the internal architecture: the <span class="in">`EditLens`</span> struct, the five-step translation pipeline, complement state machine transitions, law verification, provenance tracking, and VCS integration.</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>For the user-facing tutorial, see the <span class="co">[</span><span class="ot">tutorial's edit lenses chapter</span><span class="co">](https://panproto.dev/tutorial/chapters/23-edit-lenses.html)</span>.</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## `EditLens` struct</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_lens.rs`</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/edit_lens.rs" start-line=31 end-line=52}</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>The fields:</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compiled`**: the <span class="in">`CompiledMigration`</span> from the underlying state-based lens. Carries the surviving vertex/edge sets, vertex remap, edge remap, resolver, and field transforms.</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`src_schema` / `tgt_schema`**: the source and target schemas.</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`complement`**: the current complement state, mutated by every <span class="in">`get_edit`</span> and <span class="in">`put_edit`</span> call.</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protocol`**: the protocol definition, used to access directed equations and complement policies.</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`reverse_vertex_remap` / `reverse_edge_remap`**: precomputed inverse maps for the <span class="in">`put_edit`</span> direction.</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`pipeline`**: an optional <span class="in">`EditPipeline`</span> for the per-step incremental translation. Initialized by <span class="in">`initialize()`</span>.</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">### Construction and initialization</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="in">`EditLens::from_lens(lens, protocol)`</span> constructs the edit lens from an existing state-based <span class="in">`Lens`</span>. It builds the reverse remap tables by inverting the compiled migration's vertex and edge maps. The complement starts empty.</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="in">`initialize(source)`</span> performs a whole-state <span class="in">`get`</span> on the source instance to populate the initial complement and creates the <span class="in">`EditPipeline`</span>:</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/edit_lens.rs" start-line=82 end-line=98}</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `get_edit` translation</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_lens.rs`</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>Each <span class="in">`get_edit`</span> call dispatches on the <span class="in">`TreeEdit`</span> variant and applies the translation pipeline:</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Anchor survival**: for <span class="in">`InsertNode`</span>, check whether the node's anchor (after vertex remap) is in <span class="in">`surviving_verts`</span>. If not, the node and its edge are added to the complement, and <span class="in">`Identity`</span> is returned.</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Conditional survival**: evaluate value-dependent predicates from <span class="in">`conditional_survival`</span> on the node's <span class="in">`extra_fields`</span>. If the predicate returns <span class="in">`false`</span>, the node is dropped to complement.</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Structural remap**: remap the node's anchor via <span class="in">`vertex_remap`</span> and the edge via <span class="in">`edge_remap`</span>. Apply <span class="in">`FieldTransform`</span> operations to surviving nodes' fields.</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Field transforms**: for <span class="in">`SetField`</span> edits, translate the field name (honoring <span class="in">`RenameField`</span> transforms) and apply <span class="in">`ApplyExpr`</span> transforms to values.</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Complement update**: update the complement based on which data was absorbed or released.</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>For <span class="in">`SetField`</span> targeting a complement node, the edit updates the complement's copy of the node and returns <span class="in">`Identity`</span>. For <span class="in">`DeleteNode`</span> targeting a complement node, the node is removed from the complement.</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>For <span class="in">`RelabelNode`</span>, the lens handles four cases:</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Was in complement? <span class="pp">|</span> New anchor survives? <span class="pp">|</span> Result <span class="pp">|</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Yes <span class="pp">|</span> Yes <span class="pp">|</span> Remove from complement, emit <span class="in">`InsertNode`</span> <span class="pp">|</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Yes <span class="pp">|</span> No <span class="pp">|</span> Update complement node's anchor, emit <span class="in">`Identity`</span> <span class="pp">|</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> No <span class="pp">|</span> Yes <span class="pp">|</span> Emit <span class="in">`RelabelNode`</span> with remapped anchor <span class="pp">|</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> No <span class="pp">|</span> No <span class="pp">|</span> Emit <span class="in">`DeleteNode`</span> <span class="pp">|</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `put_edit` translation</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="in">`put_edit`</span> reverses <span class="in">`get_edit`</span> using the precomputed <span class="in">`reverse_vertex_remap`</span> and <span class="in">`reverse_edge_remap`</span>. For <span class="in">`InsertNode`</span>, the node and edge are un-remapped to source-schema coordinates. For <span class="in">`SetField`</span>, the field name is translated backward through field transforms.</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="in">`put_edit`</span> does not need to check anchor survival (the edit is already in view-schema coordinates, so all anchors are surviving by definition).</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## The five-step `EditPipeline`</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_pipeline.rs`</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/edit_pipeline.rs" start-line=19 end-line=37}</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>The <span class="in">`EditPipeline`</span> mirrors the five stages of <span class="in">`wtype_restrict`</span> but operates incrementally on individual edits rather than whole instances.</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: anchor survival</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>Checks whether the edit targets a surviving vertex. Non-surviving <span class="in">`InsertNode`</span> edits are absorbed into the complement. <span class="in">`DeleteNode`</span> edits for complement nodes remove them from the complement. <span class="in">`SetField`</span> edits for complement nodes update the complement's copy.</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: reachability</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>Uses the <span class="in">`ReachabilityIndex`</span> to track which nodes can reach the root:</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`InsertNode`</span>: calls <span class="in">`insert_edge(parent, child)`</span>, which BFS-marks the child's subtree as reachable.</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DeleteNode`</span>: calls <span class="in">`delete_edge(parent, child)`</span>, which BFS-marks the subtree as unreachable if no alternate path to root exists.</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MoveSubtree`</span>: removes the old edge and inserts the new one, cascading reachability updates.</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-inst/src/reachability.rs`</span></span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ReachabilityIndex`</span> maintains a <span class="in">`reachable`</span> set (backed by <span class="in">`FxHashSet`</span>), plus parent/children adjacency maps. Updates are proportional to the affected subtree, not the whole instance.</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: ancestor contraction</span></span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>Uses the <span class="in">`ContractionTracker`</span> to record which nodes have been contracted:</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ContractNode`</span>: records the contraction via <span class="in">`ContractionTracker::contract`</span>, including the original parent, children, and edge.</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`InsertNode`</span>: if the child was previously contracted, calls <span class="in">`expand`</span> to undo the contraction.</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-inst/src/contraction.rs`</span></span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ContractionTracker`</span> maps each contracted node to its <span class="in">`ContractionRecord`</span> and tracks which surviving nodes absorbed which contracted nodes via the <span class="in">`absorptions`</span> map.</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 4: edge resolution</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>For edits that create arcs with <span class="in">`kind = "contracted"`</span> (from contraction), the pipeline resolves the correct schema edge using <span class="in">`panproto_inst::resolve_edge`</span> with the compiled migration's resolver.</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 5: fan reconstruction</span></span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>Fans with dropped participants (parent or child in the complement) are absorbed into <span class="in">`complement.dropped_fans`</span>. Fans whose participants all survive pass through.</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### Forward and reverse</span></span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="in">`translate_get`</span> runs steps 1 through 5 in order. <span class="in">`translate_put`</span> runs them in reverse order (5, 4, 3, 2, 1), mirroring the <span class="in">`put`</span> operation's reverse-step reconstruction.</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement state machine transitions</span></span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>The complement is a <span class="in">`Complement`</span> struct (from <span class="in">`panproto-lens/src/asymmetric.rs`</span>) whose fields are mutated by each edit:</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Edit <span class="pp">|</span> Complement effect <span class="pp">|</span></span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`InsertNode`</span> (non-surviving) <span class="pp">|</span> Node added to <span class="in">`dropped_nodes`</span>, edge added to <span class="in">`dropped_arcs`</span> <span class="pp">|</span></span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DeleteNode`</span> (in complement) <span class="pp">|</span> Node removed from <span class="in">`dropped_nodes`</span> <span class="pp">|</span></span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`SetField`</span> (complement node) <span class="pp">|</span> Node's <span class="in">`extra_fields`</span> updated <span class="pp">|</span></span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RelabelNode`</span> (complement -&gt; surviving) <span class="pp">|</span> Node removed from complement, emitted as insert <span class="pp">|</span></span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`InsertFan`</span> (dropped participant) <span class="pp">|</span> Fan added to <span class="in">`dropped_fans`</span> <span class="pp">|</span></span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DeleteFan`</span> (in complement) <span class="pp">|</span> Fan removed from <span class="in">`dropped_fans`</span> <span class="pp">|</span></span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>The state machine invariant: after processing a sequence of edits $e_1, \ldots, e_n$, the complement state is identical to the complement produced by applying all edits to the source and running a whole-state <span class="in">`get`</span>.</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Edit lens law verification</span></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_laws.rs`</span></span>
+<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="fu">### `check_edit_consistency`</span></span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>Verifies the Consistency law by comparing two paths:</span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Path 1** (incremental): call <span class="in">`get_edit(edit)`</span> on a clone of the lens, apply the result to the current view.</span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Path 2** (batch): apply <span class="in">`edit`</span> to the source, then run a whole-state <span class="in">`get`</span>.</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>Compares the resulting views node by node. Returns <span class="in">`EditLawViolation::Consistency`</span> if node counts or anchors diverge.</span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### `check_complement_coherence`</span></span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>Verifies the Complement coherence law:</span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Path 1**: call <span class="in">`get_edit(edit)`</span> on a clone, inspect the resulting complement.</span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Path 2**: apply <span class="in">`edit`</span> to the source, run a whole-state <span class="in">`get`</span>, inspect the complement.</span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>Compares <span class="in">`dropped_nodes`</span> counts. Returns <span class="in">`EditLawViolation::ComplementCoherence`</span> on mismatch.</span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Optics dispatch</span></span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>The <span class="in">`optic_kind()`</span> classification from <span class="in">`panproto-lens/src/optic.rs`</span> determines how the edit lens translates structural edits:</span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`OpticKind`</span> <span class="pp">|</span> Translation strategy <span class="pp">|</span></span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Iso`</span> <span class="pp">|</span> Direct remap (no complement interaction) <span class="pp">|</span></span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Lens`</span> <span class="pp">|</span> Anchor survival + complement tracking <span class="pp">|</span></span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Prism`</span> <span class="pp">|</span> Variant tag routing <span class="pp">|</span></span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Affine`</span> <span class="pp">|</span> Lens + Prism combined <span class="pp">|</span></span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Traversal`</span> <span class="pp">|</span> Array element mapping <span class="pp">|</span></span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>For <span class="in">`Iso`</span> transformations, <span class="in">`get_edit`</span> skips complement checks entirely.</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## `EditProvenance`</span></span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_provenance.rs`</span></span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-lens/src/edit_provenance.rs" start-line=16 end-line=26}</span></span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>Provenance is populated by <span class="in">`get_edit_with_provenance`</span>, which wraps <span class="in">`get_edit`</span> and records which rules fired. The <span class="in">`rules_applied`</span> vector captures named rules (e.g., <span class="in">`"structural_remap"`</span>, <span class="in">`"field_text"`</span>). The <span class="in">`policy_consulted`</span> field records which complement policy (from the schema's policy sorts) was used. The <span class="in">`was_total`</span> flag is <span class="in">`false`</span> when a refinement constraint failed, indicating a partial translation.</span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a><span class="in">`EditProvenance`</span> derives <span class="in">`Serialize`</span> and <span class="in">`Deserialize`</span>, so provenance records can be stored alongside edit logs for auditing.</span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS integration</span></span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="fu">### `EditLogObject`</span></span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/object.rs`</span></span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-vcs/src/object.rs" start-line=148 end-line=165}</span></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>An <span class="in">`EditLogObject`</span> is a content-addressed VCS object storing:</span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`schema_id`</span>: the schema the edits apply to</span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`data_id`</span>: the data set the edits were applied to</span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`edits`</span>: MessagePack-encoded <span class="in">`Vec&lt;TreeEdit&gt;`</span></span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`edit_count`</span>: number of edits in the log</span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`final_complement`</span>: the <span class="in">`ObjectId`</span> of the complement state after all edits</span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a><span class="in">`CommitObject`</span> includes an <span class="in">`edit_log_ids: Vec&lt;ObjectId&gt;`</span> field referencing any edit logs generated at that commit.</span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="fu">### `incremental_migrate`</span></span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/edit_mig.rs`</span></span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-vcs/src/edit_mig.rs" start-line=13 end-line=37}</span></span>
+<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>Translates a sequence of source edits through an edit lens. Non-identity results are collected into the output. Returns <span class="in">`VcsError::DataMigrationFailed`</span> if any translation fails.</span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a><span class="fu">### `encode_edit_log` / `decode_edit_log`</span></span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>Serialize and deserialize edit sequences as MessagePack bytes:</span>
+<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-vcs/src/edit_mig.rs" start-line=39 end-line=55}</span></span>
+<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>These are used by the CLI <span class="in">`schema data sync --edits`</span> command to store edit logs in the VCS object store.</span>
+<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error types</span></span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-lens/src/edit_error.rs`</span></span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="in">`EditLensError`</span> covers translation failures:</span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variant <span class="pp">|</span> When <span class="pp">|</span></span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`TranslationFailed`</span> <span class="pp">|</span> General translation failure <span class="pp">|</span></span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PolicyConflict`</span> <span class="pp">|</span> Complement policy conflict for a vertex kind <span class="pp">|</span></span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`NoInverse`</span> <span class="pp">|</span> A directed equation has no inverse, needed for <span class="in">`put_edit`</span> <span class="pp">|</span></span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ComplementInconsistent`</span> <span class="pp">|</span> Complement state does not match expected state <span class="pp">|</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Restrict`</span> <span class="pp">|</span> Underlying <span class="in">`wtype_restrict`</span> failed <span class="pp">|</span></span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`EditApply`</span> <span class="pp">|</span> An edit could not be applied to the instance <span class="pp">|</span></span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## Module map</span></span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Module <span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_lens`</span> <span class="pp">|</span> <span class="in">`crates/panproto-lens/src/edit_lens.rs`</span> <span class="pp">|</span> <span class="in">`EditLens`</span> struct, <span class="in">`get_edit`</span>, <span class="in">`put_edit`</span> <span class="pp">|</span></span>
+<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_pipeline`</span> <span class="pp">|</span> <span class="in">`crates/panproto-lens/src/edit_pipeline.rs`</span> <span class="pp">|</span> Five-step incremental pipeline <span class="pp">|</span></span>
+<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_laws`</span> <span class="pp">|</span> <span class="in">`crates/panproto-lens/src/edit_laws.rs`</span> <span class="pp">|</span> Consistency and coherence law verification <span class="pp">|</span></span>
+<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_provenance`</span> <span class="pp">|</span> <span class="in">`crates/panproto-lens/src/edit_provenance.rs`</span> <span class="pp">|</span> Translation lineage tracking <span class="pp">|</span></span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_error`</span> <span class="pp">|</span> <span class="in">`crates/panproto-lens/src/edit_error.rs`</span> <span class="pp">|</span> Error types <span class="pp">|</span></span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`tree_edit`</span> <span class="pp">|</span> <span class="in">`crates/panproto-inst/src/tree_edit.rs`</span> <span class="pp">|</span> <span class="in">`TreeEdit`</span> monoid for W-type instances <span class="pp">|</span></span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`table_edit`</span> <span class="pp">|</span> <span class="in">`crates/panproto-inst/src/table_edit.rs`</span> <span class="pp">|</span> <span class="in">`TableEdit`</span> monoid for functor instances <span class="pp">|</span></span>
+<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`reachability`</span> <span class="pp">|</span> <span class="in">`crates/panproto-inst/src/reachability.rs`</span> <span class="pp">|</span> Incremental <span class="in">`ReachabilityIndex`</span> <span class="pp">|</span></span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`contraction`</span> <span class="pp">|</span> <span class="in">`crates/panproto-inst/src/contraction.rs`</span> <span class="pp">|</span> Incremental <span class="in">`ContractionTracker`</span> <span class="pp">|</span></span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`edit_mig`</span> <span class="pp">|</span> <span class="in">`crates/panproto-vcs/src/edit_mig.rs`</span> <span class="pp">|</span> VCS-level incremental migration <span class="pp">|</span></span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`cmd/data`</span> <span class="pp">|</span> <span class="in">`crates/panproto-cli/src/cmd/data.rs`</span> <span class="pp">|</span> <span class="in">`schema data sync`</span> and <span class="in">`schema data status`</span> CLI commands <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/31-edit-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

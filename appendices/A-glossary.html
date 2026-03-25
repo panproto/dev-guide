@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>29&nbsp; Glossary – panproto: Developer Guide</title>
+<title>30&nbsp; Glossary – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-ffa0eef5ebcb8616de356e02b78e2eb3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee1364869a0ea6f86de9400b37a80109.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -112,6 +112,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -287,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A-glossary.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A-glossary.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Glossary</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -497,6 +526,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/31-edit-lenses.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -511,19 +546,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -540,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -557,31 +592,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -596,13 +631,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#algebraic-foundations" id="toc-algebraic-foundations" class="nav-link active" data-scroll-target="#algebraic-foundations"><span class="header-section-number">29.1</span> Algebraic foundations</a></li>
-  <li><a href="#schema-layer" id="toc-schema-layer" class="nav-link" data-scroll-target="#schema-layer"><span class="header-section-number">29.2</span> Schema layer</a></li>
-  <li><a href="#instance-layer" id="toc-instance-layer" class="nav-link" data-scroll-target="#instance-layer"><span class="header-section-number">29.3</span> Instance layer</a></li>
-  <li><a href="#migration-layer" id="toc-migration-layer" class="nav-link" data-scroll-target="#migration-layer"><span class="header-section-number">29.4</span> Migration layer</a></li>
-  <li><a href="#lens-layer" id="toc-lens-layer" class="nav-link" data-scroll-target="#lens-layer"><span class="header-section-number">29.5</span> Lens layer</a></li>
-  <li><a href="#restrict-and-lift-operations" id="toc-restrict-and-lift-operations" class="nav-link" data-scroll-target="#restrict-and-lift-operations"><span class="header-section-number">29.6</span> Restrict and lift operations</a></li>
-  <li><a href="#infrastructure" id="toc-infrastructure" class="nav-link" data-scroll-target="#infrastructure"><span class="header-section-number">29.7</span> Infrastructure</a></li>
+  <li><a href="#algebraic-foundations" id="toc-algebraic-foundations" class="nav-link active" data-scroll-target="#algebraic-foundations"><span class="header-section-number">30.1</span> Algebraic foundations</a></li>
+  <li><a href="#schema-layer" id="toc-schema-layer" class="nav-link" data-scroll-target="#schema-layer"><span class="header-section-number">30.2</span> Schema layer</a></li>
+  <li><a href="#instance-layer" id="toc-instance-layer" class="nav-link" data-scroll-target="#instance-layer"><span class="header-section-number">30.3</span> Instance layer</a></li>
+  <li><a href="#migration-layer" id="toc-migration-layer" class="nav-link" data-scroll-target="#migration-layer"><span class="header-section-number">30.4</span> Migration layer</a></li>
+  <li><a href="#lens-layer" id="toc-lens-layer" class="nav-link" data-scroll-target="#lens-layer"><span class="header-section-number">30.5</span> Lens layer</a></li>
+  <li><a href="#edit-lens-layer" id="toc-edit-lens-layer" class="nav-link" data-scroll-target="#edit-lens-layer"><span class="header-section-number">30.6</span> Edit lens layer</a></li>
+  <li><a href="#restrict-and-lift-operations" id="toc-restrict-and-lift-operations" class="nav-link" data-scroll-target="#restrict-and-lift-operations"><span class="header-section-number">30.7</span> Restrict and lift operations</a></li>
+  <li><a href="#infrastructure" id="toc-infrastructure" class="nav-link" data-scroll-target="#infrastructure"><span class="header-section-number">30.8</span> Infrastructure</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/appendices/A-glossary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -610,9 +646,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A-glossary.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A-glossary.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A-glossary.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Glossary</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-glossary" class="quarto-section-identifier"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Glossary</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-glossary" class="quarto-section-identifier"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Glossary</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -630,8 +666,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This appendix defines every domain term used in the panproto codebase and documentation. Each definition is specific to panproto’s usage. For the underlying category theory foundations, see the <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a>.</p>
-<section id="algebraic-foundations" class="level2" data-number="29.1">
-<h2 data-number="29.1" class="anchored" data-anchor-id="algebraic-foundations"><span class="header-section-number">29.1</span> Algebraic foundations</h2>
+<section id="algebraic-foundations" class="level2" data-number="30.1">
+<h2 data-number="30.1" class="anchored" data-anchor-id="algebraic-foundations"><span class="header-section-number">30.1</span> Algebraic foundations</h2>
 <dl>
 <dt>GAT (Generalized Algebraic Theory)</dt>
 <dd>
@@ -671,8 +707,8 @@ A concrete interpretation of a theory: an assignment of sets to sorts and functi
 </dd>
 </dl>
 </section>
-<section id="schema-layer" class="level2" data-number="29.2">
-<h2 data-number="29.2" class="anchored" data-anchor-id="schema-layer"><span class="header-section-number">29.2</span> Schema layer</h2>
+<section id="schema-layer" class="level2" data-number="30.2">
+<h2 data-number="30.2" class="anchored" data-anchor-id="schema-layer"><span class="header-section-number">30.2</span> Schema layer</h2>
 <dl>
 <dt>Schema</dt>
 <dd>
@@ -708,8 +744,8 @@ Namespaced Identifier, the AT Protocol’s hierarchical naming scheme for schema
 </dd>
 </dl>
 </section>
-<section id="instance-layer" class="level2" data-number="29.3">
-<h2 data-number="29.3" class="anchored" data-anchor-id="instance-layer"><span class="header-section-number">29.3</span> Instance layer</h2>
+<section id="instance-layer" class="level2" data-number="30.3">
+<h2 data-number="30.3" class="anchored" data-anchor-id="instance-layer"><span class="header-section-number">30.3</span> Instance layer</h2>
 <dl>
 <dt>Instance</dt>
 <dd>
@@ -737,8 +773,8 @@ An ordered collection of arcs from a single node, representing a hyper-edge’s 
 </dd>
 </dl>
 </section>
-<section id="migration-layer" class="level2" data-number="29.4">
-<h2 data-number="29.4" class="anchored" data-anchor-id="migration-layer"><span class="header-section-number">29.4</span> Migration layer</h2>
+<section id="migration-layer" class="level2" data-number="30.4">
+<h2 data-number="30.4" class="anchored" data-anchor-id="migration-layer"><span class="header-section-number">30.4</span> Migration layer</h2>
 <dl>
 <dt>Migration</dt>
 <dd>
@@ -766,8 +802,8 @@ A function within a compiled migration that computes the value of a target-schem
 </dd>
 </dl>
 </section>
-<section id="lens-layer" class="level2" data-number="29.5">
-<h2 data-number="29.5" class="anchored" data-anchor-id="lens-layer"><span class="header-section-number">29.5</span> Lens layer</h2>
+<section id="lens-layer" class="level2" data-number="30.5">
+<h2 data-number="30.5" class="anchored" data-anchor-id="lens-layer"><span class="header-section-number">30.5</span> Lens layer</h2>
 <dl>
 <dt>Lens</dt>
 <dd>
@@ -827,8 +863,49 @@ The round-trip law stating that <code>get(put(t, s)) = t</code> — getting afte
 </dd>
 </dl>
 </section>
-<section id="restrict-and-lift-operations" class="level2" data-number="29.6">
-<h2 data-number="29.6" class="anchored" data-anchor-id="restrict-and-lift-operations"><span class="header-section-number">29.6</span> Restrict and lift operations</h2>
+<section id="edit-lens-layer" class="level2" data-number="30.6">
+<h2 data-number="30.6" class="anchored" data-anchor-id="edit-lens-layer"><span class="header-section-number">30.6</span> Edit lens layer</h2>
+<dl>
+<dt>Edit lens</dt>
+<dd>
+A lens that operates on individual edits (patches) rather than whole states, translating <code>TreeEdit</code> values between schema versions while maintaining a stateful complement. Implemented in <code>crates/panproto-lens/src/edit_lens.rs</code>.
+</dd>
+<dt><code>TreeEdit</code></dt>
+<dd>
+An element of the edit monoid for tree-shaped (W-type) instances. Variants include <code>InsertNode</code>, <code>DeleteNode</code>, <code>ContractNode</code>, <code>RelabelNode</code>, <code>SetField</code>, <code>RemoveField</code>, <code>MoveSubtree</code>, <code>InsertFan</code>, <code>DeleteFan</code>, <code>JoinFeatures</code>, and <code>Sequence</code>. Implemented in <code>crates/panproto-inst/src/tree_edit.rs</code>.
+</dd>
+<dt><code>TableEdit</code></dt>
+<dd>
+An element of the edit monoid for relational (functor) instances. Variants include <code>InsertRow</code>, <code>DeleteRow</code>, and <code>UpdateCell</code>. Implemented in <code>crates/panproto-inst/src/table_edit.rs</code>.
+</dd>
+<dt>Edit monoid</dt>
+<dd>
+The algebraic structure on edits: a set with an associative composition operation and an identity element (the no-op edit). The monoid action on instances is given by <code>apply(edit, instance)</code>. Both <code>TreeEdit</code> and <code>TableEdit</code> form monoids.
+</dd>
+<dt>Complement state machine</dt>
+<dd>
+The mode of complement operation in an edit lens. Unlike batch lenses where the complement is a snapshot, in edit lenses the complement is mutated by each <code>get_edit</code> and <code>put_edit</code> call. The state machine invariant guarantees that the complement after processing edits <span class="math inline">\(e_1, \ldots, e_n\)</span> equals the complement from a whole-state <code>get</code> on the edited source.
+</dd>
+<dt><code>ReachabilityIndex</code></dt>
+<dd>
+An incremental data structure tracking which nodes in a W-type instance are reachable from the root. Supports <code>insert_edge</code> and <code>delete_edge</code> operations that update reachability in time proportional to the affected subtree. Used by the edit lens pipeline’s step 2. Implemented in <code>crates/panproto-inst/src/reachability.rs</code>.
+</dd>
+<dt><code>ContractionTracker</code></dt>
+<dd>
+An incremental tracker for ancestor contractions in the edit lens pipeline. Records which nodes have been contracted (absorbed into their nearest surviving ancestor) and supports individual undo via <code>expand</code>. Implemented in <code>crates/panproto-inst/src/contraction.rs</code>.
+</dd>
+<dt><code>EditProvenance</code></dt>
+<dd>
+A record capturing the lineage of a translated edit: which source edit produced it, which translation rules fired, which complement policy was consulted, and whether the translation was total or partial. Implemented in <code>crates/panproto-lens/src/edit_provenance.rs</code>.
+</dd>
+<dt><code>EditLogObject</code></dt>
+<dd>
+A VCS object storing a content-addressed sequence of edits for incremental migration. Contains the schema ID, data set ID, MessagePack-encoded edits, edit count, and final complement state. Stored in the commit DAG via <code>CommitObject.edit_log_ids</code>. Implemented in <code>crates/panproto-vcs/src/object.rs</code>.
+</dd>
+</dl>
+</section>
+<section id="restrict-and-lift-operations" class="level2" data-number="30.7">
+<h2 data-number="30.7" class="anchored" data-anchor-id="restrict-and-lift-operations"><span class="header-section-number">30.7</span> Restrict and lift operations</h2>
 <dl>
 <dt>Restrict</dt>
 <dd>
@@ -860,8 +937,8 @@ Rebuilding fan (ordered child collection) structures after restrict, accounting 
 </dd>
 </dl>
 </section>
-<section id="infrastructure" class="level2" data-number="29.7">
-<h2 data-number="29.7" class="anchored" data-anchor-id="infrastructure"><span class="header-section-number">29.7</span> Infrastructure</h2>
+<section id="infrastructure" class="level2" data-number="30.8">
+<h2 data-number="30.8" class="anchored" data-anchor-id="infrastructure"><span class="header-section-number">30.8</span> Infrastructure</h2>
 <dl>
 <dt>Handle</dt>
 <dd>
@@ -1354,12 +1431,12 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/19-release.html" class="pagination-link" aria-label="Release Process">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Release Process</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Release Process</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../appendices/B-source-code-map.html" class="pagination-link" aria-label="Source Code Map">
-        <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Source Code Map</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Source Code Map</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -1506,42 +1583,71 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>PutGet law</span>
 <span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`get(put(t, s)) = t`</span> --- getting after a put yields the updated target.</span>
 <span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Restrict and lift operations</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Edit lens layer</span></span>
 <span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>Restrict</span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>: The forward migration operation: given a source instance and a compiled migration, produce the corresponding target instance by dropping non-surviving elements and remapping the rest.</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>Edit lens</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>: A lens that operates on individual edits (patches) rather than whole states, translating <span class="in">`TreeEdit`</span> values between schema versions while maintaining a stateful complement. Implemented in <span class="in">`crates/panproto-lens/src/edit_lens.rs`</span>.</span>
 <span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>Lift</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>: The backward migration operation: given a target instance and a compiled migration (with complement), reconstruct a source instance. The inverse of restrict.</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="in">`TreeEdit`</span></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>: An element of the edit monoid for tree-shaped (W-type) instances. Variants include <span class="in">`InsertNode`</span>, <span class="in">`DeleteNode`</span>, <span class="in">`ContractNode`</span>, <span class="in">`RelabelNode`</span>, <span class="in">`SetField`</span>, <span class="in">`RemoveField`</span>, <span class="in">`MoveSubtree`</span>, <span class="in">`InsertFan`</span>, <span class="in">`DeleteFan`</span>, <span class="in">`JoinFeatures`</span>, and <span class="in">`Sequence`</span>. Implemented in <span class="in">`crates/panproto-inst/src/tree_edit.rs`</span>.</span>
 <span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>Anchor</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>: The assignment of a surviving node to its position in the target schema during restrict. Computed by <span class="in">`anchor_surviving()`</span>.</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="in">`TableEdit`</span></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>: An element of the edit monoid for relational (functor) instances. Variants include <span class="in">`InsertRow`</span>, <span class="in">`DeleteRow`</span>, and <span class="in">`UpdateCell`</span>. Implemented in <span class="in">`crates/panproto-inst/src/table_edit.rs`</span>.</span>
 <span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>Reachable</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>: A node is reachable if it can be reached from a surviving node by following arcs. Unreachable nodes are dropped during restrict.</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>Edit monoid</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>: The algebraic structure on edits: a set with an associative composition operation and an identity element (the no-op edit). The monoid action on instances is given by <span class="in">`apply(edit, instance)`</span>. Both <span class="in">`TreeEdit`</span> and <span class="in">`TableEdit`</span> form monoids.</span>
 <span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>Ancestor contraction</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>: The merging of ancestor chains when intermediate vertices are removed by a migration. Implemented in <span class="in">`ancestor_contraction()`</span>.</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>Complement state machine</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>: The mode of complement operation in an edit lens. Unlike batch lenses where the complement is a snapshot, in edit lenses the complement is mutated by each <span class="in">`get_edit`</span> and <span class="in">`put_edit`</span> call. The state machine invariant guarantees that the complement after processing edits $e_1, \ldots, e_n$ equals the complement from a whole-state <span class="in">`get`</span> on the edited source.</span>
 <span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>Edge resolution</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>: The process of rewiring edges during restrict according to the compiled migration's edge remap and resolver functions.</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="in">`ReachabilityIndex`</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>: An incremental data structure tracking which nodes in a W-type instance are reachable from the root. Supports <span class="in">`insert_edge`</span> and <span class="in">`delete_edge`</span> operations that update reachability in time proportional to the affected subtree. Used by the edit lens pipeline's step 2. Implemented in <span class="in">`crates/panproto-inst/src/reachability.rs`</span>.</span>
 <span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>Fan reconstruction</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>: Rebuilding fan (ordered child collection) structures after restrict, accounting for removed or reordered arcs.</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="in">`ContractionTracker`</span></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>: An incremental tracker for ancestor contractions in the edit lens pipeline. Records which nodes have been contracted (absorbed into their nearest surviving ancestor) and supports individual undo via <span class="in">`expand`</span>. Implemented in <span class="in">`crates/panproto-inst/src/contraction.rs`</span>.</span>
 <span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Infrastructure</span></span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>Handle</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>: An opaque integer identifier used by the WASM slab allocator to reference Rust objects from JavaScript without exposing raw pointers.</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>Slab allocator</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>: The allocation strategy in <span class="in">`panproto-wasm`</span> that stores Rust objects in a <span class="in">`Vec`</span>-backed slab, returning integer handles to JavaScript. Avoids GC interaction.</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="in">`EditProvenance`</span></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>: A record capturing the lineage of a translated edit: which source edit produced it, which translation rules fired, which complement policy was consulted, and whether the translation was total or partial. Implemented in <span class="in">`crates/panproto-lens/src/edit_provenance.rs`</span>.</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="in">`EditLogObject`</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>: A VCS object storing a content-addressed sequence of edits for incremental migration. Contains the schema ID, data set ID, MessagePack-encoded edits, edit count, and final complement state. Stored in the commit DAG via <span class="in">`CommitObject.edit_log_ids`</span>. Implemented in <span class="in">`crates/panproto-vcs/src/object.rs`</span>.</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Restrict and lift operations</span></span>
 <span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>MessagePack</span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>: The binary serialization format used at the WASM boundary to pass structured data between Rust and JavaScript. Implemented via <span class="in">`rmp-serde`</span>.</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>Restrict</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>: The forward migration operation: given a source instance and a compiled migration, produce the corresponding target instance by dropping non-surviving elements and remapping the rest.</span>
 <span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>wasm-bindgen</span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>: The Rust-to-JavaScript binding generator used by <span class="in">`panproto-wasm`</span> to expose the engine's API to the TypeScript SDK.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>Lift</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>: The backward migration operation: given a target instance and a compiled migration (with complement), reconstruct a source instance. The inverse of restrict.</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>Anchor</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>: The assignment of a surviving node to its position in the target schema during restrict. Computed by <span class="in">`anchor_surviving()`</span>.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>Reachable</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>: A node is reachable if it can be reached from a surviving node by following arcs. Unreachable nodes are dropped during restrict.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>Ancestor contraction</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>: The merging of ancestor chains when intermediate vertices are removed by a migration. Implemented in <span class="in">`ancestor_contraction()`</span>.</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>Edge resolution</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>: The process of rewiring edges during restrict according to the compiled migration's edge remap and resolver functions.</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>Fan reconstruction</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>: Rebuilding fan (ordered child collection) structures after restrict, accounting for removed or reordered arcs.</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Infrastructure</span></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>Handle</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>: An opaque integer identifier used by the WASM slab allocator to reference Rust objects from JavaScript without exposing raw pointers.</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>Slab allocator</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>: The allocation strategy in <span class="in">`panproto-wasm`</span> that stores Rust objects in a <span class="in">`Vec`</span>-backed slab, returning integer handles to JavaScript. Avoids GC interaction.</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>MessagePack</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>: The binary serialization format used at the WASM boundary to pass structured data between Rust and JavaScript. Implemented via <span class="in">`rmp-serde`</span>.</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>wasm-bindgen</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>: The Rust-to-JavaScript binding generator used by <span class="in">`panproto-wasm`</span> to expose the engine's API to the TypeScript SDK.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

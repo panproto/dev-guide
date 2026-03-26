@@ -796,7 +796,8 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-schema` for schema types and builders.</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_schema <span class="kw">as</span> schema<span class="op">;</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// Re-export of `panproto-vcs` for schematic version control.</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_vcs <span class="kw">as</span> vcs<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">use</span> panproto_vcs <span class="kw">as</span> vcs<span class="op">;</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Downstream code writes <code>panproto::gat::Theory</code> rather than importing <code>panproto-gat</code> directly. The facade adds no logic of its own.</p>
 </section>
 <section id="crate-dependency-graph" class="level3" data-number="5.1.2">

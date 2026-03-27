@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-ffa0eef5ebcb8616de356e02b78e2eb3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-9a159394d0dfcf30f47bc0b5b5b6e761.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee1364869a0ea6f86de9400b37a80109.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-02872a90036b0e653a0630af89e7d30f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -1186,25 +1186,25 @@ Figure&nbsp;6.1: Internal structure of a Theory. Sorts may have SortParam depend
 </section>
 <section id="rust-7" class="level3" data-number="6.10.2">
 <h3 data-number="6.10.2" class="anchored" data-anchor-id="rust-7"><span class="header-section-number">6.10.2</span> Rust</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 5;"><span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">/// Compute the pushout (colimit) of two theories over a shared base theory.</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">/// Given theories `t1` and `t2` that both extend a `shared` theory, this</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">/// produces a combined theory containing all sorts, operations, and equations</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">/// from both, with the shared components identified (not duplicated).</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">/// The resulting theory is named `"{t1.name}_{t2.name}_colimit"`.</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::SortConflict`] if `t1` and `t2` both declare a sort with</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// the same name but incompatible definitions (different parameter lists).</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::OpConflict`] if `t1` and `t2` both declare an operation</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// with the same name but incompatible signatures.</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::EqConflict`] if `t1` and `t2` both declare an equation</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// with the same name but different content.</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> colimit(t1<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span> t2<span class="op">:</span> <span class="op">&amp;</span>Theory<span class="op">,</span> shared<span class="op">:</span> <span class="op">&amp;</span>Theory) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Theory<span class="op">,</span> GatError<span class="op">&gt;</span> <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 5;"><span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">/// Compute the pushout (colimit) of two theories over a shared base theory.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">/// Given theories `t1` and `t2` that both extend a `shared` theory, this</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">/// produces a combined theory containing all sorts, operations, and equations</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">/// from both, with the shared components identified (not duplicated).</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// The resulting theory is named `"{t1.name}_{t2.name}_colimit"`.</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::SortConflict`] if `t1` and `t2` both declare a sort with</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">/// the same name but incompatible definitions (different parameter lists).</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::OpConflict`] if `t1` and `t2` both declare an operation</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">/// with the same name but incompatible signatures.</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">/// Returns [`GatError::EqConflict`] if `t1` and `t2` both declare an equation</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">/// with the same name but different content.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="pushout-diagram" class="level3" data-number="6.10.3">
 <h3 data-number="6.10.3" class="anchored" data-anchor-id="pushout-diagram"><span class="header-section-number">6.10.3</span> Pushout Diagram</h3>

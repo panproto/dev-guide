@@ -753,10 +753,10 @@ window.Quarto = {
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Used by `put` to restore original field values.</span></span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> skip_serializing_if <span class="op">=</span> <span class="st">"HashMap::is_empty"</span><span class="at">)]</span></span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> original_extra_fields<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="pp">panproto_inst::value::</span>Value<span class="op">&gt;&gt;,</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Complement <span class="op">{</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty complement (no data discarded).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Exact edge used for every arc in the view, keyed by `(parent_id, child_id)`.</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This makes `put` deterministic when the source schema has parallel edges</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// between the same vertex pair, ensuring the cartesian lift is unique.</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> skip_serializing_if <span class="op">=</span> <span class="st">"HashMap::is_empty"</span><span class="at">)]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Each field records a specific category of lost information:</p>
 <ul>
 <li><strong><code>dropped_nodes</code></strong>: a map from node ID to <code>Node</code> for every source node that doesn’t appear in the target view. These are the nodes whose anchor vertex wasn’t in the migration’s surviving set.</li>
@@ -782,17 +782,17 @@ Tip
 <section id="forward-direction-get" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="forward-direction-get"><span class="header-section-number">10.1</span> Forward Direction: get</h2>
 <p>Formally, <span class="math inline">\(\mathrm{get}: S \to V \times C\)</span> where <span class="math inline">\(S\)</span> is the source instance type, <span class="math inline">\(V\)</span> is the view type, and <span class="math inline">\(C\)</span> is the complement type. The function runs the forward (restrict) pipeline, producing both the projected view and its complement.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="49"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            dropped_nodes<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            dropped_arcs<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            dropped_fans<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            contraction_choices<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            original_parent<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            source_fingerprint<span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            original_extra_fields<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="49"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Complement <span class="op">{</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty complement (no data discarded).</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            dropped_nodes<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            dropped_arcs<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            dropped_fans<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>            contraction_choices<span class="op">:</span> <span class="pp">HashMap::</span>new()<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Internally, <code>get</code> delegates to <code>wtype_restrict</code> from <code>panproto-inst</code> to compute the view, then calculates the set difference between the source and result to populate each complement field:</p>
 <ol type="1">
 <li><strong>View computation</strong>: calls <code>wtype_restrict</code> with the lens’s compiled migration. This produces the projected instance under the target schema.</li>

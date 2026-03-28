@@ -897,7 +897,7 @@ window.Quarto = {
 <span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_variant_preservation(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
 <span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> theory<span class="op">.</span>find_sort(<span class="st">"Position"</span>)<span class="op">.</span>is_some() <span class="op">{</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_order_compatibility(src<span class="op">,</span> tgt))<span class="op">;</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_order_compatibility(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> theory<span class="op">.</span>find_sort(<span class="st">"Mu"</span>)<span class="op">.</span>is_some() <span class="op">{</span></span>
 <span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>            errors<span class="op">.</span>extend(check_recursion_compatibility(src<span class="op">,</span> tgt<span class="op">,</span> migration))<span class="op">;</span></span>

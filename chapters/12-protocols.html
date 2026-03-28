@@ -873,9 +873,9 @@ window.Quarto = {
 <span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="co">/// Sorts: `Node`, `Discriminator`, `ExtraField`.</span></span>
 <span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="co">/// Ops: `discriminator`, `extra_field`.</span></span>
 <span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="co">/// Note: `extra_field` outputs `Value` which is from `ThWType`. These</span></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="co">/// are identified when `ThMeta` is composed with `ThWType` via colimit</span></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="co">/// over shared `Node`.</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="co">/// Note: `extra_field` outputs `Value`, which is also declared in `ThWType`.</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="co">/// These sorts are identified when `ThMeta` is composed with `ThWType` via</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="co">/// colimit over shared `{Node, Value}`.</span></span>
 <span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
 <span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> th_meta() <span class="op">-&gt;</span> Theory <span class="op">{</span></span>
 <span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>    <span class="pp">Theory::</span>new(</span>
@@ -890,22 +890,22 @@ window.Quarto = {
 <section id="constraint-theory" class="level3" data-number="12.2.2">
 <h3 data-number="12.2.2" class="anchored" data-anchor-id="constraint-theory"><span class="header-section-number">12.2.2</span> Constraint Theory</h3>
 <p>The constraint theory demonstrates the dependent sort pattern:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="129"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 128;"><span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"discriminator"</span><span class="op">,</span> <span class="st">"n"</span><span class="op">,</span> <span class="st">"Node"</span><span class="op">,</span> <span class="st">"Discriminator"</span>)<span class="op">,</span></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>new(</span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>                <span class="st">"extra_field"</span><span class="op">,</span></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>                <span class="pp">vec!</span>[</span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"n"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"Node"</span><span class="op">.</span>into())<span class="op">,</span></span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"key"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"ExtraField"</span><span class="op">.</span>into())<span class="op">,</span></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>                ]<span class="op">,</span></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Value"</span><span class="op">,</span></span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>            )<span class="op">,</span></span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="129"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 128;"><span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Sort::</span>simple(<span class="st">"Value"</span>)<span class="op">,</span></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>unary(<span class="st">"discriminator"</span><span class="op">,</span> <span class="st">"n"</span><span class="op">,</span> <span class="st">"Node"</span><span class="op">,</span> <span class="st">"Discriminator"</span>)<span class="op">,</span></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>            <span class="pp">Operation::</span>new(</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>                <span class="st">"extra_field"</span><span class="op">,</span></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>                <span class="pp">vec!</span>[</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"n"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"Node"</span><span class="op">.</span>into())<span class="op">,</span></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>                    (<span class="st">"key"</span><span class="op">.</span>into()<span class="op">,</span> <span class="st">"ExtraField"</span><span class="op">.</span>into())<span class="op">,</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>                ]<span class="op">,</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Value"</span><span class="op">,</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>            )<span class="op">,</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>        ]<span class="op">,</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>        <span class="pp">vec!</span>[]<span class="op">,</span></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>Constraint</code> sort is parameterized by a vertex via <code>SortParam::new("v", "Vertex")</code>. This is a GAT-level encoding of the fact that constraints are attached to specific schema elements. A <code>maxLength</code> constraint on a string field is a different sort instance than a <code>maxLength</code> constraint on a different field, even though they share the same sort name.</p>
 <p>This dependent sort pattern has practical consequences throughout panproto:</p>
 <ul>

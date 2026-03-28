@@ -906,22 +906,22 @@ Table&nbsp;19.1: Theory transform variants and their effects.
 <section id="cascading-drops" class="level3" data-number="19.1.2">
 <h3 data-number="19.1.2" class="anchored" data-anchor-id="cascading-drops"><span class="header-section-number">19.1.2</span> Cascading Drops</h3>
 <p><code>DropSort</code> cascades: removing a sort also removes all operations that reference it (as input or output) and all equations that reference those operations. <code>DropOp</code> similarly cascades to equations. This ensures that the resulting theory is always well-formed.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="96"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 95;"><span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a sort with a default expression for backward compatibility.</span></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>    AddSortWithDefault <span class="op">{</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort to add.</span></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Sort<span class="op">,</span></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The default expression for existing data.</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>        default_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a directed equation.</span></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>    AddDirectedEquation(DirectedEquation)<span class="op">,</span></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop a directed equation by name.</span></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    DropDirectedEquation(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Pullback along a theory morphism.</span></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>    Pullback(TheoryMorphism)<span class="op">,</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Sequential composition: T ↦ G(F(T))</span></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    Compose(<span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;,</span> <span class="dt">Box</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="96"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 95;"><span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The name for the merged sort.</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>        merged_name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The merger expression.</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>        merger_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a sort with a default expression for backward compatibility.</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>    AddSortWithDefault <span class="op">{</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort to add.</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Sort<span class="op">,</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The default expression for existing data.</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>        default_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a directed equation.</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>    AddDirectedEquation(DirectedEquation)<span class="op">,</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop a directed equation by name.</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    DropDirectedEquation(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="composing-schema-transforms" class="level3" data-number="19.1.3">
 <h3 data-number="19.1.3" class="anchored" data-anchor-id="composing-schema-transforms"><span class="header-section-number">19.1.3</span> Composing Schema Transforms</h3>
@@ -976,17 +976,17 @@ Table&nbsp;19.1: Theory transform variants and their effects.
 <h2 data-number="19.3" class="anchored" data-anchor-id="sec-protolens-struct"><span class="header-section-number">19.3</span> The <code>Protolens</code> Struct</h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/protolens.rs</code></p>
 <p>The <code>Protolens</code> struct bundles the source and target schema transforms with a complement constructor:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="123"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 122;"><span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="pp">serde::</span>Serialize<span class="op">,</span> <span class="pp">serde::</span>Deserialize<span class="at">)]</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Protolens <span class="op">{</span></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Human-readable name.</span></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> name<span class="op">:</span> Name<span class="op">,</span></span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Source endofunctor `F`.</span></span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> source<span class="op">:</span> TheoryEndofunctor<span class="op">,</span></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Target endofunctor `G`.</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> target<span class="op">:</span> TheoryEndofunctor<span class="op">,</span></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// How the complement type depends on the schema.</span></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> complement_constructor<span class="op">:</span> ComplementConstructor<span class="op">,</span></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="123"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 122;"><span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="co">/// where `F` (source) and `G` (target) are theory endofunctors.</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="co">/// The key operation is [`instantiate`](Self::instantiate), which</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="co">/// applies this dependent function to a specific schema.</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="co">/// The endofunctor framing means protolenses have the structure of</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="co">/// natural transformations (each elementary constructor is natural</span></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="co">/// by construction), but naturality is not runtime-verified.</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="pp">serde::</span>Serialize<span class="op">,</span> <span class="pp">serde::</span>Deserialize<span class="at">)]</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Protolens <span class="op">{</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Human-readable name.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Key fields:</p>
 <ul>
 <li><strong><code>source</code></strong>: The schema transform <span class="math inline">\(F\)</span> that produces the <em>source</em> schema of the instantiated lens.</li>
@@ -998,37 +998,37 @@ Table&nbsp;19.1: Theory transform variants and their effects.
 <section id="sec-protolens-instantiation" class="level2" data-number="19.4">
 <h2 data-number="19.4" class="anchored" data-anchor-id="sec-protolens-instantiation"><span class="header-section-number">19.4</span> Instantiation</h2>
 <p>Instantiation is the core operation: given a schema <span class="math inline">\(S\)</span> and protocol, produce a concrete <span class="math inline">\(\text{Lens}(F(S), G(S))\)</span>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="162"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 161;"><span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Instantiate this protolens at a specific schema, producing a concrete</span></span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`Lens`].</span></span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This is Π-type elimination: applying the dependent function to a</span></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// specific schema.</span></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// # Errors</span></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns [`LensError::ProtolensError`] if either endofunctor's</span></span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// transform fails to apply.</span></span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> instantiate(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span> protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Lens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 1. Compute source schema: F(S)</span></span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> src_schema <span class="op">=</span> <span class="cf">if</span> <span class="pp">matches!</span>(<span class="kw">self</span><span class="op">.</span>source<span class="op">.</span>transform<span class="op">,</span> <span class="pp">TheoryTransform::</span>Identity) <span class="op">{</span></span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>            schema<span class="op">.</span>clone()</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>            apply_theory_transform_to_schema(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>source<span class="op">.</span>transform<span class="op">,</span> schema<span class="op">,</span> protocol)<span class="op">?</span></span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 2. Compute target schema: G(S)</span></span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> tgt_schema <span class="op">=</span></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>            apply_theory_transform_to_schema(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>target<span class="op">.</span>transform<span class="op">,</span> schema<span class="op">,</span> protocol)<span class="op">?;</span></span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 3. Compute the migration from F(S) to G(S)</span></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> compiled <span class="op">=</span> compute_migration_between(<span class="op">&amp;</span>src_schema<span class="op">,</span> <span class="op">&amp;</span>tgt_schema)<span class="op">;</span></span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>        <span class="cn">Ok</span>(Lens <span class="op">{</span></span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>            compiled<span class="op">,</span></span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>            src_schema<span class="op">,</span></span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>            tgt_schema<span class="op">,</span></span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)</span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="162"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 161;"><span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> reasons <span class="op">=</span> constraint<span class="op">.</span>check(schema)<span class="op">;</span></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> reasons<span class="op">.</span>is_empty() <span class="op">{</span></span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Ok</span>(())</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>            <span class="cn">Err</span>(reasons)</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Instantiate this protolens at a specific schema, producing a concrete</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`Lens`].</span></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This is Π-type elimination: applying the dependent function to a</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// specific schema.</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// # Errors</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns [`LensError::ProtolensError`] if either endofunctor's</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// transform fails to apply.</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> instantiate(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span> protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Lens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 1. Compute source schema: F(S)</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> src_schema <span class="op">=</span> <span class="cf">if</span> <span class="pp">matches!</span>(<span class="kw">self</span><span class="op">.</span>source<span class="op">.</span>transform<span class="op">,</span> <span class="pp">TheoryTransform::</span>Identity) <span class="op">{</span></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>            schema<span class="op">.</span>clone()</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>            apply_theory_transform_to_schema(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>source<span class="op">.</span>transform<span class="op">,</span> schema<span class="op">,</span> protocol)<span class="op">?</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>        <span class="op">};</span></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 2. Compute target schema: G(S)</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> tgt_schema <span class="op">=</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>            apply_theory_transform_to_schema(<span class="op">&amp;</span><span class="kw">self</span><span class="op">.</span>target<span class="op">.</span>transform<span class="op">,</span> schema<span class="op">,</span> protocol)<span class="op">?;</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>        <span class="co">// 3. Compute the migration from F(S) to G(S)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The instantiation pipeline:</p>
 <ol type="1">
 <li><strong>Compute source schema</strong>: Apply <span class="math inline">\(F\)</span> to <span class="math inline">\(S\)</span> via <code>apply_theory_transform_to_schema</code>. If <span class="math inline">\(F\)</span> is the identity, this is a clone.</li>
@@ -1070,140 +1070,140 @@ Note
 <section id="vertical-composition-chaining-transforms" class="level3" data-number="19.6.1">
 <h3 data-number="19.6.1" class="anchored" data-anchor-id="vertical-composition-chaining-transforms"><span class="header-section-number">19.6.1</span> Vertical Composition (Chaining Transforms)</h3>
 <p>Given a protolens from <span class="math inline">\(F\)</span> to <span class="math inline">\(G\)</span> and another from <span class="math inline">\(G\)</span> to <span class="math inline">\(H\)</span>, vertical composition produces a single protolens from <span class="math inline">\(F\)</span> to <span class="math inline">\(H\)</span>:<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-startfrom="396"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 395;"><span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>All(cs) <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span>All(cs<span class="op">.</span>iter()<span class="op">.</span>map(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint)<span class="op">.</span>collect())</span>
-<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span><span class="bu">Any</span>(cs) <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span><span class="bu">Any</span>(cs<span class="op">.</span>iter()<span class="op">.</span>map(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint)<span class="op">.</span>collect())</span>
-<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span><span class="bu">Not</span>(c) <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span><span class="bu">Not</span>(<span class="dt">Box</span><span class="pp">::</span>new(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint(c)))</span>
-<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Enriched theory constraints delegate to the theory-level checker.</span></span>
-<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a>            other <span class="op">@</span> (<span class="pp">panproto_gat::TheoryConstraint::</span>HasDirectedEq(_)</span>
-<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasValSort(_)</span>
-<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasCoercion <span class="op">{</span> <span class="op">..</span> <span class="op">}</span></span>
-<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasMerger(_)</span>
-<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasPolicy(_)) <span class="op">=&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Theory(other<span class="op">.</span>clone())<span class="op">,</span></span>
-<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a><span class="co">// Composition</span></span>
-<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-startfrom="396"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 395;"><span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Lift a `TheoryConstraint` to a `SchemaConstraint`.</span></span>
+<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> from_theory_constraint(tc<span class="op">:</span> <span class="op">&amp;</span><span class="pp">panproto_gat::</span>TheoryConstraint) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> tc <span class="op">{</span></span>
+<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>Unconstrained <span class="op">=&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Unconstrained<span class="op">,</span></span>
+<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>HasSort(name) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span>HasVertexKind(<span class="pp">Name::</span>from(<span class="op">&amp;**</span>name))</span>
+<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>HasOp(name) <span class="op">=&gt;</span> <span class="dt">Self</span><span class="pp">::</span>HasEdgeKind(<span class="pp">Name::</span>from(<span class="op">&amp;**</span>name))<span class="op">,</span></span>
+<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>HasEquation(name) <span class="op">=&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Theory(</span>
+<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a>                <span class="pp">panproto_gat::TheoryConstraint::</span>HasEquation(<span class="pp">Arc::</span>clone(name))<span class="op">,</span></span>
+<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a>            )<span class="op">,</span></span>
+<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span>All(cs) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span>All(cs<span class="op">.</span>iter()<span class="op">.</span>map(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint)<span class="op">.</span>collect())</span>
+<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span><span class="bu">Any</span>(cs) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span><span class="bu">Any</span>(cs<span class="op">.</span>iter()<span class="op">.</span>map(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint)<span class="op">.</span>collect())</span>
+<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a>            <span class="pp">panproto_gat::TheoryConstraint::</span><span class="bu">Not</span>(c) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Self</span><span class="pp">::</span><span class="bu">Not</span>(<span class="dt">Box</span><span class="pp">::</span>new(<span class="dt">Self</span><span class="pp">::</span>from_theory_constraint(c)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The composed protolens uses the first step’s source transform and the second step’s target transform. The complement is the composite of both complements; during <code>get</code>, both steps’ lost data is captured.</p>
 </section>
 <section id="horizontal-composition-combining-independent-transforms" class="level3" data-number="19.6.2">
 <h3 data-number="19.6.2" class="anchored" data-anchor-id="horizontal-composition-combining-independent-transforms"><span class="header-section-number">19.6.2</span> Horizontal Composition (Combining Independent Transforms)</h3>
 <p>Given two independent protolenses that operate on different parts of the theory, horizontal composition applies both simultaneously:<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="420"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 419;"><span id="cb9-420"><a href="#cb9-420" aria-hidden="true" tabindex="-1"></a><span class="co">/// `θ : G ⟹ H`, produce `θ ∘ η : F ⟹ H`.</span></span>
-<span id="cb9-421"><a href="#cb9-421" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb9-422"><a href="#cb9-422" aria-hidden="true" tabindex="-1"></a><span class="co">/// The target endofunctor of `eta` must match the source of `theta`.</span></span>
-<span id="cb9-423"><a href="#cb9-423" aria-hidden="true" tabindex="-1"></a><span class="co">/// This is checked dynamically at instantiation time.</span></span>
-<span id="cb9-424"><a href="#cb9-424" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb9-425"><a href="#cb9-425" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
-<span id="cb9-426"><a href="#cb9-426" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb9-427"><a href="#cb9-427" aria-hidden="true" tabindex="-1"></a><span class="co">/// Currently infallible, but returns `Result` for future compatibility</span></span>
-<span id="cb9-428"><a href="#cb9-428" aria-hidden="true" tabindex="-1"></a><span class="co">/// with static compatibility checks.</span></span>
-<span id="cb9-429"><a href="#cb9-429" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> vertical_compose(eta<span class="op">:</span> <span class="op">&amp;</span>Protolens<span class="op">,</span> theta<span class="op">:</span> <span class="op">&amp;</span>Protolens) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Protolens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb9-430"><a href="#cb9-430" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> complement <span class="op">=</span> <span class="pp">ComplementConstructor::</span>Composite(<span class="pp">vec!</span>[</span>
-<span id="cb9-431"><a href="#cb9-431" aria-hidden="true" tabindex="-1"></a>        eta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb9-432"><a href="#cb9-432" aria-hidden="true" tabindex="-1"></a>        theta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb9-433"><a href="#cb9-433" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
-<span id="cb9-434"><a href="#cb9-434" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-435"><a href="#cb9-435" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(Protolens <span class="op">{</span></span>
-<span id="cb9-436"><a href="#cb9-436" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="pp">Name::</span>from(<span class="pp">format!</span>(<span class="st">"{}.{}"</span><span class="op">,</span> theta<span class="op">.</span>name<span class="op">,</span> eta<span class="op">.</span>name))<span class="op">,</span></span>
-<span id="cb9-437"><a href="#cb9-437" aria-hidden="true" tabindex="-1"></a>        source<span class="op">:</span> eta<span class="op">.</span>source<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb9-438"><a href="#cb9-438" aria-hidden="true" tabindex="-1"></a>        target<span class="op">:</span> theta<span class="op">.</span>target<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb9-439"><a href="#cb9-439" aria-hidden="true" tabindex="-1"></a>        complement_constructor<span class="op">:</span> complement<span class="op">,</span></span>
-<span id="cb9-440"><a href="#cb9-440" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
-<span id="cb9-441"><a href="#cb9-441" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-startfrom="420"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 419;"><span id="cb9-420"><a href="#cb9-420" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Enriched theory constraints delegate to the theory-level checker.</span></span>
+<span id="cb9-421"><a href="#cb9-421" aria-hidden="true" tabindex="-1"></a>            other <span class="op">@</span> (<span class="pp">panproto_gat::TheoryConstraint::</span>HasDirectedEq(_)</span>
+<span id="cb9-422"><a href="#cb9-422" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasValSort(_)</span>
+<span id="cb9-423"><a href="#cb9-423" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasCoercion <span class="op">{</span> <span class="op">..</span> <span class="op">}</span></span>
+<span id="cb9-424"><a href="#cb9-424" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasMerger(_)</span>
+<span id="cb9-425"><a href="#cb9-425" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="pp">panproto_gat::TheoryConstraint::</span>HasPolicy(_)) <span class="op">=&gt;</span> <span class="dt">Self</span><span class="pp">::</span>Theory(other<span class="op">.</span>clone())<span class="op">,</span></span>
+<span id="cb9-426"><a href="#cb9-426" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb9-427"><a href="#cb9-427" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb9-428"><a href="#cb9-428" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb9-429"><a href="#cb9-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-430"><a href="#cb9-430" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb9-431"><a href="#cb9-431" aria-hidden="true" tabindex="-1"></a><span class="co">// Composition</span></span>
+<span id="cb9-432"><a href="#cb9-432" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb9-433"><a href="#cb9-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-434"><a href="#cb9-434" aria-hidden="true" tabindex="-1"></a><span class="co">/// Vertical composition of protolenses: given `η : F ⟹ G` and</span></span>
+<span id="cb9-435"><a href="#cb9-435" aria-hidden="true" tabindex="-1"></a><span class="co">/// `θ : G ⟹ H`, produce `θ ∘ η : F ⟹ H`.</span></span>
+<span id="cb9-436"><a href="#cb9-436" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb9-437"><a href="#cb9-437" aria-hidden="true" tabindex="-1"></a><span class="co">/// The target endofunctor of `eta` must match the source of `theta`.</span></span>
+<span id="cb9-438"><a href="#cb9-438" aria-hidden="true" tabindex="-1"></a><span class="co">/// This is checked dynamically at instantiation time.</span></span>
+<span id="cb9-439"><a href="#cb9-439" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb9-440"><a href="#cb9-440" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb9-441"><a href="#cb9-441" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Horizontal composition uses <code>TheoryEndofunctor::compose</code> to build the composed source and target transforms. This is useful when two independent schema changes need to be applied simultaneously.</p>
 </section>
 <section id="protolenschain" class="level3" data-number="19.6.3">
 <h3 data-number="19.6.3" class="anchored" data-anchor-id="protolenschain"><span class="header-section-number">19.6.3</span> <code>ProtolensChain</code></h3>
 <p>The <code>ProtolensChain</code> struct provides a convenient wrapper for vertical composition chains:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-startfrom="447"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 446;"><span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a><span class="co">/// Currently infallible, but returns `Result` for future compatibility</span></span>
-<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a><span class="co">/// with static compatibility checks.</span></span>
-<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> horizontal_compose(eta<span class="op">:</span> <span class="op">&amp;</span>Protolens<span class="op">,</span> theta<span class="op">:</span> <span class="op">&amp;</span>Protolens) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Protolens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> source <span class="op">=</span> eta<span class="op">.</span>source<span class="op">.</span>compose(<span class="op">&amp;</span>theta<span class="op">.</span>source)<span class="op">;</span></span>
-<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> target <span class="op">=</span> eta<span class="op">.</span>target<span class="op">.</span>compose(<span class="op">&amp;</span>theta<span class="op">.</span>target)<span class="op">;</span></span>
-<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> complement <span class="op">=</span> <span class="pp">ComplementConstructor::</span>Composite(<span class="pp">vec!</span>[</span>
-<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a>        eta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a>        theta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-startfrom="447"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 446;"><span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a>        theta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
+<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(Protolens <span class="op">{</span></span>
+<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="pp">Name::</span>from(<span class="pp">format!</span>(<span class="st">"{}.{}"</span><span class="op">,</span> theta<span class="op">.</span>name<span class="op">,</span> eta<span class="op">.</span>name))<span class="op">,</span></span>
+<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a>        source<span class="op">:</span> eta<span class="op">.</span>source<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a>        target<span class="op">:</span> theta<span class="op">.</span>target<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a>        complement_constructor<span class="op">:</span> complement<span class="op">,</span></span>
+<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
+<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb10-457"><a href="#cb10-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(Protolens <span class="op">{</span></span>
-<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="pp">Name::</span>from(<span class="pp">format!</span>(<span class="st">"{}*{}"</span><span class="op">,</span> theta<span class="op">.</span>name<span class="op">,</span> eta<span class="op">.</span>name))<span class="op">,</span></span>
-<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a>        source<span class="op">,</span></span>
-<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a>        target<span class="op">,</span></span>
-<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a>        complement_constructor<span class="op">:</span> complement<span class="op">,</span></span>
-<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
-<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a><span class="co">// ProtolensChain</span></span>
-<span id="cb10-468"><a href="#cb10-468" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb10-469"><a href="#cb10-469" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-470"><a href="#cb10-470" aria-hidden="true" tabindex="-1"></a><span class="co">/// A chain of protolenses for vertical composition.</span></span>
-<span id="cb10-471"><a href="#cb10-471" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
-<span id="cb10-472"><a href="#cb10-472" aria-hidden="true" tabindex="-1"></a><span class="co">/// Each step's target endofunctor feeds into the next step's source.</span></span>
-<span id="cb10-473"><a href="#cb10-473" aria-hidden="true" tabindex="-1"></a><span class="co">/// Instantiating the chain at a schema produces a composed lens.</span></span>
-<span id="cb10-474"><a href="#cb10-474" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="pp">serde::</span>Serialize<span class="op">,</span> <span class="pp">serde::</span>Deserialize<span class="at">)]</span></span>
-<span id="cb10-475"><a href="#cb10-475" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ProtolensChain <span class="op">{</span></span>
-<span id="cb10-476"><a href="#cb10-476" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The individual protolens steps.</span></span>
-<span id="cb10-477"><a href="#cb10-477" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> steps<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Protolens<span class="op">&gt;,</span></span>
-<span id="cb10-478"><a href="#cb10-478" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb10-479"><a href="#cb10-479" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-480"><a href="#cb10-480" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> ProtolensChain <span class="op">{</span></span>
-<span id="cb10-481"><a href="#cb10-481" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new chain from steps.</span></span>
-<span id="cb10-482"><a href="#cb10-482" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb10-483"><a href="#cb10-483" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> new(steps<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Protolens<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb10-484"><a href="#cb10-484" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span> steps <span class="op">}</span></span>
-<span id="cb10-485"><a href="#cb10-485" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb10-486"><a href="#cb10-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-487"><a href="#cb10-487" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Check if the chain can be instantiated at the given schema.</span></span>
-<span id="cb10-488"><a href="#cb10-488" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb10-489"><a href="#cb10-489" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// An empty chain (identity) is applicable to any schema. Otherwise,</span></span>
-<span id="cb10-490"><a href="#cb10-490" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// the first step must be applicable.</span></span>
-<span id="cb10-491"><a href="#cb10-491" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb10-492"><a href="#cb10-492" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> applicable_to(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
-<span id="cb10-493"><a href="#cb10-493" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>steps<span class="op">.</span>is_empty() <span class="op">{</span></span>
-<span id="cb10-494"><a href="#cb10-494" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">true</span><span class="op">;</span></span>
-<span id="cb10-495"><a href="#cb10-495" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb10-496"><a href="#cb10-496" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>steps[<span class="dv">0</span>]<span class="op">.</span>applicable_to(schema)</span>
-<span id="cb10-497"><a href="#cb10-497" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb10-498"><a href="#cb10-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-499"><a href="#cb10-499" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Instantiate the chain at a specific schema, producing a composed</span></span>
-<span id="cb10-500"><a href="#cb10-500" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`Lens`].</span></span>
-<span id="cb10-501"><a href="#cb10-501" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb10-502"><a href="#cb10-502" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Each step is instantiated at the current schema, and the resulting</span></span>
-<span id="cb10-503"><a href="#cb10-503" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// lenses are composed sequentially.</span></span>
-<span id="cb10-504"><a href="#cb10-504" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb10-505"><a href="#cb10-505" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// # Errors</span></span>
-<span id="cb10-506"><a href="#cb10-506" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb10-507"><a href="#cb10-507" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns [`LensError::ProtolensError`] if any step fails, or</span></span>
-<span id="cb10-508"><a href="#cb10-508" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`LensError::CompositionMismatch`] if lens composition fails.</span></span>
-<span id="cb10-509"><a href="#cb10-509" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> instantiate(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span> protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Lens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
-<span id="cb10-510"><a href="#cb10-510" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>steps<span class="op">.</span>is_empty() <span class="op">{</span></span>
-<span id="cb10-511"><a href="#cb10-511" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">Ok</span>(identity_lens(schema))<span class="op">;</span></span>
-<span id="cb10-512"><a href="#cb10-512" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb10-513"><a href="#cb10-513" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>steps<span class="op">.</span>len() <span class="op">==</span> <span class="dv">1</span> <span class="op">{</span></span>
-<span id="cb10-514"><a href="#cb10-514" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">self</span><span class="op">.</span>steps[<span class="dv">0</span>]<span class="op">.</span>instantiate(schema<span class="op">,</span> protocol)<span class="op">;</span></span>
-<span id="cb10-515"><a href="#cb10-515" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb10-516"><a href="#cb10-516" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Fuse and instantiate as a single protolens</span></span>
-<span id="cb10-517"><a href="#cb10-517" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> fused <span class="op">=</span> <span class="kw">self</span><span class="op">.</span>fuse()<span class="op">?;</span></span>
-<span id="cb10-518"><a href="#cb10-518" aria-hidden="true" tabindex="-1"></a>        fused<span class="op">.</span>instantiate(schema<span class="op">,</span> protocol)</span>
-<span id="cb10-519"><a href="#cb10-519" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb10-520"><a href="#cb10-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-521"><a href="#cb10-521" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Instantiate this chain as an [`crate::EditLens`] at a specific schema.</span></span>
-<span id="cb10-522"><a href="#cb10-522" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb10-523"><a href="#cb10-523" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This is a convenience method that calls [`instantiate`](Self::instantiate)</span></span>
-<span id="cb10-524"><a href="#cb10-524" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// and wraps the result with [`crate::EditLens::from_lens`].</span></span>
-<span id="cb10-525"><a href="#cb10-525" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a><span class="co">/// Horizontal composition of protolenses: given `η : F ⟹ G` and</span></span>
+<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a><span class="co">/// `θ : F' ⟹ G'`, produce `η * θ : F∘F' ⟹ G∘G'`.</span></span>
+<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a><span class="co">/// # Errors</span></span>
+<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a><span class="co">/// Currently infallible, but returns `Result` for future compatibility</span></span>
+<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a><span class="co">/// with static compatibility checks.</span></span>
+<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> horizontal_compose(eta<span class="op">:</span> <span class="op">&amp;</span>Protolens<span class="op">,</span> theta<span class="op">:</span> <span class="op">&amp;</span>Protolens) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Protolens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> source <span class="op">=</span> eta<span class="op">.</span>source<span class="op">.</span>compose(<span class="op">&amp;</span>theta<span class="op">.</span>source)<span class="op">;</span></span>
+<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> target <span class="op">=</span> eta<span class="op">.</span>target<span class="op">.</span>compose(<span class="op">&amp;</span>theta<span class="op">.</span>target)<span class="op">;</span></span>
+<span id="cb10-468"><a href="#cb10-468" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> complement <span class="op">=</span> <span class="pp">ComplementConstructor::</span>Composite(<span class="pp">vec!</span>[</span>
+<span id="cb10-469"><a href="#cb10-469" aria-hidden="true" tabindex="-1"></a>        eta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb10-470"><a href="#cb10-470" aria-hidden="true" tabindex="-1"></a>        theta<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb10-471"><a href="#cb10-471" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
+<span id="cb10-472"><a href="#cb10-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-473"><a href="#cb10-473" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(Protolens <span class="op">{</span></span>
+<span id="cb10-474"><a href="#cb10-474" aria-hidden="true" tabindex="-1"></a>        name<span class="op">:</span> <span class="pp">Name::</span>from(<span class="pp">format!</span>(<span class="st">"{}*{}"</span><span class="op">,</span> theta<span class="op">.</span>name<span class="op">,</span> eta<span class="op">.</span>name))<span class="op">,</span></span>
+<span id="cb10-475"><a href="#cb10-475" aria-hidden="true" tabindex="-1"></a>        source<span class="op">,</span></span>
+<span id="cb10-476"><a href="#cb10-476" aria-hidden="true" tabindex="-1"></a>        target<span class="op">,</span></span>
+<span id="cb10-477"><a href="#cb10-477" aria-hidden="true" tabindex="-1"></a>        complement_constructor<span class="op">:</span> complement<span class="op">,</span></span>
+<span id="cb10-478"><a href="#cb10-478" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
+<span id="cb10-479"><a href="#cb10-479" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-480"><a href="#cb10-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-481"><a href="#cb10-481" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb10-482"><a href="#cb10-482" aria-hidden="true" tabindex="-1"></a><span class="co">// ProtolensChain</span></span>
+<span id="cb10-483"><a href="#cb10-483" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
+<span id="cb10-484"><a href="#cb10-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-485"><a href="#cb10-485" aria-hidden="true" tabindex="-1"></a><span class="co">/// A chain of protolenses for vertical composition.</span></span>
+<span id="cb10-486"><a href="#cb10-486" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb10-487"><a href="#cb10-487" aria-hidden="true" tabindex="-1"></a><span class="co">/// Each step's target endofunctor feeds into the next step's source.</span></span>
+<span id="cb10-488"><a href="#cb10-488" aria-hidden="true" tabindex="-1"></a><span class="co">/// Instantiating the chain at a schema produces a composed lens.</span></span>
+<span id="cb10-489"><a href="#cb10-489" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> <span class="pp">serde::</span>Serialize<span class="op">,</span> <span class="pp">serde::</span>Deserialize<span class="at">)]</span></span>
+<span id="cb10-490"><a href="#cb10-490" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ProtolensChain <span class="op">{</span></span>
+<span id="cb10-491"><a href="#cb10-491" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The individual protolens steps.</span></span>
+<span id="cb10-492"><a href="#cb10-492" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> steps<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Protolens<span class="op">&gt;,</span></span>
+<span id="cb10-493"><a href="#cb10-493" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-494"><a href="#cb10-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-495"><a href="#cb10-495" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> ProtolensChain <span class="op">{</span></span>
+<span id="cb10-496"><a href="#cb10-496" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a new chain from steps.</span></span>
+<span id="cb10-497"><a href="#cb10-497" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb10-498"><a href="#cb10-498" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> new(steps<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>Protolens<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
+<span id="cb10-499"><a href="#cb10-499" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span> steps <span class="op">}</span></span>
+<span id="cb10-500"><a href="#cb10-500" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-501"><a href="#cb10-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-502"><a href="#cb10-502" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Check if the chain can be instantiated at the given schema.</span></span>
+<span id="cb10-503"><a href="#cb10-503" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb10-504"><a href="#cb10-504" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// An empty chain (identity) is applicable to any schema. Otherwise,</span></span>
+<span id="cb10-505"><a href="#cb10-505" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// the first step must be applicable.</span></span>
+<span id="cb10-506"><a href="#cb10-506" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb10-507"><a href="#cb10-507" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> applicable_to(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema) <span class="op">-&gt;</span> <span class="dt">bool</span> <span class="op">{</span></span>
+<span id="cb10-508"><a href="#cb10-508" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>steps<span class="op">.</span>is_empty() <span class="op">{</span></span>
+<span id="cb10-509"><a href="#cb10-509" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="cn">true</span><span class="op">;</span></span>
+<span id="cb10-510"><a href="#cb10-510" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb10-511"><a href="#cb10-511" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>steps[<span class="dv">0</span>]<span class="op">.</span>applicable_to(schema)</span>
+<span id="cb10-512"><a href="#cb10-512" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb10-513"><a href="#cb10-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-514"><a href="#cb10-514" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Instantiate the chain at a specific schema, producing a composed</span></span>
+<span id="cb10-515"><a href="#cb10-515" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`Lens`].</span></span>
+<span id="cb10-516"><a href="#cb10-516" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb10-517"><a href="#cb10-517" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Each step is instantiated at the current schema, and the resulting</span></span>
+<span id="cb10-518"><a href="#cb10-518" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// lenses are composed sequentially.</span></span>
+<span id="cb10-519"><a href="#cb10-519" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb10-520"><a href="#cb10-520" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// # Errors</span></span>
+<span id="cb10-521"><a href="#cb10-521" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb10-522"><a href="#cb10-522" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Returns [`LensError::ProtolensError`] if any step fails, or</span></span>
+<span id="cb10-523"><a href="#cb10-523" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// [`LensError::CompositionMismatch`] if lens composition fails.</span></span>
+<span id="cb10-524"><a href="#cb10-524" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> instantiate(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> schema<span class="op">:</span> <span class="op">&amp;</span>Schema<span class="op">,</span> protocol<span class="op">:</span> <span class="op">&amp;</span>Protocol) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>Lens<span class="op">,</span> LensError<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb10-525"><a href="#cb10-525" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">self</span><span class="op">.</span>steps<span class="op">.</span>is_empty() <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Instantiating a chain applies each step sequentially, using the previous step’s target schema as the next step’s input. The resulting lenses are composed via <code>crate::compose::compose</code>.</p>
 </section>
 </section>
@@ -1282,63 +1282,63 @@ Table&nbsp;19.2: Elementary protolens constructors.
 </div>
 <p>All elementary constructors have the identity as their source transform. The precondition on the source is <code>Unconstrained</code> for additive constructors (adding a sort/op/equation is always valid) and <code>HasSort</code>/<code>HasOp</code>/<code>HasEquation</code> for subtractive or renaming constructors (the element must exist to be dropped or renamed).</p>
 <p>For example, <code>elementary::drop_sort</code> constructs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="766"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 765;"><span id="cb11-766"><a href="#cb11-766" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map(<span class="op">|</span>s<span class="op">|</span> lift_protolens(s<span class="op">,</span> morphism))</span>
-<span id="cb11-767"><a href="#cb11-767" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>collect()<span class="op">,</span></span>
-<span id="cb11-768"><a href="#cb11-768" aria-hidden="true" tabindex="-1"></a>    )</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="766"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 765;"><span id="cb11-766"><a href="#cb11-766" aria-hidden="true" tabindex="-1"></a>        target<span class="op">:</span> lift_endofunctor(<span class="op">&amp;</span>protolens<span class="op">.</span>target<span class="op">,</span> morphism)<span class="op">,</span></span>
+<span id="cb11-767"><a href="#cb11-767" aria-hidden="true" tabindex="-1"></a>        complement_constructor<span class="op">:</span> protolens<span class="op">.</span>complement_constructor<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb11-768"><a href="#cb11-768" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb11-769"><a href="#cb11-769" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb11-770"><a href="#cb11-770" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-771"><a href="#cb11-771" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb11-772"><a href="#cb11-772" aria-hidden="true" tabindex="-1"></a><span class="co">// Elementary protolens constructors</span></span>
-<span id="cb11-773"><a href="#cb11-773" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span>
-<span id="cb11-774"><a href="#cb11-774" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-775"><a href="#cb11-775" aria-hidden="true" tabindex="-1"></a><span class="co">/// Built-in protolens constructors — the "atoms" from which all</span></span>
-<span id="cb11-776"><a href="#cb11-776" aria-hidden="true" tabindex="-1"></a><span class="co">/// protolenses are composed.</span></span>
-<span id="cb11-777"><a href="#cb11-777" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">mod</span> elementary <span class="op">{</span></span>
-<span id="cb11-778"><a href="#cb11-778" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">panproto_gat::</span><span class="op">{</span></span>
-<span id="cb11-779"><a href="#cb11-779" aria-hidden="true" tabindex="-1"></a>        DirectedEquation<span class="op">,</span> Equation<span class="op">,</span> Name<span class="op">,</span> Operation<span class="op">,</span> Sort<span class="op">,</span> TheoryConstraint<span class="op">,</span> TheoryEndofunctor<span class="op">,</span></span>
-<span id="cb11-780"><a href="#cb11-780" aria-hidden="true" tabindex="-1"></a>        TheoryMorphism<span class="op">,</span> TheoryTransform<span class="op">,</span></span>
-<span id="cb11-781"><a href="#cb11-781" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
-<span id="cb11-782"><a href="#cb11-782" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">panproto_inst::value::</span>Value<span class="op">;</span></span>
-<span id="cb11-783"><a href="#cb11-783" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="pp">std::sync::</span>Arc<span class="op">;</span></span>
-<span id="cb11-784"><a href="#cb11-784" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-785"><a href="#cb11-785" aria-hidden="true" tabindex="-1"></a>    <span class="kw">use</span> <span class="kw">super</span><span class="pp">::</span><span class="op">{</span>ComplementConstructor<span class="op">,</span> Protolens<span class="op">,</span> name_arc_clone<span class="op">};</span></span>
-<span id="cb11-786"><a href="#cb11-786" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-771"><a href="#cb11-771" aria-hidden="true" tabindex="-1"></a><span class="co">/// Lift an entire protolens chain along a theory morphism.</span></span>
+<span id="cb11-772"><a href="#cb11-772" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb11-773"><a href="#cb11-773" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> lift_chain(</span>
+<span id="cb11-774"><a href="#cb11-774" aria-hidden="true" tabindex="-1"></a>    chain<span class="op">:</span> <span class="op">&amp;</span>ProtolensChain<span class="op">,</span></span>
+<span id="cb11-775"><a href="#cb11-775" aria-hidden="true" tabindex="-1"></a>    morphism<span class="op">:</span> <span class="op">&amp;</span><span class="pp">panproto_gat::</span>TheoryMorphism<span class="op">,</span></span>
+<span id="cb11-776"><a href="#cb11-776" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> ProtolensChain <span class="op">{</span></span>
+<span id="cb11-777"><a href="#cb11-777" aria-hidden="true" tabindex="-1"></a>    <span class="pp">ProtolensChain::</span>new(</span>
+<span id="cb11-778"><a href="#cb11-778" aria-hidden="true" tabindex="-1"></a>        chain</span>
+<span id="cb11-779"><a href="#cb11-779" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>steps</span>
+<span id="cb11-780"><a href="#cb11-780" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>iter()</span>
+<span id="cb11-781"><a href="#cb11-781" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>map(<span class="op">|</span>s<span class="op">|</span> lift_protolens(s<span class="op">,</span> morphism))</span>
+<span id="cb11-782"><a href="#cb11-782" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>collect()<span class="op">,</span></span>
+<span id="cb11-783"><a href="#cb11-783" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-784"><a href="#cb11-784" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb11-785"><a href="#cb11-785" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-786"><a href="#cb11-786" aria-hidden="true" tabindex="-1"></a><span class="co">// ---------------------------------------------------------------------------</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="sec-complement-spec" class="level2" data-number="19.8">
 <h2 data-number="19.8" class="anchored" data-anchor-id="sec-complement-spec"><span class="header-section-number">19.8</span> <code>ComplementConstructor</code> as Schema-Dependent Type</h2>
 <p>The <code>ComplementConstructor</code> enum describes how the complement type depends on the schema at instantiation time:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-startfrom="72"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 71;"><span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="co">/// How the complement type depends on the schema at instantiation time.</span></span>
 <span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> ComplementConstructor <span class="op">{</span></span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement is always empty (lossless protolens).</span></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>    Empty<span class="op">,</span></span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement captures dropped sort data.</span></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>    DroppedSortData <span class="op">{</span></span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort whose data is captured.</span></span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Name<span class="op">,</span></span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement captures dropped edge data.</span></span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>    DroppedOpData <span class="op">{</span></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The operation whose data is captured.</span></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>        op<span class="op">:</span> Name<span class="op">,</span></span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement is the kernel of a natural transformation.</span></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    NatTransKernel <span class="op">{</span></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Name of the natural transformation.</span></span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>        nat_trans_name<span class="op">:</span> Name<span class="op">,</span></span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Forward direction requires a default for an added element.</span></span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>    AddedElement <span class="op">{</span></span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Name of the element being added.</span></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>        element_name<span class="op">:</span> Name<span class="op">,</span></span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// What kind of element (e.g. `"string"`, `"record"`).</span></span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>        element_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Default value to use when instantiating.</span></span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>        default_value<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Value<span class="op">&gt;,</span></span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Composite complement from a chain.</span></span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>    Composite(<span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Self</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>non_exhaustive<span class="at">]</span></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> ComplementConstructor <span class="op">{</span></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement is always empty (lossless protolens).</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>    Empty<span class="op">,</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement captures dropped sort data.</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>    DroppedSortData <span class="op">{</span></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort whose data is captured.</span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement captures dropped edge data.</span></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>    DroppedOpData <span class="op">{</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The operation whose data is captured.</span></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>        op<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement is the kernel of a natural transformation.</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>    NatTransKernel <span class="op">{</span></span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Name of the natural transformation.</span></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>        nat_trans_name<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Forward direction requires a default for an added element.</span></span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a>    AddedElement <span class="op">{</span></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Name of the element being added.</span></span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>        element_name<span class="op">:</span> Name<span class="op">,</span></span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// What kind of element (e.g. `"string"`, `"record"`).</span></span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a>        element_kind<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Default value to use when instantiating.</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>        default_value<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Value<span class="op">&gt;,</span></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Complement captures coerced sort data with a specific round-trip class.</span></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a>    CoercedSortData <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is a <em>type-level</em> description, not a runtime complement. At instantiation time, the constructor determines what data the resulting lens’s <code>get</code> direction will capture in the complement:</p>
 <ul>
 <li><code>Empty</code>: lossless transformation (renames, additions, equation changes).</li>

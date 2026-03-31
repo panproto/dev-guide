@@ -623,7 +623,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
   <ul class="collapse">
   <li><a href="#crate-map" id="toc-crate-map" class="nav-link" data-scroll-target="#crate-map">Crate map</a></li>
-  <li><a href="#organization" id="toc-organization" class="nav-link" data-scroll-target="#organization">Organization</a></li>
   <li><a href="#reading-paths" id="toc-reading-paths" class="nav-link" data-scroll-target="#reading-paths">Reading paths</a></li>
   <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
   <li><a href="#conventions" id="toc-conventions" class="nav-link" data-scroll-target="#conventions">Conventions</a></li>
@@ -682,7 +681,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This guide is nearly fully LLM-generated. Proceed with caution. We appreciate <a href="https://github.com/panproto/panproto/issues">bug reports</a>.</p>
 </div>
 </div>
-<p>This is the panproto developer guide. It documents crate architecture, algebraic internals, and contributor workflow for the panproto schematic version control system. We assume Rust (ownership, traits, generics, <code>Result</code>-based error handling; Edition 2024) and basic algebraic thinking (sorts, operations, equations). The <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a> provides relevant background on the algebraic concepts.</p>
+<p>This is the panproto developer guide. It documents crate architecture, algebraic internals, and contributor workflow for the panproto schematic version control system. We assume familiarity with Rust (ownership, traits, generics, <code>Result</code>-based error handling; Edition 2024) and basic algebraic thinking (sorts, operations, equations). If the algebraic vocabulary is new to you, the <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a> provides the necessary background.</p>
 <section id="crate-map" class="level2">
 <h2 class="anchored" data-anchor-id="crate-map">Crate map</h2>
 <table class="caption-top table">
@@ -731,24 +730,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-</section>
-<section id="organization" class="level2">
-<h2 class="anchored" data-anchor-id="organization">Organization</h2>
-<p>The guide is organized into six parts:</p>
-<ul>
-<li><strong>Part I (Getting Started):</strong> orientation and your first contribution.</li>
-<li><strong>Part II (Development Environment):</strong> building, testing, debugging, profiling.</li>
-<li><strong>Part III (Architecture and Internals):</strong> deep dives into each crate and subsystem. Read the architecture overview first, then jump to whichever crate you’re working on.</li>
-<li><strong>Part IV (Contributing Process):</strong> coding conventions, testing philosophy, PR workflow.</li>
-<li><strong>Part V (Project Operations):</strong> release process and versioning policy.</li>
-<li><strong>Appendices:</strong> glossary (A), source code map (B), troubleshooting FAQ (C), optimization guide (D), benchmark results (E).</li>
-</ul>
+<p>Each level depends only on the levels below it. <code>panproto-gat</code> has no panproto dependencies. <code>panproto-core</code> re-exports everything.</p>
 </section>
 <section id="reading-paths" class="level2">
 <h2 class="anchored" data-anchor-id="reading-paths">Reading paths</h2>
-<p><strong>Contributors</strong> landing a fix or feature: chapters 1 through 2, then chapter 3 (build), then chapters 16 through 18 (PR workflow).</p>
-<p><strong>Protocol authors</strong> adding a new schema language: chapters 5 (architecture), 6 (GAT engine), then the protocol chapter (12).</p>
-<p><strong>Researchers</strong> exploring the internals: chapters 5 through 6, then <a href="chapters/22-advanced-internals.html" class="quarto-xref"><span>18&nbsp; Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></a>, then <a href="chapters/26-protolens-engine.html" class="quarto-xref"><span>19&nbsp; Protolens Engine</span></a> and <a href="chapters/27-auto-lens-pipeline.html" class="quarto-xref"><span>20&nbsp; Automated Lens Generation Pipeline</span></a>.</p>
+<p><strong>Contributors</strong> landing a fix or feature: start with Chapters 1 and 2, then Chapter 3 (building the project), then Chapters 16 through 18 (the PR workflow).</p>
+<p><strong>Protocol authors</strong> adding a new schema language: read Chapter 5 (architecture overview), Chapter 6 (the GAT engine), then Chapter 12 (protocols).</p>
+<p><strong>Researchers</strong> exploring the internals: read Chapters 5 and 6 sequentially, then <a href="chapters/22-advanced-internals.html" class="quarto-xref"><span>18&nbsp; Advanced Internals: Building Blocks, Naming, Auto-Morphisms, and Type Checking</span></a>, then <a href="chapters/26-protolens-engine.html" class="quarto-xref"><span>19&nbsp; Protolens Engine</span></a> and <a href="chapters/27-auto-lens-pipeline.html" class="quarto-xref"><span>20&nbsp; Automated Lens Generation Pipeline</span></a>.</p>
 </section>
 <section id="links" class="level2">
 <h2 class="anchored" data-anchor-id="links">Links</h2>
@@ -760,12 +748,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="conventions" class="level2">
 <h2 class="anchored" data-anchor-id="conventions">Conventions</h2>
-<ul>
-<li>Inline code like <code>panproto-gat</code> refers to a crate name.</li>
-<li>File paths like <code>crates/panproto-gat/src/theory.rs</code> are relative to the repository root.</li>
-<li>Shell commands assume a Unix-like environment (macOS or Linux).</li>
-</ul>
-<hr>
+<p>Inline code like <code>panproto-gat</code> refers to a crate name. File paths like <code>crates/panproto-gat/src/theory.rs</code> are relative to the repository root. Shell commands assume a Unix-like environment (macOS or Linux).</p>
 <p><em>Aaron Steven White</em></p>
 
 
@@ -1256,7 +1239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>This guide is nearly fully LLM-generated. Proceed with caution. We appreciate <span class="co">[</span><span class="ot">bug reports</span><span class="co">](https://github.com/panproto/panproto/issues)</span>.</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>This is the panproto developer guide. It documents crate architecture, algebraic internals, and contributor workflow for the panproto schematic version control system. We assume Rust (ownership, traits, generics, <span class="in">`Result`</span>-based error handling; Edition 2024) and basic algebraic thinking (sorts, operations, equations). The <span class="co">[</span><span class="ot">tutorial's formal foundations appendix</span><span class="co">](https://panproto.dev/tutorial/appendices/A-formal-foundations.html)</span> provides relevant background on the algebraic concepts.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>This is the panproto developer guide.  It documents crate architecture, algebraic internals, and contributor workflow for the panproto schematic version control system.  We assume familiarity with Rust (ownership, traits, generics, <span class="in">`Result`</span>-based error handling; Edition 2024) and basic algebraic thinking (sorts, operations, equations).  If the algebraic vocabulary is new to you, the <span class="co">[</span><span class="ot">tutorial's formal foundations appendix</span><span class="co">](https://panproto.dev/tutorial/appendices/A-formal-foundations.html)</span> provides the necessary background.</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Crate map</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
@@ -1269,40 +1252,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3.5 <span class="pp">|</span> <span class="in">`panproto-io`</span> <span class="pp">|</span> Instance-level presentation: format-specific parse/emit <span class="pp">|</span></span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span>, <span class="in">`panproto-wasm`</span>, <span class="in">`panproto-cli`</span> <span class="pp">|</span> Re-export facade, WASM boundary, CLI <span class="pp">|</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Organization</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>Each level depends only on the levels below it.  <span class="in">`panproto-gat`</span> has no panproto dependencies.  <span class="in">`panproto-core`</span> re-exports everything.</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>The guide is organized into six parts:</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading paths</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part I (Getting Started):** orientation and your first contribution.</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part II (Development Environment):** building, testing, debugging, profiling.</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part III (Architecture and Internals):** deep dives into each crate and subsystem. Read the architecture overview first, then jump to whichever crate you're working on.</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part IV (Contributing Process):** coding conventions, testing philosophy, PR workflow.</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part V (Project Operations):** release process and versioning policy.</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Appendices:** glossary (A), source code map (B), troubleshooting FAQ (C), optimization guide (D), benchmark results (E).</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading paths</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>**Contributors** landing a fix or feature: chapters 1 through 2, then chapter 3 (build), then chapters 16 through 18 (PR workflow).</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>**Protocol authors** adding a new schema language: chapters 5 (architecture), 6 (GAT engine), then the protocol chapter (12).</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>**Researchers** exploring the internals: chapters 5 through 6, then @sec-advanced-internals, then @sec-protolens-engine and @sec-auto-lens-pipeline.</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Links</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial:** <span class="ot">&lt;https://panproto.dev/tutorial/&gt;</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Repository:** <span class="ot">&lt;https://github.com/panproto/panproto&gt;</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rustdoc:** generated from <span class="in">`cargo doc --workspace --no-deps`</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Inline code like <span class="in">`panproto-gat`</span> refers to a crate name.</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>File paths like <span class="in">`crates/panproto-gat/src/theory.rs`</span> are relative to the repository root.</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Shell commands assume a Unix-like environment (macOS or Linux).</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>*Aaron Steven White*</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>**Contributors** landing a fix or feature: start with Chapters 1 and 2, then Chapter 3 (building the project), then Chapters 16 through 18 (the PR workflow).</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>**Protocol authors** adding a new schema language: read Chapter 5 (architecture overview), Chapter 6 (the GAT engine), then Chapter 12 (protocols).</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>**Researchers** exploring the internals: read Chapters 5 and 6 sequentially, then @sec-advanced-internals, then @sec-protolens-engine and @sec-auto-lens-pipeline.</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Links</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial:** <span class="ot">&lt;https://panproto.dev/tutorial/&gt;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Repository:** <span class="ot">&lt;https://github.com/panproto/panproto&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Rustdoc:** generated from <span class="in">`cargo doc --workspace --no-deps`</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Inline code like <span class="in">`panproto-gat`</span> refers to a crate name.  File paths like <span class="in">`crates/panproto-gat/src/theory.rs`</span> are relative to the repository root.  Shell commands assume a Unix-like environment (macOS or Linux).</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>*Aaron Steven White*</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

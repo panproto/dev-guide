@@ -620,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-data-object-model" id="toc-sec-data-object-model" class="nav-link active" data-scroll-target="#sec-data-object-model"><span class="header-section-number">21.1</span> Object model: DataSetObject, ComplementObject, Protocol</a>
+  <li><a href="#sec-data-object-model" id="toc-sec-data-object-model" class="nav-link active" data-scroll-target="#sec-data-object-model"><span class="header-section-number">21.1</span> Object model: datasetobject, complementobject, Protocol</a>
   <ul class="collapse">
   <li><a href="#datasetobject" id="toc-datasetobject" class="nav-link" data-scroll-target="#datasetobject"><span class="header-section-number">21.1.1</span> DataSetObject</a></li>
   <li><a href="#complementobject" id="toc-complementobject" class="nav-link" data-scroll-target="#complementobject"><span class="header-section-number">21.1.2</span> ComplementObject</a></li>
@@ -635,7 +635,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#detect_staleness" id="toc-detect_staleness" class="nav-link" data-scroll-target="#detect_staleness"><span class="header-section-number">21.4.3</span> detect_staleness</a></li>
   <li><a href="#migrate_through_path" id="toc-migrate_through_path" class="nav-link" data-scroll-target="#migrate_through_path"><span class="header-section-number">21.4.4</span> migrate_through_path</a></li>
   </ul></li>
-  <li><a href="#sec-complement-lifecycle" id="toc-sec-complement-lifecycle" class="nav-link" data-scroll-target="#sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, GC</a></li>
+  <li><a href="#sec-complement-lifecycle" id="toc-sec-complement-lifecycle" class="nav-link" data-scroll-target="#sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, gc</a></li>
   <li><a href="#sec-dag-path-migration" id="toc-sec-dag-path-migration" class="nav-link" data-scroll-target="#sec-dag-path-migration"><span class="header-section-number">21.6</span> DAG path migration: multi-step data migration through commit history</a></li>
   <li><a href="#sec-data-sync-pipeline" id="toc-sec-data-sync-pipeline" class="nav-link" data-scroll-target="#sec-data-sync-pipeline"><span class="header-section-number">21.7</span> <code>schema data sync</code> pipeline</a></li>
   <li><a href="#sec-checkout-merge-integration" id="toc-sec-checkout-merge-integration" class="nav-link" data-scroll-target="#sec-checkout-merge-integration"><span class="header-section-number">21.8</span> checkout_with_data / merge_with_data integration</a>
@@ -643,7 +643,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#checkout_with_data" id="toc-checkout_with_data" class="nav-link" data-scroll-target="#checkout_with_data"><span class="header-section-number">21.8.1</span> checkout_with_data</a></li>
   <li><a href="#merge_with_data" id="toc-merge_with_data" class="nav-link" data-scroll-target="#merge_with_data"><span class="header-section-number">21.8.2</span> merge_with_data</a></li>
   </ul></li>
-  <li><a href="#sec-index-staging" id="toc-sec-index-staging" class="nav-link" data-scroll-target="#sec-index-staging"><span class="header-section-number">21.9</span> Index staging: StagedData, staged_protocol</a>
+  <li><a href="#sec-index-staging" id="toc-sec-index-staging" class="nav-link" data-scroll-target="#sec-index-staging"><span class="header-section-number">21.9</span> Index staging: stageddata, staged_protocol</a>
   <ul class="collapse">
   <li><a href="#stageddata" id="toc-stageddata" class="nav-link" data-scroll-target="#stageddata"><span class="header-section-number">21.9.1</span> StagedData</a></li>
   <li><a href="#staged_protocol" id="toc-staged_protocol" class="nav-link" data-scroll-target="#staged_protocol"><span class="header-section-number">21.9.2</span> staged_protocol</a></li>
@@ -676,7 +676,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>The <code>panproto-vcs</code> object model extends beyond schemas and migrations to include data snapshots, complements, and protocol definitions as first-class versioned objects. For the user-facing workflow, see the <a href="https://panproto.dev/tutorial/chapters/19-data-versioning.html">tutorial’s data versioning chapter</a>.</p>
 <section id="sec-data-object-model" class="level2" data-number="21.1">
-<h2 data-number="21.1" class="anchored" data-anchor-id="sec-data-object-model"><span class="header-section-number">21.1</span> Object model: DataSetObject, ComplementObject, Protocol</h2>
+<h2 data-number="21.1" class="anchored" data-anchor-id="sec-data-object-model"><span class="header-section-number">21.1</span> Object model: datasetobject, complementobject, Protocol</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
 <p>Three new variants join the <code>Object</code> enum:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Object <span class="op">{</span></span>
@@ -845,7 +845,7 @@ Note
 </section>
 </section>
 <section id="sec-complement-lifecycle" class="level2" data-number="21.5">
-<h2 data-number="21.5" class="anchored" data-anchor-id="sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, GC</h2>
+<h2 data-number="21.5" class="anchored" data-anchor-id="sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, gc</h2>
 <p>Complements follow the same lifecycle as other objects in the store:</p>
 <ol type="1">
 <li><strong>Creation</strong>: <code>migrate_forward</code> produces a <code>ComplementObject</code> and writes it to the store.</li>
@@ -935,7 +935,7 @@ Tip
 </section>
 </section>
 <section id="sec-index-staging" class="level2" data-number="21.9">
-<h2 data-number="21.9" class="anchored" data-anchor-id="sec-index-staging"><span class="header-section-number">21.9</span> Index staging: StagedData, staged_protocol</h2>
+<h2 data-number="21.9" class="anchored" data-anchor-id="sec-index-staging"><span class="header-section-number">21.9</span> Index staging: stageddata, staged_protocol</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
 <p>The <code>Index</code> struct gains two fields:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> <span class="bu">Index</span> <span class="op">{</span></span>
@@ -1457,7 +1457,7 @@ Note
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-vcs`</span> object model extends beyond schemas and migrations to include data snapshots, complements, and protocol definitions as first-class versioned objects. For the user-facing workflow, see the <span class="co">[</span><span class="ot">tutorial's data versioning chapter</span><span class="co">](https://panproto.dev/tutorial/chapters/19-data-versioning.html)</span>.</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Object model: DataSetObject, ComplementObject, Protocol {#sec-data-object-model}</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Object model: datasetobject, complementobject, Protocol {#sec-data-object-model}</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/objects.rs`</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -1630,7 +1630,7 @@ Note
 <span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a>The function returns <span class="in">`Error::MissingComplement`</span> with the migration ID and data set ID. This can happen if someone ran <span class="in">`schema gc`</span> and the complement was collected. The remedy is to re-migrate forward from an older snapshot that still has its complements.</span>
 <span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement lifecycle: creation, storage, retrieval, GC {#sec-complement-lifecycle}</span></span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement lifecycle: creation, storage, retrieval, gc {#sec-complement-lifecycle}</span></span>
 <span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a>Complements follow the same lifecycle as other objects in the store:</span>
 <span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a></span>
@@ -1718,7 +1718,7 @@ Note
 <span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a>If the merge has conflicts, data migration is skipped. The <span class="in">`MergeResult`</span> contains the conflicts, and the caller must resolve them before migrating data.</span>
 <span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## Index staging: StagedData, staged_protocol {#sec-index-staging}</span></span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## Index staging: stageddata, staged_protocol {#sec-index-staging}</span></span>
 <span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-vcs/src/objects.rs`</span></span>
 <span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a></span>

@@ -653,28 +653,28 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-auto-lens-e2e" id="toc-sec-auto-lens-e2e" class="nav-link active" data-scroll-target="#sec-auto-lens-e2e"><span class="header-section-number">20.1</span> End-to-End Pipeline</a></li>
-  <li><a href="#sec-implicit-theory" id="toc-sec-implicit-theory" class="nav-link" data-scroll-target="#sec-implicit-theory"><span class="header-section-number">20.2</span> <code>schema_to_implicit_theory</code>: Bridging Schema-Level to GAT-Level</a></li>
-  <li><a href="#sec-factorize-algorithm" id="toc-sec-factorize-algorithm" class="nav-link" data-scroll-target="#sec-factorize-algorithm"><span class="header-section-number">20.3</span> The <code>factorize</code> Algorithm</a>
+  <li><a href="#sec-auto-lens-e2e" id="toc-sec-auto-lens-e2e" class="nav-link active" data-scroll-target="#sec-auto-lens-e2e"><span class="header-section-number">20.1</span> End-to-end pipeline</a></li>
+  <li><a href="#sec-implicit-theory" id="toc-sec-implicit-theory" class="nav-link" data-scroll-target="#sec-implicit-theory"><span class="header-section-number">20.2</span> <code>schema_to_implicit_theory</code>: bridging schema-level to GAT-level</a></li>
+  <li><a href="#sec-factorize-algorithm" id="toc-sec-factorize-algorithm" class="nav-link" data-scroll-target="#sec-factorize-algorithm"><span class="header-section-number">20.3</span> The <code>factorize</code> algorithm</a>
   <ul class="collapse">
-  <li><a href="#phase-ordering" id="toc-phase-ordering" class="nav-link" data-scroll-target="#phase-ordering"><span class="header-section-number">20.3.1</span> Phase Ordering</a></li>
-  <li><a href="#topological-sort-of-dependent-sorts" id="toc-topological-sort-of-dependent-sorts" class="nav-link" data-scroll-target="#topological-sort-of-dependent-sorts"><span class="header-section-number">20.3.2</span> Topological Sort of Dependent Sorts</a></li>
-  <li><a href="#factorization-result" id="toc-factorization-result" class="nav-link" data-scroll-target="#factorization-result"><span class="header-section-number">20.3.3</span> Factorization Result</a></li>
+  <li><a href="#phase-ordering" id="toc-phase-ordering" class="nav-link" data-scroll-target="#phase-ordering"><span class="header-section-number">20.3.1</span> Phase ordering</a></li>
+  <li><a href="#topological-sort-of-dependent-sorts" id="toc-topological-sort-of-dependent-sorts" class="nav-link" data-scroll-target="#topological-sort-of-dependent-sorts"><span class="header-section-number">20.3.2</span> Topological sort of dependent sorts</a></li>
+  <li><a href="#factorization-result" id="toc-factorization-result" class="nav-link" data-scroll-target="#factorization-result"><span class="header-section-number">20.3.3</span> Factorization result</a></li>
   <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation"><span class="header-section-number">20.3.4</span> Validation</a></li>
   </ul></li>
-  <li><a href="#sec-diff-to-protolens" id="toc-sec-diff-to-protolens" class="nav-link" data-scroll-target="#sec-diff-to-protolens"><span class="header-section-number">20.4</span> <code>diff_to_protolens</code>: Mapping Transforms to Protolenses</a></li>
-  <li><a href="#sec-symmetric-from-overlap" id="toc-sec-symmetric-from-overlap" class="nav-link" data-scroll-target="#sec-symmetric-from-overlap"><span class="header-section-number">20.5</span> Symmetric Lens Construction from Overlap Discovery</a></li>
-  <li><a href="#sec-protolens-wasm" id="toc-sec-protolens-wasm" class="nav-link" data-scroll-target="#sec-protolens-wasm"><span class="header-section-number">20.6</span> WASM Boundary</a></li>
-  <li><a href="#sec-protolens-cli" id="toc-sec-protolens-cli" class="nav-link" data-scroll-target="#sec-protolens-cli"><span class="header-section-number">20.7</span> CLI Handlers</a></li>
-  <li><a href="#sec-fleet-application" id="toc-sec-fleet-application" class="nav-link" data-scroll-target="#sec-fleet-application"><span class="header-section-number">20.8</span> Fleet Application</a></li>
-  <li><a href="#sec-complement-state-tracking" id="toc-sec-complement-state-tracking" class="nav-link" data-scroll-target="#sec-complement-state-tracking"><span class="header-section-number">20.9</span> Complement State Tracking</a></li>
-  <li><a href="#sec-serialization-format" id="toc-sec-serialization-format" class="nav-link" data-scroll-target="#sec-serialization-format"><span class="header-section-number">20.10</span> Serialization Format</a></li>
-  <li><a href="#sec-protolens-testing" id="toc-sec-protolens-testing" class="nav-link" data-scroll-target="#sec-protolens-testing"><span class="header-section-number">20.11</span> Testing Strategy</a>
+  <li><a href="#sec-diff-to-protolens" id="toc-sec-diff-to-protolens" class="nav-link" data-scroll-target="#sec-diff-to-protolens"><span class="header-section-number">20.4</span> <code>diff_to_protolens</code>: mapping transforms to protolenses</a></li>
+  <li><a href="#sec-symmetric-from-overlap" id="toc-sec-symmetric-from-overlap" class="nav-link" data-scroll-target="#sec-symmetric-from-overlap"><span class="header-section-number">20.5</span> Symmetric lens construction from overlap discovery</a></li>
+  <li><a href="#sec-protolens-WASM" id="toc-sec-protolens-WASM" class="nav-link" data-scroll-target="#sec-protolens-WASM"><span class="header-section-number">20.6</span> WASM boundary</a></li>
+  <li><a href="#sec-protolens-CLI" id="toc-sec-protolens-CLI" class="nav-link" data-scroll-target="#sec-protolens-CLI"><span class="header-section-number">20.7</span> CLI handlers</a></li>
+  <li><a href="#sec-fleet-application" id="toc-sec-fleet-application" class="nav-link" data-scroll-target="#sec-fleet-application"><span class="header-section-number">20.8</span> Fleet application</a></li>
+  <li><a href="#sec-complement-state-tracking" id="toc-sec-complement-state-tracking" class="nav-link" data-scroll-target="#sec-complement-state-tracking"><span class="header-section-number">20.9</span> Complement state tracking</a></li>
+  <li><a href="#sec-serialization-format" id="toc-sec-serialization-format" class="nav-link" data-scroll-target="#sec-serialization-format"><span class="header-section-number">20.10</span> Serialization format</a></li>
+  <li><a href="#sec-protolens-testing" id="toc-sec-protolens-testing" class="nav-link" data-scroll-target="#sec-protolens-testing"><span class="header-section-number">20.11</span> Testing strategy</a>
   <ul class="collapse">
-  <li><a href="#unit-tests" id="toc-unit-tests" class="nav-link" data-scroll-target="#unit-tests"><span class="header-section-number">20.11.1</span> Unit Tests</a></li>
-  <li><a href="#commutativity-checks" id="toc-commutativity-checks" class="nav-link" data-scroll-target="#commutativity-checks"><span class="header-section-number">20.11.2</span> Commutativity Checks</a></li>
-  <li><a href="#round-trip-verification" id="toc-round-trip-verification" class="nav-link" data-scroll-target="#round-trip-verification"><span class="header-section-number">20.11.3</span> Round-Trip Verification</a></li>
-  <li><a href="#property-based-tests" id="toc-property-based-tests" class="nav-link" data-scroll-target="#property-based-tests"><span class="header-section-number">20.11.4</span> Property-Based Tests</a></li>
+  <li><a href="#unit-tests" id="toc-unit-tests" class="nav-link" data-scroll-target="#unit-tests"><span class="header-section-number">20.11.1</span> Unit tests</a></li>
+  <li><a href="#commutativity-checks" id="toc-commutativity-checks" class="nav-link" data-scroll-target="#commutativity-checks"><span class="header-section-number">20.11.2</span> Commutativity checks</a></li>
+  <li><a href="#round-trip-verification" id="toc-round-trip-verification" class="nav-link" data-scroll-target="#round-trip-verification"><span class="header-section-number">20.11.3</span> Round-trip verification</a></li>
+  <li><a href="#property-based-tests" id="toc-property-based-tests" class="nav-link" data-scroll-target="#property-based-tests"><span class="header-section-number">20.11.4</span> Property-based tests</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/27-auto-lens-pipeline.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -702,10 +702,10 @@ window.Quarto = {
 </header>
 
 
-<p>The automated lens generation pipeline derives protolens chains from schema diffs. Given two schemas, panproto can search for a homomorphism, factorize it into elementary steps, convert each step to a protolens, and instantiate the resulting chain, all without manual lens construction.</p>
-<p>For the protolens engine internals, see <a href="26-protolens-engine.html" class="quarto-xref"><span>Chapter 19</span></a>. For the homomorphism search and the extend/restrict/complete operations, see <a href="22-advanced-internals.html#sec-auto-morphisms-section" class="quarto-xref"><span>Section 18.3</span></a>.</p>
+<p>Hand-writing a lens for every schema change is viable when changes are infrequent and small. It stops being viable when a platform has hundreds of schemas evolving independently. The automated lens generation pipeline closes this gap: given two schemas, it searches for a structure-preserving map, decomposes it into elementary steps, converts each step to a protolens, and instantiates the resulting chain—no manual lens construction required.</p>
+<p>For the protolens engine internals, see <a href="26-protolens-engine.html" class="quarto-xref"><span>Chapter 19</span></a>. For homomorphism search and the extend/restrict/complete operations, see <a href="22-advanced-internals.html#sec-auto-morphisms-section" class="quarto-xref"><span>Section 18.3</span></a>.</p>
 <section id="sec-auto-lens-e2e" class="level2" data-number="20.1">
-<h2 data-number="20.1" class="anchored" data-anchor-id="sec-auto-lens-e2e"><span class="header-section-number">20.1</span> End-to-End Pipeline</h2>
+<h2 data-number="20.1" class="anchored" data-anchor-id="sec-auto-lens-e2e"><span class="header-section-number">20.1</span> End-to-end pipeline</h2>
 <p>The automated lens generation pipeline consists of five stages:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -734,7 +734,7 @@ Figure&nbsp;20.1: End-to-end automated lens generation pipeline. Each stage tran
 </div>
 </div>
 <ol type="1">
-<li><strong>Homomorphism search</strong> (<code>hom_search</code>): find a structure-preserving map between the source and target schemas. This uses the CSP-based backtracking search described in <a href="22-advanced-internals.html#sec-auto-morphisms-section" class="quarto-xref"><span>Section 18.3</span></a>.</li>
+<li><strong>Homomorphism search</strong> (<code>hom_search</code>): find a structure-preserving map between the source and target schemas. Uses the CSP-based backtracking search described in <a href="22-advanced-internals.html#sec-auto-morphisms-section" class="quarto-xref"><span>Section 18.3</span></a>.</li>
 <li><strong>Factorization</strong> (<code>factorize</code>): decompose the resulting theory morphism into a sequence of elementary transforms (drops, renames, and adds).</li>
 <li><strong>Protolens chain construction</strong> (<code>diff_to_protolens</code>): map each elementary transform to an elementary protolens constructor.</li>
 <li><strong>Instantiation</strong>: apply the protolens chain to the source schema, producing a concrete <code>Lens</code>.</li>
@@ -742,7 +742,7 @@ Figure&nbsp;20.1: End-to-end automated lens generation pipeline. Each stage tran
 </ol>
 </section>
 <section id="sec-implicit-theory" class="level2" data-number="20.2">
-<h2 data-number="20.2" class="anchored" data-anchor-id="sec-implicit-theory"><span class="header-section-number">20.2</span> <code>schema_to_implicit_theory</code>: Bridging Schema-Level to GAT-Level</h2>
+<h2 data-number="20.2" class="anchored" data-anchor-id="sec-implicit-theory"><span class="header-section-number">20.2</span> <code>schema_to_implicit_theory</code>: bridging schema-level to GAT-level</h2>
 <p>The pipeline’s first bridge is <code>schema_to_implicit_theory</code>, which extracts a GAT from a schema’s structural information:</p>
 <ul>
 <li>Each unique <strong>vertex kind</strong> becomes a sort (a type in a formal theory, not a sorting operation; here simple, with arity 0).</li>
@@ -770,7 +770,7 @@ Note
 </div>
 </section>
 <section id="sec-factorize-algorithm" class="level2" data-number="20.3">
-<h2 data-number="20.3" class="anchored" data-anchor-id="sec-factorize-algorithm"><span class="header-section-number">20.3</span> The <code>factorize</code> Algorithm</h2>
+<h2 data-number="20.3" class="anchored" data-anchor-id="sec-factorize-algorithm"><span class="header-section-number">20.3</span> The <code>factorize</code> algorithm</h2>
 <p><strong>File</strong>: <code>crates/panproto-gat/src/factorize.rs</code></p>
 <p>The <code>factorize</code> function decomposes a theory morphism <span class="math inline">\(F: T_1 \to T_2\)</span> into a sequence of elementary <code>TheoryEndofunctor</code> steps:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="194"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 193;"><span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> factorize(</span>
@@ -811,13 +811,13 @@ Note
 <span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
 <span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="phase-ordering" class="level3" data-number="20.3.1">
-<h3 data-number="20.3.1" class="anchored" data-anchor-id="phase-ordering"><span class="header-section-number">20.3.1</span> Phase Ordering</h3>
+<h3 data-number="20.3.1" class="anchored" data-anchor-id="phase-ordering"><span class="header-section-number">20.3.1</span> Phase ordering</h3>
 <p>The factorization proceeds in four phases, ordered to maintain well-formedness at each intermediate step:</p>
 <ol type="1">
 <li><strong>Identify renames</strong>: sort-map and op-map entries where <code>old != new</code> and both names exist in their respective theories.</li>
-<li><strong>Emit drops</strong> (equations first, then ops, then sorts): remove elements present in the domain but absent from the codomain. The ordering ensures that equations referencing an operation are dropped before the operation, and operations referencing a sort are dropped before the sort.</li>
+<li><strong>Emit drops</strong> (equations first, then ops, then sorts): remove elements present in the domain but absent from the codomain. Dropping equations before operations, and operations before sorts, ensures the result stays well-formed.</li>
 <li><strong>Emit renames</strong>: apply the identified sort and operation renames.</li>
-<li><strong>Emit adds</strong> (sorts first, then ops, then equations): add elements present in the codomain but absent from the (renamed) domain. Sorts are topologically sorted by parameter dependencies to ensure that a sort’s parameters exist before the sort is added.</li>
+<li><strong>Emit adds</strong> (sorts first, then ops, then equations): add elements present in the codomain but absent from the (renamed) domain. Sorts are topologically sorted by parameter dependencies to ensure a sort’s parameters exist before the sort is added.</li>
 </ol>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -834,7 +834,7 @@ Note
 </div>
 </section>
 <section id="topological-sort-of-dependent-sorts" class="level3" data-number="20.3.2">
-<h3 data-number="20.3.2" class="anchored" data-anchor-id="topological-sort-of-dependent-sorts"><span class="header-section-number">20.3.2</span> Topological Sort of Dependent Sorts</h3>
+<h3 data-number="20.3.2" class="anchored" data-anchor-id="topological-sort-of-dependent-sorts"><span class="header-section-number">20.3.2</span> Topological sort of dependent sorts</h3>
 <p>When adding new sorts, the <code>emit_adds</code> function performs a topological sort based on <code>SortParam</code> dependencies:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="99"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 98;"><span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> emit_adds(</span>
 <span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">Vec</span><span class="op">&lt;</span>TheoryEndofunctor<span class="op">&gt;,</span></span>
@@ -886,7 +886,7 @@ Note
 <p>A sort with parameters depending on other sorts must be added after those dependency sorts. The algorithm iterates until all additions are emitted, with a cycle guard (<code>max_iterations</code>) to prevent infinite loops in malformed inputs.</p>
 </section>
 <section id="factorization-result" class="level3" data-number="20.3.3">
-<h3 data-number="20.3.3" class="anchored" data-anchor-id="factorization-result"><span class="header-section-number">20.3.3</span> Factorization Result</h3>
+<h3 data-number="20.3.3" class="anchored" data-anchor-id="factorization-result"><span class="header-section-number">20.3.3</span> Factorization result</h3>
 <p>The <code>Factorization</code> struct holds the ordered sequence of steps plus domain and codomain names:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="11"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 10;"><span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> <span class="bu">Clone</span><span class="at">)]</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> Factorization <span class="op">{</span></span>
@@ -932,14 +932,8 @@ Note
 </section>
 </section>
 <section id="sec-diff-to-protolens" class="level2" data-number="20.4">
-<h2 data-number="20.4" class="anchored" data-anchor-id="sec-diff-to-protolens"><span class="header-section-number">20.4</span> <code>diff_to_protolens</code>: Mapping Transforms to Protolenses</h2>
+<h2 data-number="20.4" class="anchored" data-anchor-id="sec-diff-to-protolens"><span class="header-section-number">20.4</span> <code>diff_to_protolens</code>: mapping transforms to protolenses</h2>
 <p>Each <code>TheoryEndofunctor</code> in a factorization maps directly to an elementary protolens constructor:</p>
-<div id="tbl-diff-to-protolens" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-diff-to-protolens-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;20.1: Mapping from theory transforms to elementary protolenses.
-</figcaption>
-<div aria-describedby="tbl-diff-to-protolens-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -996,13 +990,10 @@ Table&nbsp;20.1: Mapping from theory transforms to elementary protolenses.
 </tr>
 </tbody>
 </table>
-</div>
-</figure>
-</div>
 <p>The conversion is mechanical: each transform step becomes a protolens step with the same semantics. The resulting <code>Vec&lt;Protolens&gt;</code> is wrapped in a <code>ProtolensChain</code> for instantiation.</p>
 </section>
 <section id="sec-symmetric-from-overlap" class="level2" data-number="20.5">
-<h2 data-number="20.5" class="anchored" data-anchor-id="sec-symmetric-from-overlap"><span class="header-section-number">20.5</span> Symmetric Lens Construction from Overlap Discovery</h2>
+<h2 data-number="20.5" class="anchored" data-anchor-id="sec-symmetric-from-overlap"><span class="header-section-number">20.5</span> Symmetric lens construction from overlap discovery</h2>
 <p>When two schemas overlap partially, the pipeline constructs a symmetric lens by:</p>
 <ol type="1">
 <li><strong>Discovering overlap</strong>: use <code>find_best_morphism</code> (from <code>panproto-mig/src/overlap.rs</code>) with <code>monic: true</code> to find the maximal common substructure.</li>
@@ -1035,8 +1026,8 @@ Figure&nbsp;20.2: Symmetric lens construction via overlap discovery. The overlap
 </div>
 </div>
 </section>
-<section id="sec-protolens-wasm" class="level2" data-number="20.6">
-<h2 data-number="20.6" class="anchored" data-anchor-id="sec-protolens-wasm"><span class="header-section-number">20.6</span> WASM Boundary</h2>
+<section id="sec-protolens-WASM" class="level2" data-number="20.6">
+<h2 data-number="20.6" class="anchored" data-anchor-id="sec-protolens-WASM"><span class="header-section-number">20.6</span> WASM boundary</h2>
 <p>Protolens chains cross the WASM boundary via handle-based allocation, consistent with panproto’s handle/slab architecture (see <a href="13-wasm-boundary.html" class="quarto-xref"><span>Chapter 13</span></a>):</p>
 <ul>
 <li><strong><code>create_protolens_chain</code></strong>: allocates a <code>ProtolensChain</code> in the Rust slab, returns a <code>u32</code> handle to JavaScript.</li>
@@ -1058,15 +1049,9 @@ Tip
 </div>
 </div>
 </section>
-<section id="sec-protolens-cli" class="level2" data-number="20.7">
-<h2 data-number="20.7" class="anchored" data-anchor-id="sec-protolens-cli"><span class="header-section-number">20.7</span> CLI Handlers</h2>
+<section id="sec-protolens-CLI" class="level2" data-number="20.7">
+<h2 data-number="20.7" class="anchored" data-anchor-id="sec-protolens-CLI"><span class="header-section-number">20.7</span> CLI handlers</h2>
 <p>The CLI exposes protolens functionality through several subcommands:</p>
-<div id="tbl-protolens-cli" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-protolens-cli-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;20.2: CLI subcommands for protolens operations.
-</figcaption>
-<div aria-describedby="tbl-protolens-cli-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1105,9 +1090,6 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 </tr>
 </tbody>
 </table>
-</div>
-</figure>
-</div>
 <p>The <code>lens-diff</code> command is the primary entry point for the automated pipeline:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">prot</span> lens-diff <span class="at">--src</span> schema-v1.json <span class="at">--tgt</span> schema-v2.json <span class="at">--protocol</span> json-schema</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This runs the full pipeline (hom_search, factorize, diff_to_protolens) and outputs the protolens chain as a JSON array of steps. Each step includes the transform names, preconditions, and complement constructors, providing a human-readable audit trail of the derived migration.</p>
@@ -1116,7 +1098,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <p>This generates random modifications to the instance data and verifies that GetPut and PutGet hold for each modification.</p>
 </section>
 <section id="sec-fleet-application" class="level2" data-number="20.8">
-<h2 data-number="20.8" class="anchored" data-anchor-id="sec-fleet-application"><span class="header-section-number">20.8</span> Fleet Application</h2>
+<h2 data-number="20.8" class="anchored" data-anchor-id="sec-fleet-application"><span class="header-section-number">20.8</span> Fleet application</h2>
 <p><code>apply_to_fleet</code> iterates over a collection of schemas, checks each against the chain’s preconditions, and either instantiates the chain or records the failure:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> apply_to_fleet(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    chain<span class="op">:</span> <span class="op">&amp;</span>ProtolensChain<span class="op">,</span></span>
@@ -1147,12 +1129,12 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <p><code>FleetResult</code> partitions outcomes into <code>applied</code> (successful instantiations) and <code>skipped</code> (schemas that failed precondition checks or instantiation). Failed instantiations are skipped rather than fatal; a single broken schema doesn’t abort the fleet migration.</p>
 </section>
 <section id="sec-complement-state-tracking" class="level2" data-number="20.9">
-<h2 data-number="20.9" class="anchored" data-anchor-id="sec-complement-state-tracking"><span class="header-section-number">20.9</span> Complement State Tracking</h2>
+<h2 data-number="20.9" class="anchored" data-anchor-id="sec-complement-state-tracking"><span class="header-section-number">20.9</span> Complement state tracking</h2>
 <p><code>chain_complement_spec</code> advances a <code>current_schema</code> through each step’s target transform before evaluating the next step’s complement. Each step’s complement is computed against the schema as it exists after all preceding steps. This means a <code>drop_sort("metadata")</code> followed by <code>add_sort("metadata_v2")</code> correctly reports the drop’s captured data count from the original schema and the add’s default requirement from the intermediate schema.</p>
 <p>The <code>AddedElement</code> variant of <code>ComplementConstructor</code> handles <code>add_sort</code> and <code>add_op</code> protolenses. These require default values at instantiation time. <code>AddedElement { name, kind }</code> records what the user must supply, and <code>chain.requirements()</code> aggregates these into a complete list of defaults needed for the chain to instantiate.</p>
 </section>
 <section id="sec-serialization-format" class="level2" data-number="20.10">
-<h2 data-number="20.10" class="anchored" data-anchor-id="sec-serialization-format"><span class="header-section-number">20.10</span> Serialization Format</h2>
+<h2 data-number="20.10" class="anchored" data-anchor-id="sec-serialization-format"><span class="header-section-number">20.10</span> Serialization format</h2>
 <p>Protolens chains serialize to JSON with the following structure:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"steps"</span><span class="fu">:</span> <span class="ot">[</span></span>
@@ -1186,10 +1168,10 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <p>Individual protolenses also support <code>to_json()</code> / <code>from_json()</code> with the same per-step structure (minus the outer <code>steps</code> array).</p>
 </section>
 <section id="sec-protolens-testing" class="level2" data-number="20.11">
-<h2 data-number="20.11" class="anchored" data-anchor-id="sec-protolens-testing"><span class="header-section-number">20.11</span> Testing Strategy</h2>
+<h2 data-number="20.11" class="anchored" data-anchor-id="sec-protolens-testing"><span class="header-section-number">20.11</span> Testing strategy</h2>
 <p>The protolens engine uses three testing approaches:</p>
 <section id="unit-tests" class="level3" data-number="20.11.1">
-<h3 data-number="20.11.1" class="anchored" data-anchor-id="unit-tests"><span class="header-section-number">20.11.1</span> Unit Tests</h3>
+<h3 data-number="20.11.1" class="anchored" data-anchor-id="unit-tests"><span class="header-section-number">20.11.1</span> Unit tests</h3>
 <p>Each elementary protolens constructor has unit tests verifying:</p>
 <ul>
 <li><strong>Applicability</strong>: the protolens is applicable to schemas containing the relevant sorts/ops and not applicable otherwise.</li>
@@ -1198,11 +1180,11 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 </ul>
 </section>
 <section id="commutativity-checks" class="level3" data-number="20.11.2">
-<h3 data-number="20.11.2" class="anchored" data-anchor-id="commutativity-checks"><span class="header-section-number">20.11.2</span> Commutativity Checks</h3>
+<h3 data-number="20.11.2" class="anchored" data-anchor-id="commutativity-checks"><span class="header-section-number">20.11.2</span> Commutativity checks</h3>
 <p>Commutativity is tested by instantiating the same protolens at multiple related schemas and verifying that the resulting lenses commute with schema morphisms between those schemas. The test fixture generates a family of schemas of increasing complexity and checks commutativity for each pair.</p>
 </section>
 <section id="round-trip-verification" class="level3" data-number="20.11.3">
-<h3 data-number="20.11.3" class="anchored" data-anchor-id="round-trip-verification"><span class="header-section-number">20.11.3</span> Round-Trip Verification</h3>
+<h3 data-number="20.11.3" class="anchored" data-anchor-id="round-trip-verification"><span class="header-section-number">20.11.3</span> Round-trip verification</h3>
 <p>The <code>check_laws</code> function from <code>panproto-lens/src/laws.rs</code> is applied to instantiated protolenses:</p>
 <ol type="1">
 <li>Generate a random instance conforming to the source schema.</li>
@@ -1214,7 +1196,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 </ol>
 </section>
 <section id="property-based-tests" class="level3" data-number="20.11.4">
-<h3 data-number="20.11.4" class="anchored" data-anchor-id="property-based-tests"><span class="header-section-number">20.11.4</span> Property-Based Tests</h3>
+<h3 data-number="20.11.4" class="anchored" data-anchor-id="property-based-tests"><span class="header-section-number">20.11.4</span> Property-based tests</h3>
 <p>The integration test suite (<code>tests/integration/tests/lens_laws.rs</code>) includes property-based tests that:</p>
 <ul>
 <li>Generate random schema pairs by applying random sequences of elementary protolens constructors to a base schema.</li>
@@ -1715,11 +1697,11 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Automated Lens Generation Pipeline {#sec-auto-lens-pipeline}</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>The automated lens generation pipeline derives protolens chains from schema diffs. Given two schemas, panproto can search for a homomorphism, factorize it into elementary steps, convert each step to a protolens, and instantiate the resulting chain, all without manual lens construction.</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Hand-writing a lens for every schema change is viable when changes are infrequent and small.  It stops being viable when a platform has hundreds of schemas evolving independently.  The automated lens generation pipeline closes this gap: given two schemas, it searches for a structure-preserving map, decomposes it into elementary steps, converts each step to a protolens, and instantiates the resulting chain—no manual lens construction required.</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>For the protolens engine internals, see @sec-protolens-engine. For the homomorphism search and the extend/restrict/complete operations, see @sec-auto-morphisms-section.</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>For the protolens engine internals, see @sec-protolens-engine.  For homomorphism search and the extend/restrict/complete operations, see @sec-auto-morphisms-section.</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## End-to-End Pipeline {#sec-auto-lens-e2e}</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## End-to-end pipeline {#sec-auto-lens-e2e}</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>The automated lens generation pipeline consists of five stages:</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
@@ -1738,13 +1720,13 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    style LENS fill:<span class="co">#e8f4e8,stroke:#2d7d2d</span></span>
 <span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Homomorphism search** (<span class="in">`hom_search`</span>): find a structure-preserving map between the source and target schemas. This uses the CSP-based backtracking search described in @sec-auto-morphisms-section.</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Homomorphism search** (<span class="in">`hom_search`</span>): find a structure-preserving map between the source and target schemas. Uses the CSP-based backtracking search described in @sec-auto-morphisms-section.</span>
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Factorization** (<span class="in">`factorize`</span>): decompose the resulting theory morphism into a sequence of elementary transforms (drops, renames, and adds).</span>
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Protolens chain construction** (<span class="in">`diff_to_protolens`</span>): map each elementary transform to an elementary protolens constructor.</span>
 <span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Instantiation**: apply the protolens chain to the source schema, producing a concrete <span class="in">`Lens`</span>.</span>
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Application**: use the lens's <span class="in">`get`</span> and <span class="in">`put`</span> to migrate data bidirectionally.</span>
 <span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## `schema_to_implicit_theory`: Bridging Schema-Level to GAT-Level {#sec-implicit-theory}</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## `schema_to_implicit_theory`: bridging schema-level to GAT-level {#sec-implicit-theory}</span></span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>The pipeline's first bridge is <span class="in">`schema_to_implicit_theory`</span>, which extracts a GAT from a schema's structural information:</span>
 <span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a></span>
@@ -1767,7 +1749,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>The implicit theory is a *presentation* of the schema's structure in the language of GATs. It's not the same as the protocol's schema theory (which defines vertex kinds and edge rules globally). The implicit theory is local to a specific schema instance, capturing only the kinds that actually appear.</span>
 <span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `factorize` Algorithm {#sec-factorize-algorithm}</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `factorize` algorithm {#sec-factorize-algorithm}</span></span>
 <span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>**File**: <span class="in">`crates/panproto-gat/src/factorize.rs`</span></span>
 <span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a></span>
@@ -1776,14 +1758,14 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-gat/src/factorize.rs" start-line=194 end-line=230}</span></span>
 <span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### Phase Ordering</span></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="fu">### Phase ordering</span></span>
 <span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>The factorization proceeds in four phases, ordered to maintain well-formedness at each intermediate step:</span>
 <span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Identify renames**: sort-map and op-map entries where <span class="in">`old != new`</span> and both names exist in their respective theories.</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Emit drops** (equations first, then ops, then sorts): remove elements present in the domain but absent from the codomain. The ordering ensures that equations referencing an operation are dropped before the operation, and operations referencing a sort are dropped before the sort.</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Emit drops** (equations first, then ops, then sorts): remove elements present in the domain but absent from the codomain. Dropping equations before operations, and operations before sorts, ensures the result stays well-formed.</span>
 <span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Emit renames**: apply the identified sort and operation renames.</span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Emit adds** (sorts first, then ops, then equations): add elements present in the codomain but absent from the (renamed) domain. Sorts are topologically sorted by parameter dependencies to ensure that a sort's parameters exist before the sort is added.</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Emit adds** (sorts first, then ops, then equations): add elements present in the codomain but absent from the (renamed) domain. Sorts are topologically sorted by parameter dependencies to ensure a sort's parameters exist before the sort is added.</span>
 <span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this specific phase order?</span></span>
@@ -1791,7 +1773,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>Dropping before renaming avoids name collisions: if we renamed first, a rename <span class="in">`A -&gt; B`</span> followed by a drop of <span class="in">`B`</span> would drop the wrong element. Renaming before adding ensures the adds operate on the already-renamed theory, so new elements can reference renamed sorts without ambiguity.</span>
 <span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="fu">### Topological Sort of Dependent Sorts</span></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="fu">### Topological sort of dependent sorts</span></span>
 <span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>When adding new sorts, the <span class="in">`emit_adds`</span> function performs a topological sort based on <span class="in">`SortParam`</span> dependencies:</span>
 <span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
@@ -1800,7 +1782,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>A sort with parameters depending on other sorts must be added after those dependency sorts. The algorithm iterates until all additions are emitted, with a cycle guard (<span class="in">`max_iterations`</span>) to prevent infinite loops in malformed inputs.</span>
 <span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Factorization Result</span></span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Factorization result</span></span>
 <span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Factorization`</span> struct holds the ordered sequence of steps plus domain and codomain names:</span>
 <span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a></span>
@@ -1816,7 +1798,7 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>This is an end-to-end correctness check: if validation passes, the factorization faithfully represents the original morphism.</span>
 <span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## `diff_to_protolens`: Mapping Transforms to Protolenses {#sec-diff-to-protolens}</span></span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## `diff_to_protolens`: mapping transforms to protolenses {#sec-diff-to-protolens}</span></span>
 <span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>Each <span class="in">`TheoryEndofunctor`</span> in a factorization maps directly to an elementary protolens constructor:</span>
 <span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a></span>
@@ -1832,197 +1814,193 @@ Table&nbsp;20.2: CLI subcommands for protolens operations.
 <span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DropEquation(n)`</span> <span class="pp">|</span> <span class="in">`drop_equation(n)`</span> <span class="pp">|</span> <span class="in">`Empty`</span> <span class="pp">|</span></span>
 <span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Pullback(morph)`</span> <span class="pp">|</span> <span class="in">`pullback(morph)`</span> <span class="pp">|</span> <span class="in">`Empty`</span> <span class="pp">|</span></span>
 <span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>: Mapping from theory transforms to elementary protolenses. {#tbl-diff-to-protolens}</span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>The conversion is mechanical: each transform step becomes a protolens step with the same semantics. The resulting <span class="in">`Vec&lt;Protolens&gt;`</span> is wrapped in a <span class="in">`ProtolensChain`</span> for instantiation.</span>
 <span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>The conversion is mechanical: each transform step becomes a protolens step with the same semantics. The resulting <span class="in">`Vec&lt;Protolens&gt;`</span> is wrapped in a <span class="in">`ProtolensChain`</span> for instantiation.</span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symmetric lens construction from overlap discovery {#sec-symmetric-from-overlap}</span></span>
 <span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symmetric Lens Construction from Overlap Discovery {#sec-symmetric-from-overlap}</span></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>When two schemas overlap partially, the pipeline constructs a symmetric lens by:</span>
 <span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>When two schemas overlap partially, the pipeline constructs a symmetric lens by:</span>
-<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Discovering overlap**: use <span class="in">`find_best_morphism`</span> (from <span class="in">`panproto-mig/src/overlap.rs`</span>) with <span class="in">`monic: true`</span> to find the maximal common substructure.</span>
-<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Building protolens chains for each direction**: factorize the morphisms from each schema to the overlap, producing two protolens chains (one forward, one backward).<span class="ot">[^symmetric-chains]</span></span>
-<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Instantiating both chains**: produce $\text{Lens}(S_1, \text{overlap})$ and $\text{Lens}(S_2, \text{overlap})$.</span>
-<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Composing into a symmetric lens**: combine the forward lens from $S_1$ to the overlap with the backward lens from the overlap to $S_2$.</span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Discovering overlap**: use <span class="in">`find_best_morphism`</span> (from <span class="in">`panproto-mig/src/overlap.rs`</span>) with <span class="in">`monic: true`</span> to find the maximal common substructure.</span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Building protolens chains for each direction**: factorize the morphisms from each schema to the overlap, producing two protolens chains (one forward, one backward).<span class="ot">[^symmetric-chains]</span></span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Instantiating both chains**: produce $\text{Lens}(S_1, \text{overlap})$ and $\text{Lens}(S_2, \text{overlap})$.</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Composing into a symmetric lens**: combine the forward lens from $S_1$ to the overlap with the backward lens from the overlap to $S_2$.</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a><span class="ot">[^symmetric-chains]: </span>Each direction involves a morphism from a full schema to the overlap subschema. Factorizing these morphisms into elementary transforms and mapping them to protolenses yields two chains whose composition forms the symmetric lens.</span>
 <span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="ot">[^symmetric-chains]: </span>Each direction involves a morphism from a full schema to the overlap subschema. Factorizing these morphisms into elementary transforms and mapping them to protolenses yields two chains whose composition forms the symmetric lens.</span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>The overlap serves as the "common view" that both schemas can project onto. Data not in the overlap is captured in the respective complements.</span>
 <span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a>The overlap serves as the "common view" that both schemas can project onto. Data not in the overlap is captured in the respective complements.</span>
-<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>%%| label: fig-symmetric-from-overlap</span>
-<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Symmetric lens construction via overlap discovery. The overlap is the greatest common subschema.</span><span class="ot">"</span></span>
-<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>    S1[<span class="ot">"</span><span class="st">Schema S1</span><span class="ot">"</span>] --&gt;|<span class="ot">"</span><span class="st">project</span><span class="ot">"</span>| O[<span class="ot">"</span><span class="st">Overlap</span><span class="ot">"</span>]</span>
-<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a>    S2[<span class="ot">"</span><span class="st">Schema S2</span><span class="ot">"</span>] --&gt;|<span class="ot">"</span><span class="st">project</span><span class="ot">"</span>| O</span>
-<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a>    O --&gt;|<span class="ot">"</span><span class="st">embed</span><span class="ot">"</span>| S1</span>
-<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a>    O --&gt;|<span class="ot">"</span><span class="st">embed</span><span class="ot">"</span>| S2</span>
-<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a>    style O fill:<span class="co">#e8f4e8,stroke:#2d7d2d</span></span>
-<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a>%%| label: fig-symmetric-from-overlap</span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Symmetric lens construction via overlap discovery. The overlap is the greatest common subschema.</span><span class="ot">"</span></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a>    S1[<span class="ot">"</span><span class="st">Schema S1</span><span class="ot">"</span>] --&gt;|<span class="ot">"</span><span class="st">project</span><span class="ot">"</span>| O[<span class="ot">"</span><span class="st">Overlap</span><span class="ot">"</span>]</span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>    S2[<span class="ot">"</span><span class="st">Schema S2</span><span class="ot">"</span>] --&gt;|<span class="ot">"</span><span class="st">project</span><span class="ot">"</span>| O</span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>    O --&gt;|<span class="ot">"</span><span class="st">embed</span><span class="ot">"</span>| S1</span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a>    O --&gt;|<span class="ot">"</span><span class="st">embed</span><span class="ot">"</span>| S2</span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a>    style O fill:<span class="co">#e8f4e8,stroke:#2d7d2d</span></span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary {#sec-protolens-WASM}</span></span>
 <span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Boundary {#sec-protolens-wasm}</span></span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>Protolens chains cross the WASM boundary via handle-based allocation, consistent with panproto's handle/slab architecture (see @sec-wasm-boundary):</span>
 <span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a>Protolens chains cross the WASM boundary via handle-based allocation, consistent with panproto's handle/slab architecture (see @sec-wasm-boundary):</span>
-<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`create_protolens_chain`**: allocates a <span class="in">`ProtolensChain`</span> in the Rust slab, returns a <span class="in">`u32`</span> handle to JavaScript.</span>
-<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`instantiate_protolens`**: takes a chain handle and a schema handle, instantiates the chain, and returns a lens handle.</span>
-<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protolens_chain_info`**: returns metadata (step count, complement types) as a MessagePack-encoded blob.</span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`create_protolens_chain`**: allocates a <span class="in">`ProtolensChain`</span> in the Rust slab, returns a <span class="in">`u32`</span> handle to JavaScript.</span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`instantiate_protolens`**: takes a chain handle and a schema handle, instantiates the chain, and returns a lens handle.</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`protolens_chain_info`**: returns metadata (step count, complement types) as a MessagePack-encoded blob.</span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ComplementConstructor`</span> enum is serialized via <span class="in">`serde`</span> into MessagePack for transmission across the WASM boundary. The TypeScript SDK deserializes it into a discriminated union type.</span>
 <span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ComplementConstructor`</span> enum is serialized via <span class="in">`serde`</span> into MessagePack for transmission across the WASM boundary. The TypeScript SDK deserializes it into a discriminated union type.</span>
-<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a>Protolens chains are lightweight on the Rust side (no computation until instantiation), so it's cheap to create multiple chains speculatively in JavaScript, evaluate their applicability, and instantiate only the best match.</span>
-<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a>Protolens chains are lightweight on the Rust side (no computation until instantiation), so it's cheap to create multiple chains speculatively in JavaScript, evaluate their applicability, and instantiate only the best match.</span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## CLI handlers {#sec-protolens-CLI}</span></span>
 <span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## CLI Handlers {#sec-protolens-cli}</span></span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a>The CLI exposes protolens functionality through several subcommands:</span>
 <span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a>The CLI exposes protolens functionality through several subcommands:</span>
-<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Command <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot convert`</span> <span class="pp">|</span> Convert data between schema versions using the automated pipeline <span class="pp">|</span></span>
-<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens`</span> <span class="pp">|</span> Build a lens from a combinator chain or protolens specification <span class="pp">|</span></span>
-<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-apply`</span> <span class="pp">|</span> Apply a lens to an instance (<span class="in">`get`</span> or <span class="in">`put`</span> direction) <span class="pp">|</span></span>
-<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-verify`</span> <span class="pp">|</span> Verify GetPut and PutGet laws on a lens with test data <span class="pp">|</span></span>
-<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-compose`</span> <span class="pp">|</span> Compose two lenses sequentially <span class="pp">|</span></span>
-<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-diff`</span> <span class="pp">|</span> Compute the protolens chain between two schemas <span class="pp">|</span></span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Command <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot convert`</span> <span class="pp">|</span> Convert data between schema versions using the automated pipeline <span class="pp">|</span></span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens`</span> <span class="pp">|</span> Build a lens from a combinator chain or protolens specification <span class="pp">|</span></span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-apply`</span> <span class="pp">|</span> Apply a lens to an instance (<span class="in">`get`</span> or <span class="in">`put`</span> direction) <span class="pp">|</span></span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-verify`</span> <span class="pp">|</span> Verify GetPut and PutGet laws on a lens with test data <span class="pp">|</span></span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-compose`</span> <span class="pp">|</span> Compose two lenses sequentially <span class="pp">|</span></span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`prot lens-diff`</span> <span class="pp">|</span> Compute the protolens chain between two schemas <span class="pp">|</span></span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a>The <span class="in">`lens-diff`</span> command is the primary entry point for the automated pipeline:</span>
 <span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a>: CLI subcommands for protolens operations. {#tbl-protolens-cli}</span>
-<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>The <span class="in">`lens-diff`</span> command is the primary entry point for the automated pipeline:</span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a><span class="ex">prot</span> lens-diff <span class="at">--src</span> schema-v1.json <span class="at">--tgt</span> schema-v2.json <span class="at">--protocol</span> json-schema</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a><span class="ex">prot</span> lens-diff <span class="at">--src</span> schema-v1.json <span class="at">--tgt</span> schema-v2.json <span class="at">--protocol</span> json-schema</span>
-<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a>This runs the full pipeline (hom_search, factorize, diff_to_protolens) and outputs the protolens chain as a JSON array of steps. Each step includes the transform names, preconditions, and complement constructors, providing a human-readable audit trail of the derived migration.</span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a>The <span class="in">`lens-verify`</span> command property-tests the lens laws:</span>
 <span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a>This runs the full pipeline (hom_search, factorize, diff_to_protolens) and outputs the protolens chain as a JSON array of steps. Each step includes the transform names, preconditions, and complement constructors, providing a human-readable audit trail of the derived migration.</span>
-<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a>The <span class="in">`lens-verify`</span> command property-tests the lens laws:</span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a><span class="ex">prot</span> lens-verify <span class="at">--lens</span> lens.json <span class="at">--instance</span> data.json <span class="at">--iterations</span> 1000</span>
+<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a><span class="ex">prot</span> lens-verify <span class="at">--lens</span> lens.json <span class="at">--instance</span> data.json <span class="at">--iterations</span> 1000</span>
-<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a>This generates random modifications to the instance data and verifies that GetPut and PutGet hold for each modification.</span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fleet application {#sec-fleet-application}</span></span>
 <span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a>This generates random modifications to the instance data and verifies that GetPut and PutGet hold for each modification.</span>
+<span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a><span class="in">`apply_to_fleet`</span> iterates over a collection of schemas, checks each against the chain's preconditions, and either instantiates the chain or records the failure:</span>
 <span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fleet Application {#sec-fleet-application}</span></span>
-<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a><span class="in">`apply_to_fleet`</span> iterates over a collection of schemas, checks each against the chain's preconditions, and either instantiates the chain or records the failure:</span>
-<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">apply_to_fleet</span>(</span>
-<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>    chain<span class="sc">:</span> <span class="er">&amp;</span>ProtolensChain,</span>
-<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a>    schemas<span class="sc">:</span> <span class="er">&amp;</span>[Schema],</span>
-<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a>    protocol<span class="sc">:</span> <span class="er">&amp;</span>Protocol,</span>
-<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FleetResult {</span>
-<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a>    let mut applied <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
-<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a>    let mut skipped <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
-<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> schema <span class="cf">in</span> schemas {</span>
-<span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a>        let failures <span class="ot">=</span> <span class="fu">chain.check_applicability</span>(schema);</span>
-<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">failures.is_empty</span>() {</span>
-<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a>            match <span class="fu">chain.instantiate</span>(schema, protocol) {</span>
-<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a>                <span class="fu">Ok</span>(lens) <span class="sc">=&gt;</span> <span class="fu">applied.push</span>(FleetEntry { schema, lens }),</span>
-<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a>                <span class="fu">Err</span>(e) <span class="sc">=&gt;</span> <span class="fu">skipped.push</span>(SkippedEntry {</span>
-<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a>                    schema,</span>
-<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a>                    reasons<span class="sc">:</span> vec<span class="sc">!</span>[<span class="fu">e.to_string</span>()],</span>
-<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a>                }),</span>
-<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a>            <span class="fu">skipped.push</span>(SkippedEntry {</span>
-<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a>                schema,</span>
-<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a>                reasons<span class="sc">:</span> <span class="fu">failures.iter</span>()<span class="fu">.map</span>(<span class="sc">|</span>f<span class="sc">|</span> <span class="fu">f.to_string</span>())<span class="fu">.collect</span>(),</span>
-<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a>            });</span>
-<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a>    FleetResult { applied, skipped }</span>
-<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a>pub fn <span class="fu">apply_to_fleet</span>(</span>
+<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a>    chain<span class="sc">:</span> <span class="er">&amp;</span>ProtolensChain,</span>
+<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a>    schemas<span class="sc">:</span> <span class="er">&amp;</span>[Schema],</span>
+<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a>    protocol<span class="sc">:</span> <span class="er">&amp;</span>Protocol,</span>
+<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> FleetResult {</span>
+<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>    let mut applied <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
+<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a>    let mut skipped <span class="ot">=</span> Vec<span class="sc">::</span><span class="fu">new</span>();</span>
+<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> schema <span class="cf">in</span> schemas {</span>
+<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a>        let failures <span class="ot">=</span> <span class="fu">chain.check_applicability</span>(schema);</span>
+<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="fu">failures.is_empty</span>() {</span>
+<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a>            match <span class="fu">chain.instantiate</span>(schema, protocol) {</span>
+<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a>                <span class="fu">Ok</span>(lens) <span class="sc">=&gt;</span> <span class="fu">applied.push</span>(FleetEntry { schema, lens }),</span>
+<span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a>                <span class="fu">Err</span>(e) <span class="sc">=&gt;</span> <span class="fu">skipped.push</span>(SkippedEntry {</span>
+<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a>                    schema,</span>
+<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a>                    reasons<span class="sc">:</span> vec<span class="sc">!</span>[<span class="fu">e.to_string</span>()],</span>
+<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a>                }),</span>
+<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a>            <span class="fu">skipped.push</span>(SkippedEntry {</span>
+<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a>                schema,</span>
+<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a>                reasons<span class="sc">:</span> <span class="fu">failures.iter</span>()<span class="fu">.map</span>(<span class="sc">|</span>f<span class="sc">|</span> <span class="fu">f.to_string</span>())<span class="fu">.collect</span>(),</span>
+<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a>            });</span>
+<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a>    FleetResult { applied, skipped }</span>
+<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a><span class="in">`FleetResult`</span> partitions outcomes into <span class="in">`applied`</span> (successful instantiations) and <span class="in">`skipped`</span> (schemas that failed precondition checks or instantiation). Failed instantiations are skipped rather than fatal; a single broken schema doesn't abort the fleet migration.</span>
+<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement state tracking {#sec-complement-state-tracking}</span></span>
 <span id="cb10-230"><a href="#cb10-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a><span class="in">`FleetResult`</span> partitions outcomes into <span class="in">`applied`</span> (successful instantiations) and <span class="in">`skipped`</span> (schemas that failed precondition checks or instantiation). Failed instantiations are skipped rather than fatal; a single broken schema doesn't abort the fleet migration.</span>
+<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a><span class="in">`chain_complement_spec`</span> advances a <span class="in">`current_schema`</span> through each step's target transform before evaluating the next step's complement. Each step's complement is computed against the schema as it exists after all preceding steps. This means a <span class="in">`drop_sort("metadata")`</span> followed by <span class="in">`add_sort("metadata_v2")`</span> correctly reports the drop's captured data count from the original schema and the add's default requirement from the intermediate schema.</span>
 <span id="cb10-232"><a href="#cb10-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement State Tracking {#sec-complement-state-tracking}</span></span>
+<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a>The <span class="in">`AddedElement`</span> variant of <span class="in">`ComplementConstructor`</span> handles <span class="in">`add_sort`</span> and <span class="in">`add_op`</span> protolenses. These require default values at instantiation time. <span class="in">`AddedElement { name, kind }`</span> records what the user must supply, and <span class="in">`chain.requirements()`</span> aggregates these into a complete list of defaults needed for the chain to instantiate.</span>
 <span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a><span class="in">`chain_complement_spec`</span> advances a <span class="in">`current_schema`</span> through each step's target transform before evaluating the next step's complement. Each step's complement is computed against the schema as it exists after all preceding steps. This means a <span class="in">`drop_sort("metadata")`</span> followed by <span class="in">`add_sort("metadata_v2")`</span> correctly reports the drop's captured data count from the original schema and the add's default requirement from the intermediate schema.</span>
+<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Serialization format {#sec-serialization-format}</span></span>
 <span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a>The <span class="in">`AddedElement`</span> variant of <span class="in">`ComplementConstructor`</span> handles <span class="in">`add_sort`</span> and <span class="in">`add_op`</span> protolenses. These require default values at instantiation time. <span class="in">`AddedElement { name, kind }`</span> records what the user must supply, and <span class="in">`chain.requirements()`</span> aggregates these into a complete list of defaults needed for the chain to instantiate.</span>
+<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a>Protolens chains serialize to JSON with the following structure:</span>
 <span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Serialization Format {#sec-serialization-format}</span></span>
-<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a>Protolens chains serialize to JSON with the following structure:</span>
-<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
-<span id="cb10-244"><a href="#cb10-244" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb10-245"><a href="#cb10-245" aria-hidden="true" tabindex="-1"></a>  <span class="st">"steps"</span><span class="op">:</span> [</span>
-<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="op">:</span> <span class="st">"rename_sort"</span><span class="op">,</span></span>
-<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a>      <span class="st">"source"</span><span class="op">:</span> {</span>
-<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> <span class="st">"Identity"</span><span class="op">,</span></span>
-<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> <span class="st">"Unconstrained"</span></span>
+<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a><span class="in">```json</span></span>
+<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a>  <span class="st">"steps"</span><span class="op">:</span> [</span>
+<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="op">:</span> <span class="st">"rename_sort"</span><span class="op">,</span></span>
+<span id="cb10-244"><a href="#cb10-244" aria-hidden="true" tabindex="-1"></a>      <span class="st">"source"</span><span class="op">:</span> {</span>
+<span id="cb10-245"><a href="#cb10-245" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> <span class="st">"Identity"</span><span class="op">,</span></span>
+<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> <span class="st">"Unconstrained"</span></span>
+<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a>      <span class="st">"target"</span><span class="op">:</span> {</span>
+<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> { <span class="st">"RenameSort"</span><span class="op">:</span> { <span class="st">"old"</span><span class="op">:</span> <span class="st">"Vertex"</span><span class="op">,</span> <span class="st">"new"</span><span class="op">:</span> <span class="st">"Node"</span> } }<span class="op">,</span></span>
+<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> { <span class="st">"HasSort"</span><span class="op">:</span> <span class="st">"Vertex"</span> }</span>
 <span id="cb10-251"><a href="#cb10-251" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
-<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a>      <span class="st">"target"</span><span class="op">:</span> {</span>
-<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> { <span class="st">"RenameSort"</span><span class="op">:</span> { <span class="st">"old"</span><span class="op">:</span> <span class="st">"Vertex"</span><span class="op">,</span> <span class="st">"new"</span><span class="op">:</span> <span class="st">"Node"</span> } }<span class="op">,</span></span>
-<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> { <span class="st">"HasSort"</span><span class="op">:</span> <span class="st">"Vertex"</span> }</span>
-<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
-<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a>      <span class="st">"complement_constructor"</span><span class="op">:</span> <span class="st">"Empty"</span></span>
-<span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
-<span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="op">:</span> <span class="st">"drop_op"</span><span class="op">,</span></span>
-<span id="cb10-260"><a href="#cb10-260" aria-hidden="true" tabindex="-1"></a>      <span class="st">"source"</span><span class="op">:</span> {</span>
-<span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> <span class="st">"Identity"</span><span class="op">,</span></span>
-<span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> <span class="st">"Unconstrained"</span></span>
+<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a>      <span class="st">"complement_constructor"</span><span class="op">:</span> <span class="st">"Empty"</span></span>
+<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a>      <span class="st">"name"</span><span class="op">:</span> <span class="st">"drop_op"</span><span class="op">,</span></span>
+<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a>      <span class="st">"source"</span><span class="op">:</span> {</span>
+<span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> <span class="st">"Identity"</span><span class="op">,</span></span>
+<span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> <span class="st">"Unconstrained"</span></span>
+<span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
+<span id="cb10-260"><a href="#cb10-260" aria-hidden="true" tabindex="-1"></a>      <span class="st">"target"</span><span class="op">:</span> {</span>
+<span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> { <span class="st">"DropOp"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> }<span class="op">,</span></span>
+<span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> { <span class="st">"HasOp"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> }</span>
 <span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
-<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a>      <span class="st">"target"</span><span class="op">:</span> {</span>
-<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">:</span> { <span class="st">"DropOp"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> }<span class="op">,</span></span>
-<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a>        <span class="st">"constraint"</span><span class="op">:</span> { <span class="st">"HasOp"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> }</span>
-<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a>      }<span class="op">,</span></span>
-<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a>      <span class="st">"complement_constructor"</span><span class="op">:</span> { <span class="st">"DroppedOpData"</span><span class="op">:</span> { <span class="st">"op"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> } }</span>
-<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a>      <span class="st">"complement_constructor"</span><span class="op">:</span> { <span class="st">"DroppedOpData"</span><span class="op">:</span> { <span class="st">"op"</span><span class="op">:</span> <span class="st">"legacyEdge"</span> } }</span>
+<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a>Each step includes its name, source and target endofunctors (transform + constraint), and complement constructor. The <span class="in">`from_json(to_json(chain))`</span> round-trip produces a chain that is structurally equal to the original: same step count, same transforms, same constraints, same complement constructors.</span>
+<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a>Individual protolenses also support <span class="in">`to_json()`</span> / <span class="in">`from_json()`</span> with the same per-step structure (minus the outer <span class="in">`steps`</span> array).</span>
 <span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a>Each step includes its name, source and target endofunctors (transform + constraint), and complement constructor. The <span class="in">`from_json(to_json(chain))`</span> round-trip produces a chain that is structurally equal to the original: same step count, same transforms, same constraints, same complement constructors.</span>
+<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing strategy {#sec-protolens-testing}</span></span>
 <span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a>Individual protolenses also support <span class="in">`to_json()`</span> / <span class="in">`from_json()`</span> with the same per-step structure (minus the outer <span class="in">`steps`</span> array).</span>
+<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a>The protolens engine uses three testing approaches:</span>
 <span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing Strategy {#sec-protolens-testing}</span></span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit tests</span></span>
 <span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>The protolens engine uses three testing approaches:</span>
+<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>Each elementary protolens constructor has unit tests verifying:</span>
 <span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Tests</span></span>
-<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a>Each elementary protolens constructor has unit tests verifying:</span>
+<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Applicability**: the protolens is applicable to schemas containing the relevant sorts/ops and not applicable otherwise.</span>
+<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Instantiation correctness**: the resulting lens has the expected source and target schemas.</span>
+<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Losslessness classification**: <span class="in">`is_lossless()`</span> returns the correct value.</span>
 <span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Applicability**: the protolens is applicable to schemas containing the relevant sorts/ops and not applicable otherwise.</span>
-<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Instantiation correctness**: the resulting lens has the expected source and target schemas.</span>
-<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Losslessness classification**: <span class="in">`is_lossless()`</span> returns the correct value.</span>
+<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a><span class="fu">### Commutativity checks</span></span>
+<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a>Commutativity is tested by instantiating the same protolens at multiple related schemas and verifying that the resulting lenses commute with schema morphisms between those schemas. The test fixture generates a family of schemas of increasing complexity and checks commutativity for each pair.</span>
 <span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a><span class="fu">### Commutativity Checks</span></span>
+<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a><span class="fu">### Round-trip verification</span></span>
 <span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a>Commutativity is tested by instantiating the same protolens at multiple related schemas and verifying that the resulting lenses commute with schema morphisms between those schemas. The test fixture generates a family of schemas of increasing complexity and checks commutativity for each pair.</span>
+<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_laws`</span> function from <span class="in">`panproto-lens/src/laws.rs`</span> is applied to instantiated protolenses:</span>
 <span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a><span class="fu">### Round-Trip Verification</span></span>
-<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-296"><a href="#cb10-296" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_laws`</span> function from <span class="in">`panproto-lens/src/laws.rs`</span> is applied to instantiated protolenses:</span>
-<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Generate a random instance conforming to the source schema.</span>
-<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Apply <span class="in">`get`</span> to produce a view and complement.</span>
-<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Apply <span class="in">`put`</span> with the unmodified view and complement.</span>
-<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Verify that the restored instance equals the original (GetPut).</span>
-<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Apply <span class="in">`get`</span> to the restored instance.</span>
-<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Verify that the new view and complement equal the originals (PutGet).</span>
+<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Generate a random instance conforming to the source schema.</span>
+<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Apply <span class="in">`get`</span> to produce a view and complement.</span>
+<span id="cb10-296"><a href="#cb10-296" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Apply <span class="in">`put`</span> with the unmodified view and complement.</span>
+<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Verify that the restored instance equals the original (GetPut).</span>
+<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Apply <span class="in">`get`</span> to the restored instance.</span>
+<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Verify that the new view and complement equal the originals (PutGet).</span>
+<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a><span class="fu">### Property-based tests</span></span>
+<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a>The integration test suite (<span class="in">`tests/integration/tests/lens_laws.rs`</span>) includes property-based tests that:</span>
 <span id="cb10-304"><a href="#cb10-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a><span class="fu">### Property-Based Tests</span></span>
-<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a>The integration test suite (<span class="in">`tests/integration/tests/lens_laws.rs`</span>) includes property-based tests that:</span>
-<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Generate random schema pairs by applying random sequences of elementary protolens constructors to a base schema.</span>
-<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Factorize the resulting morphism.</span>
-<span id="cb10-311"><a href="#cb10-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Verify that <span class="in">`validate_factorization`</span> passes.</span>
-<span id="cb10-312"><a href="#cb10-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Instantiate the protolens chain and verify lens laws.</span>
-<span id="cb10-313"><a href="#cb10-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-314"><a href="#cb10-314" aria-hidden="true" tabindex="-1"></a>This provides coverage over the full pipeline, catching regressions in factorization ordering, schema transformation, and migration derivation.</span>
+<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Generate random schema pairs by applying random sequences of elementary protolens constructors to a base schema.</span>
+<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Factorize the resulting morphism.</span>
+<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Verify that <span class="in">`validate_factorization`</span> passes.</span>
+<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Instantiate the protolens chain and verify lens laws.</span>
+<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a>This provides coverage over the full pipeline, catching regressions in factorization ordering, schema transformation, and migration derivation.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

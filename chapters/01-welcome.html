@@ -697,7 +697,7 @@ window.Quarto = {
 
 
 <p>panproto is a schematic version control system parameterized by pairs of Generalized Algebraic Theories (GATs). A protocol <span class="math inline">\(\mathcal{P} = (\mathbb{T}_S, \mathbb{T}_I)\)</span> consists of a schema theory <span class="math inline">\(\mathbb{T}_S\)</span> (what schemas look like) and an instance theory <span class="math inline">\(\mathbb{T}_I\)</span> (what data looks like). Migration, diffing, compatibility checking, and bidirectional lenses are derived from <span class="math inline">\(\mathcal{P}\)</span> by the same algorithms regardless of protocol.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>The crate hierarchy mirrors this algebraic structure:</p>
+<p>The crate hierarchy mirrors this algebraic structure. Each level builds on the ones below it:</p>
 <ul>
 <li><strong>Level 0</strong> (<code>panproto-gat</code>): sorts, operations, equations, theory morphisms, colimits.</li>
 <li><strong>Level 1</strong> (<code>panproto-schema</code>, <code>panproto-inst</code>): schema graphs as models of <span class="math inline">\(\mathbb{T}_S\)</span>; instances as models of <span class="math inline">\(\mathbb{T}_I\)</span>.</li>
@@ -708,9 +708,9 @@ window.Quarto = {
 <p>Each level depends only on the levels below it. <code>panproto-gat</code> has no panproto dependencies. <code>panproto-core</code> re-exports everything.</p>
 <section id="three-audiences" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="three-audiences"><span class="header-section-number">1.1</span> Three audiences</h2>
-<p><strong>Contributors</strong> fixing bugs or adding features: start with <a href="02-first-contribution.html" class="quarto-xref"><span>Chapter 2</span></a>, then build the project (<a href="03-building-testing.html" class="quarto-xref"><span>Chapter 3</span></a>), then read the architecture chapter for the crate you’re modifying, then review the contribution process (chapters 16 through 18).</p>
-<p><strong>Protocol authors</strong> adding a new schema language: you’ll define a pair of GATs (<span class="math inline">\(\mathbb{T}_S\)</span>, <span class="math inline">\(\mathbb{T}_I\)</span>) and implement the <code>Protocol</code> trait. Read <a href="05-architecture-overview.html" class="quarto-xref"><span>Chapter 5</span></a>, <a href="06-gat-engine.html" class="quarto-xref"><span>Chapter 6</span></a>, <a href="07-schema-protocols.html" class="quarto-xref"><span>Chapter 7</span></a>, and <span class="quarto-unresolved-ref">?sec-protocols</span>.</p>
-<p><strong>Researchers</strong> exploring the internals: read the architecture section sequentially (chapters 5 through 11), then <a href="22-advanced-internals.html" class="quarto-xref"><span>Chapter 18</span></a> for the building-block theory catalog.</p>
+<p><strong>Contributors</strong> fixing bugs or adding features start with <a href="02-first-contribution.html" class="quarto-xref"><span>Chapter 2</span></a>, then <a href="03-building-testing.html" class="quarto-xref"><span>Chapter 3</span></a>, then the architecture chapter for the crate you’re modifying. Chapter 16 through 18 cover the contribution process.</p>
+<p><strong>Protocol authors</strong> adding a new schema language define a pair of GATs (<span class="math inline">\(\mathbb{T}_S\)</span>, <span class="math inline">\(\mathbb{T}_I\)</span>) and implement the <code>Protocol</code> trait. Read <a href="05-architecture-overview.html" class="quarto-xref"><span>Chapter 5</span></a>, <a href="06-gat-engine.html" class="quarto-xref"><span>Chapter 6</span></a>, <a href="07-schema-protocols.html" class="quarto-xref"><span>Chapter 7</span></a>, and <a href="12-protocols.html" class="quarto-xref"><span>Chapter 12</span></a>.</p>
+<p><strong>Researchers</strong> exploring the internals read the architecture section sequentially (chapters 5 through 11), then <a href="22-advanced-internals.html" class="quarto-xref"><span>Chapter 18</span></a> for the building-block theory catalog.</p>
 </section>
 <section id="key-design-decisions" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="key-design-decisions"><span class="header-section-number">1.2</span> Key design decisions</h2>
@@ -1221,7 +1221,7 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>panproto is a schematic version control system parameterized by pairs of Generalized Algebraic Theories (GATs). A protocol $\mathcal{P} = (\mathbb{T}_S, \mathbb{T}_I)$ consists of a schema theory $\mathbb{T}_S$ (what schemas look like) and an instance theory $\mathbb{T}_I$ (what data looks like). Migration, diffing, compatibility checking, and bidirectional lenses are derived from $\mathcal{P}$ by the same algorithms regardless of protocol.^<span class="co">[</span><span class="ot">The foundational treatment of GATs is due to @cartmell1986. panproto's computational architecture adapts [GATlab](https://algebraicjulia.github.io/GATlab.jl/) [@lynch2024] to Rust.</span><span class="co">]</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>The crate hierarchy mirrors this algebraic structure:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>The crate hierarchy mirrors this algebraic structure. Each level builds on the ones below it:</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Level 0** (<span class="in">`panproto-gat`</span>): sorts, operations, equations, theory morphisms, colimits.</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Level 1** (<span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span>): schema graphs as models of $\mathbb{T}_S$; instances as models of $\mathbb{T}_I$.</span>
@@ -1231,25 +1231,23 @@ Lynch, Owen, Kris Brown, James Fairbanks, and Evan Patterson. 2024. <span>“<sp
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>Each level depends only on the levels below it. <span class="in">`panproto-gat`</span> has no panproto dependencies. <span class="in">`panproto-core`</span> re-exports everything.</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three audiences</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>**Contributors** fixing bugs or adding features: start with @sec-first-contribution, then build the project (@sec-building-testing), then read the architecture chapter for the crate you're modifying, then review the contribution process (chapters 16 through 18).</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>**Protocol authors** adding a new schema language: you'll define a pair of GATs ($\mathbb{T}_S$, $\mathbb{T}_I$) and implement the <span class="in">`Protocol`</span> trait. Read @sec-architecture-overview, @sec-gat-engine, @sec-schema-protocols, and @sec-protocols.</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>**Researchers** exploring the internals: read the architecture section sequentially (chapters 5 through 11), then @sec-advanced-internals for the building-block theory catalog.</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three audiences</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>**Contributors** fixing bugs or adding features start with @sec-first-contribution, then @sec-building-testing, then the architecture chapter for the crate you're modifying. Chapter 16 through 18 cover the contribution process.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>**Protocol authors** adding a new schema language define a pair of GATs ($\mathbb{T}_S$, $\mathbb{T}_I$) and implement the <span class="in">`Protocol`</span> trait. Read @sec-architecture-overview, @sec-gat-engine, @sec-schema-protocols, and @sec-protocols.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>**Researchers** exploring the internals read the architecture section sequentially (chapters 5 through 11), then @sec-advanced-internals for the building-block theory catalog.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key design decisions</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key design decisions</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Theories are data, not code.** A protocol is defined by constructing <span class="in">`Theory`</span> values, not by implementing an interface with methods. The engine inspects the theory's sorts, operations, and equations to derive behavior.</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Theories are data, not code.** A protocol is defined by constructing <span class="in">`Theory`</span> values, not by implementing an interface with methods. The engine inspects the theory's sorts, operations, and equations to derive behavior.</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Two parameters, not one.** Both the schema shape ($\mathbb{T}_S$) and the data shape ($\mathbb{T}_I$) are parameters. The instance theory determines the restriction operator: <span class="in">`restrict`</span> for $\text{ThFunctor}$, tree surgery for $\text{ThWType}$, field projection for $\text{ThFlat}$.</span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Two parameters, not one.** Both the schema shape ($\mathbb{T}_S$) and the data shape ($\mathbb{T}_I$) are parameters. The instance theory determines the restriction operator: <span class="in">`restrict`</span> for $\text{ThFunctor}$, tree surgery for $\text{ThWType}$, field projection for $\text{ThFlat}$.</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Content-addressed everything.** Schemas, migrations, and commits are identified by blake3 hashes of their canonical forms. Identity comes from structure, not naming.</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Content-addressed everything.** Schemas, migrations, and commits are identified by blake3 hashes of their canonical forms. Identity comes from structure, not naming.</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.dev/tutorial/)</span> teaches how to *use* panproto. This guide explains how the engine *works*. The tutorial defines what a theory morphism does; this guide shows how colimits are computed. The tutorial shows how to run a migration; this guide shows how the surviving-set computation and W-type restrict pipeline are implemented.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">tutorial</span><span class="co">](https://panproto.dev/tutorial/)</span> teaches how to *use* panproto. This guide explains how the engine *works*. The tutorial defines what a theory morphism does; this guide shows how colimits are computed. The tutorial shows how to run a migration; this guide shows how the surviving-set computation and W-type restrict pipeline are implemented.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

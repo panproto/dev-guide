@@ -766,7 +766,7 @@ Important
 <li><p><strong>Check for version skew.</strong> The most common cause is rebuilding the Rust WASM without rebuilding the TypeScript SDK (or vice versa). Rebuild both from the same commit:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">wasm-pack</span> build crates/panproto-wasm <span class="at">--target</span> web</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sdk/typescript <span class="kw">&amp;&amp;</span> <span class="ex">pnpm</span> build</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p><strong>Inspect the payload.</strong> Add a hex dump before deserialization (see <a href="../chapters/04-debugging-profiling.html" class="quarto-xref"><span>Chapter 4</span></a> for instructions) and decode with a MessagePack inspector.</p></li>
+<li><p><strong>Inspect the payload.</strong> Add a hex dump before deserialization and decode with a MessagePack inspector.</p></li>
 <li><p><strong>Compare types.</strong> Open <code>crates/panproto-wasm/src/api.rs</code> and <code>sdk/typescript/src/types.ts</code> side by side. Every <code>#[serde(rename)]</code> attribute in Rust must match the corresponding TypeScript field name.</p></li>
 </ol>
 <p><strong>Fix:</strong> After identifying the mismatch, update whichever side is out of date and rebuild.</p>
@@ -1442,7 +1442,7 @@ Important
 <span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>    <span class="bu">cd</span> sdk/typescript <span class="kw">&amp;&amp;</span> <span class="ex">pnpm</span> build</span>
 <span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
 <span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Inspect the payload.** Add a hex dump before deserialization (see @sec-debugging-profiling for instructions) and decode with a MessagePack inspector.</span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Inspect the payload.** Add a hex dump before deserialization and decode with a MessagePack inspector.</span>
 <span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Compare types.** Open <span class="in">`crates/panproto-wasm/src/api.rs`</span> and <span class="in">`sdk/typescript/src/types.ts`</span> side by side. Every <span class="in">`#[serde(rename)]`</span> attribute in Rust must match the corresponding TypeScript field name.</span>
 <span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a></span>
@@ -1544,7 +1544,7 @@ Important
 <span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>**Possible causes and fixes:**</span>
 <span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**First build:** The initial build downloads and compiles all dependencies. This is expected to take 3--5 minutes. Subsequent incremental builds should take under 10 seconds.</span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**First build:** The initial build downloads and compiles all dependencies. This is expected to take 3–5 minutes. Subsequent incremental builds should take under 10 seconds.</span>
 <span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Release mode:** If you accidentally used <span class="in">`--release`</span>, switch back to debug mode for development.</span>
 <span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**LTO in dev:** Check that you are not setting <span class="in">`lto = true`</span> in a custom profile for dev builds. The workspace only enables LTO in the <span class="in">`release`</span> and <span class="in">`release-wasm`</span> profiles.</span>
 <span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Disk I/O:** If you are on a networked filesystem or a slow disk, consider using a local SSD for the <span class="in">`target/`</span> directory.</span>

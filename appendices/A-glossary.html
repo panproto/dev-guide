@@ -689,7 +689,7 @@ window.Quarto = {
 <dl>
 <dt>GAT (Generalized Algebraic Theory)</dt>
 <dd>
-A theory with sorts, typed operations, and equations between terms — the core abstraction panproto uses to represent schema languages. Implemented in <code>panproto-gat</code>.
+A theory with sorts, typed operations, and equations between terms. The core abstraction panproto uses to represent schema languages. Implemented in <code>panproto-gat</code>.
 </dd>
 <dt>Sort</dt>
 <dd>
@@ -1465,7 +1465,7 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Algebraic foundations</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>GAT (Generalized Algebraic Theory)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>: A theory with sorts, typed operations, and equations between terms --- the core abstraction panproto uses to represent schema languages. Implemented in <span class="in">`panproto-gat`</span>.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>: A theory with sorts, typed operations, and equations between terms. The core abstraction panproto uses to represent schema languages. Implemented in <span class="in">`panproto-gat`</span>.</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Sort</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>: A named type within a GAT, optionally parameterized by other sorts. In panproto, schema elements like "vertex," "edge," and "constraint" are sorts.</span>
@@ -1520,7 +1520,7 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Instance layer</span></span>
 <span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>Instance</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>: A concrete dataset that conforms to a schema --- the "data" as opposed to the "shape." Represented in <span class="in">`panproto-inst`</span>.</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>: A concrete dataset that conforms to a schema — the "data" as opposed to the "shape." Represented in <span class="in">`panproto-inst`</span>.</span>
 <span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>W-type instance</span>
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>: panproto's tree-structured representation of instance data, based on W-types from type theory. Each node has a label (vertex), children (edges), and a value.</span>
@@ -1584,7 +1584,7 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>: The coherence condition on a protolens: instantiating at one schema and then migrating must produce the same result as migrating first and then instantiating. Naturality ensures that protolenses are well-behaved families of lenses, not ad-hoc collections.</span>
 <span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>Instantiation (Pi-elimination)</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>: The operation of applying a protolens to a specific schema and protocol to produce a concrete <span class="in">`Lens`</span>. Mathematically, this is Pi-type elimination---evaluating a dependent function at a specific argument. Performed by <span class="in">`Protolens::instantiate`</span>.</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>: The operation of applying a protolens to a specific schema and protocol to produce a concrete <span class="in">`Lens`</span>. Mathematically, this is Pi-type elimination—evaluating a dependent function at a specific argument. Performed by <span class="in">`Protolens::instantiate`</span>.</span>
 <span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>Factorization (morphism decomposition)</span>
 <span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>: The decomposition of a theory morphism into a sequence of elementary endofunctor steps (drops, renames, adds). Each step maps to an elementary protolens constructor. Implemented by <span class="in">`factorize()`</span> in <span class="in">`crates/panproto-gat/src/factorize.rs`</span>.</span>
@@ -1596,10 +1596,10 @@ The Rust-to-JavaScript binding generator used by <code>panproto-wasm</code> to e
 <span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>: The backward direction of a lens: given updated target data and a complement, reconstructs a source instance.</span>
 <span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>GetPut law</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`put(get(s), s) = s`</span> --- putting back unchanged data recovers the original source.</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`put(get(s), s) = s`</span> — putting back unchanged data recovers the original source.</span>
 <span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>PutGet law</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`get(put(t, s)) = t`</span> --- getting after a put yields the updated target.</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>: The round-trip law stating that <span class="in">`get(put(t, s)) = t`</span> — getting after a put yields the updated target.</span>
 <span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## Edit lens layer</span></span>
 <span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>

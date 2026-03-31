@@ -651,12 +651,12 @@ window.Quarto = {
   <ul>
   <li><a href="#sec-field-transform-algebra" id="toc-sec-field-transform-algebra" class="nav-link active" data-scroll-target="#sec-field-transform-algebra"><span class="header-section-number">22.1</span> The FieldTransform algebra</a></li>
   <li><a href="#sec-path-transform-arch" id="toc-sec-path-transform-arch" class="nav-link" data-scroll-target="#sec-path-transform-arch"><span class="header-section-number">22.2</span> PathTransform as path functor action</a></li>
-  <li><a href="#sec-map-references-arch" id="toc-sec-map-references-arch" class="nav-link" data-scroll-target="#sec-map-references-arch"><span class="header-section-number">22.3</span> MapReferences as functorial action on the name-reference algebra</a></li>
+  <li><a href="#sec-map-references-arch" id="toc-sec-map-references-arch" class="nav-link" data-scroll-target="#sec-map-references-arch"><span class="header-section-number">22.3</span> MapReferences as functorial action</a></li>
   <li><a href="#sec-case-arch" id="toc-sec-case-arch" class="nav-link" data-scroll-target="#sec-case-arch"><span class="header-section-number">22.4</span> Case as coproduct eliminator</a></li>
   <li><a href="#sec-conditional-survival-arch" id="toc-sec-conditional-survival-arch" class="nav-link" data-scroll-target="#sec-conditional-survival-arch"><span class="header-section-number">22.5</span> ConditionalSurvival as a refined survival predicate</a></li>
   <li><a href="#sec-build-env" id="toc-sec-build-env" class="nav-link" data-scroll-target="#sec-build-env"><span class="header-section-number">22.6</span> build_env_from_extra_fields: variable binding strategy</a></li>
   <li><a href="#sec-value-to-literal" id="toc-sec-value-to-literal" class="nav-link" data-scroll-target="#sec-value-to-literal"><span class="header-section-number">22.7</span> value_to_expr_literal: Value-to-Literal conversion</a></li>
-  <li><a href="#sec-transform-ordering" id="toc-sec-transform-ordering" class="nav-link" data-scroll-target="#sec-transform-ordering"><span class="header-section-number">22.8</span> Transform ordering: addAttrs, ComputeField, dropAttrs</a></li>
+  <li><a href="#sec-transform-ordering" id="toc-sec-transform-ordering" class="nav-link" data-scroll-target="#sec-transform-ordering"><span class="header-section-number">22.8</span> Transform ordering: addattrs, computefield, dropattrs</a></li>
   <li><a href="#sec-bfs-integration" id="toc-sec-bfs-integration" class="nav-link" data-scroll-target="#sec-bfs-integration"><span class="header-section-number">22.9</span> Integration with wtype_restrict’s BFS pass</a></li>
   <li><a href="#sec-field-transform-source" id="toc-sec-field-transform-source" class="nav-link" data-scroll-target="#sec-field-transform-source"><span class="header-section-number">22.10</span> Source locations</a></li>
   </ul>
@@ -685,7 +685,7 @@ window.Quarto = {
 </header>
 
 
-<p><code>FieldTransform</code> is the value-level complement to the structural <code>TheoryTransform</code> layer. Where <code>TheoryTransform</code> operates on schema vertices and edges, <code>FieldTransform</code> operates on the <code>extra_fields</code> of individual instance nodes during <code>wtype_restrict</code>.</p>
+<p><code>FieldTransform</code> operates at the value level—the complement to <code>TheoryTransform</code>, which works at the schema level. Where <code>TheoryTransform</code> modifies vertex and edge kinds, <code>FieldTransform</code> modifies the <code>extra_fields</code> of individual nodes during <code>wtype_restrict</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -701,78 +701,69 @@ Note
 </div>
 <section id="sec-field-transform-algebra" class="level2" data-number="22.1">
 <h2 data-number="22.1" class="anchored" data-anchor-id="sec-field-transform-algebra"><span class="header-section-number">22.1</span> The FieldTransform algebra</h2>
-<p><code>FieldTransform</code> is a nine-variant enum defined in <code>panproto-inst/src/wtype.rs</code>. The variants form a small algebra of node mutations:</p>
-<div id="tbl-field-transforms" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-field-transforms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;22.1: The nine <code>FieldTransform</code> variants and their categorical roles.
-</figcaption>
-<div aria-describedby="tbl-field-transforms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<p><code>FieldTransform</code> is a nine-variant enum in <code>panproto-inst/src/wtype.rs</code>. Each variant expresses one kind of node mutation:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 16%">
-<col style="width: 60%">
-<col style="width: 23%">
+<col style="width: 27%">
+<col style="width: 39%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Variant</th>
-<th>Category-theoretic interpretation</th>
-<th>Typical use</th>
+<th>What it does</th>
+<th>When to use</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>RenameField</code></td>
-<td>Endomorphism on the key set (key bijection)</td>
-<td>Normalize field names across protocol versions</td>
+<td>Renames a field by key</td>
+<td>Normalizing field names across versions</td>
 </tr>
 <tr class="even">
 <td><code>DropField</code></td>
-<td>Partial projection (forgetful functor on a field)</td>
-<td>Remove deprecated fields</td>
+<td>Removes a field</td>
+<td>Removing deprecated fields</td>
 </tr>
 <tr class="odd">
 <td><code>AddField</code></td>
-<td>Natural transformation injecting a constant</td>
-<td>Provide default values for new required fields</td>
+<td>Injects a constant field</td>
+<td>Providing defaults for new required fields</td>
 </tr>
 <tr class="even">
 <td><code>KeepFields</code></td>
-<td>Projection onto a named subset</td>
-<td>Restrict fields to those recognized by the target schema</td>
+<td>Retains only named fields</td>
+<td>Restricting to target schema fields</td>
 </tr>
 <tr class="odd">
 <td><code>ApplyExpr</code></td>
-<td>Endomorphism on a single field’s value via the expr evaluator</td>
+<td>Transforms a field value via expression</td>
 <td>Type coercions, string normalization</td>
 </tr>
 <tr class="even">
 <td><code>PathTransform</code></td>
-<td>Action of a path functor on the transform endomorphism algebra</td>
-<td>Apply any transform to a nested object field</td>
+<td>Applies any transform to a nested field</td>
+<td>Working with nested objects</td>
 </tr>
 <tr class="odd">
 <td><code>ComputeField</code></td>
-<td>Morphism from the full field environment to a target field</td>
-<td>Compute derived fields from multiple sources</td>
+<td>Derives a field from other fields</td>
+<td>Computing aggregates or combinations</td>
 </tr>
 <tr class="even">
 <td><code>Case</code></td>
-<td>Coproduct eliminator / dependent function space</td>
-<td>Conditional logic based on runtime field values</td>
+<td>Conditional logic based on field values</td>
+<td>Branching on runtime data</td>
 </tr>
 <tr class="odd">
 <td><code>MapReferences</code></td>
-<td>Functorial action on the name-reference algebra</td>
-<td>Propagate vertex renames into string reference fields</td>
+<td>Updates string fields that hold vertex names</td>
+<td>Propagating vertex renames</td>
 </tr>
 </tbody>
 </table>
-</div>
-</figure>
-</div>
-<p>The transforms compose sequentially: <code>apply_field_transforms</code> iterates over a <code>Vec&lt;FieldTransform&gt;</code> and applies each one in order. Earlier transforms see the original fields; later transforms see the result of everything before them. This sequential composition is the reason the builder methods on <code>CompiledMigration</code> append to a <code>Vec</code> rather than replace.</p>
+<p>These transforms compose sequentially: <code>apply_field_transforms</code> iterates a <code>Vec&lt;FieldTransform&gt;</code> and applies each in order. Earlier transforms see the original fields; later transforms see results from all preceding ones. This sequential model is why the builder appends to a vector rather than replacing.</p>
 </section>
 <section id="sec-path-transform-arch" class="level2" data-number="22.2">
 <h2 data-number="22.2" class="anchored" data-anchor-id="sec-path-transform-arch"><span class="header-section-number">22.2</span> PathTransform as path functor action</h2>
@@ -781,25 +772,25 @@ Table&nbsp;22.1: The nine <code>FieldTransform</code> variants and their categor
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    path<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    inner<span class="op">:</span> <span class="dt">Box</span><span class="op">&lt;</span>FieldTransform<span class="op">&gt;,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The implementation in <code>apply_path_transform</code> navigates the <code>extra_fields</code> tree by treating each path segment as a <code>Value::Unknown</code> map lookup. At the end of the path, a temporary <code>Node</code> is constructed with the nested map as its <code>extra_fields</code>, <code>apply_field_transforms</code> is called on that node, and the result is written back.</p>
-<p>This is the action of a path functor: the value tree has an endomorphism monoid at each leaf (the set of transforms applicable to a <code>HashMap&lt;String, Value&gt;</code>), and <code>PathTransform</code> lifts any element of that monoid to act on a subtree. An empty path is the identity action on the root: the inner transform applies directly to the node’s own fields.</p>
-<p>The recursion bottoms out when <code>path.len() == 1</code>. For deeper paths, the function calls itself with <code>&amp;path[1..]</code> and the nested map. Paths that don’t resolve (because an intermediate key is absent or not <code>Value::Unknown</code>) are silently no-ops: the transform produces no change rather than an error. This design choice avoids hard failures on data that lacks an expected nested structure.</p>
+<p>It navigates the <code>extra_fields</code> tree by treating each path segment as a map key lookup. At the path’s end, a temporary <code>Node</code> is constructed with the nested map as its <code>extra_fields</code>. The inner transform runs on that node, then the result gets written back.</p>
+<p>Think of this as lifting a transform on flat fields to act on a subtree. An empty path means the transform applies directly to the node’s own fields.</p>
+<p>The recursion bottoms out when <code>path.len() == 1</code>. For deeper paths, the function recurses with <code>&amp;path[1..]</code> and the nested map. Paths that don’t resolve (missing keys or non-map values) are silently no-ops—the transform produces no change rather than an error. This design avoids failures on data lacking an expected structure.</p>
 </section>
 <section id="sec-map-references-arch" class="level2" data-number="22.3">
-<h2 data-number="22.3" class="anchored" data-anchor-id="sec-map-references-arch"><span class="header-section-number">22.3</span> MapReferences as functorial action on the name-reference algebra</h2>
-<p>When a <code>RenameVertex</code> schema transform is compiled, any fields in surviving nodes that carry vertex names as string data must be updated to reflect the rename. This is the content of <code>MapReferences</code>:</p>
+<h2 data-number="22.3" class="anchored" data-anchor-id="sec-map-references-arch"><span class="header-section-number">22.3</span> MapReferences as functorial action</h2>
+<p>When a vertex gets renamed in the schema, any fields holding vertex names as strings must be updated. That’s what <code>MapReferences</code> does:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>MapReferences <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    field<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    rename_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;&gt;,</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>Option&lt;String&gt;</code> value type handles both rename (<code>Some(new_name)</code>) and removal (<code>None</code>). The implementation in <code>apply_map_references</code> handles two cases:</p>
-<p><strong>Flat string fields</strong>: <code>Value::Str(s)</code> is looked up in <code>rename_map</code>. If found, it’s replaced with the new name or removed entirely.</p>
-<p><strong>Encoded array fields</strong>: panproto encodes JSON arrays inside <code>extra_fields</code> as <code>Value::Unknown</code> maps with an <code>__array_len</code> sentinel key and integer-indexed entries (<code>"0"</code>, <code>"1"</code>, …). <code>apply_map_references</code> detects this encoding by checking for <code>__array_len</code>, iterates over the indexed entries, applies the rename map to each string element, drops entries mapped to <code>None</code>, and reconstructs the array with updated indices and a corrected <code>__array_len</code>.</p>
-<p>The functorial interpretation: the schema category has a rename morphism <span class="math inline">\(r : V \to V'\)</span>; the name-reference algebra is the free monoid on vertex names; <code>MapReferences</code> is the application of <span class="math inline">\(r\)</span> to each element of that monoid stored in a field. The operation preserves all references not in the rename map, which corresponds to <span class="math inline">\(r\)</span> acting as the identity on names outside its domain.</p>
+<p>The <code>Option&lt;String&gt;</code> value handles both rename (<code>Some(new_name)</code>) and removal (<code>None</code>). Implementation in <code>apply_map_references</code> handles two cases:</p>
+<p><strong>Flat string fields</strong>: <code>Value::Str(s)</code> is looked up in the rename map. If found, it’s replaced or removed.</p>
+<p><strong>Encoded array fields</strong>: panproto stores JSON arrays in <code>extra_fields</code> as maps with an <code>__array_len</code> sentinel. For example, <code>["u-url", "external"]</code> becomes <code>{"0": "u-url", "1": "external", "__array_len": 2}</code>. The function detects this encoding, iterates the indexed entries, applies the rename to each string, drops entries mapped to <code>None</code>, and rebuilds with updated indices.</p>
+<p>The categorical interpretation: the rename is a morphism in the name-reference algebra, and <code>MapReferences</code> applies that morphism to each element stored in a field. References outside the rename map stay unchanged, which corresponds to the morphism acting as identity there.</p>
 </section>
 <section id="sec-case-arch" class="level2" data-number="22.4">
 <h2 data-number="22.4" class="anchored" data-anchor-id="sec-case-arch"><span class="header-section-number">22.4</span> Case as coproduct eliminator</h2>
-<p><code>Case</code> is the most general transform variant:</p>
+<p><code>Case</code> branches on node values:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Case <span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    branches<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>CaseBranch<span class="op">&gt;,</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -808,20 +799,20 @@ Table&nbsp;22.1: The nine <code>FieldTransform</code> variants and their categor
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> predicate<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> transforms<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>FieldTransform<span class="op">&gt;,</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The evaluation follows coproduct elimination semantics: the node’s current <code>extra_fields</code> map (after preceding transforms in the same list) is used to build an expression environment via <code>build_env_from_extra_fields</code>. Each branch’s predicate is evaluated against that environment. The first branch that evaluates to <code>Literal::Bool(true)</code> has its <code>transforms</code> applied; no subsequent branches are evaluated. If no branch matches, the node is unchanged.</p>
-<p>As the dependent function space <span class="math inline">\(\Pi(x : \text{Node}). \text{FieldTransform}\)</span>, <code>Case</code> selects a transform based on the node’s value. The selection is a runtime decision, not a compile-time one: different nodes of the same vertex type can receive entirely different transformations.</p>
-<p>The <code>transforms</code> list inside each branch is a full <code>Vec&lt;FieldTransform&gt;</code>, so branches can contain arbitrary transform sequences including nested <code>Case</code> blocks, <code>PathTransform</code> wrappers, and <code>ComputeField</code> expressions. This makes <code>Case</code> a complete transformer that can express any acyclic conditional logic.</p>
+<p>The evaluator uses the node’s current <code>extra_fields</code> to build an expression environment via <code>build_env_from_extra_fields</code>. Each branch’s predicate is evaluated. The first branch returning <code>Literal::Bool(true)</code> has its transforms applied; no subsequent branches run. If none match, the node is unchanged.</p>
+<p>Mathematically, this is the dependent function space <span class="math inline">\(\Pi(x : \text{Node}). \text{FieldTransform}\)</span>. The selection happens at runtime, not compile-time, so different nodes can receive entirely different transformations.</p>
+<p>Each branch’s <code>transforms</code> list is a full <code>Vec&lt;FieldTransform&gt;</code>, so branches can nest <code>Case</code> blocks, wrap with <code>PathTransform</code>, or use <code>ComputeField</code>. This completeness lets <code>Case</code> express arbitrary conditional logic.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What happens if no branch matches?
+<span class="screen-reader-only">Note</span>What if no branch matches?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The node passes through unchanged. This is by design: <code>Case</code> is a total function. If you need a “catch-all” branch, add a final branch with a predicate that always evaluates to <code>true</code>.</p>
+<p>The node passes through unchanged. Add a final branch with a predicate that always evaluates to <code>true</code> if you need a “catch-all.”</p>
 </div>
 </div>
 </section>
@@ -829,23 +820,22 @@ Table&nbsp;22.1: The nine <code>FieldTransform</code> variants and their categor
 <h2 data-number="22.5" class="anchored" data-anchor-id="sec-conditional-survival-arch"><span class="header-section-number">22.5</span> ConditionalSurvival as a refined survival predicate</h2>
 <p><code>ConditionalSurvival</code> is stored separately from <code>field_transforms</code> in <code>CompiledMigration</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> conditional_survival<span class="op">:</span> HashMap<span class="op">&lt;</span>Name<span class="op">,</span> <span class="pp">panproto_expr::</span>Expr<span class="op">&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>It’s checked <em>before</em> field transforms, during the BFS pass in <code>wtype_restrict</code>. The flow for each child node in the BFS is:</p>
+<p>It’s checked <em>before</em> field transforms during the BFS pass in <code>wtype_restrict</code>. For each child node:</p>
 <ol type="1">
 <li>Is the remapped target anchor in <code>surviving_verts</code>? If not, skip (structurally pruned).</li>
 <li>Is there a conditional survival predicate for the <em>source</em> anchor? If so, evaluate it.</li>
-<li>If the predicate returns <code>false</code>, treat the node as if it were structurally pruned: push it back on the BFS queue (so its descendants can still be processed through ancestor contraction), but don’t add it to the surviving set.</li>
-<li>If the predicate returns <code>true</code> (or no predicate exists), add the node to the surviving set and apply field transforms.</li>
+<li>If the predicate returns <code>false</code>, push the node back on the BFS queue (so descendants can still be processed through ancestor contraction) but don’t add it to the surviving set.</li>
+<li>If the predicate returns <code>true</code> (or no predicate exists), add it to the surviving set and apply field transforms.</li>
 </ol>
-<p>This two-step design separates the structural question (“does this vertex type survive?”) from the value question (“does this specific node satisfy the predicate?”). The structural question is answered by the schema migration specification. The value question is answered at runtime.</p>
-<p>The predicate is evaluated with the same <code>build_env_from_extra_fields</code> environment used for <code>ComputeField</code> and <code>Case</code>. All <code>extra_fields</code> entries and <code>attrs.*</code> subentries are bound as variables.</p>
+<p>This two-step design separates structure from value. The schema migration answers: “does this vertex type survive?” The predicate answers: “does this specific node satisfy the condition?” All predicates are evaluated with the same <code>build_env_from_extra_fields</code> environment used for <code>ComputeField</code> and <code>Case</code>.</p>
 </section>
 <section id="sec-build-env" class="level2" data-number="22.6">
 <h2 data-number="22.6" class="anchored" data-anchor-id="sec-build-env"><span class="header-section-number">22.6</span> build_env_from_extra_fields: variable binding strategy</h2>
-<p><code>build_env_from_extra_fields</code> is the shared environment builder used by <code>ComputeField</code>, <code>Case</code>, and <code>conditional_survival</code>. Its binding strategy has three components:</p>
-<p><strong>Flat bindings</strong>: every key in <code>extra_fields</code> is bound as a top-level variable. A field <code>"level": 2</code> becomes <code>Expr::Var("level")</code> evaluating to <code>Literal::Int(2)</code>.</p>
-<p><strong>Qualified bindings for non-structural keys</strong>: for most keys (everything except <code>"attrs"</code>, <code>"name"</code>, <code>"$type"</code>, and <code>"parents"</code>), a qualified <code>attrs.key</code> binding is also created. This means predicates can reference <code>attrs.level</code> even when <code>level</code> is stored flat, without needing to know whether the field is nested.</p>
-<p><strong>Nested attrs expansion</strong>: if <code>extra_fields</code> contains an <code>"attrs"</code> key holding a <code>Value::Unknown</code> map, every entry in that nested map is bound under both the qualified name <code>attrs.key</code> and (if not shadowed by a flat field) the unqualified <code>key</code>. This makes predicates portable: a predicate written against <code>attrs.level</code> works whether <code>level</code> is flat or nested.</p>
-<p>The dual binding strategy exists because different document formats store the same semantic information differently. AT Protocol records use top-level keys. Some annotation formats use an <code>attrs</code> object. Predicates that reference <code>attrs.level</code> work against both conventions.</p>
+<p>This shared environment builder is used by <code>ComputeField</code>, <code>Case</code>, and <code>conditional_survival</code>. Its three binding strategies cover different storage conventions:</p>
+<p><strong>Flat bindings</strong>: every key in <code>extra_fields</code> becomes a top-level variable. A field <code>"level": 2</code> evaluates as <code>Expr::Var("level")</code> → <code>Literal::Int(2)</code>.</p>
+<p><strong>Qualified bindings for non-structural keys</strong>: most keys (anything except <code>"attrs"</code>, <code>"name"</code>, <code>"$type"</code>, <code>"parents"</code>) get a qualified <code>attrs.key</code> binding too. This means predicates can reference <code>attrs.level</code> without knowing whether <code>level</code> is flat or nested.</p>
+<p><strong>Nested attrs expansion</strong>: if <code>extra_fields</code> contains an <code>"attrs"</code> key holding a map, every entry in that map binds under both the qualified name <code>attrs.key</code> and (unless shadowed) the unqualified <code>key</code>. Predicates written against <code>attrs.level</code> work whether <code>level</code> is flat or nested.</p>
+<p>This dual binding exists because different protocols store the same semantic information at different nesting depths. AT Protocol uses top-level keys; some annotation formats use an <code>attrs</code> object. Dual bindings let predicates work across both conventions without format-specific logic.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -856,28 +846,22 @@ Table&nbsp;22.1: The nine <code>FieldTransform</code> variants and their categor
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Different protocols store the same concept at different nesting depths. By binding both, we let predicates work across protocols without format-specific logic. A predicate <code>attrs.level &gt; 2</code> matches whether <code>level</code> is a top-level field or nested inside <code>attrs</code>.</p>
+<p>Different protocols nest the same concept differently. Binding both means predicates work across protocols. A predicate like <code>attrs.level &gt; 2</code> matches whether <code>level</code> is top-level or inside <code>attrs</code>.</p>
 </div>
 </div>
 </section>
 <section id="sec-value-to-literal" class="level2" data-number="22.7">
 <h2 data-number="22.7" class="anchored" data-anchor-id="sec-value-to-literal"><span class="header-section-number">22.7</span> value_to_expr_literal: Value-to-Literal conversion</h2>
-<p><code>value_to_expr_literal</code> converts an instance <code>Value</code> to a <code>panproto_expr::Literal</code> for use in expression evaluation:</p>
-<div id="tbl-value-to-literal" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-value-to-literal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;22.2: <code>value_to_expr_literal</code> conversion table.
-</figcaption>
-<div aria-describedby="tbl-value-to-literal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<p><code>value_to_expr_literal</code> converts an instance <code>Value</code> to a <code>panproto_expr::Literal</code>:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 48%">
-<col style="width: 51%">
+<col style="width: 59%">
+<col style="width: 40%">
 </colgroup>
 <thead>
 <tr class="header">
 <th><code>Value</code> variant</th>
-<th><code>Literal</code> result</th>
+<th>Converts to</th>
 </tr>
 </thead>
 <tbody>
@@ -911,36 +895,33 @@ Table&nbsp;22.2: <code>value_to_expr_literal</code> conversion table.
 </tr>
 </tbody>
 </table>
-</div>
-</figure>
-</div>
-<p>The encoded-array case deserves explanation. panproto stores JSON arrays in <code>extra_fields</code> as <code>Value::Unknown</code> maps because <code>extra_fields</code> is <code>HashMap&lt;String, Value&gt;</code> and <code>Value</code> doesn’t have a dedicated list variant for the flat map case. The array <code>["u-url", "external"]</code> becomes <code>{"0": "u-url", "1": "external", "__array_len": 2}</code>. When this map is passed to <code>value_to_expr_literal</code>, the <code>__array_len</code> sentinel is detected and the array elements are collected and joined with commas: <code>"u-url,external"</code>. This allows <code>BuiltinOp::Contains</code> to check for membership in the serialized array.</p>
-<p>The inverse conversion (<code>expr_literal_to_value</code>) normalizes float-valued integers: a <code>Literal::Float</code> whose fractional part is zero and whose magnitude fits within <code>i64</code> is converted to <code>Value::Int</code> for JSON round-trip fidelity. This handles the common case where expression evaluation returns <code>1.0</code> from arithmetic on integer inputs.</p>
+<p>The encoded-array case deserves explanation. panproto stores JSON arrays in <code>extra_fields</code> as maps because <code>extra_fields</code> is a <code>HashMap&lt;String, Value&gt;</code> without a dedicated list variant. The array <code>["u-url", "external"]</code> becomes <code>{"0": "u-url", "1": "external", "__array_len": 2}</code>. When this reaches <code>value_to_expr_literal</code>, the <code>__array_len</code> sentinel is detected and array elements are collected and joined with commas: <code>"u-url,external"</code>. This lets <code>BuiltinOp::Contains</code> check membership in the serialized array.</p>
+<p>The inverse conversion (<code>expr_literal_to_value</code>) normalizes float-valued integers: a <code>Literal::Float</code> with zero fractional part and magnitude within <code>i64</code> becomes <code>Value::Int</code> for JSON round-trip fidelity. This handles the common case where arithmetic on integers returns <code>1.0</code>.</p>
 </section>
 <section id="sec-transform-ordering" class="level2" data-number="22.8">
-<h2 data-number="22.8" class="anchored" data-anchor-id="sec-transform-ordering"><span class="header-section-number">22.8</span> Transform ordering: addAttrs, ComputeField, dropAttrs</h2>
-<p><code>field_transforms</code> is a <code>Vec&lt;FieldTransform&gt;</code> applied in sequence. The ordering of transforms within the sequence matters because later transforms see the result of earlier ones.</p>
-<p>The recommended ordering convention for migrations that need to add, compute, and clean up fields:</p>
+<h2 data-number="22.8" class="anchored" data-anchor-id="sec-transform-ordering"><span class="header-section-number">22.8</span> Transform ordering: addattrs, computefield, dropattrs</h2>
+<p><code>field_transforms</code> is a <code>Vec&lt;FieldTransform&gt;</code> applied in sequence. Order matters because later transforms see the result of earlier ones.</p>
+<p>The recommended convention for migrations needing to add, compute, and clean up fields:</p>
 <ol type="1">
-<li><strong><code>AddField</code> for inputs</strong>: add constant fields that expressions need but the source data doesn’t carry.</li>
-<li><strong><code>PathTransform</code> for nested normalization</strong>: flatten or reorganize nested structures before expressions run.</li>
+<li><strong><code>AddField</code> for inputs</strong>: add constant fields that expressions need but source data doesn’t carry.</li>
+<li><strong><code>PathTransform</code> for nested normalization</strong>: flatten or reorganize before expressions run.</li>
 <li><strong><code>ComputeField</code> and <code>ApplyExpr</code></strong>: compute derived fields using the now-complete input set.</li>
 <li><strong><code>Case</code></strong>: apply conditional logic that may depend on computed fields from step 3.</li>
-<li><strong><code>DropField</code> / <code>KeepFields</code></strong>: remove intermediate fields that were used as inputs but shouldn’t appear in the output.</li>
+<li><strong><code>DropField</code> / <code>KeepFields</code></strong>: remove intermediate fields used as inputs but not in the output.</li>
 </ol>
-<p>If you add a <code>level</code> field in step 1 (because the source format stores it elsewhere), compute <code>name</code> from <code>level</code> in step 3, and then drop <code>level</code> in step 5 because the target format doesn’t have that field, all three transforms reference the same intermediate state. Reversing steps 3 and 5 would produce a node with <code>name</code> computed from a missing <code>level</code> variable, which would leave <code>name</code> unchanged.</p>
-<p>There’s no automatic dependency analysis. Transform authors are responsible for ordering. The builder API appends in registration order, so the first <code>add_field_default</code> call fires before the first <code>add_computed_field</code> call, which fires before the first <code>add_field_drop</code> call.</p>
+<p>If you add a <code>level</code> field (step 1) because the source stores it elsewhere, compute <code>name</code> from <code>level</code> (step 3), then drop <code>level</code> (step 5), all three transforms reference the same intermediate state. Reversing steps 3 and 5 would compute <code>name</code> from a missing <code>level</code> variable, leaving <code>name</code> unchanged.</p>
+<p>There’s no automatic dependency analysis. Transform authors are responsible for ordering. The builder API appends in registration order, so the first <code>add_field_default</code> fires before the first <code>add_computed_field</code>, which fires before the first <code>add_field_drop</code>.</p>
 </section>
 <section id="sec-bfs-integration" class="level2" data-number="22.9">
 <h2 data-number="22.9" class="anchored" data-anchor-id="sec-bfs-integration"><span class="header-section-number">22.9</span> Integration with wtype_restrict’s BFS pass</h2>
 <p>Field transforms are applied inside the fused BFS pass in <code>wtype_restrict</code>, not as a separate post-pass. The execution point is after a node is confirmed to survive (both structural and value-dependent predicates passed) and after its anchor is remapped to the target vertex name.</p>
 <p>The relevant portion of the BFS loop:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Apply value-level field transforms if any exist for this vertex</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// apply value-level field transforms if any exist for this vertex</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">let</span> <span class="cn">Some</span>(transforms) <span class="op">=</span> migration<span class="op">.</span>field_transforms<span class="op">.</span>get(<span class="op">&amp;</span>child_node<span class="op">.</span>anchor) <span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    apply_field_transforms(<span class="op">&amp;</span><span class="kw">mut</span> new_node<span class="op">,</span> transforms)<span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>new_nodes<span class="op">.</span>insert(child_id<span class="op">,</span> new_node<span class="op">.</span>clone())<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The lookup key is <code>child_node.anchor</code>, the <em>source</em> vertex name, not the remapped target name. This is intentional: the <code>field_transforms</code> map is keyed by source vertex name so that the migration author can write <code>migration.add_field_rename("h1", ...)</code> when building the migration against the source schema. The anchor is remapped on the <code>new_node</code> clone before field transforms run, so by the time <code>apply_field_transforms</code> executes, <code>new_node.anchor</code> already holds the target vertex name, but the lookup into <code>field_transforms</code> happened with the original <code>child_node.anchor</code>.</p>
+<p>The lookup key is <code>child_node.anchor</code>, the <em>source</em> vertex name. The <code>field_transforms</code> map is keyed by source vertex name so migration authors can write <code>migration.add_field_rename("h1", ...)</code> against the source schema. The anchor is remapped on the <code>new_node</code> clone before field transforms run, so by the time <code>apply_field_transforms</code> executes, <code>new_node.anchor</code> holds the target name, but the lookup used the original <code>child_node.anchor</code>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -951,10 +932,10 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>field_transforms</code> are keyed by source vertex name. <code>conditional_survival</code> predicates are also keyed by source vertex name. Both are looked up before anchor remapping of the lookup key. However, the node passed to <code>apply_field_transforms</code> already has its anchor remapped. If your transforms read <code>node.anchor</code> (unusual), they see the target name, not the source name.</p>
+<p><code>field_transforms</code> and <code>conditional_survival</code> predicates are both keyed by source vertex name and looked up before anchor remapping. However, the node passed to <code>apply_field_transforms</code> already has its anchor remapped. If your transforms read <code>node.anchor</code> (unusual), they see the target name, not the source.</p>
 </div>
 </div>
-<p>The BFS pass also handles fan reconstruction (step 5 of <code>wtype_restrict</code>) as a separate pass operating on the original fan list. Field transforms don’t run on fan members independently; fans are structural groupings that are reconstructed after the BFS pass finishes. If a node that participates in a fan also has field transforms, those transforms run on the node when it’s added to <code>new_nodes</code> during BFS, before fan reconstruction runs.</p>
+<p>The BFS pass also handles fan reconstruction (step 5 of <code>wtype_restrict</code>) as a separate pass operating on the original fan list. Field transforms don’t run on fans independently; fans are structural groupings reconstructed after the BFS pass finishes. If a node participating in a fan also has field transforms, those transforms run when the node is added to <code>new_nodes</code> during BFS, before fan reconstruction.</p>
 </section>
 <section id="sec-field-transform-source" class="level2" data-number="22.10">
 <h2 data-number="22.10" class="anchored" data-anchor-id="sec-field-transform-source"><span class="header-section-number">22.10</span> Source locations</h2>
@@ -1458,7 +1439,7 @@ Important
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Field Transform Architecture {#sec-field-transforms}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="in">`FieldTransform`</span> is the value-level complement to the structural <span class="in">`TheoryTransform`</span> layer. Where <span class="in">`TheoryTransform`</span> operates on schema vertices and edges, <span class="in">`FieldTransform`</span> operates on the <span class="in">`extra_fields`</span> of individual instance nodes during <span class="in">`wtype_restrict`</span>.</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="in">`FieldTransform`</span> operates at the value level—the complement to <span class="in">`TheoryTransform`</span>, which works at the schema level. Where <span class="in">`TheoryTransform`</span> modifies vertex and edge kinds, <span class="in">`FieldTransform`</span> modifies the <span class="in">`extra_fields`</span> of individual nodes during <span class="in">`wtype_restrict`</span>.</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>For the user-facing walkthrough of value-dependent migration, see <span class="co">[</span><span class="ot">the tutorial</span><span class="co">](https://panproto.dev/tutorial/chapters/20-value-dependent-transforms.html)</span>.</span>
@@ -1466,198 +1447,192 @@ Important
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## The FieldTransform algebra {#sec-field-transform-algebra}</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="in">`FieldTransform`</span> is a nine-variant enum defined in <span class="in">`panproto-inst/src/wtype.rs`</span>. The variants form a small algebra of node mutations:</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="in">`FieldTransform`</span> is a nine-variant enum in <span class="in">`panproto-inst/src/wtype.rs`</span>. Each variant expresses one kind of node mutation:</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variant <span class="pp">|</span> Category-theoretic interpretation <span class="pp">|</span> Typical use <span class="pp">|</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|----------------------------------|-------------|</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameField`</span> <span class="pp">|</span> Endomorphism on the key set (key bijection) <span class="pp">|</span> Normalize field names across protocol versions <span class="pp">|</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DropField`</span> <span class="pp">|</span> Partial projection (forgetful functor on a field) <span class="pp">|</span> Remove deprecated fields <span class="pp">|</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`AddField`</span> <span class="pp">|</span> Natural transformation injecting a constant <span class="pp">|</span> Provide default values for new required fields <span class="pp">|</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`KeepFields`</span> <span class="pp">|</span> Projection onto a named subset <span class="pp">|</span> Restrict fields to those recognized by the target schema <span class="pp">|</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ApplyExpr`</span> <span class="pp">|</span> Endomorphism on a single field's value via the expr evaluator <span class="pp">|</span> Type coercions, string normalization <span class="pp">|</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PathTransform`</span> <span class="pp">|</span> Action of a path functor on the transform endomorphism algebra <span class="pp">|</span> Apply any transform to a nested object field <span class="pp">|</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ComputeField`</span> <span class="pp">|</span> Morphism from the full field environment to a target field <span class="pp">|</span> Compute derived fields from multiple sources <span class="pp">|</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Case`</span> <span class="pp">|</span> Coproduct eliminator / dependent function space <span class="pp">|</span> Conditional logic based on runtime field values <span class="pp">|</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`MapReferences`</span> <span class="pp">|</span> Functorial action on the name-reference algebra <span class="pp">|</span> Propagate vertex renames into string reference fields <span class="pp">|</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variant <span class="pp">|</span> What it does <span class="pp">|</span> When to use <span class="pp">|</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------------|-----------|</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`RenameField`</span> <span class="pp">|</span> Renames a field by key <span class="pp">|</span> Normalizing field names across versions <span class="pp">|</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DropField`</span> <span class="pp">|</span> Removes a field <span class="pp">|</span> Removing deprecated fields <span class="pp">|</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`AddField`</span> <span class="pp">|</span> Injects a constant field <span class="pp">|</span> Providing defaults for new required fields <span class="pp">|</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`KeepFields`</span> <span class="pp">|</span> Retains only named fields <span class="pp">|</span> Restricting to target schema fields <span class="pp">|</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ApplyExpr`</span> <span class="pp">|</span> Transforms a field value via expression <span class="pp">|</span> Type coercions, string normalization <span class="pp">|</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PathTransform`</span> <span class="pp">|</span> Applies any transform to a nested field <span class="pp">|</span> Working with nested objects <span class="pp">|</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ComputeField`</span> <span class="pp">|</span> Derives a field from other fields <span class="pp">|</span> Computing aggregates or combinations <span class="pp">|</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Case`</span> <span class="pp">|</span> Conditional logic based on field values <span class="pp">|</span> Branching on runtime data <span class="pp">|</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`MapReferences`</span> <span class="pp">|</span> Updates string fields that hold vertex names <span class="pp">|</span> Propagating vertex renames <span class="pp">|</span></span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>: The nine <span class="in">`FieldTransform`</span> variants and their categorical roles. {#tbl-field-transforms}</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>These transforms compose sequentially: <span class="in">`apply_field_transforms`</span> iterates a <span class="in">`Vec&lt;FieldTransform&gt;`</span> and applies each in order. Earlier transforms see the original fields; later transforms see results from all preceding ones. This sequential model is why the builder appends to a vector rather than replacing.</span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>The transforms compose sequentially: <span class="in">`apply_field_transforms`</span> iterates over a <span class="in">`Vec&lt;FieldTransform&gt;`</span> and applies each one in order. Earlier transforms see the original fields; later transforms see the result of everything before them. This sequential composition is the reason the builder methods on <span class="in">`CompiledMigration`</span> append to a <span class="in">`Vec`</span> rather than replace.</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## PathTransform as path functor action {#sec-path-transform-arch}</span></span>
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## PathTransform as path functor action {#sec-path-transform-arch}</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="in">`PathTransform`</span> wraps an inner transform and a path:</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">`PathTransform`</span> wraps an inner transform and a path:</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>PathTransform {</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    path<span class="sc">:</span> Vec<span class="sc">&lt;</span>String<span class="sc">&gt;</span>,</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    inner<span class="sc">:</span> Box<span class="sc">&lt;</span>FieldTransform<span class="sc">&gt;</span>,</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>PathTransform {</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    path<span class="sc">:</span> Vec<span class="sc">&lt;</span>String<span class="sc">&gt;</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    inner<span class="sc">:</span> Box<span class="sc">&lt;</span>FieldTransform<span class="sc">&gt;</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>It navigates the <span class="in">`extra_fields`</span> tree by treating each path segment as a map key lookup. At the path's end, a temporary <span class="in">`Node`</span> is constructed with the nested map as its <span class="in">`extra_fields`</span>. The inner transform runs on that node, then the result gets written back.</span>
 <span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>The implementation in <span class="in">`apply_path_transform`</span> navigates the <span class="in">`extra_fields`</span> tree by treating each path segment as a <span class="in">`Value::Unknown`</span> map lookup. At the end of the path, a temporary <span class="in">`Node`</span> is constructed with the nested map as its <span class="in">`extra_fields`</span>, <span class="in">`apply_field_transforms`</span> is called on that node, and the result is written back.</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>Think of this as lifting a transform on flat fields to act on a subtree. An empty path means the transform applies directly to the node's own fields.</span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>This is the action of a path functor: the value tree has an endomorphism monoid at each leaf (the set of transforms applicable to a <span class="in">`HashMap&lt;String, Value&gt;`</span>), and <span class="in">`PathTransform`</span> lifts any element of that monoid to act on a subtree. An empty path is the identity action on the root: the inner transform applies directly to the node's own fields.</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>The recursion bottoms out when <span class="in">`path.len() == 1`</span>. For deeper paths, the function recurses with <span class="in">`&amp;path[1..]`</span> and the nested map. Paths that don't resolve (missing keys or non-map values) are silently no-ops—the transform produces no change rather than an error. This design avoids failures on data lacking an expected structure.</span>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>The recursion bottoms out when <span class="in">`path.len() == 1`</span>. For deeper paths, the function calls itself with <span class="in">`&amp;path[1..]`</span> and the nested map. Paths that don't resolve (because an intermediate key is absent or not <span class="in">`Value::Unknown`</span>) are silently no-ops: the transform produces no change rather than an error. This design choice avoids hard failures on data that lacks an expected nested structure.</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## MapReferences as functorial action {#sec-map-references-arch}</span></span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## MapReferences as functorial action on the name-reference algebra {#sec-map-references-arch}</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>When a vertex gets renamed in the schema, any fields holding vertex names as strings must be updated. That's what <span class="in">`MapReferences`</span> does:</span>
 <span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>When a <span class="in">`RenameVertex`</span> schema transform is compiled, any fields in surviving nodes that carry vertex names as string data must be updated to reflect the rename. This is the content of <span class="in">`MapReferences`</span>:</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>MapReferences {</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    field<span class="sc">:</span> String,</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    rename_map<span class="sc">:</span> HashMap<span class="sc">&lt;</span>String, Option<span class="sc">&lt;</span>String<span class="sc">&gt;</span><span class="er">&gt;</span>,</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>MapReferences {</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    field<span class="sc">:</span> String,</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    rename_map<span class="sc">:</span> HashMap<span class="sc">&lt;</span>String, Option<span class="sc">&lt;</span>String<span class="sc">&gt;</span><span class="er">&gt;</span>,</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Option&lt;String&gt;`</span> value handles both rename (<span class="in">`Some(new_name)`</span>) and removal (<span class="in">`None`</span>). Implementation in <span class="in">`apply_map_references`</span> handles two cases:</span>
 <span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Option&lt;String&gt;`</span> value type handles both rename (<span class="in">`Some(new_name)`</span>) and removal (<span class="in">`None`</span>). The implementation in <span class="in">`apply_map_references`</span> handles two cases:</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>**Flat string fields**: <span class="in">`Value::Str(s)`</span> is looked up in the rename map. If found, it's replaced or removed.</span>
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>**Flat string fields**: <span class="in">`Value::Str(s)`</span> is looked up in <span class="in">`rename_map`</span>. If found, it's replaced with the new name or removed entirely.</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>**Encoded array fields**: panproto stores JSON arrays in <span class="in">`extra_fields`</span> as maps with an <span class="in">`__array_len`</span> sentinel. For example, <span class="in">`["u-url", "external"]`</span> becomes <span class="in">`{"0": "u-url", "1": "external", "__array_len": 2}`</span>. The function detects this encoding, iterates the indexed entries, applies the rename to each string, drops entries mapped to <span class="in">`None`</span>, and rebuilds with updated indices.</span>
 <span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>**Encoded array fields**: panproto encodes JSON arrays inside <span class="in">`extra_fields`</span> as <span class="in">`Value::Unknown`</span> maps with an <span class="in">`__array_len`</span> sentinel key and integer-indexed entries (<span class="in">`"0"`</span>, <span class="in">`"1"`</span>, ...). <span class="in">`apply_map_references`</span> detects this encoding by checking for <span class="in">`__array_len`</span>, iterates over the indexed entries, applies the rename map to each string element, drops entries mapped to <span class="in">`None`</span>, and reconstructs the array with updated indices and a corrected <span class="in">`__array_len`</span>.</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>The categorical interpretation: the rename is a morphism in the name-reference algebra, and <span class="in">`MapReferences`</span> applies that morphism to each element stored in a field. References outside the rename map stay unchanged, which corresponds to the morphism acting as identity there.</span>
 <span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>The functorial interpretation: the schema category has a rename morphism $r : V \to V'$; the name-reference algebra is the free monoid on vertex names; <span class="in">`MapReferences`</span> is the application of $r$ to each element of that monoid stored in a field. The operation preserves all references not in the rename map, which corresponds to $r$ acting as the identity on names outside its domain.</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Case as coproduct eliminator {#sec-case-arch}</span></span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Case as coproduct eliminator {#sec-case-arch}</span></span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="in">`Case`</span> branches on node values:</span>
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="in">`Case`</span> is the most general transform variant:</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>Case {</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    branches<span class="sc">:</span> Vec<span class="sc">&lt;</span>CaseBranch<span class="sc">&gt;</span>,</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>pub struct CaseBranch {</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    pub predicate<span class="sc">:</span> panproto_expr<span class="sc">::</span>Expr,</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    pub transforms<span class="sc">:</span> Vec<span class="sc">&lt;</span>FieldTransform<span class="sc">&gt;</span>,</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>Case {</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    branches<span class="sc">:</span> Vec<span class="sc">&lt;</span>CaseBranch<span class="sc">&gt;</span>,</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>pub struct CaseBranch {</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    pub predicate<span class="sc">:</span> panproto_expr<span class="sc">::</span>Expr,</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    pub transforms<span class="sc">:</span> Vec<span class="sc">&lt;</span>FieldTransform<span class="sc">&gt;</span>,</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>The evaluator uses the node's current <span class="in">`extra_fields`</span> to build an expression environment via <span class="in">`build_env_from_extra_fields`</span>. Each branch's predicate is evaluated. The first branch returning <span class="in">`Literal::Bool(true)`</span> has its transforms applied; no subsequent branches run. If none match, the node is unchanged.</span>
 <span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>The evaluation follows coproduct elimination semantics: the node's current <span class="in">`extra_fields`</span> map (after preceding transforms in the same list) is used to build an expression environment via <span class="in">`build_env_from_extra_fields`</span>. Each branch's predicate is evaluated against that environment. The first branch that evaluates to <span class="in">`Literal::Bool(true)`</span> has its <span class="in">`transforms`</span> applied; no subsequent branches are evaluated. If no branch matches, the node is unchanged.</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>Mathematically, this is the dependent function space $\Pi(x : \text{Node}). \text{FieldTransform}$. The selection happens at runtime, not compile-time, so different nodes can receive entirely different transformations.</span>
 <span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>As the dependent function space $\Pi(x : \text{Node}). \text{FieldTransform}$, <span class="in">`Case`</span> selects a transform based on the node's value. The selection is a runtime decision, not a compile-time one: different nodes of the same vertex type can receive entirely different transformations.</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>Each branch's <span class="in">`transforms`</span> list is a full <span class="in">`Vec&lt;FieldTransform&gt;`</span>, so branches can nest <span class="in">`Case`</span> blocks, wrap with <span class="in">`PathTransform`</span>, or use <span class="in">`ComputeField`</span>. This completeness lets <span class="in">`Case`</span> express arbitrary conditional logic.</span>
 <span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>The <span class="in">`transforms`</span> list inside each branch is a full <span class="in">`Vec&lt;FieldTransform&gt;`</span>, so branches can contain arbitrary transform sequences including nested <span class="in">`Case`</span> blocks, <span class="in">`PathTransform`</span> wrappers, and <span class="in">`ComputeField`</span> expressions. This makes <span class="in">`Case`</span> a complete transformer that can express any acyclic conditional logic.</span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## What happens if no branch matches?</span></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>The node passes through unchanged. This is by design: <span class="in">`Case`</span> is a total function. If you need a "catch-all" branch, add a final branch with a predicate that always evaluates to <span class="in">`true`</span>.</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## What if no branch matches?</span></span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>The node passes through unchanged. Add a final branch with a predicate that always evaluates to <span class="in">`true`</span> if you need a "catch-all."</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## ConditionalSurvival as a refined survival predicate {#sec-conditional-survival-arch}</span></span>
 <span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## ConditionalSurvival as a refined survival predicate {#sec-conditional-survival-arch}</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="in">`ConditionalSurvival`</span> is stored separately from <span class="in">`field_transforms`</span> in <span class="in">`CompiledMigration`</span>:</span>
 <span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="in">`ConditionalSurvival`</span> is stored separately from <span class="in">`field_transforms`</span> in <span class="in">`CompiledMigration`</span>:</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>pub conditional_survival<span class="sc">:</span> HashMap<span class="sc">&lt;</span>Name, panproto_expr<span class="sc">::</span>Expr<span class="sc">&gt;</span>,</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>pub conditional_survival<span class="sc">:</span> HashMap<span class="sc">&lt;</span>Name, panproto_expr<span class="sc">::</span>Expr<span class="sc">&gt;</span>,</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>It's checked *before* field transforms during the BFS pass in <span class="in">`wtype_restrict`</span>. For each child node:</span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>It's checked *before* field transforms, during the BFS pass in <span class="in">`wtype_restrict`</span>. The flow for each child node in the BFS is:</span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Is the remapped target anchor in <span class="in">`surviving_verts`</span>? If not, skip (structurally pruned).</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Is there a conditional survival predicate for the *source* anchor? If so, evaluate it.</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If the predicate returns <span class="in">`false`</span>, treat the node as if it were structurally pruned: push it back on the BFS queue (so its descendants can still be processed through ancestor contraction), but don't add it to the surviving set.</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If the predicate returns <span class="in">`true`</span> (or no predicate exists), add the node to the surviving set and apply field transforms.</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Is the remapped target anchor in <span class="in">`surviving_verts`</span>? If not, skip (structurally pruned).</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Is there a conditional survival predicate for the *source* anchor? If so, evaluate it.</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If the predicate returns <span class="in">`false`</span>, push the node back on the BFS queue (so descendants can still be processed through ancestor contraction) but don't add it to the surviving set.</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If the predicate returns <span class="in">`true`</span> (or no predicate exists), add it to the surviving set and apply field transforms.</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>This two-step design separates structure from value. The schema migration answers: "does this vertex type survive?" The predicate answers: "does this specific node satisfy the condition?" All predicates are evaluated with the same <span class="in">`build_env_from_extra_fields`</span> environment used for <span class="in">`ComputeField`</span> and <span class="in">`Case`</span>.</span>
 <span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>This two-step design separates the structural question ("does this vertex type survive?") from the value question ("does this specific node satisfy the predicate?"). The structural question is answered by the schema migration specification. The value question is answered at runtime.</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## build_env_from_extra_fields: variable binding strategy {#sec-build-env}</span></span>
 <span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>The predicate is evaluated with the same <span class="in">`build_env_from_extra_fields`</span> environment used for <span class="in">`ComputeField`</span> and <span class="in">`Case`</span>. All <span class="in">`extra_fields`</span> entries and <span class="in">`attrs.*`</span> subentries are bound as variables.</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>This shared environment builder is used by <span class="in">`ComputeField`</span>, <span class="in">`Case`</span>, and <span class="in">`conditional_survival`</span>. Its three binding strategies cover different storage conventions:</span>
 <span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## build_env_from_extra_fields: variable binding strategy {#sec-build-env}</span></span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>**Flat bindings**: every key in <span class="in">`extra_fields`</span> becomes a top-level variable. A field <span class="in">`"level": 2`</span> evaluates as <span class="in">`Expr::Var("level")`</span> → <span class="in">`Literal::Int(2)`</span>.</span>
 <span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="in">`build_env_from_extra_fields`</span> is the shared environment builder used by <span class="in">`ComputeField`</span>, <span class="in">`Case`</span>, and <span class="in">`conditional_survival`</span>. Its binding strategy has three components:</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>**Qualified bindings for non-structural keys**: most keys (anything except <span class="in">`"attrs"`</span>, <span class="in">`"name"`</span>, <span class="in">`"$type"`</span>, <span class="in">`"parents"`</span>) get a qualified <span class="in">`attrs.key`</span> binding too. This means predicates can reference <span class="in">`attrs.level`</span> without knowing whether <span class="in">`level`</span> is flat or nested.</span>
 <span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>**Flat bindings**: every key in <span class="in">`extra_fields`</span> is bound as a top-level variable. A field <span class="in">`"level": 2`</span> becomes <span class="in">`Expr::Var("level")`</span> evaluating to <span class="in">`Literal::Int(2)`</span>.</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>**Nested attrs expansion**: if <span class="in">`extra_fields`</span> contains an <span class="in">`"attrs"`</span> key holding a map, every entry in that map binds under both the qualified name <span class="in">`attrs.key`</span> and (unless shadowed) the unqualified <span class="in">`key`</span>. Predicates written against <span class="in">`attrs.level`</span> work whether <span class="in">`level`</span> is flat or nested.</span>
 <span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>**Qualified bindings for non-structural keys**: for most keys (everything except <span class="in">`"attrs"`</span>, <span class="in">`"name"`</span>, <span class="in">`"$type"`</span>, and <span class="in">`"parents"`</span>), a qualified <span class="in">`attrs.key`</span> binding is also created. This means predicates can reference <span class="in">`attrs.level`</span> even when <span class="in">`level`</span> is stored flat, without needing to know whether the field is nested.</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>This dual binding exists because different protocols store the same semantic information at different nesting depths. AT Protocol uses top-level keys; some annotation formats use an <span class="in">`attrs`</span> object. Dual bindings let predicates work across both conventions without format-specific logic.</span>
 <span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>**Nested attrs expansion**: if <span class="in">`extra_fields`</span> contains an <span class="in">`"attrs"`</span> key holding a <span class="in">`Value::Unknown`</span> map, every entry in that nested map is bound under both the qualified name <span class="in">`attrs.key`</span> and (if not shadowed by a flat field) the unqualified <span class="in">`key`</span>. This makes predicates portable: a predicate written against <span class="in">`attrs.level`</span> works whether <span class="in">`level`</span> is flat or nested.</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>The dual binding strategy exists because different document formats store the same semantic information differently. AT Protocol records use top-level keys. Some annotation formats use an <span class="in">`attrs`</span> object. Predicates that reference <span class="in">`attrs.level`</span> work against both conventions.</span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why both `level` and `attrs.level`?</span></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>Different protocols store the same concept at different nesting depths. By binding both, we let predicates work across protocols without format-specific logic. A predicate <span class="in">`attrs.level &gt; 2`</span> matches whether <span class="in">`level`</span> is a top-level field or nested inside <span class="in">`attrs`</span>.</span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why both `level` and `attrs.level`?</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>Different protocols nest the same concept differently. Binding both means predicates work across protocols. A predicate like <span class="in">`attrs.level &gt; 2`</span> matches whether <span class="in">`level`</span> is top-level or inside <span class="in">`attrs`</span>.</span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## value_to_expr_literal: Value-to-Literal conversion {#sec-value-to-literal}</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a><span class="in">`value_to_expr_literal`</span> converts an instance <span class="in">`Value`</span> to a <span class="in">`panproto_expr::Literal`</span>:</span>
 <span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## value_to_expr_literal: Value-to-Literal conversion {#sec-value-to-literal}</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="in">`value_to_expr_literal`</span> converts an instance <span class="in">`Value`</span> to a <span class="in">`panproto_expr::Literal`</span> for use in expression evaluation:</span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value`</span> variant <span class="pp">|</span> <span class="in">`Literal`</span> result <span class="pp">|</span></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|----------------|-----------------|</span></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Bool(b)`</span> <span class="pp">|</span> <span class="in">`Literal::Bool(b)`</span> <span class="pp">|</span></span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Int(i)`</span> <span class="pp">|</span> <span class="in">`Literal::Int(i)`</span> <span class="pp">|</span></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Float(f)`</span> <span class="pp">|</span> <span class="in">`Literal::Float(f)`</span> <span class="pp">|</span></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Str(s)`</span> <span class="pp">|</span> <span class="in">`Literal::Str(s)`</span> <span class="pp">|</span></span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Unknown`</span> with <span class="in">`__array_len`</span> <span class="pp">|</span> Comma-separated string of elements <span class="pp">|</span></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Unknown`</span> without <span class="in">`__array_len`</span> <span class="pp">|</span> <span class="in">`Literal::Null`</span> <span class="pp">|</span></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Null`</span> and others <span class="pp">|</span> <span class="in">`Literal::Null`</span> <span class="pp">|</span></span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value`</span> variant <span class="pp">|</span> Converts to <span class="pp">|</span></span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|----------------|-----------|</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Bool(b)`</span> <span class="pp">|</span> <span class="in">`Literal::Bool(b)`</span> <span class="pp">|</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Int(i)`</span> <span class="pp">|</span> <span class="in">`Literal::Int(i)`</span> <span class="pp">|</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Float(f)`</span> <span class="pp">|</span> <span class="in">`Literal::Float(f)`</span> <span class="pp">|</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Str(s)`</span> <span class="pp">|</span> <span class="in">`Literal::Str(s)`</span> <span class="pp">|</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Unknown`</span> with <span class="in">`__array_len`</span> <span class="pp">|</span> Comma-separated string of elements <span class="pp">|</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Unknown`</span> without <span class="in">`__array_len`</span> <span class="pp">|</span> <span class="in">`Literal::Null`</span> <span class="pp">|</span></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Value::Null`</span> and others <span class="pp">|</span> <span class="in">`Literal::Null`</span> <span class="pp">|</span></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>The encoded-array case deserves explanation. panproto stores JSON arrays in <span class="in">`extra_fields`</span> as maps because <span class="in">`extra_fields`</span> is a <span class="in">`HashMap&lt;String, Value&gt;`</span> without a dedicated list variant. The array <span class="in">`["u-url", "external"]`</span> becomes <span class="in">`{"0": "u-url", "1": "external", "__array_len": 2}`</span>. When this reaches <span class="in">`value_to_expr_literal`</span>, the <span class="in">`__array_len`</span> sentinel is detected and array elements are collected and joined with commas: <span class="in">`"u-url,external"`</span>. This lets <span class="in">`BuiltinOp::Contains`</span> check membership in the serialized array.</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>The inverse conversion (<span class="in">`expr_literal_to_value`</span>) normalizes float-valued integers: a <span class="in">`Literal::Float`</span> with zero fractional part and magnitude within <span class="in">`i64`</span> becomes <span class="in">`Value::Int`</span> for JSON round-trip fidelity. This handles the common case where arithmetic on integers returns <span class="in">`1.0`</span>.</span>
 <span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>: <span class="in">`value_to_expr_literal`</span> conversion table. {#tbl-value-to-literal}</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Transform ordering: addattrs, computefield, dropattrs {#sec-transform-ordering}</span></span>
 <span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>The encoded-array case deserves explanation. panproto stores JSON arrays in <span class="in">`extra_fields`</span> as <span class="in">`Value::Unknown`</span> maps because <span class="in">`extra_fields`</span> is <span class="in">`HashMap&lt;String, Value&gt;`</span> and <span class="in">`Value`</span> doesn't have a dedicated list variant for the flat map case. The array <span class="in">`["u-url", "external"]`</span> becomes <span class="in">`{"0": "u-url", "1": "external", "__array_len": 2}`</span>. When this map is passed to <span class="in">`value_to_expr_literal`</span>, the <span class="in">`__array_len`</span> sentinel is detected and the array elements are collected and joined with commas: <span class="in">`"u-url,external"`</span>. This allows <span class="in">`BuiltinOp::Contains`</span> to check for membership in the serialized array.</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="in">`field_transforms`</span> is a <span class="in">`Vec&lt;FieldTransform&gt;`</span> applied in sequence. Order matters because later transforms see the result of earlier ones.</span>
 <span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>The inverse conversion (<span class="in">`expr_literal_to_value`</span>) normalizes float-valued integers: a <span class="in">`Literal::Float`</span> whose fractional part is zero and whose magnitude fits within <span class="in">`i64`</span> is converted to <span class="in">`Value::Int`</span> for JSON round-trip fidelity. This handles the common case where expression evaluation returns <span class="in">`1.0`</span> from arithmetic on integer inputs.</span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>The recommended convention for migrations needing to add, compute, and clean up fields:</span>
 <span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Transform ordering: addAttrs, ComputeField, dropAttrs {#sec-transform-ordering}</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="in">`field_transforms`</span> is a <span class="in">`Vec&lt;FieldTransform&gt;`</span> applied in sequence. The ordering of transforms within the sequence matters because later transforms see the result of earlier ones.</span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a>The recommended ordering convention for migrations that need to add, compute, and clean up fields:</span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`AddField` for inputs**: add constant fields that expressions need but source data doesn't carry.</span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`PathTransform` for nested normalization**: flatten or reorganize before expressions run.</span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`ComputeField` and `ApplyExpr`**: compute derived fields using the now-complete input set.</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**`Case`**: apply conditional logic that may depend on computed fields from step 3.</span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`DropField` / `KeepFields`**: remove intermediate fields used as inputs but not in the output.</span>
 <span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`AddField` for inputs**: add constant fields that expressions need but the source data doesn't carry.</span>
-<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`PathTransform` for nested normalization**: flatten or reorganize nested structures before expressions run.</span>
-<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**`ComputeField` and `ApplyExpr`**: compute derived fields using the now-complete input set.</span>
-<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**`Case`**: apply conditional logic that may depend on computed fields from step 3.</span>
-<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`DropField` / `KeepFields`**: remove intermediate fields that were used as inputs but shouldn't appear in the output.</span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>If you add a <span class="in">`level`</span> field (step 1) because the source stores it elsewhere, compute <span class="in">`name`</span> from <span class="in">`level`</span> (step 3), then drop <span class="in">`level`</span> (step 5), all three transforms reference the same intermediate state. Reversing steps 3 and 5 would compute <span class="in">`name`</span> from a missing <span class="in">`level`</span> variable, leaving <span class="in">`name`</span> unchanged.</span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>There's no automatic dependency analysis. Transform authors are responsible for ordering. The builder API appends in registration order, so the first <span class="in">`add_field_default`</span> fires before the first <span class="in">`add_computed_field`</span>, which fires before the first <span class="in">`add_field_drop`</span>.</span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Integration with wtype_restrict's BFS pass {#sec-bfs-integration}</span></span>
 <span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>If you add a <span class="in">`level`</span> field in step 1 (because the source format stores it elsewhere), compute <span class="in">`name`</span> from <span class="in">`level`</span> in step 3, and then drop <span class="in">`level`</span> in step 5 because the target format doesn't have that field, all three transforms reference the same intermediate state. Reversing steps 3 and 5 would produce a node with <span class="in">`name`</span> computed from a missing <span class="in">`level`</span> variable, which would leave <span class="in">`name`</span> unchanged.</span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>Field transforms are applied inside the fused BFS pass in <span class="in">`wtype_restrict`</span>, not as a separate post-pass. The execution point is after a node is confirmed to survive (both structural and value-dependent predicates passed) and after its anchor is remapped to the target vertex name.</span>
 <span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>There's no automatic dependency analysis. Transform authors are responsible for ordering. The builder API appends in registration order, so the first <span class="in">`add_field_default`</span> call fires before the first <span class="in">`add_computed_field`</span> call, which fires before the first <span class="in">`add_field_drop`</span> call.</span>
+<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a>The relevant portion of the BFS loop:</span>
 <span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Integration with wtype_restrict's BFS pass {#sec-bfs-integration}</span></span>
-<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a>Field transforms are applied inside the fused BFS pass in <span class="in">`wtype_restrict`</span>, not as a separate post-pass. The execution point is after a node is confirmed to survive (both structural and value-dependent predicates passed) and after its anchor is remapped to the target vertex name.</span>
-<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a>The relevant portion of the BFS loop:</span>
-<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
-<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Apply value<span class="sc">-</span>level field transforms <span class="cf">if</span> any exist <span class="cf">for</span> this vertex</span>
-<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> let <span class="fu">Some</span>(transforms) <span class="ot">=</span> <span class="fu">migration.field_transforms.get</span>(<span class="sc">&amp;</span>child_node.anchor) {</span>
-<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a>    <span class="fu">apply_field_transforms</span>(<span class="sc">&amp;</span>mut new_node, transforms);</span>
-<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a><span class="fu">new_nodes.insert</span>(child_id, <span class="fu">new_node.clone</span>());</span>
-<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
+<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> apply value<span class="sc">-</span>level field transforms <span class="cf">if</span> any exist <span class="cf">for</span> this vertex</span>
+<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> let <span class="fu">Some</span>(transforms) <span class="ot">=</span> <span class="fu">migration.field_transforms.get</span>(<span class="sc">&amp;</span>child_node.anchor) {</span>
+<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a>    <span class="fu">apply_field_transforms</span>(<span class="sc">&amp;</span>mut new_node, transforms);</span>
+<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a><span class="fu">new_nodes.insert</span>(child_id, <span class="fu">new_node.clone</span>());</span>
+<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a>The lookup key is <span class="in">`child_node.anchor`</span>, the *source* vertex name. The <span class="in">`field_transforms`</span> map is keyed by source vertex name so migration authors can write <span class="in">`migration.add_field_rename("h1", ...)`</span> against the source schema. The anchor is remapped on the <span class="in">`new_node`</span> clone before field transforms run, so by the time <span class="in">`apply_field_transforms`</span> executes, <span class="in">`new_node.anchor`</span> holds the target name, but the lookup used the original <span class="in">`child_node.anchor`</span>.</span>
+<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
+<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a><span class="in">`field_transforms`</span> and <span class="in">`conditional_survival`</span> predicates are both keyed by source vertex name and looked up before anchor remapping. However, the node passed to <span class="in">`apply_field_transforms`</span> already has its anchor remapped. If your transforms read <span class="in">`node.anchor`</span> (unusual), they see the target name, not the source.</span>
+<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a>The lookup key is <span class="in">`child_node.anchor`</span>, the *source* vertex name, not the remapped target name. This is intentional: the <span class="in">`field_transforms`</span> map is keyed by source vertex name so that the migration author can write <span class="in">`migration.add_field_rename("h1", ...)`</span> when building the migration against the source schema. The anchor is remapped on the <span class="in">`new_node`</span> clone before field transforms run, so by the time <span class="in">`apply_field_transforms`</span> executes, <span class="in">`new_node.anchor`</span> already holds the target vertex name, but the lookup into <span class="in">`field_transforms`</span> happened with the original <span class="in">`child_node.anchor`</span>.</span>
+<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a>The BFS pass also handles fan reconstruction (step 5 of <span class="in">`wtype_restrict`</span>) as a separate pass operating on the original fan list. Field transforms don't run on fans independently; fans are structural groupings reconstructed after the BFS pass finishes. If a node participating in a fan also has field transforms, those transforms run when the node is added to <span class="in">`new_nodes`</span> during BFS, before fan reconstruction.</span>
 <span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a><span class="in">`field_transforms`</span> are keyed by source vertex name. <span class="in">`conditional_survival`</span> predicates are also keyed by source vertex name. Both are looked up before anchor remapping of the lookup key. However, the node passed to <span class="in">`apply_field_transforms`</span> already has its anchor remapped. If your transforms read <span class="in">`node.anchor`</span> (unusual), they see the target name, not the source name.</span>
-<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-field-transform-source}</span></span>
+<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a>All types and functions described in this chapter are in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>:</span>
 <span id="cb6-184"><a href="#cb6-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a>The BFS pass also handles fan reconstruction (step 5 of <span class="in">`wtype_restrict`</span>) as a separate pass operating on the original fan list. Field transforms don't run on fan members independently; fans are structural groupings that are reconstructed after the BFS pass finishes. If a node that participates in a fan also has field transforms, those transforms run on the node when it's added to <span class="in">`new_nodes`</span> during BFS, before fan reconstruction runs.</span>
-<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-field-transform-source}</span></span>
-<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a>All types and functions described in this chapter are in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>:</span>
-<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`FieldTransform`</span> enum: lines 81 to 193</span>
-<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`CaseBranch`</span> struct: lines 195 to 205</span>
-<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`CompiledMigration::conditional_survival`</span> field: lines 70 to 71</span>
-<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Builder methods (<span class="in">`add_field_rename`</span>, <span class="in">`add_path_transform`</span>, etc.): lines 207 to 349</span>
-<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_field_transforms`</span>: lines 801 to 864</span>
-<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_path_transform`</span>: lines 868 to 886</span>
-<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_map_references`</span>: lines 888 to 940</span>
-<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`build_env_from_extra_fields`</span>: lines 947 to 972</span>
-<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`value_to_expr_literal`</span>: lines 975 to 999</span>
-<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`expr_literal_to_value`</span>: lines 1005 to 1025</span>
-<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>BFS integration point: lines 742 to 745</span>
-<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Conditional survival evaluation: lines 723 to 733</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb6-185"><a href="#cb6-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`FieldTransform`</span> enum: lines 81 to 193</span>
+<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`CaseBranch`</span> struct: lines 195 to 205</span>
+<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`CompiledMigration::conditional_survival`</span> field: lines 70 to 71</span>
+<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Builder methods (<span class="in">`add_field_rename`</span>, <span class="in">`add_path_transform`</span>, etc.): lines 207 to 349</span>
+<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_field_transforms`</span>: lines 801 to 864</span>
+<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_path_transform`</span>: lines 868 to 886</span>
+<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`apply_map_references`</span>: lines 888 to 940</span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`build_env_from_extra_fields`</span>: lines 947 to 972</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`value_to_expr_literal`</span>: lines 975 to 999</span>
+<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`expr_literal_to_value`</span>: lines 1005 to 1025</span>
+<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>BFS integration point: lines 742 to 745</span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Conditional survival evaluation: lines 723 to 733</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -624,43 +624,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#architecture-overview" id="toc-architecture-overview" class="nav-link active" data-scroll-target="#architecture-overview"><span class="header-section-number">15.1</span> Architecture Overview</a></li>
-  <li><a href="#project-structure" id="toc-project-structure" class="nav-link" data-scroll-target="#project-structure"><span class="header-section-number">15.2</span> Project Structure</a></li>
-  <li><a href="#building-and-testing" id="toc-building-and-testing" class="nav-link" data-scroll-target="#building-and-testing"><span class="header-section-number">15.3</span> Building and Testing</a></li>
-  <li><a href="#sec-python-wasm" id="toc-sec-python-wasm" class="nav-link" data-scroll-target="#sec-python-wasm"><span class="header-section-number">15.4</span> WASM Interaction Layer (<code>_wasm.py</code>)</a>
+  <li><a href="#architecture-overview" id="toc-architecture-overview" class="nav-link active" data-scroll-target="#architecture-overview"><span class="header-section-number">15.1</span> Architecture overview</a></li>
+  <li><a href="#project-structure" id="toc-project-structure" class="nav-link" data-scroll-target="#project-structure"><span class="header-section-number">15.2</span> Project structure</a></li>
+  <li><a href="#building-and-testing" id="toc-building-and-testing" class="nav-link" data-scroll-target="#building-and-testing"><span class="header-section-number">15.3</span> Building and testing</a></li>
+  <li><a href="#sec-Python-WASM" id="toc-sec-Python-WASM" class="nav-link" data-scroll-target="#sec-Python-WASM"><span class="header-section-number">15.4</span> WASM interaction layer (<code>_wasm.py</code>)</a>
   <ul class="collapse">
   <li><a href="#wasmmodule" id="toc-wasmmodule" class="nav-link" data-scroll-target="#wasmmodule"><span class="header-section-number">15.4.1</span> <code>WasmModule</code></a></li>
   <li><a href="#wasmhandle" id="toc-wasmhandle" class="nav-link" data-scroll-target="#wasmhandle"><span class="header-section-number">15.4.2</span> <code>WasmHandle</code></a></li>
   <li><a href="#load_wasm" id="toc-load_wasm" class="nav-link" data-scroll-target="#load_wasm"><span class="header-section-number">15.4.3</span> <code>load_wasm</code></a></li>
   </ul></li>
-  <li><a href="#sec-python-types" id="toc-sec-python-types" class="nav-link" data-scroll-target="#sec-python-types"><span class="header-section-number">15.5</span> Type System (<code>_types.py</code>)</a>
+  <li><a href="#sec-Python-types" id="toc-sec-Python-types" class="nav-link" data-scroll-target="#sec-Python-types"><span class="header-section-number">15.5</span> Type system (<code>_types.py</code>)</a>
   <ul class="collapse">
   <li><a href="#typeddicts" id="toc-typeddicts" class="nav-link" data-scroll-target="#typeddicts"><span class="header-section-number">15.5.1</span> TypedDicts</a></li>
-  <li><a href="#pep-695-type-aliases" id="toc-pep-695-type-aliases" class="nav-link" data-scroll-target="#pep-695-type-aliases"><span class="header-section-number">15.5.2</span> PEP 695 Type Aliases</a></li>
-  <li><a href="#wire-format-types" id="toc-wire-format-types" class="nav-link" data-scroll-target="#wire-format-types"><span class="header-section-number">15.5.3</span> Wire Format Types</a></li>
+  <li><a href="#pep-695-type-aliases" id="toc-pep-695-type-aliases" class="nav-link" data-scroll-target="#pep-695-type-aliases"><span class="header-section-number">15.5.2</span> PEP 695 Type aliases</a></li>
+  <li><a href="#wire-format-types" id="toc-wire-format-types" class="nav-link" data-scroll-target="#wire-format-types"><span class="header-section-number">15.5.3</span> Wire format types</a></li>
   </ul></li>
-  <li><a href="#sec-python-msgpack" id="toc-sec-python-msgpack" class="nav-link" data-scroll-target="#sec-python-msgpack"><span class="header-section-number">15.6</span> MessagePack Boundary (<code>_msgpack.py</code>)</a></li>
-  <li><a href="#sec-python-protocol" id="toc-sec-python-protocol" class="nav-link" data-scroll-target="#sec-python-protocol"><span class="header-section-number">15.7</span> Protocol Definitions (<code>_protocol.py</code>)</a>
+  <li><a href="#sec-Python-msgpack" id="toc-sec-Python-msgpack" class="nav-link" data-scroll-target="#sec-Python-msgpack"><span class="header-section-number">15.6</span> Messagepack boundary (<code>_msgpack.py</code>)</a></li>
+  <li><a href="#sec-Python-protocol" id="toc-sec-Python-protocol" class="nav-link" data-scroll-target="#sec-Python-protocol"><span class="header-section-number">15.7</span> Protocol definitions (<code>_protocol.py</code>)</a>
   <ul class="collapse">
-  <li><a href="#built-in-protocols" id="toc-built-in-protocols" class="nav-link" data-scroll-target="#built-in-protocols"><span class="header-section-number">15.7.1</span> Built-in Protocols</a></li>
+  <li><a href="#built-in-protocols" id="toc-built-in-protocols" class="nav-link" data-scroll-target="#built-in-protocols"><span class="header-section-number">15.7.1</span> Built-in protocols</a></li>
   </ul></li>
-  <li><a href="#sec-python-schema" id="toc-sec-python-schema" class="nav-link" data-scroll-target="#sec-python-schema"><span class="header-section-number">15.8</span> Schema Builder (<code>_schema.py</code>)</a>
+  <li><a href="#sec-Python-schema" id="toc-sec-Python-schema" class="nav-link" data-scroll-target="#sec-Python-schema"><span class="header-section-number">15.8</span> Schema Builder (<code>_schema.py</code>)</a>
   <ul class="collapse">
   <li><a href="#builtschema" id="toc-builtschema" class="nav-link" data-scroll-target="#builtschema"><span class="header-section-number">15.8.1</span> <code>BuiltSchema</code></a></li>
   </ul></li>
-  <li><a href="#sec-python-migration" id="toc-sec-python-migration" class="nav-link" data-scroll-target="#sec-python-migration"><span class="header-section-number">15.9</span> Migration Builder (<code>_migration.py</code>)</a>
+  <li><a href="#sec-Python-migration" id="toc-sec-Python-migration" class="nav-link" data-scroll-target="#sec-Python-migration"><span class="header-section-number">15.9</span> Migration Builder (<code>_migration.py</code>)</a>
   <ul class="collapse">
-  <li><a href="#module-level-functions" id="toc-module-level-functions" class="nav-link" data-scroll-target="#module-level-functions"><span class="header-section-number">15.9.1</span> Module-level Functions</a></li>
+  <li><a href="#module-level-functions" id="toc-module-level-functions" class="nav-link" data-scroll-target="#module-level-functions"><span class="header-section-number">15.9.1</span> Module-level functions</a></li>
   </ul></li>
-  <li><a href="#sec-python-lens" id="toc-sec-python-lens" class="nav-link" data-scroll-target="#sec-python-lens"><span class="header-section-number">15.10</span> Lens API (<code>_lens.py</code>)</a></li>
-  <li><a href="#sec-python-errors" id="toc-sec-python-errors" class="nav-link" data-scroll-target="#sec-python-errors"><span class="header-section-number">15.11</span> Error Hierarchy (<code>_errors.py</code>)</a></li>
-  <li><a href="#sec-python-panproto" id="toc-sec-python-panproto" class="nav-link" data-scroll-target="#sec-python-panproto"><span class="header-section-number">15.12</span> The <code>Panproto</code> Class</a></li>
-  <li><a href="#schema-enrichment" id="toc-schema-enrichment" class="nav-link" data-scroll-target="#schema-enrichment"><span class="header-section-number">15.13</span> Schema Enrichment</a></li>
-  <li><a href="#migration-analysis" id="toc-migration-analysis" class="nav-link" data-scroll-target="#migration-analysis"><span class="header-section-number">15.14</span> Migration Analysis</a></li>
-  <li><a href="#gat-engine-access" id="toc-gat-engine-access" class="nav-link" data-scroll-target="#gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine Access</a></li>
-  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">15.16</span> VCS Integration</a></li>
-  <li><a href="#usage-pattern" id="toc-usage-pattern" class="nav-link" data-scroll-target="#usage-pattern"><span class="header-section-number">15.17</span> Usage Pattern</a></li>
-  <li><a href="#sec-python-conventions" id="toc-sec-python-conventions" class="nav-link" data-scroll-target="#sec-python-conventions"><span class="header-section-number">15.18</span> Conventions</a></li>
+  <li><a href="#sec-Python-lens" id="toc-sec-Python-lens" class="nav-link" data-scroll-target="#sec-Python-lens"><span class="header-section-number">15.10</span> Lens API (<code>_lens.py</code>)</a></li>
+  <li><a href="#sec-Python-errors" id="toc-sec-Python-errors" class="nav-link" data-scroll-target="#sec-Python-errors"><span class="header-section-number">15.11</span> Error hierarchy (<code>_errors.py</code>)</a></li>
+  <li><a href="#sec-Python-panproto" id="toc-sec-Python-panproto" class="nav-link" data-scroll-target="#sec-Python-panproto"><span class="header-section-number">15.12</span> The <code>panproto</code> class</a></li>
+  <li><a href="#schema-enrichment" id="toc-schema-enrichment" class="nav-link" data-scroll-target="#schema-enrichment"><span class="header-section-number">15.13</span> Schema enrichment</a></li>
+  <li><a href="#migration-analysis" id="toc-migration-analysis" class="nav-link" data-scroll-target="#migration-analysis"><span class="header-section-number">15.14</span> Migration analysis</a></li>
+  <li><a href="#gat-engine-access" id="toc-gat-engine-access" class="nav-link" data-scroll-target="#gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine access</a></li>
+  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">15.16</span> VCS integration</a></li>
+  <li><a href="#usage-pattern" id="toc-usage-pattern" class="nav-link" data-scroll-target="#usage-pattern"><span class="header-section-number">15.17</span> Usage pattern</a></li>
+  <li><a href="#sec-Python-conventions" id="toc-sec-Python-conventions" class="nav-link" data-scroll-target="#sec-Python-conventions"><span class="header-section-number">15.18</span> Conventions</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/20-python-sdk.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -702,7 +702,7 @@ Tip
 </div>
 </div>
 <section id="architecture-overview" class="level2" data-number="15.1">
-<h2 data-number="15.1" class="anchored" data-anchor-id="architecture-overview"><span class="header-section-number">15.1</span> Architecture Overview</h2>
+<h2 data-number="15.1" class="anchored" data-anchor-id="architecture-overview"><span class="header-section-number">15.1</span> Architecture overview</h2>
 <p>The SDK is organized into eight modules, each with a focused responsibility:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -775,7 +775,7 @@ Tip
 </div>
 </section>
 <section id="project-structure" class="level2" data-number="15.2">
-<h2 data-number="15.2" class="anchored" data-anchor-id="project-structure"><span class="header-section-number">15.2</span> Project Structure</h2>
+<h2 data-number="15.2" class="anchored" data-anchor-id="project-structure"><span class="header-section-number">15.2</span> Project structure</h2>
 <p>The SDK lives at <code>sdk/python/</code> and follows a standard <code>src</code> layout:</p>
 <pre class="text"><code>sdk/python/
 ├── pyproject.toml          # hatchling build, pyright strict, ruff
@@ -796,7 +796,7 @@ Tip
 <p>All private modules use the underscore prefix (<code>_wasm.py</code>, <code>_types.py</code>, etc.). The public surface is defined entirely in <code>__init__.py</code> via <code>__all__</code>.</p>
 </section>
 <section id="building-and-testing" class="level2" data-number="15.3">
-<h2 data-number="15.3" class="anchored" data-anchor-id="building-and-testing"><span class="header-section-number">15.3</span> Building and Testing</h2>
+<h2 data-number="15.3" class="anchored" data-anchor-id="building-and-testing"><span class="header-section-number">15.3</span> Building and testing</h2>
 <p>The SDK uses <a href="https://hatch.pypa.io/">Hatch</a> as its build backend. Runtime dependencies are minimal: <code>wasmtime&gt;=29.0.0</code> and <code>msgpack&gt;=1.1.0</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install in development mode</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> <span class="st">"sdk/python[dev]"</span></span>
@@ -812,8 +812,8 @@ Tip
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">ruff</span> format sdk/python/src/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>[dev]</code> extra pulls in <code>pytest&gt;=8.0</code>, <code>ruff&gt;=0.5</code>, and <code>pyright&gt;=1.1</code>.</p>
 </section>
-<section id="sec-python-wasm" class="level2" data-number="15.4">
-<h2 data-number="15.4" class="anchored" data-anchor-id="sec-python-wasm"><span class="header-section-number">15.4</span> WASM Interaction Layer (<code>_wasm.py</code>)</h2>
+<section id="sec-Python-WASM" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="sec-Python-WASM"><span class="header-section-number">15.4</span> WASM interaction layer (<code>_wasm.py</code>)</h2>
 <p>The <code>_wasm.py</code> module handles WASM binary loading, instance creation, and resource lifecycle. It contains three key components: <code>WasmModule</code>, <code>WasmHandle</code>, and the <code>load_wasm</code> factory.</p>
 <section id="wasmmodule" class="level3" data-number="15.4.1">
 <h3 data-number="15.4.1" class="anchored" data-anchor-id="wasmmodule"><span class="header-section-number">15.4.1</span> <code>WasmModule</code></h3>
@@ -864,8 +864,8 @@ Important
 <p>Unlike the TypeScript SDK’s async <code>init()</code>, the Python factory is synchronous; <code>wasmtime-py</code> loads modules on the calling thread.</p>
 </section>
 </section>
-<section id="sec-python-types" class="level2" data-number="15.5">
-<h2 data-number="15.5" class="anchored" data-anchor-id="sec-python-types"><span class="header-section-number">15.5</span> Type System (<code>_types.py</code>)</h2>
+<section id="sec-Python-types" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="sec-Python-types"><span class="header-section-number">15.5</span> Type system (<code>_types.py</code>)</h2>
 <p>The <code>_types.py</code> module defines all data-carrying types that cross the MessagePack boundary. It mirrors the Rust structures and the TypeScript SDK interfaces using Python 3.13+ conventions:</p>
 <table class="caption-top table">
 <thead>
@@ -908,7 +908,7 @@ Important
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-start-line="166" data-end-line="184"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="pep-695-type-aliases" class="level3" data-number="15.5.2">
-<h3 data-number="15.5.2" class="anchored" data-anchor-id="pep-695-type-aliases"><span class="header-section-number">15.5.2</span> PEP 695 Type Aliases</h3>
+<h3 data-number="15.5.2" class="anchored" data-anchor-id="pep-695-type-aliases"><span class="header-section-number">15.5.2</span> PEP 695 Type aliases</h3>
 <p>The module uses <code>type</code> statement syntax (PEP 695) for all type aliases:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-start-line="25" data-end-line="31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>JsonValue</code> alias is a recursive type covering all JSON primitives plus nested sequences and mappings. It replaces <code>Any</code> wherever the SDK must accept or return arbitrary JSON-like data.</p>
@@ -920,7 +920,7 @@ Important
 </ul>
 </section>
 <section id="wire-format-types" class="level3" data-number="15.5.3">
-<h3 data-number="15.5.3" class="anchored" data-anchor-id="wire-format-types"><span class="header-section-number">15.5.3</span> Wire Format Types</h3>
+<h3 data-number="15.5.3" class="anchored" data-anchor-id="wire-format-types"><span class="header-section-number">15.5.3</span> Wire format types</h3>
 <p>Internal wire-format types (prefixed with <code>_</code>) match the exact field names expected by Rust’s <code>serde</code>:</p>
 <ul>
 <li><strong><code>_SchemaOpVertex</code></strong>, <strong><code>_SchemaOpEdge</code></strong>, <strong><code>_SchemaOpHyperEdge</code></strong>, <strong><code>_SchemaOpConstraint</code></strong>, <strong><code>_SchemaOpRequired</code></strong>: The five schema operation variants. The <code>op</code> field acts as a serde internally-tagged discriminant.</li>
@@ -929,8 +929,8 @@ Important
 </ul>
 </section>
 </section>
-<section id="sec-python-msgpack" class="level2" data-number="15.6">
-<h2 data-number="15.6" class="anchored" data-anchor-id="sec-python-msgpack"><span class="header-section-number">15.6</span> MessagePack Boundary (<code>_msgpack.py</code>)</h2>
+<section id="sec-Python-msgpack" class="level2" data-number="15.6">
+<h2 data-number="15.6" class="anchored" data-anchor-id="sec-Python-msgpack"><span class="header-section-number">15.6</span> Messagepack boundary (<code>_msgpack.py</code>)</h2>
 <p>The <code>_msgpack.py</code> module provides four encoding helpers that wrap the <code>msgpack</code> library:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-start-line="40" data-end-line="102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
@@ -943,21 +943,21 @@ Important
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-start-line="30" data-end-line="33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It extends <code>JsonValue</code> with <code>bytes</code>, since MessagePack natively supports binary data (used for opaque complements).</p>
 </section>
-<section id="sec-python-protocol" class="level2" data-number="15.7">
-<h2 data-number="15.7" class="anchored" data-anchor-id="sec-python-protocol"><span class="header-section-number">15.7</span> Protocol Definitions (<code>_protocol.py</code>)</h2>
-<p>A <code>Protocol</code> holds a WASM-side handle to the registered protocol specification and provides the <code>schema()</code> factory for building schemas within that protocol:</p>
+<section id="sec-Python-protocol" class="level2" data-number="15.7">
+<h2 data-number="15.7" class="anchored" data-anchor-id="sec-Python-protocol"><span class="header-section-number">15.7</span> Protocol definitions (<code>_protocol.py</code>)</h2>
+<p>A <code>Protocol</code> holds a WASM-side handle to the registered protocol specification and provides the <code>schema()</code> factory:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-start-line="30" data-end-line="128"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>define_protocol</code> module-level function serializes a <code>ProtocolSpec</code> to its wire format, sends it to WASM, and wraps the returned handle:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-start-line="136" data-end-line="181"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="built-in-protocols" class="level3" data-number="15.7.1">
-<h3 data-number="15.7.1" class="anchored" data-anchor-id="built-in-protocols"><span class="header-section-number">15.7.1</span> Built-in Protocols</h3>
+<h3 data-number="15.7.1" class="anchored" data-anchor-id="built-in-protocols"><span class="header-section-number">15.7.1</span> Built-in protocols</h3>
 <p>Five built-in protocol specs are provided as module-level constants: <code>ATPROTO_SPEC</code>, <code>SQL_SPEC</code>, <code>PROTOBUF_SPEC</code>, <code>GRAPHQL_SPEC</code>, and <code>JSON_SCHEMA_SPEC</code>. They’re auto-registered on first access via <code>panproto.protocol("atproto")</code>. The <code>BUILTIN_PROTOCOLS</code> mapping provides a name-to-spec lookup table:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-start-line="278" data-end-line="285"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="sec-python-schema" class="level2" data-number="15.8">
-<h2 data-number="15.8" class="anchored" data-anchor-id="sec-python-schema"><span class="header-section-number">15.8</span> Schema Builder (<code>_schema.py</code>)</h2>
-<p><code>SchemaBuilder</code> is an immutable fluent builder. Each method returns a <strong>new</strong> builder instance, leaving the original unchanged. This makes it safe to branch schema definitions from a common base:</p>
+<section id="sec-Python-schema" class="level2" data-number="15.8">
+<h2 data-number="15.8" class="anchored" data-anchor-id="sec-Python-schema"><span class="header-section-number">15.8</span> Schema Builder (<code>_schema.py</code>)</h2>
+<p><code>SchemaBuilder</code> is an immutable fluent builder. Each method returns a <strong>new</strong> builder instance, leaving the original unchanged. This makes it safe to branch schema definitions:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-start-line="35" data-end-line="72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The builder accumulates <code>SchemaOp</code> objects (matching the Rust <code>BuildOp</code> tagged enum). Each mutation method creates a new instance with the new operation appended. On <code>.build()</code>, it packs the accumulated operations as MessagePack, sends them to WASM, and wraps the returned handle:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-start-line="376" data-end-line="412"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -968,8 +968,8 @@ Important
 <p>The <code>data</code> property returns the full <code>SchemaData</code> TypedDict. Convenience properties <code>protocol</code>, <code>vertices</code>, and <code>edges</code> provide direct access to the most commonly used fields.</p>
 </section>
 </section>
-<section id="sec-python-migration" class="level2" data-number="15.9">
-<h2 data-number="15.9" class="anchored" data-anchor-id="sec-python-migration"><span class="header-section-number">15.9</span> Migration Builder (<code>_migration.py</code>)</h2>
+<section id="sec-Python-migration" class="level2" data-number="15.9">
+<h2 data-number="15.9" class="anchored" data-anchor-id="sec-Python-migration"><span class="header-section-number">15.9</span> Migration Builder (<code>_migration.py</code>)</h2>
 <p><code>MigrationBuilder</code> follows the same immutable fluent pattern. It accumulates vertex mappings, edge mappings, and resolvers:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-start-line="36" data-end-line="84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Three mutation methods build up the migration specification:</p>
@@ -999,7 +999,7 @@ Note
 </div>
 </div>
 <section id="module-level-functions" class="level3" data-number="15.9.1">
-<h3 data-number="15.9.1" class="anchored" data-anchor-id="module-level-functions"><span class="header-section-number">15.9.1</span> Module-level Functions</h3>
+<h3 data-number="15.9.1" class="anchored" data-anchor-id="module-level-functions"><span class="header-section-number">15.9.1</span> Module-level functions</h3>
 <p>Two additional functions are exported at module level:</p>
 <ul>
 <li><strong><code>check_existence(src, tgt, spec, wasm)</code></strong>: Validate that a migration specification satisfies all protocol-derived existence conditions.</li>
@@ -1007,8 +1007,8 @@ Note
 </ul>
 </section>
 </section>
-<section id="sec-python-lens" class="level2" data-number="15.10">
-<h2 data-number="15.10" class="anchored" data-anchor-id="sec-python-lens"><span class="header-section-number">15.10</span> Lens API (<code>_lens.py</code>)</h2>
+<section id="sec-Python-lens" class="level2" data-number="15.10">
+<h2 data-number="15.10" class="anchored" data-anchor-id="sec-Python-lens"><span class="header-section-number">15.10</span> Lens API (<code>_lens.py</code>)</h2>
 <p>The <code>_lens.py</code> module provides three handle classes for bidirectional schema transformations: <code>ProtolensChainHandle</code> for schema-independent lens families, <code>LensHandle</code> for concrete lenses, and <code>SymmetricLensHandle</code> for symmetric bidirectional sync.</p>
 <p><code>ProtolensChainHandle</code> wraps a WASM-side protolens chain and can be instantiated against a concrete schema to produce a <code>LensHandle</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-start-line="36" data-end-line="128"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1027,8 +1027,8 @@ Note
 <li><strong><code>LensHandle.check_laws(instance)</code></strong>: Verify GetPut and PutGet laws.</li>
 </ul>
 </section>
-<section id="sec-python-errors" class="level2" data-number="15.11">
-<h2 data-number="15.11" class="anchored" data-anchor-id="sec-python-errors"><span class="header-section-number">15.11</span> Error Hierarchy (<code>_errors.py</code>)</h2>
+<section id="sec-Python-errors" class="level2" data-number="15.11">
+<h2 data-number="15.11" class="anchored" data-anchor-id="sec-Python-errors"><span class="header-section-number">15.11</span> Error hierarchy (<code>_errors.py</code>)</h2>
 <p>The SDK defines a four-class error hierarchy, all extending <code>PanprotoError</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-start-line="31" data-end-line="127"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
@@ -1040,8 +1040,8 @@ Note
 </ul>
 <p>All leaf exception classes are decorated with <code>@final</code> to prevent subclassing. Each exception class uses <code>__slots__</code> for memory efficiency and provides a custom <code>__repr__</code> for better debug output.</p>
 </section>
-<section id="sec-python-panproto" class="level2" data-number="15.12">
-<h2 data-number="15.12" class="anchored" data-anchor-id="sec-python-panproto"><span class="header-section-number">15.12</span> The <code>Panproto</code> Class</h2>
+<section id="sec-Python-panproto" class="level2" data-number="15.12">
+<h2 data-number="15.12" class="anchored" data-anchor-id="sec-Python-panproto"><span class="header-section-number">15.12</span> The <code>panproto</code> class</h2>
 <p><code>Panproto</code> is the main entry point. It loads the WASM module and provides the top-level API:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-start-line="40" data-end-line="68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Key methods:</p>
@@ -1058,7 +1058,7 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-start-line="638" data-end-line="656"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="schema-enrichment" class="level2" data-number="15.13">
-<h2 data-number="15.13" class="anchored" data-anchor-id="schema-enrichment"><span class="header-section-number">15.13</span> Schema Enrichment</h2>
+<h2 data-number="15.13" class="anchored" data-anchor-id="schema-enrichment"><span class="header-section-number">15.13</span> Schema enrichment</h2>
 <p>The <code>SchemaBuilder</code> supports enrichment through constraints, which encode defaults, coercions, and merge policies:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add constraints to encode enriched schema properties</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> (</span>
@@ -1074,7 +1074,7 @@ Note
 <p>Constraints serve triple duty: they encode refinement types (value bounds), default behaviors (when a field has a known initial value), and coercion hints (when a field can be safely converted between representations). The protocol’s <code>constraint_sorts</code> list determines which constraint sorts are recognized during compatibility checking.</p>
 </section>
 <section id="migration-analysis" class="level2" data-number="15.14">
-<h2 data-number="15.14" class="anchored" data-anchor-id="migration-analysis"><span class="header-section-number">15.14</span> Migration Analysis</h2>
+<h2 data-number="15.14" class="anchored" data-anchor-id="migration-analysis"><span class="header-section-number">15.14</span> Migration analysis</h2>
 <p>The SDK provides analysis capabilities through the diff/classify pipeline:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute structural diff</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>diff_report <span class="op">=</span> pp.diff(old_schema, new_schema)</span>
@@ -1099,7 +1099,7 @@ Note
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># "DroppedSortData" in complement means lens</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="gat-engine-access" class="level2" data-number="15.15">
-<h2 data-number="15.15" class="anchored" data-anchor-id="gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine Access</h2>
+<h2 data-number="15.15" class="anchored" data-anchor-id="gat-engine-access"><span class="header-section-number">15.15</span> GAT Engine access</h2>
 <p>The SDK provides direct access to the GAT engine for theory construction and composition:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create theories via WASM</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>theory_spec <span class="op">=</span> {</span>
@@ -1121,7 +1121,7 @@ Note
 <span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># use composed theory</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="vcs-integration" class="level2" data-number="15.16">
-<h2 data-number="15.16" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">15.16</span> VCS Integration</h2>
+<h2 data-number="15.16" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">15.16</span> VCS integration</h2>
 <p>The SDK exposes version control operations for schemas and data:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize a repository</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pp.vcs_init(<span class="st">"atproto"</span>) <span class="im">as</span> repo:</span>
@@ -1134,7 +1134,7 @@ Note
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> pp.vcs_status(repo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="usage-pattern" class="level2" data-number="15.17">
-<h2 data-number="15.17" class="anchored" data-anchor-id="usage-pattern"><span class="header-section-number">15.17</span> Usage Pattern</h2>
+<h2 data-number="15.17" class="anchored" data-anchor-id="usage-pattern"><span class="header-section-number">15.17</span> Usage pattern</h2>
 <p>A typical SDK session:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> panproto <span class="im">import</span> Panproto</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1183,8 +1183,8 @@ Tip
 </div>
 </div>
 </section>
-<section id="sec-python-conventions" class="level2" data-number="15.18">
-<h2 data-number="15.18" class="anchored" data-anchor-id="sec-python-conventions"><span class="header-section-number">15.18</span> Conventions</h2>
+<section id="sec-Python-conventions" class="level2" data-number="15.18">
+<h2 data-number="15.18" class="anchored" data-anchor-id="sec-Python-conventions"><span class="header-section-number">15.18</span> Conventions</h2>
 <p>The Python SDK enforces the following project conventions:</p>
 <ul>
 <li><strong>Python 3.13+</strong>: The minimum supported version. The SDK uses PEP 695 type aliases, structural pattern matching, parenthesized context managers, and other 3.13 features.</li>
@@ -1689,7 +1689,7 @@ Tip
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>For a quick-reference listing of all public APIs with parameter types, see the tutorial's API reference appendix.</span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Architecture Overview</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Architecture overview</span></span>
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>The SDK is organized into eight modules, each with a focused responsibility:</span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
@@ -1754,7 +1754,7 @@ Tip
 <span id="cb29-73"><a href="#cb29-73" aria-hidden="true" tabindex="-1"></a>    MigrationBuilder --&gt; CompiledMigration : compile()</span>
 <span id="cb29-74"><a href="#cb29-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-75"><a href="#cb29-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project Structure</span></span>
+<span id="cb29-76"><a href="#cb29-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project structure</span></span>
 <span id="cb29-77"><a href="#cb29-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-78"><a href="#cb29-78" aria-hidden="true" tabindex="-1"></a>The SDK lives at <span class="in">`sdk/python/`</span> and follows a standard <span class="in">`src`</span> layout:</span>
 <span id="cb29-79"><a href="#cb29-79" aria-hidden="true" tabindex="-1"></a></span>
@@ -1779,7 +1779,7 @@ Tip
 <span id="cb29-98"><a href="#cb29-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-99"><a href="#cb29-99" aria-hidden="true" tabindex="-1"></a>All private modules use the underscore prefix (<span class="in">`_wasm.py`</span>, <span class="in">`_types.py`</span>, etc.). The public surface is defined entirely in <span class="in">`__init__.py`</span> via <span class="in">`__all__`</span>.</span>
 <span id="cb29-100"><a href="#cb29-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building and Testing</span></span>
+<span id="cb29-101"><a href="#cb29-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Building and testing</span></span>
 <span id="cb29-102"><a href="#cb29-102" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-103"><a href="#cb29-103" aria-hidden="true" tabindex="-1"></a>The SDK uses <span class="co">[</span><span class="ot">Hatch</span><span class="co">](https://hatch.pypa.io/)</span> as its build backend. Runtime dependencies are minimal: <span class="in">`wasmtime&gt;=29.0.0`</span> and <span class="in">`msgpack&gt;=1.1.0`</span>.</span>
 <span id="cb29-104"><a href="#cb29-104" aria-hidden="true" tabindex="-1"></a></span>
@@ -1800,7 +1800,7 @@ Tip
 <span id="cb29-119"><a href="#cb29-119" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-120"><a href="#cb29-120" aria-hidden="true" tabindex="-1"></a>The <span class="in">`[dev]`</span> extra pulls in <span class="in">`pytest&gt;=8.0`</span>, <span class="in">`ruff&gt;=0.5`</span>, and <span class="in">`pyright&gt;=1.1`</span>.</span>
 <span id="cb29-121"><a href="#cb29-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Interaction Layer (`_wasm.py`) {#sec-python-wasm}</span></span>
+<span id="cb29-122"><a href="#cb29-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM interaction layer (`_wasm.py`) {#sec-Python-WASM}</span></span>
 <span id="cb29-123"><a href="#cb29-123" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-124"><a href="#cb29-124" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_wasm.py`</span> module handles WASM binary loading, instance creation, and resource lifecycle. It contains three key components: <span class="in">`WasmModule`</span>, <span class="in">`WasmHandle`</span>, and the <span class="in">`load_wasm`</span> factory.</span>
 <span id="cb29-125"><a href="#cb29-125" aria-hidden="true" tabindex="-1"></a></span>
@@ -1851,7 +1851,7 @@ Tip
 <span id="cb29-170"><a href="#cb29-170" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-171"><a href="#cb29-171" aria-hidden="true" tabindex="-1"></a>Unlike the TypeScript SDK's async <span class="in">`init()`</span>, the Python factory is synchronous; <span class="in">`wasmtime-py`</span> loads modules on the calling thread.</span>
 <span id="cb29-172"><a href="#cb29-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type System (`_types.py`) {#sec-python-types}</span></span>
+<span id="cb29-173"><a href="#cb29-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Type system (`_types.py`) {#sec-Python-types}</span></span>
 <span id="cb29-174"><a href="#cb29-174" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-175"><a href="#cb29-175" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_types.py`</span> module defines all data-carrying types that cross the MessagePack boundary. It mirrors the Rust structures and the TypeScript SDK interfaces using Python 3.13+ conventions:</span>
 <span id="cb29-176"><a href="#cb29-176" aria-hidden="true" tabindex="-1"></a></span>
@@ -1878,7 +1878,7 @@ Tip
 <span id="cb29-197"><a href="#cb29-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_types.py" start-line=166 end-line=184}</span></span>
 <span id="cb29-198"><a href="#cb29-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-199"><a href="#cb29-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### PEP 695 Type Aliases</span></span>
+<span id="cb29-200"><a href="#cb29-200" aria-hidden="true" tabindex="-1"></a><span class="fu">### PEP 695 Type aliases</span></span>
 <span id="cb29-201"><a href="#cb29-201" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-202"><a href="#cb29-202" aria-hidden="true" tabindex="-1"></a>The module uses <span class="in">`type`</span> statement syntax (PEP 695) for all type aliases:</span>
 <span id="cb29-203"><a href="#cb29-203" aria-hidden="true" tabindex="-1"></a></span>
@@ -1893,7 +1893,7 @@ Tip
 <span id="cb29-212"><a href="#cb29-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`Compatibility`**: Three-way classification: <span class="in">`"fully-compatible"`</span>, <span class="in">`"backward-compatible"`</span>, <span class="in">`"breaking"`</span>.</span>
 <span id="cb29-213"><a href="#cb29-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`ExistenceErrorKind`**: Ten structured error kinds emitted by the existence checker.</span>
 <span id="cb29-214"><a href="#cb29-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Wire Format Types</span></span>
+<span id="cb29-215"><a href="#cb29-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Wire format types</span></span>
 <span id="cb29-216"><a href="#cb29-216" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-217"><a href="#cb29-217" aria-hidden="true" tabindex="-1"></a>Internal wire-format types (prefixed with <span class="in">`_`</span>) match the exact field names expected by Rust's <span class="in">`serde`</span>:</span>
 <span id="cb29-218"><a href="#cb29-218" aria-hidden="true" tabindex="-1"></a></span>
@@ -1901,7 +1901,7 @@ Tip
 <span id="cb29-220"><a href="#cb29-220" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`SchemaOp`**: A PEP 695 union of the five variants.</span>
 <span id="cb29-221"><a href="#cb29-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`MigrationMapping`**: Wire-format migration mapping with <span class="in">`vertex_map`</span>, <span class="in">`edge_map`</span>, and <span class="in">`resolver`</span>.</span>
 <span id="cb29-222"><a href="#cb29-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## MessagePack Boundary (`_msgpack.py`) {#sec-python-msgpack}</span></span>
+<span id="cb29-223"><a href="#cb29-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## Messagepack boundary (`_msgpack.py`) {#sec-Python-msgpack}</span></span>
 <span id="cb29-224"><a href="#cb29-224" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-225"><a href="#cb29-225" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_msgpack.py`</span> module provides four encoding helpers that wrap the <span class="in">`msgpack`</span> library:</span>
 <span id="cb29-226"><a href="#cb29-226" aria-hidden="true" tabindex="-1"></a></span>
@@ -1920,9 +1920,9 @@ Tip
 <span id="cb29-239"><a href="#cb29-239" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-240"><a href="#cb29-240" aria-hidden="true" tabindex="-1"></a>It extends <span class="in">`JsonValue`</span> with <span class="in">`bytes`</span>, since MessagePack natively supports binary data (used for opaque complements).</span>
 <span id="cb29-241"><a href="#cb29-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol Definitions (`_protocol.py`) {#sec-python-protocol}</span></span>
+<span id="cb29-242"><a href="#cb29-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol definitions (`_protocol.py`) {#sec-Python-protocol}</span></span>
 <span id="cb29-243"><a href="#cb29-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Protocol`</span> holds a WASM-side handle to the registered protocol specification and provides the <span class="in">`schema()`</span> factory for building schemas within that protocol:</span>
+<span id="cb29-244"><a href="#cb29-244" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Protocol`</span> holds a WASM-side handle to the registered protocol specification and provides the <span class="in">`schema()`</span> factory:</span>
 <span id="cb29-245"><a href="#cb29-245" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-246"><a href="#cb29-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=30 end-line=128}</span></span>
 <span id="cb29-247"><a href="#cb29-247" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1932,16 +1932,16 @@ Tip
 <span id="cb29-251"><a href="#cb29-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=136 end-line=181}</span></span>
 <span id="cb29-252"><a href="#cb29-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-253"><a href="#cb29-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### Built-in Protocols</span></span>
+<span id="cb29-254"><a href="#cb29-254" aria-hidden="true" tabindex="-1"></a><span class="fu">### Built-in protocols</span></span>
 <span id="cb29-255"><a href="#cb29-255" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-256"><a href="#cb29-256" aria-hidden="true" tabindex="-1"></a>Five built-in protocol specs are provided as module-level constants: <span class="in">`ATPROTO_SPEC`</span>, <span class="in">`SQL_SPEC`</span>, <span class="in">`PROTOBUF_SPEC`</span>, <span class="in">`GRAPHQL_SPEC`</span>, and <span class="in">`JSON_SCHEMA_SPEC`</span>. They're auto-registered on first access via <span class="in">`panproto.protocol("atproto")`</span>. The <span class="in">`BUILTIN_PROTOCOLS`</span> mapping provides a name-to-spec lookup table:</span>
 <span id="cb29-257"><a href="#cb29-257" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-258"><a href="#cb29-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_protocol.py" start-line=278 end-line=285}</span></span>
 <span id="cb29-259"><a href="#cb29-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-260"><a href="#cb29-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-261"><a href="#cb29-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Builder (`_schema.py`) {#sec-python-schema}</span></span>
+<span id="cb29-261"><a href="#cb29-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Builder (`_schema.py`) {#sec-Python-schema}</span></span>
 <span id="cb29-262"><a href="#cb29-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> is an immutable fluent builder. Each method returns a **new** builder instance, leaving the original unchanged. This makes it safe to branch schema definitions from a common base:</span>
+<span id="cb29-263"><a href="#cb29-263" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> is an immutable fluent builder. Each method returns a **new** builder instance, leaving the original unchanged. This makes it safe to branch schema definitions:</span>
 <span id="cb29-264"><a href="#cb29-264" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-265"><a href="#cb29-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_schema.py" start-line=35 end-line=72}</span></span>
 <span id="cb29-266"><a href="#cb29-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1960,7 +1960,7 @@ Tip
 <span id="cb29-279"><a href="#cb29-279" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-280"><a href="#cb29-280" aria-hidden="true" tabindex="-1"></a>The <span class="in">`data`</span> property returns the full <span class="in">`SchemaData`</span> TypedDict. Convenience properties <span class="in">`protocol`</span>, <span class="in">`vertices`</span>, and <span class="in">`edges`</span> provide direct access to the most commonly used fields.</span>
 <span id="cb29-281"><a href="#cb29-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Builder (`_migration.py`) {#sec-python-migration}</span></span>
+<span id="cb29-282"><a href="#cb29-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Builder (`_migration.py`) {#sec-Python-migration}</span></span>
 <span id="cb29-283"><a href="#cb29-283" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-284"><a href="#cb29-284" aria-hidden="true" tabindex="-1"></a><span class="in">`MigrationBuilder`</span> follows the same immutable fluent pattern. It accumulates vertex mappings, edge mappings, and resolvers:</span>
 <span id="cb29-285"><a href="#cb29-285" aria-hidden="true" tabindex="-1"></a></span>
@@ -1986,14 +1986,14 @@ Tip
 <span id="cb29-305"><a href="#cb29-305" aria-hidden="true" tabindex="-1"></a>The <span class="in">`complement`</span> from <span class="in">`get()`</span> is an opaque <span class="in">`bytes`</span> object. It captures the data discarded by the forward projection, enabling lossless round-tripping. Treat it as a black box; its internal format is a MessagePack-encoded Rust <span class="in">`Complement`</span> struct.</span>
 <span id="cb29-306"><a href="#cb29-306" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb29-307"><a href="#cb29-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-308"><a href="#cb29-308" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module-level Functions</span></span>
+<span id="cb29-308"><a href="#cb29-308" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module-level functions</span></span>
 <span id="cb29-309"><a href="#cb29-309" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-310"><a href="#cb29-310" aria-hidden="true" tabindex="-1"></a>Two additional functions are exported at module level:</span>
 <span id="cb29-311"><a href="#cb29-311" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-312"><a href="#cb29-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`check_existence(src, tgt, spec, wasm)`**: Validate that a migration specification satisfies all protocol-derived existence conditions.</span>
 <span id="cb29-313"><a href="#cb29-313" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compose_migrations(m1, m2, wasm)`**: Compose two compiled migrations into one. The resulting migration is equivalent to applying *m1* first, then *m2*.</span>
 <span id="cb29-314"><a href="#cb29-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens API (`_lens.py`) {#sec-python-lens}</span></span>
+<span id="cb29-315"><a href="#cb29-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lens API (`_lens.py`) {#sec-Python-lens}</span></span>
 <span id="cb29-316"><a href="#cb29-316" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-317"><a href="#cb29-317" aria-hidden="true" tabindex="-1"></a>The <span class="in">`_lens.py`</span> module provides three handle classes for bidirectional schema transformations: <span class="in">`ProtolensChainHandle`</span> for schema-independent lens families, <span class="in">`LensHandle`</span> for concrete lenses, and <span class="in">`SymmetricLensHandle`</span> for symmetric bidirectional sync.</span>
 <span id="cb29-318"><a href="#cb29-318" aria-hidden="true" tabindex="-1"></a></span>
@@ -2019,7 +2019,7 @@ Tip
 <span id="cb29-338"><a href="#cb29-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.put(view, complement)`**: Backward put: restore from view and complement.</span>
 <span id="cb29-339"><a href="#cb29-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`LensHandle.check_laws(instance)`**: Verify GetPut and PutGet laws.</span>
 <span id="cb29-340"><a href="#cb29-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-341"><a href="#cb29-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Hierarchy (`_errors.py`) {#sec-python-errors}</span></span>
+<span id="cb29-341"><a href="#cb29-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error hierarchy (`_errors.py`) {#sec-Python-errors}</span></span>
 <span id="cb29-342"><a href="#cb29-342" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-343"><a href="#cb29-343" aria-hidden="true" tabindex="-1"></a>The SDK defines a four-class error hierarchy, all extending <span class="in">`PanprotoError`</span>:</span>
 <span id="cb29-344"><a href="#cb29-344" aria-hidden="true" tabindex="-1"></a></span>
@@ -2034,7 +2034,7 @@ Tip
 <span id="cb29-353"><a href="#cb29-353" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-354"><a href="#cb29-354" aria-hidden="true" tabindex="-1"></a>All leaf exception classes are decorated with <span class="in">`@final`</span> to prevent subclassing. Each exception class uses <span class="in">`__slots__`</span> for memory efficiency and provides a custom <span class="in">`__repr__`</span> for better debug output.</span>
 <span id="cb29-355"><a href="#cb29-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-356"><a href="#cb29-356" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `Panproto` Class {#sec-python-panproto}</span></span>
+<span id="cb29-356"><a href="#cb29-356" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `panproto` class {#sec-Python-panproto}</span></span>
 <span id="cb29-357"><a href="#cb29-357" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-358"><a href="#cb29-358" aria-hidden="true" tabindex="-1"></a><span class="in">`Panproto`</span> is the main entry point. It loads the WASM module and provides the top-level API:</span>
 <span id="cb29-359"><a href="#cb29-359" aria-hidden="true" tabindex="-1"></a></span>
@@ -2056,7 +2056,7 @@ Tip
 <span id="cb29-375"><a href="#cb29-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python include="../../sdk/python/src/panproto/_panproto.py" start-line=638 end-line=656}</span></span>
 <span id="cb29-376"><a href="#cb29-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-377"><a href="#cb29-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-378"><a href="#cb29-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema Enrichment</span></span>
+<span id="cb29-378"><a href="#cb29-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## Schema enrichment</span></span>
 <span id="cb29-379"><a href="#cb29-379" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-380"><a href="#cb29-380" aria-hidden="true" tabindex="-1"></a>The <span class="in">`SchemaBuilder`</span> supports enrichment through constraints, which encode defaults, coercions, and merge policies:</span>
 <span id="cb29-381"><a href="#cb29-381" aria-hidden="true" tabindex="-1"></a></span>
@@ -2076,7 +2076,7 @@ Tip
 <span id="cb29-395"><a href="#cb29-395" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-396"><a href="#cb29-396" aria-hidden="true" tabindex="-1"></a>Constraints serve triple duty: they encode refinement types (value bounds), default behaviors (when a field has a known initial value), and coercion hints (when a field can be safely converted between representations). The protocol's <span class="in">`constraint_sorts`</span> list determines which constraint sorts are recognized during compatibility checking.</span>
 <span id="cb29-397"><a href="#cb29-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-398"><a href="#cb29-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Analysis</span></span>
+<span id="cb29-398"><a href="#cb29-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration analysis</span></span>
 <span id="cb29-399"><a href="#cb29-399" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-400"><a href="#cb29-400" aria-hidden="true" tabindex="-1"></a>The SDK provides analysis capabilities through the diff/classify pipeline:</span>
 <span id="cb29-401"><a href="#cb29-401" aria-hidden="true" tabindex="-1"></a></span>
@@ -2108,7 +2108,7 @@ Tip
 <span id="cb29-427"><a href="#cb29-427" aria-hidden="true" tabindex="-1"></a>        <span class="co"># "DroppedSortData" in complement means lens</span></span>
 <span id="cb29-428"><a href="#cb29-428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-429"><a href="#cb29-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-430"><a href="#cb29-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## GAT Engine Access</span></span>
+<span id="cb29-430"><a href="#cb29-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## GAT Engine access</span></span>
 <span id="cb29-431"><a href="#cb29-431" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-432"><a href="#cb29-432" aria-hidden="true" tabindex="-1"></a>The SDK provides direct access to the GAT engine for theory construction and composition:</span>
 <span id="cb29-433"><a href="#cb29-433" aria-hidden="true" tabindex="-1"></a></span>
@@ -2133,7 +2133,7 @@ Tip
 <span id="cb29-452"><a href="#cb29-452" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># use composed theory</span></span>
 <span id="cb29-453"><a href="#cb29-453" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-454"><a href="#cb29-454" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-455"><a href="#cb29-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS Integration</span></span>
+<span id="cb29-455"><a href="#cb29-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## VCS integration</span></span>
 <span id="cb29-456"><a href="#cb29-456" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-457"><a href="#cb29-457" aria-hidden="true" tabindex="-1"></a>The SDK exposes version control operations for schemas and data:</span>
 <span id="cb29-458"><a href="#cb29-458" aria-hidden="true" tabindex="-1"></a></span>
@@ -2149,7 +2149,7 @@ Tip
 <span id="cb29-468"><a href="#cb29-468" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> pp.vcs_status(repo)</span>
 <span id="cb29-469"><a href="#cb29-469" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb29-470"><a href="#cb29-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-471"><a href="#cb29-471" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage Pattern</span></span>
+<span id="cb29-471"><a href="#cb29-471" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage pattern</span></span>
 <span id="cb29-472"><a href="#cb29-472" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-473"><a href="#cb29-473" aria-hidden="true" tabindex="-1"></a>A typical SDK session:</span>
 <span id="cb29-474"><a href="#cb29-474" aria-hidden="true" tabindex="-1"></a></span>
@@ -2193,7 +2193,7 @@ Tip
 <span id="cb29-512"><a href="#cb29-512" aria-hidden="true" tabindex="-1"></a>The <span class="in">`with`</span> statement ensures all WASM handles are freed when the block exits. Nested <span class="in">`with`</span> blocks (or the parenthesized multi-context form shown above) are the Python equivalent of TypeScript's <span class="in">`using`</span> keyword. If you need to manage handle lifetimes more flexibly, call <span class="in">`.close()`</span> manually or use <span class="in">`contextlib.ExitStack`</span>.</span>
 <span id="cb29-513"><a href="#cb29-513" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb29-514"><a href="#cb29-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-515"><a href="#cb29-515" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions {#sec-python-conventions}</span></span>
+<span id="cb29-515"><a href="#cb29-515" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conventions {#sec-Python-conventions}</span></span>
 <span id="cb29-516"><a href="#cb29-516" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-517"><a href="#cb29-517" aria-hidden="true" tabindex="-1"></a>The Python SDK enforces the following project conventions:</span>
 <span id="cb29-518"><a href="#cb29-518" aria-hidden="true" tabindex="-1"></a></span>

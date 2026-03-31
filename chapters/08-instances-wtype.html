@@ -675,37 +675,37 @@ window.Quarto = {
   <li><a href="#compiledmigration" id="toc-compiledmigration" class="nav-link active" data-scroll-target="#compiledmigration"><span class="header-section-number">8.1</span> CompiledMigration</a></li>
   <li><a href="#winstance" id="toc-winstance" class="nav-link" data-scroll-target="#winstance"><span class="header-section-number">8.2</span> WInstance</a>
   <ul class="collapse">
-  <li><a href="#node-structure" id="toc-node-structure" class="nav-link" data-scroll-target="#node-structure"><span class="header-section-number">8.2.1</span> Node Structure</a></li>
-  <li><a href="#arcs-and-trees" id="toc-arcs-and-trees" class="nav-link" data-scroll-target="#arcs-and-trees"><span class="header-section-number">8.2.2</span> Arcs and Trees</a></li>
+  <li><a href="#node-structure" id="toc-node-structure" class="nav-link" data-scroll-target="#node-structure"><span class="header-section-number">8.2.1</span> Node structure</a></li>
+  <li><a href="#arcs-and-trees" id="toc-arcs-and-trees" class="nav-link" data-scroll-target="#arcs-and-trees"><span class="header-section-number">8.2.2</span> Arcs and trees</a></li>
   </ul></li>
-  <li><a href="#restrictstate-and-the-arena-allocator" id="toc-restrictstate-and-the-arena-allocator" class="nav-link" data-scroll-target="#restrictstate-and-the-arena-allocator"><span class="header-section-number">8.3</span> RestrictState and the Arena Allocator</a></li>
-  <li><a href="#the-5-step-restrict-pipeline-fused-single-pass" id="toc-the-5-step-restrict-pipeline-fused-single-pass" class="nav-link" data-scroll-target="#the-5-step-restrict-pipeline-fused-single-pass"><span class="header-section-number">8.4</span> The 5-Step Restrict Pipeline (Fused Single-Pass)</a>
+  <li><a href="#restrictstate-and-the-arena-allocator" id="toc-restrictstate-and-the-arena-allocator" class="nav-link" data-scroll-target="#restrictstate-and-the-arena-allocator"><span class="header-section-number">8.3</span> RestrictState and the arena allocator</a></li>
+  <li><a href="#the-5-step-restrict-pipeline-fused-single-pass" id="toc-the-5-step-restrict-pipeline-fused-single-pass" class="nav-link" data-scroll-target="#the-5-step-restrict-pipeline-fused-single-pass"><span class="header-section-number">8.4</span> The 5-step restrict pipeline (fused single-pass)</a>
   <ul class="collapse">
-  <li><a href="#step-1-signature-restriction-anchor_surviving" id="toc-step-1-signature-restriction-anchor_surviving" class="nav-link" data-scroll-target="#step-1-signature-restriction-anchor_surviving"><span class="header-section-number">8.4.1</span> Step 1: Signature Restriction (anchor_surviving)</a></li>
-  <li><a href="#step-2-reachability-bfs-reachable_from_root" id="toc-step-2-reachability-bfs-reachable_from_root" class="nav-link" data-scroll-target="#step-2-reachability-bfs-reachable_from_root"><span class="header-section-number">8.4.2</span> Step 2: Reachability BFS (reachable_from_root)</a></li>
-  <li><a href="#step-3-ancestor-contraction-ancestor_contraction" id="toc-step-3-ancestor-contraction-ancestor_contraction" class="nav-link" data-scroll-target="#step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: Ancestor Contraction (ancestor_contraction)</a></li>
-  <li><a href="#step-4-edge-resolution-resolve_edge" id="toc-step-4-edge-resolution-resolve_edge" class="nav-link" data-scroll-target="#step-4-edge-resolution-resolve_edge"><span class="header-section-number">8.4.4</span> Step 4: Edge Resolution (resolve_edge)</a></li>
-  <li><a href="#step-5-fan-reconstruction-reconstruct_fans" id="toc-step-5-fan-reconstruction-reconstruct_fans" class="nav-link" data-scroll-target="#step-5-fan-reconstruction-reconstruct_fans"><span class="header-section-number">8.4.5</span> Step 5: Fan Reconstruction (reconstruct_fans)</a></li>
+  <li><a href="#step-1-signature-restriction-anchor_surviving" id="toc-step-1-signature-restriction-anchor_surviving" class="nav-link" data-scroll-target="#step-1-signature-restriction-anchor_surviving"><span class="header-section-number">8.4.1</span> Step 1: signature restriction (anchor_surviving)</a></li>
+  <li><a href="#step-2-reachability-bfs-reachable_from_root" id="toc-step-2-reachability-bfs-reachable_from_root" class="nav-link" data-scroll-target="#step-2-reachability-bfs-reachable_from_root"><span class="header-section-number">8.4.2</span> Step 2: reachability BFS (reachable_from_root)</a></li>
+  <li><a href="#step-3-ancestor-contraction-ancestor_contraction" id="toc-step-3-ancestor-contraction-ancestor_contraction" class="nav-link" data-scroll-target="#step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: ancestor contraction (ancestor_contraction)</a></li>
+  <li><a href="#step-4-edge-resolution-resolve_edge" id="toc-step-4-edge-resolution-resolve_edge" class="nav-link" data-scroll-target="#step-4-edge-resolution-resolve_edge"><span class="header-section-number">8.4.4</span> Step 4: edge resolution (resolve_edge)</a></li>
+  <li><a href="#step-5-fan-reconstruction-reconstruct_fans" id="toc-step-5-fan-reconstruction-reconstruct_fans" class="nav-link" data-scroll-target="#step-5-fan-reconstruction-reconstruct_fans"><span class="header-section-number">8.4.5</span> Step 5: fan reconstruction (reconstruct_fans)</a></li>
   </ul></li>
-  <li><a href="#functor-instances-functor_restrict" id="toc-functor-instances-functor_restrict" class="nav-link" data-scroll-target="#functor-instances-functor_restrict"><span class="header-section-number">8.5</span> Functor Instances (functor_restrict)</a></li>
-  <li><a href="#json-round-trip-parse_json-to_json" id="toc-json-round-trip-parse_json-to_json" class="nav-link" data-scroll-target="#json-round-trip-parse_json-to_json"><span class="header-section-number">8.6</span> JSON Round-Trip (parse_json / to_json)</a></li>
-  <li><a href="#validation-axioms-i1-through-i7" id="toc-validation-axioms-i1-through-i7" class="nav-link" data-scroll-target="#validation-axioms-i1-through-i7"><span class="header-section-number">8.7</span> Validation Axioms (I1 through I7)</a>
+  <li><a href="#functor-instances-functor_restrict" id="toc-functor-instances-functor_restrict" class="nav-link" data-scroll-target="#functor-instances-functor_restrict"><span class="header-section-number">8.5</span> Functor instances (functor_restrict)</a></li>
+  <li><a href="#json-round-trip-parse_json-to_json" id="toc-json-round-trip-parse_json-to_json" class="nav-link" data-scroll-target="#json-round-trip-parse_json-to_json"><span class="header-section-number">8.6</span> Json round-trip (parse_json / to_json)</a></li>
+  <li><a href="#validation-axioms-i1-through-i7" id="toc-validation-axioms-i1-through-i7" class="nav-link" data-scroll-target="#validation-axioms-i1-through-i7"><span class="header-section-number">8.7</span> Validation axioms (i1 through i7)</a>
   <ul class="collapse">
-  <li><a href="#axiom-preservation-through-the-pipeline" id="toc-axiom-preservation-through-the-pipeline" class="nav-link" data-scroll-target="#axiom-preservation-through-the-pipeline"><span class="header-section-number">8.7.1</span> Axiom Preservation Through the Pipeline</a></li>
+  <li><a href="#axiom-preservation-through-the-pipeline" id="toc-axiom-preservation-through-the-pipeline" class="nav-link" data-scroll-target="#axiom-preservation-through-the-pipeline"><span class="header-section-number">8.7.1</span> Axiom preservation through the pipeline</a></li>
   </ul></li>
-  <li><a href="#the-acsetops-trait" id="toc-the-acsetops-trait" class="nav-link" data-scroll-target="#the-acsetops-trait"><span class="header-section-number">8.8</span> The AcsetOps Trait</a>
+  <li><a href="#the-acsetops-trait" id="toc-the-acsetops-trait" class="nav-link" data-scroll-target="#the-acsetops-trait"><span class="header-section-number">8.8</span> The acsetops trait</a>
   <ul class="collapse">
-  <li><a href="#trait-definition" id="toc-trait-definition" class="nav-link" data-scroll-target="#trait-definition"><span class="header-section-number">8.8.1</span> Trait Definition</a></li>
+  <li><a href="#trait-definition" id="toc-trait-definition" class="nav-link" data-scroll-target="#trait-definition"><span class="header-section-number">8.8.1</span> Trait definition</a></li>
   <li><a href="#implementations" id="toc-implementations" class="nav-link" data-scroll-target="#implementations"><span class="header-section-number">8.8.2</span> Implementations</a></li>
-  <li><a href="#the-instance-enum" id="toc-the-instance-enum" class="nav-link" data-scroll-target="#the-instance-enum"><span class="header-section-number">8.8.3</span> The Instance Enum</a></li>
-  <li><a href="#ginstance-graph-shaped-instances" id="toc-ginstance-graph-shaped-instances" class="nav-link" data-scroll-target="#ginstance-graph-shaped-instances"><span class="header-section-number">8.8.4</span> GInstance: Graph-Shaped Instances</a></li>
+  <li><a href="#the-instance-enum" id="toc-the-instance-enum" class="nav-link" data-scroll-target="#the-instance-enum"><span class="header-section-number">8.8.3</span> The instance Enum</a></li>
+  <li><a href="#ginstance-graph-shaped-instances" id="toc-ginstance-graph-shaped-instances" class="nav-link" data-scroll-target="#ginstance-graph-shaped-instances"><span class="header-section-number">8.8.4</span> Ginstance: graph-shaped instances</a></li>
   </ul></li>
-  <li><a href="#polynomial-operations-and-fibers" id="toc-polynomial-operations-and-fibers" class="nav-link" data-scroll-target="#polynomial-operations-and-fibers"><span class="header-section-number">8.9</span> Polynomial Operations and Fibers</a></li>
-  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link" data-scroll-target="#design-rationale"><span class="header-section-number">8.10</span> Design Rationale</a>
+  <li><a href="#polynomial-operations-and-fibers" id="toc-polynomial-operations-and-fibers" class="nav-link" data-scroll-target="#polynomial-operations-and-fibers"><span class="header-section-number">8.9</span> Polynomial operations and fibers</a></li>
+  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link" data-scroll-target="#design-rationale"><span class="header-section-number">8.10</span> Design rationale</a>
   <ul class="collapse">
-  <li><a href="#why-separate-node-ids-from-anchors" id="toc-why-separate-node-ids-from-anchors" class="nav-link" data-scroll-target="#why-separate-node-ids-from-anchors"><span class="header-section-number">8.10.1</span> Why Separate Node IDs from Anchors</a></li>
-  <li><a href="#why-precomputed-parent-and-children-maps" id="toc-why-precomputed-parent-and-children-maps" class="nav-link" data-scroll-target="#why-precomputed-parent-and-children-maps"><span class="header-section-number">8.10.2</span> Why Precomputed Parent and Children Maps</a></li>
-  <li><a href="#why-five-steps-instead-of-one" id="toc-why-five-steps-instead-of-one" class="nav-link" data-scroll-target="#why-five-steps-instead-of-one"><span class="header-section-number">8.10.3</span> Why Five Steps Instead of One</a></li>
+  <li><a href="#why-separate-node-ids-from-anchors" id="toc-why-separate-node-ids-from-anchors" class="nav-link" data-scroll-target="#why-separate-node-ids-from-anchors"><span class="header-section-number">8.10.1</span> Why separate node ids from anchors</a></li>
+  <li><a href="#why-precomputed-parent-and-children-maps" id="toc-why-precomputed-parent-and-children-maps" class="nav-link" data-scroll-target="#why-precomputed-parent-and-children-maps"><span class="header-section-number">8.10.2</span> Why precomputed parent and children maps</a></li>
+  <li><a href="#why-five-steps-instead-of-one" id="toc-why-five-steps-instead-of-one" class="nav-link" data-scroll-target="#why-five-steps-instead-of-one"><span class="header-section-number">8.10.3</span> Why five steps instead of one</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/08-instances-wtype.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -805,7 +805,7 @@ Important
 <span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// value-dependent predicate (vertex set membership AND value predicate).</span></span>
 <span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> skip_serializing_if <span class="op">=</span> <span class="st">"HashMap::is_empty"</span><span class="at">)]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <section id="node-structure" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="node-structure"><span class="header-section-number">8.2.1</span> Node Structure</h3>
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="node-structure"><span class="header-section-number">8.2.1</span> Node structure</h3>
 <p>Each <code>Node</code> (defined in <code>inst/src/metadata.rs</code>) carries:</p>
 <ul>
 <li><code>id: u32</code>: unique within the instance.</li>
@@ -816,7 +816,7 @@ Important
 </ul>
 </section>
 <section id="arcs-and-trees" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="arcs-and-trees"><span class="header-section-number">8.2.2</span> Arcs and Trees</h3>
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="arcs-and-trees"><span class="header-section-number">8.2.2</span> Arcs and trees</h3>
 <p>An arc <code>(parent_id, child_id, Edge)</code> connects a parent node to a child node along a schema edge. The tree invariant is enforced structurally: every non-root node has exactly one parent. The <code>parent_map</code> and <code>children_map</code> are precomputed in <code>WInstance::new()</code> from the arc list.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -834,7 +834,7 @@ Tip
 </section>
 </section>
 <section id="restrictstate-and-the-arena-allocator" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="restrictstate-and-the-arena-allocator"><span class="header-section-number">8.3</span> RestrictState and the Arena Allocator</h2>
+<h2 data-number="8.3" class="anchored" data-anchor-id="restrictstate-and-the-arena-allocator"><span class="header-section-number">8.3</span> RestrictState and the arena allocator</h2>
 <p>The restrict pipeline uses a <code>RestrictState</code> struct to carry intermediate results between steps without re-allocating:</p>
 <ul>
 <li><strong><code>surviving_nodes: Vec&lt;u32&gt;</code></strong>: node IDs that passed anchor filtering (Step 1) and reachability (Step 2).</li>
@@ -857,7 +857,7 @@ Tip
 </div>
 </section>
 <section id="the-5-step-restrict-pipeline-fused-single-pass" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="the-5-step-restrict-pipeline-fused-single-pass"><span class="header-section-number">8.4</span> The 5-Step Restrict Pipeline (Fused Single-Pass)</h2>
+<h2 data-number="8.4" class="anchored" data-anchor-id="the-5-step-restrict-pipeline-fused-single-pass"><span class="header-section-number">8.4</span> The 5-step restrict pipeline (fused single-pass)</h2>
 <p>The <code>wtype_restrict</code> function projects an instance along a compiled migration. Conceptually it’s five steps; the implementation fuses Steps 1 and 2 into a single BFS pass and Steps 3 and 4 into a single ancestor-walk pass.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -890,45 +890,45 @@ Figure&nbsp;8.1: The 5-step wtype_restrict pipeline. Each step filters or transf
 </div>
 </div>
 <section id="step-1-signature-restriction-anchor_surviving" class="level3" data-number="8.4.1">
-<h3 data-number="8.4.1" class="anchored" data-anchor-id="step-1-signature-restriction-anchor_surviving"><span class="header-section-number">8.4.1</span> Step 1: Signature Restriction (anchor_surviving)</h3>
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="step-1-signature-restriction-anchor_surviving"><span class="header-section-number">8.4.1</span> Step 1: signature restriction (anchor_surviving)</h3>
 <p>The first step selects the subset of instance nodes whose schema anchor vertex is retained by the migration. This is a pure filter: if a node’s <code>anchor</code> is in <code>CompiledMigration::surviving_verts</code>, it’s a candidate; otherwise it’s dropped.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="139"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 138;"><span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// all `extra_fields` (and nested attrs) as variables, evaluates the</span></span>
-<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// expression, and stores the result in the target field.</span></span>
-<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This enables template name computation like</span></span>
-<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `target_key`: "name",</span></span>
-<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `expr`: `(concat "h" (int_to_str attrs.level))`</span></span>
-<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// which computes "h1", "h2", etc. from the level attribute.</span></span>
-<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>    ComputeField <span class="op">{</span></span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field to store the computed result in.</span></span>
-<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>        target_key<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="139"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 138;"><span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Unlike `ApplyExpr` which binds a single field, `ComputeField` binds</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// all `extra_fields`, nested attrs, AND scalar values from immediate</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// child nodes (the dependent-sum projection) as variables, evaluates</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// the expression, and stores the result in the target field.</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This means `ComputeField` can access any scalar property of the</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// parent object, whether it was parsed as an extra field or as a</span></span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// schema-defined child vertex (e.g., a string field with a `"format"`</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// annotation like `"at-uri"`). Computed results are always written to</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `extra_fields`, making them available to subsequent transforms and</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>After this step, some surviving nodes may be orphaned (their parent was dropped) or disconnected (reachable only through dropped intermediaries). Steps 2 and 3 handle these cases.</p>
 </section>
 <section id="step-2-reachability-bfs-reachable_from_root" class="level3" data-number="8.4.2">
-<h3 data-number="8.4.2" class="anchored" data-anchor-id="step-2-reachability-bfs-reachable_from_root"><span class="header-section-number">8.4.2</span> Step 2: Reachability BFS (reachable_from_root)</h3>
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="step-2-reachability-bfs-reachable_from_root"><span class="header-section-number">8.4.2</span> Step 2: reachability BFS (reachable_from_root)</h3>
 <p>Not all anchor-surviving nodes are necessarily reachable from the root. Step 2 performs a breadth-first search starting from the root (if it survived Step 1) through children that are also in the candidate set.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="154"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 153;"><span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a>        coercion_class<span class="op">:</span> <span class="pp">panproto_gat::</span>CoercionClass<span class="op">,</span></span>
-<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Case analysis on node values — the coproduct eliminator for the</span></span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// field transform algebra.</span></span>
-<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Each branch is a (predicate, transforms) pair. Branches are evaluated</span></span>
-<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// in order with the node's `extra_fields` (and nested `attrs.*` keys)</span></span>
-<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// bound as expression variables. The first branch whose predicate</span></span>
-<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// evaluates to `true` has its transforms applied. If no branch matches,</span></span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// the node passes through unchanged.</span></span>
-<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This is the dependent function space lift of field transforms:</span></span>
-<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `Π(x : Value). FieldTransform` — a transform that depends on the</span></span>
-<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// runtime value of the node, not just its schema vertex. It composes</span></span>
-<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// naturally with all other transform variants (including nesting</span></span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// inside `PathTransform`).</span></span>
-<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Use cases:</span></span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - `matchAttrs`: "if `level == 1` then rename to `h1`, if `level == 2`</span></span>
-<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   then rename to `h2`" — each heading level is a branch.</span></span>
-<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - Conditional attribute injection: "if `list == 'ordered'` then add</span></span>
-<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `type: ol`, else add `type: ul`".</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="154"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 153;"><span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `PutGet` holds for modifications to the computed field.</span></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - `Opaque`: no inverse exists; the complement stores the entire</span></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   original value. Modifications to the computed field in the view</span></span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   are not independently round-trippable. This is analogous to SQL</span></span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   computed columns: the lens law holds for the independent</span></span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   (non-derived) components of the view, and the derived components</span></span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   are re-computed deterministically.</span></span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This enables template name computation like</span></span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `target_key`: "name",</span></span>
+<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `expr`: `(concat "h" (int_to_str attrs.level))`</span></span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// which computes "h1", "h2", etc. from the level attribute, as well</span></span>
+<span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// as AT-URI decomposition where the `repo` field is a schema-defined</span></span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// child vertex.</span></span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a>    ComputeField <span class="op">{</span></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field to store the computed result in.</span></span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a>        target_key<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The expression, with all `extra_fields` bound as variables.</span></span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a>        expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Optional inverse expression for round-tripping.</span></span>
+<span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a>        inverse<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="pp">panproto_expr::</span>Expr<span class="op">&gt;,</span></span>
+<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Round-trip classification of this transformation.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the root itself doesn’t survive anchor restriction, the entire instance is pruned and <code>wtype_restrict</code> returns <code>RestrictError::RootPruned</code>. An instance without a root isn’t a valid tree.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -945,147 +945,147 @@ Note
 </div>
 </section>
 <section id="step-3-ancestor-contraction-ancestor_contraction" class="level3" data-number="8.4.3">
-<h3 data-number="8.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: Ancestor Contraction (ancestor_contraction)</h3>
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: ancestor contraction (ancestor_contraction)</h3>
 <p>When intermediate nodes are pruned, their children need to be re-attached to the nearest surviving ancestor. Step 3 walks up the parent chain for each surviving non-root node to find that ancestor.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="188"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 187;"><span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - If the value is a `Value::Str` matching a key in `rename_map`,</span></span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   it is replaced with the mapped value (or removed if mapped to None).</span></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - If the value is a `Value::Unknown` containing an `__array_len`</span></span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   sentinel (encoded array), each string element is checked.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="188"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 187;"><span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `Π(x : Value). FieldTransform` — a transform that depends on the</span></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// runtime value of the node, not just its schema vertex. It composes</span></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// naturally with all other transform variants (including nesting</span></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// inside `PathTransform`).</span></span>
 <span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This handles parent reference arrays, cross-annotation links,</span></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// and any other string fields that carry vertex identity.</span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>    MapReferences <span class="op">{</span></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field containing references (e.g., "parents").</span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>        field<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Map from old name to new name (None = remove the reference).</span></span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>        rename_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;&gt;,</span></span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> FieldTransform <span class="op">{</span></span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Compute the coercion class of this field transform.</span></span>
-<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The class describes the round-trip properties: whether the transform</span></span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// is lossless (Iso), has a retraction (Retraction), or is opaque.</span></span>
-<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> coercion_class(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="pp">panproto_gat::</span>CoercionClass <span class="op">{</span></span>
-<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> <span class="kw">self</span> <span class="op">{</span></span>
-<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>RenameField <span class="op">{</span> <span class="op">..</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="pp">panproto_gat::CoercionClass::</span>Iso<span class="op">,</span></span>
-<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>DropField <span class="op">{</span> <span class="op">..</span> <span class="op">}</span> <span class="op">|</span> <span class="dt">Self</span><span class="pp">::</span>KeepFields <span class="op">{</span> <span class="op">..</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="pp">panproto_gat::CoercionClass::</span>Opaque<span class="op">,</span></span>
-<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>AddField <span class="op">{</span> <span class="op">..</span> <span class="op">}</span> <span class="op">|</span> <span class="dt">Self</span><span class="pp">::</span>MapReferences <span class="op">{</span> <span class="op">..</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>                <span class="pp">panproto_gat::CoercionClass::</span>Retraction</span>
-<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>ApplyExpr <span class="op">{</span> coercion_class<span class="op">,</span> <span class="op">..</span> <span class="op">}</span> <span class="op">|</span> <span class="dt">Self</span><span class="pp">::</span>ComputeField <span class="op">{</span> coercion_class<span class="op">,</span> <span class="op">..</span> <span class="op">}</span> <span class="op">=&gt;</span> <span class="op">{</span></span>
-<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>coercion_class</span>
-<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>PathTransform <span class="op">{</span> inner<span class="op">,</span> <span class="op">..</span> <span class="op">}</span> <span class="op">=&gt;</span> inner<span class="op">.</span>coercion_class()<span class="op">,</span></span>
-<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>Case <span class="op">{</span> branches <span class="op">}</span> <span class="op">=&gt;</span> branches</span>
-<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>iter()</span>
-<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>flat_map(<span class="op">|</span>b<span class="op">|</span> b<span class="op">.</span>transforms<span class="op">.</span>iter())</span>
-<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>fold(<span class="pp">panproto_gat::CoercionClass::</span>Iso<span class="op">,</span> <span class="op">|</span>acc<span class="op">,</span> t<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a>                    acc<span class="op">.</span>compose(t<span class="op">.</span>coercion_class())</span>
-<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>)<span class="op">,</span></span>
-<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a><span class="co">/// A branch in a [`FieldTransform::Case`] analysis.</span></span>
-<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Use cases:</span></span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - `matchAttrs`: "if `level == 1` then rename to `h1`, if `level == 2`</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   then rename to `h2`" — each heading level is a branch.</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - Conditional attribute injection: "if `list == 'ordered'` then add</span></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `type: ol`, else add `type: ul`".</span></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>    Case <span class="op">{</span></span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Ordered branches: first matching predicate wins.</span></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>        branches<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>CaseBranch<span class="op">&gt;,</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Update string values that reference vertex names.</span></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// When vertices are renamed or dropped during migration, string fields</span></span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// that reference those vertices by name must be updated to reflect the</span></span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// new names. This is the functorial action of the vertex rename map</span></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// on the name-reference algebra.</span></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// For each field value:</span></span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - If the value is a `Value::Str` matching a key in `rename_map`,</span></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   it is replaced with the mapped value (or removed if mapped to None).</span></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - If the value is a `Value::Unknown` containing an `__array_len`</span></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   sentinel (encoded array), each string element is checked.</span></span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// This handles parent reference arrays, cross-annotation links,</span></span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// and any other string fields that carry vertex identity.</span></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>    MapReferences <span class="op">{</span></span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The field containing references (e.g., "parents").</span></span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>        field<span class="op">:</span> <span class="dt">String</span><span class="op">,</span></span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Map from old name to new name (None = remove the reference).</span></span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>        rename_map<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">String</span><span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;&gt;,</span></span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> FieldTransform <span class="op">{</span></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Compute the coercion class of this field transform.</span></span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The class describes the round-trip properties: whether the transform</span></span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// is lossless (`Iso`), has a left inverse (`Retraction`), is a</span></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// deterministic derivation (`Projection`), or has no structural</span></span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// round-trip property (`Opaque`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The result is a map from each surviving node to its nearest surviving ancestor. This map drives the arc construction in Step 4: instead of the original <code>(parent, child)</code> arc, the restricted instance will have an <code>(ancestor, child)</code> arc.</p>
 <p>The function includes cycle detection as a safety measure. In a well-formed tree instance, cycles in the parent chain can’t occur (the tree invariant forbids them), but the guard prevents infinite loops if an invalid instance is passed in.</p>
 </section>
 <section id="step-4-edge-resolution-resolve_edge" class="level3" data-number="8.4.4">
-<h3 data-number="8.4.4" class="anchored" data-anchor-id="step-4-edge-resolution-resolve_edge"><span class="header-section-number">8.4.4</span> Step 4: Edge Resolution (resolve_edge)</h3>
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="step-4-edge-resolution-resolve_edge"><span class="header-section-number">8.4.4</span> Step 4: edge resolution (resolve_edge)</h3>
 <p>Each contracted arc needs a schema edge in the target schema. Step 4 resolves the edge for each <code>(ancestor, child)</code> pair by:</p>
 <ol type="1">
 <li>Consulting the <code>CompiledMigration::resolver</code> map first (for cases where the migration author explicitly specified which edge to use).</li>
 <li>Falling back to a unique-edge heuristic: if there’s exactly one edge between the ancestor’s and child’s remapped anchor vertices in the target schema, use it.</li>
 <li>Failing with <code>RestrictError::AmbiguousEdge</code> if multiple edges exist and no resolver entry was provided.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="247"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 246;"><span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> coercion_class(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="pp">panproto_gat::</span>CoercionClass <span class="op">{</span></span>
-<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>values()</span>
-<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>flat_map(<span class="op">|</span>ts<span class="op">|</span> ts<span class="op">.</span>iter())</span>
-<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>fold(<span class="pp">panproto_gat::CoercionClass::</span>Iso<span class="op">,</span> <span class="op">|</span>acc<span class="op">,</span> t<span class="op">|</span> <span class="op">{</span></span>
-<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>                acc<span class="op">.</span>compose(t<span class="op">.</span>coercion_class())</span>
-<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)</span>
-<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a field rename transform for a vertex.</span></span>
-<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// After the node survives and its anchor is remapped, the field</span></span>
-<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `old_key` in `extra_fields` is renamed to `new_key`.</span></span>
-<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_rename(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> old_key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> new_key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">{</span></span>
-<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
-<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
-<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>RenameField <span class="op">{</span></span>
-<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>                old_key<span class="op">:</span> old_key<span class="op">.</span>to_owned()<span class="op">,</span></span>
-<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>                new_key<span class="op">:</span> new_key<span class="op">.</span>to_owned()<span class="op">,</span></span>
-<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a field drop transform for a vertex.</span></span>
-<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The field `key` is removed from the node's `extra_fields`.</span></span>
-<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_drop(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="247"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 246;"><span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>fold(<span class="pp">panproto_gat::CoercionClass::</span>Iso<span class="op">,</span> <span class="op">|</span>acc<span class="op">,</span> t<span class="op">|</span> <span class="op">{</span></span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>                    acc<span class="op">.</span>compose(t<span class="op">.</span>coercion_class())</span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span>)<span class="op">,</span></span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a><span class="co">/// A branch in a [`FieldTransform::Case`] analysis.</span></span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a><span class="co">/// Contains a predicate expression and a sequence of transforms to apply</span></span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a><span class="co">/// if the predicate evaluates to `true`.</span></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CaseBranch <span class="op">{</span></span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Predicate evaluated with the node's `extra_fields` as variables.</span></span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> predicate<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Transforms to apply if the predicate is true.</span></span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> transforms<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>FieldTransform<span class="op">&gt;,</span></span>
+<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> CompiledMigration <span class="op">{</span></span>
+<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Compute the composite coercion class of all field transforms in this migration.</span></span>
+<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Folds over every transform across all vertices using `CoercionClass::compose`,</span></span>
+<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// starting from `Iso` (the identity element).</span></span>
+<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> coercion_class(<span class="op">&amp;</span><span class="kw">self</span>) <span class="op">-&gt;</span> <span class="pp">panproto_gat::</span>CoercionClass <span class="op">{</span></span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>values()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The resolver is populated during migration compilation by <code>panproto-mig</code>. In practice, ambiguity is rare. Most vertex pairs in a schema are connected by at most one edge. When it does occur (e.g., a vertex has both a <code>"prop"</code> and a <code>"ref"</code> edge to the same target), the migration specification must include an explicit resolution.</p>
 </section>
 <section id="step-5-fan-reconstruction-reconstruct_fans" class="level3" data-number="8.4.5">
-<h3 data-number="8.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction-reconstruct_fans"><span class="header-section-number">8.4.5</span> Step 5: Fan Reconstruction (reconstruct_fans)</h3>
+<h3 data-number="8.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction-reconstruct_fans"><span class="header-section-number">8.4.5</span> Step 5: fan reconstruction (reconstruct_fans)</h3>
 <p>For schemas that use hyper-edges, the final step rebuilds the hyper-edge fans. A <em>fan</em> is an instance-level manifestation of a hyper-edge: it connects a parent node to multiple child nodes via labeled slots.</p>
 <p>When some children of a fan are pruned, the fan must be rebuilt with only the surviving children. If the <code>hyper_resolver</code> provides a mapping, the fan is remapped to a new hyper-edge ID with relabeled slots. Otherwise, the original fan is kept with its surviving children.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="286"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 285;"><span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// if it does not already exist.</span></span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_default(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> value<span class="op">:</span> Value) <span class="op">{</span></span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>AddField <span class="op">{</span></span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>                key<span class="op">:</span> key<span class="op">.</span>to_owned()<span class="op">,</span></span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>                value<span class="op">,</span></span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a keep-fields transform for a vertex.</span></span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Only the specified fields are retained in `extra_fields`;</span></span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// all others are dropped.</span></span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_keep(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> keys<span class="op">:</span> <span class="op">&amp;</span>[<span class="op">&amp;</span><span class="dt">str</span>]) <span class="op">{</span></span>
-<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
-<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
-<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>KeepFields <span class="op">{</span></span>
-<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>                keys<span class="op">:</span> keys<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>k<span class="op">|</span> (<span class="op">*</span>k)<span class="op">.</span>to_owned())<span class="op">.</span>collect()<span class="op">,</span></span>
-<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an expression transform for a field on a vertex.</span></span>
-<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The expression is evaluated with the field's current value</span></span>
-<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// bound to the variable named `key`, and the result replaces</span></span>
-<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// the field value.</span></span>
-<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_expr(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr) <span class="op">{</span></span>
-<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
-<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
-<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>ApplyExpr <span class="op">{</span></span>
-<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>                key<span class="op">:</span> key<span class="op">.</span>to_owned()<span class="op">,</span></span>
-<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>                expr<span class="op">,</span></span>
-<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a>                inverse<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
-<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>                coercion_class<span class="op">:</span> <span class="pp">panproto_gat::CoercionClass::</span>Opaque<span class="op">,</span></span>
-<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
-<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a path-based field transform for a vertex.</span></span>
-<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
-<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The inner transform is applied at the nested path within the</span></span>
-<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// node's `extra_fields` tree, navigating through `Value::Unknown`</span></span>
-<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// maps at each path segment.</span></span>
-<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_path_transform(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> path<span class="op">:</span> <span class="op">&amp;</span>[<span class="op">&amp;</span><span class="dt">str</span>]<span class="op">,</span> inner<span class="op">:</span> FieldTransform) <span class="op">{</span></span>
-<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
-<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
-<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="286"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 285;"><span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>RenameField <span class="op">{</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>                old_key<span class="op">:</span> old_key<span class="op">.</span>to_owned()<span class="op">,</span></span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a>                new_key<span class="op">:</span> new_key<span class="op">.</span>to_owned()<span class="op">,</span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a field drop transform for a vertex.</span></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The field `key` is removed from the node's `extra_fields`.</span></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_drop(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">{</span></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>DropField <span class="op">{</span></span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>                key<span class="op">:</span> key<span class="op">.</span>to_owned()<span class="op">,</span></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a field with a default value for a vertex.</span></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The field `key` is added to `extra_fields` with the given value</span></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// if it does not already exist.</span></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_default(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> key<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> value<span class="op">:</span> Value) <span class="op">{</span></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>AddField <span class="op">{</span></span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>                key<span class="op">:</span> key<span class="op">.</span>to_owned()<span class="op">,</span></span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>                value<span class="op">,</span></span>
+<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a keep-fields transform for a vertex.</span></span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Only the specified fields are retained in `extra_fields`;</span></span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// all others are dropped.</span></span>
+<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> add_field_keep(<span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span> vertex<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span> keys<span class="op">:</span> <span class="op">&amp;</span>[<span class="op">&amp;</span><span class="dt">str</span>]) <span class="op">{</span></span>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>field_transforms</span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>entry(<span class="pp">Name::</span>from(vertex))</span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>or_default()</span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>            <span class="op">.</span>push(<span class="pp">FieldTransform::</span>KeepFields <span class="op">{</span></span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>                keys<span class="op">:</span> keys<span class="op">.</span>iter()<span class="op">.</span>map(<span class="op">|</span>k<span class="op">|</span> (<span class="op">*</span>k)<span class="op">.</span>to_owned())<span class="op">.</span>collect()<span class="op">,</span></span>
+<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span>)<span class="op">;</span></span>
+<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an expression transform for a field on a vertex.</span></span>
+<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Fans whose parent was pruned are dropped entirely. Fans with no surviving children are also dropped.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1103,9 +1103,9 @@ Note
 </section>
 </section>
 <section id="functor-instances-functor_restrict" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="functor-instances-functor_restrict"><span class="header-section-number">8.5</span> Functor Instances (functor_restrict)</h2>
+<h2 data-number="8.5" class="anchored" data-anchor-id="functor-instances-functor_restrict"><span class="header-section-number">8.5</span> Functor instances (functor_restrict)</h2>
 <p><code>panproto-inst</code> also provides an alternative instance representation for relational (tabular) data: <code>FInstance</code>, a set-valued table. Each schema vertex maps to a table (a <code>Vec</code> of row maps), and each edge maps to foreign-key relationships.</p>
-<p>The restrict operation for functor instances is straightforward: for each vertex in the target schema, pull the corresponding table from the source instance via the migration’s vertex map.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>The restrict operation for functor instances is simpler than the W-type pipeline: for each vertex in the target schema, pull the corresponding table from the source instance via the migration’s vertex map.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1121,7 +1121,7 @@ Tip
 </div>
 </section>
 <section id="json-round-trip-parse_json-to_json" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="json-round-trip-parse_json-to_json"><span class="header-section-number">8.6</span> JSON Round-Trip (parse_json / to_json)</h2>
+<h2 data-number="8.6" class="anchored" data-anchor-id="json-round-trip-parse_json-to_json"><span class="header-section-number">8.6</span> Json round-trip (parse_json / to_json)</h2>
 <p>The <code>parse</code> module provides schema-guided JSON parsing and serialization:</p>
 <ul>
 <li><code>parse_json(schema, root_vertex, json_value)</code>: recursively walks a JSON value, creating a <code>WInstance</code> tree. At each level, it consults the schema’s outgoing edges to determine which JSON fields correspond to child nodes and which are leaf values.</li>
@@ -1135,7 +1135,7 @@ Tip
 </ul>
 </section>
 <section id="validation-axioms-i1-through-i7" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="validation-axioms-i1-through-i7"><span class="header-section-number">8.7</span> Validation Axioms (I1 through I7)</h2>
+<h2 data-number="8.7" class="anchored" data-anchor-id="validation-axioms-i1-through-i7"><span class="header-section-number">8.7</span> Validation axioms (i1 through i7)</h2>
 <p>The <code>validate</code> module checks that a <code>WInstance</code> satisfies seven structural axioms:</p>
 <div id="tbl-axioms" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1212,7 +1212,7 @@ Important
 </div>
 </div>
 <section id="axiom-preservation-through-the-pipeline" class="level3" data-number="8.7.1">
-<h3 data-number="8.7.1" class="anchored" data-anchor-id="axiom-preservation-through-the-pipeline"><span class="header-section-number">8.7.1</span> Axiom Preservation Through the Pipeline</h3>
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="axiom-preservation-through-the-pipeline"><span class="header-section-number">8.7.1</span> Axiom preservation through the pipeline</h3>
 <p>Each step of the restrict pipeline maintains or establishes specific axioms:</p>
 <ul>
 <li><strong>Step 1</strong> (anchor_surviving) ensures that all surviving nodes have valid anchors in the target schema (establishing I1 for the restricted set).</li>
@@ -1225,10 +1225,10 @@ Important
 </section>
 </section>
 <section id="the-acsetops-trait" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="the-acsetops-trait"><span class="header-section-number">8.8</span> The AcsetOps Trait</h2>
+<h2 data-number="8.8" class="anchored" data-anchor-id="the-acsetops-trait"><span class="header-section-number">8.8</span> The acsetops trait</h2>
 <p>The <code>AcsetOps</code> trait provides a unified interface for operations across all three instance shapes: <code>WInstance</code>, <code>FInstance</code>, and <code>GInstance</code>.</p>
 <section id="trait-definition" class="level3" data-number="8.8.1">
-<h3 data-number="8.8.1" class="anchored" data-anchor-id="trait-definition"><span class="header-section-number">8.8.1</span> Trait Definition</h3>
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="trait-definition"><span class="header-section-number">8.8.1</span> Trait definition</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">trait</span> AcsetOps<span class="op">:</span> <span class="bu">Clone</span> <span class="op">+</span> <span class="pp">std::fmt::</span><span class="bu">Debug</span> <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">fn</span> restrict(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span></span>
@@ -1305,7 +1305,7 @@ Table&nbsp;8.2: AcsetOps delegation by instance shape.
 <p>Note that <code>FInstance::restrict</code> and <code>GInstance::restrict</code> don’t use the <code>src_schema</code> and <code>tgt_schema</code> parameters. Their restrict operations depend only on the compiled migration. The schema parameters are required by <code>WInstance::restrict</code> for the ancestor contraction and fan reconstruction steps. The trait uses the most general signature to accommodate all shapes.</p>
 </section>
 <section id="the-instance-enum" class="level3" data-number="8.8.3">
-<h3 data-number="8.8.3" class="anchored" data-anchor-id="the-instance-enum"><span class="header-section-number">8.8.3</span> The Instance Enum</h3>
+<h3 data-number="8.8.3" class="anchored" data-anchor-id="the-instance-enum"><span class="header-section-number">8.8.3</span> The instance Enum</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Instance <span class="op">{</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    WType(WInstance)<span class="op">,</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    Functor(FInstance)<span class="op">,</span></span>
@@ -1314,7 +1314,7 @@ Table&nbsp;8.2: AcsetOps delegation by instance shape.
 <p><code>Instance</code> dispatches <code>restrict</code>, <code>extend</code>, <code>element_count</code>, and <code>shape_name</code> to the inner type’s <code>AcsetOps</code> implementation. This is the type used by the CLI’s <code>schema lift</code> command and by the VCS layer when storing instances in the object store.</p>
 </section>
 <section id="ginstance-graph-shaped-instances" class="level3" data-number="8.8.4">
-<h3 data-number="8.8.4" class="anchored" data-anchor-id="ginstance-graph-shaped-instances"><span class="header-section-number">8.8.4</span> GInstance: Graph-Shaped Instances</h3>
+<h3 data-number="8.8.4" class="anchored" data-anchor-id="ginstance-graph-shaped-instances"><span class="header-section-number">8.8.4</span> Ginstance: graph-shaped instances</h3>
 <p>The <code>GInstance</code> type handles the most general instance shape: a directed graph of nodes and edges with no distinguished root and cycles allowed. Both <code>WInstance</code> (trees) and <code>FInstance</code> (tables) are special cases.</p>
 <p><code>GInstance</code> is the natural instance theory for knowledge graphs (RDF, OWL, JSON-LD), property graphs (Neo4j), and dependency graphs. Its <code>graph_restrict</code> operation is simpler than the 5-step tree pipeline: it keeps nodes whose anchor survives the migration (remapping the anchor) and keeps edges whose endpoints both survive and whose schema edge survives or has a remap entry.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1333,21 +1333,21 @@ Tip
 </section>
 </section>
 <section id="polynomial-operations-and-fibers" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="polynomial-operations-and-fibers"><span class="header-section-number">8.9</span> Polynomial Operations and Fibers</h2>
+<h2 data-number="8.9" class="anchored" data-anchor-id="polynomial-operations-and-fibers"><span class="header-section-number">8.9</span> Polynomial operations and fibers</h2>
 <p><code>panproto-inst</code> also provides polynomial functor operations in <code>poly.rs</code> and <code>hom.rs</code>. These include fiber decomposition (preimage of a migration at a target anchor), section construction (enriching a base instance with annotation data), group-by (partitioning by migration image), join (pullback of two instances along shared projections), and the internal hom (a schema whose instances represent migrations). The <code>restrict_with_complement</code> function in <code>poly.rs</code> extends the restrict pipeline to track dropped nodes and arcs, enabling <code>fiber_at_node</code> queries. For full details, see <a href="30-polynomial-operations.html" class="quarto-xref"><span>Chapter 24</span></a>.</p>
 </section>
 <section id="design-rationale" class="level2" data-number="8.10">
-<h2 data-number="8.10" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">8.10</span> Design Rationale</h2>
+<h2 data-number="8.10" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">8.10</span> Design rationale</h2>
 <section id="why-separate-node-ids-from-anchors" class="level3" data-number="8.10.1">
-<h3 data-number="8.10.1" class="anchored" data-anchor-id="why-separate-node-ids-from-anchors"><span class="header-section-number">8.10.1</span> Why Separate Node IDs from Anchors</h3>
+<h3 data-number="8.10.1" class="anchored" data-anchor-id="why-separate-node-ids-from-anchors"><span class="header-section-number">8.10.1</span> Why separate node ids from anchors</h3>
 <p>Node IDs are <code>u32</code> values. Anchors are <code>String</code> schema vertex IDs. Multiple nodes can share the same anchor (e.g., an array of strings all anchored to the same <code>"items"</code> vertex). Keeping IDs numeric and anchors semantic gives <span class="math inline">\(O(1)\)</span> node lookup by ID while preserving the schema-level meaning through the anchor.</p>
 </section>
 <section id="why-precomputed-parent-and-children-maps" class="level3" data-number="8.10.2">
-<h3 data-number="8.10.2" class="anchored" data-anchor-id="why-precomputed-parent-and-children-maps"><span class="header-section-number">8.10.2</span> Why Precomputed Parent and Children Maps</h3>
+<h3 data-number="8.10.2" class="anchored" data-anchor-id="why-precomputed-parent-and-children-maps"><span class="header-section-number">8.10.2</span> Why precomputed parent and children maps</h3>
 <p>The <code>parent_map</code> and <code>children_map</code> are computed once in <code>WInstance::new()</code> and never updated. This is safe because <code>WInstance</code> is immutable after construction. The restrict pipeline creates a new <code>WInstance</code> rather than mutating the source.</p>
 </section>
 <section id="why-five-steps-instead-of-one" class="level3" data-number="8.10.3">
-<h3 data-number="8.10.3" class="anchored" data-anchor-id="why-five-steps-instead-of-one"><span class="header-section-number">8.10.3</span> Why Five Steps Instead of One</h3>
+<h3 data-number="8.10.3" class="anchored" data-anchor-id="why-five-steps-instead-of-one"><span class="header-section-number">8.10.3</span> Why five steps instead of one</h3>
 <p>Decomposing the restrict algorithm into five independent functions serves two purposes:</p>
 <ol type="1">
 <li><strong>Testability</strong>: each step can be unit-tested in isolation with small, purpose-built instances. The test suite in <code>wtype.rs</code> tests each step individually before testing the composed pipeline.</li>
@@ -1891,7 +1891,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-inst/src/wtype.rs" start-line=49 end-line=70}</span></span>
 <span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Node Structure</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Node structure</span></span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>Each <span class="in">`Node`</span> (defined in <span class="in">`inst/src/metadata.rs`</span>) carries:</span>
 <span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
@@ -1901,7 +1901,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`discriminator: Option&lt;String&gt;`</span>: for union-typed nodes, the <span class="in">`$type`</span> tag.</span>
 <span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`extra_fields: HashMap&lt;String, Value&gt;`</span>: unrecognized JSON fields preserved for round-trip fidelity.</span>
 <span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="fu">### Arcs and Trees</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="fu">### Arcs and trees</span></span>
 <span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>An arc <span class="in">`(parent_id, child_id, Edge)`</span> connects a parent node to a child node along a schema edge. The tree invariant is enforced structurally: every non-root node has exactly one parent. The <span class="in">`parent_map`</span> and <span class="in">`children_map`</span> are precomputed in <span class="in">`WInstance::new()`</span> from the arc list.</span>
 <span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
@@ -1909,7 +1909,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>The <span class="in">`children_map`</span> uses <span class="in">`SmallVec&lt;u32, 4&gt;`</span> because most instance nodes have between 1 and 4 children. This avoids heap allocation for the common case while still supporting arbitrarily large fan-outs for array nodes.</span>
 <span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## RestrictState and the Arena Allocator</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## RestrictState and the arena allocator</span></span>
 <span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>The restrict pipeline uses a <span class="in">`RestrictState`</span> struct to carry intermediate results between steps without re-allocating:</span>
 <span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
@@ -1924,7 +1924,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>For small instances (fewer than 100 nodes), per-step allocation is negligible. For large instances (100k+ nodes from format-specific parsers like HTML or CoNLL-U), the allocator overhead of five separate <span class="in">`Vec`</span>/<span class="in">`HashMap`</span> constructions becomes measurable. The fused single-pass design keeps allocation count constant regardless of instance size.</span>
 <span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## The 5-Step Restrict Pipeline (Fused Single-Pass)</span></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## The 5-step restrict pipeline (fused single-pass)</span></span>
 <span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>The <span class="in">`wtype_restrict`</span> function projects an instance along a compiled migration. Conceptually it's five steps; the implementation fuses Steps 1 and 2 into a single BFS pass and Steps 3 and 4 into a single ancestor-walk pass.</span>
 <span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
@@ -1947,7 +1947,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>    style S5 fill:<span class="co">#e8f0fe,stroke:#1a73e8</span></span>
 <span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: Signature Restriction (anchor_surviving)</span></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: signature restriction (anchor_surviving)</span></span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>The first step selects the subset of instance nodes whose schema anchor vertex is retained by the migration. This is a pure filter: if a node's <span class="in">`anchor`</span> is in <span class="in">`CompiledMigration::surviving_verts`</span>, it's a candidate; otherwise it's dropped.</span>
 <span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
@@ -1956,7 +1956,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>After this step, some surviving nodes may be orphaned (their parent was dropped) or disconnected (reachable only through dropped intermediaries). Steps 2 and 3 handle these cases.</span>
 <span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: Reachability BFS (reachable_from_root)</span></span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: reachability BFS (reachable_from_root)</span></span>
 <span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>Not all anchor-surviving nodes are necessarily reachable from the root. Step 2 performs a breadth-first search starting from the root (if it survived Step 1) through children that are also in the candidate set.</span>
 <span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a></span>
@@ -1969,7 +1969,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>The BFS traversal follows the instance tree's parent-child arcs, not the schema graph's edges. A node is reachable if there's a path of surviving nodes from the root to it through the instance tree.</span>
 <span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: Ancestor Contraction (ancestor_contraction)</span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: ancestor contraction (ancestor_contraction)</span></span>
 <span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>When intermediate nodes are pruned, their children need to be re-attached to the nearest surviving ancestor. Step 3 walks up the parent chain for each surviving non-root node to find that ancestor.</span>
 <span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a></span>
@@ -1980,7 +1980,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>The function includes cycle detection as a safety measure. In a well-formed tree instance, cycles in the parent chain can't occur (the tree invariant forbids them), but the guard prevents infinite loops if an invalid instance is passed in.</span>
 <span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 4: Edge Resolution (resolve_edge)</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 4: edge resolution (resolve_edge)</span></span>
 <span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>Each contracted arc needs a schema edge in the target schema. Step 4 resolves the edge for each <span class="in">`(ancestor, child)`</span> pair by:</span>
 <span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a></span>
@@ -1993,7 +1993,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>The resolver is populated during migration compilation by <span class="in">`panproto-mig`</span>. In practice, ambiguity is rare. Most vertex pairs in a schema are connected by at most one edge. When it does occur (e.g., a vertex has both a <span class="in">`"prop"`</span> and a <span class="in">`"ref"`</span> edge to the same target), the migration specification must include an explicit resolution.</span>
 <span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 5: Fan Reconstruction (reconstruct_fans)</span></span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 5: fan reconstruction (reconstruct_fans)</span></span>
 <span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a>For schemas that use hyper-edges, the final step rebuilds the hyper-edge fans. A _fan_ is an instance-level manifestation of a hyper-edge: it connects a parent node to multiple child nodes via labeled slots.</span>
 <span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a></span>
@@ -2009,17 +2009,17 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a>Only for protocols whose schema theory includes the <span class="in">`HyperEdge`</span> sort (Group B protocols: SQL, Parquet, Cassandra, etc.). For Group A protocols (JSON Schema, AT Protocol, OpenAPI), there are no hyper-edges and Step 5 is a no-op. The cost is a single emptiness check on the fan list.</span>
 <span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functor Instances (functor_restrict)</span></span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Functor instances (functor_restrict)</span></span>
 <span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-inst`</span> also provides an alternative instance representation for relational (tabular) data: <span class="in">`FInstance`</span>, a set-valued table. Each schema vertex maps to a table (a <span class="in">`Vec`</span> of row maps), and each edge maps to foreign-key relationships.</span>
 <span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a>The restrict operation for functor instances is straightforward: for each vertex in the target schema, pull the corresponding table from the source instance via the migration's vertex map.^<span class="co">[</span><span class="ot">Categorically, this is the pullback functor $\Delta_F$ [@spivak2012]. It composes correctly by construction: restricting along a composed migration is the same as restricting twice.</span><span class="co">]</span></span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a>The restrict operation for functor instances is simpler than the W-type pipeline: for each vertex in the target schema, pull the corresponding table from the source instance via the migration's vertex map.^<span class="co">[</span><span class="ot">Categorically, this is the pullback functor $\Delta_F$ [@spivak2012]. It composes correctly by construction: restricting along a composed migration is the same as restricting twice.</span><span class="co">]</span></span>
 <span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`FInstance`</span> and <span class="in">`functor_restrict`</span> for relational protocols (SQL, MongoDB). Use <span class="in">`WInstance`</span> and <span class="in">`wtype_restrict`</span> for document protocols (AT Protocol, JSON Schema, OpenAPI). The choice is determined by the protocol's <span class="in">`instance_theory`</span> field.</span>
 <span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## JSON Round-Trip (parse_json / to_json)</span></span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## Json round-trip (parse_json / to_json)</span></span>
 <span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>The <span class="in">`parse`</span> module provides schema-guided JSON parsing and serialization:</span>
 <span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a></span>
@@ -2032,7 +2032,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Extra fields**: JSON properties not recognized by the schema are stored in <span class="in">`Node::extra_fields`</span> and re-emitted on serialization.</span>
 <span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Discriminators**: <span class="in">`$type`</span> tags on union-typed objects are preserved via <span class="in">`Node::discriminator`</span>.</span>
 <span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## Validation Axioms (I1 through I7)</span></span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## Validation axioms (i1 through i7)</span></span>
 <span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a>The <span class="in">`validate`</span> module checks that a <span class="in">`WInstance`</span> satisfies seven structural axioms:</span>
 <span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a></span>
@@ -2054,7 +2054,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a>The restrict pipeline is designed to preserve axioms I1 through I7. If the source instance is valid and the compiled migration is well-formed, the restricted instance is guaranteed to be valid with respect to the target schema.</span>
 <span id="cb10-196"><a href="#cb10-196" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-197"><a href="#cb10-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a><span class="fu">### Axiom Preservation Through the Pipeline</span></span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a><span class="fu">### Axiom preservation through the pipeline</span></span>
 <span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a>Each step of the restrict pipeline maintains or establishes specific axioms:</span>
 <span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a></span>
@@ -2066,11 +2066,11 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a>I3 (root exists) is checked explicitly. If the root is pruned, the pipeline returns an error rather than producing an invalid instance.</span>
 <span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## The AcsetOps Trait</span></span>
+<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## The acsetops trait</span></span>
 <span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a>The <span class="in">`AcsetOps`</span> trait provides a unified interface for operations across all three instance shapes: <span class="in">`WInstance`</span>, <span class="in">`FInstance`</span>, and <span class="in">`GInstance`</span>.</span>
 <span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### Trait Definition</span></span>
+<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### Trait definition</span></span>
 <span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a><span class="in">```rust</span></span>
 <span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a>pub trait AcsetOps<span class="sc">:</span> Clone <span class="sc">+</span> std<span class="sc">::</span>fmt<span class="sc">::</span>Debug {</span>
@@ -2112,7 +2112,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a><span class="st">Note that `FInstance::restrict` and `GInstance::restrict` don'</span>t use the <span class="st">`</span><span class="at">src_schema</span><span class="st">`</span> and <span class="st">`</span><span class="at">tgt_schema</span><span class="st">`</span> parameters. Their restrict operations depend only on the compiled migration. The schema parameters are required by <span class="st">`</span><span class="at">WInstance::restrict</span><span class="st">`</span> <span class="cf">for</span> the ancestor contraction and fan reconstruction steps. The trait uses the most general signature to accommodate all shapes.</span>
 <span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a><span class="do">### The Instance Enum</span></span>
+<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a><span class="do">### The instance Enum</span></span>
 <span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">rust</span></span>
 <span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a><span class="at">pub enum Instance {</span></span>
@@ -2124,7 +2124,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">Instance</span><span class="st">`</span> dispatches <span class="st">`</span><span class="at">restrict</span><span class="st">`</span>, <span class="st">`</span><span class="at">extend</span><span class="st">`</span>, <span class="st">`</span><span class="at">element_count</span><span class="st">`</span>, and <span class="st">`</span><span class="at">shape_name</span><span class="st">`</span> to the inner type<span class="st">'s `AcsetOps` implementation. This is the type used by the CLI'</span>s <span class="st">`</span><span class="at">schema lift</span><span class="st">`</span> command and by the VCS layer when storing instances <span class="cf">in</span> the object store.</span>
 <span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a><span class="do">### GInstance: Graph-Shaped Instances</span></span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a><span class="do">### Ginstance: graph-shaped instances</span></span>
 <span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a>The <span class="st">`</span><span class="at">GInstance</span><span class="st">`</span> type handles the most general instance shape<span class="sc">:</span> a directed graph of nodes and edges with no distinguished root and cycles allowed. Both <span class="st">`</span><span class="at">WInstance</span><span class="st">`</span> (trees) and <span class="st">`</span><span class="at">FInstance</span><span class="st">`</span> (tables) are special cases.</span>
 <span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a></span>
@@ -2134,21 +2134,21 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a>Use <span class="st">`</span><span class="at">GInstance</span><span class="st">`</span> when your protocol<span class="st">'s data is inherently graph-shaped (no natural root node, cycles expected). For tree-structured data (JSON, XML), use `WInstance`. For tabular data (SQL, CSV), use `FInstance`. The `AcsetOps` trait ensures that the migration engine works identically regardless of which shape you choose.</span></span>
 <span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a><span class="st">:::</span></span>
 <span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a><span class="st">## Polynomial Operations and Fibers</span></span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a><span class="st">## Polynomial operations and fibers</span></span>
 <span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a><span class="st">`panproto-inst` also provides polynomial functor operations in `poly.rs` and `hom.rs`. These include fiber decomposition (preimage of a migration at a target anchor), section construction (enriching a base instance with annotation data), group-by (partitioning by migration image), join (pullback of two instances along shared projections), and the internal hom (a schema whose instances represent migrations). The `restrict_with_complement` function in `poly.rs` extends the restrict pipeline to track dropped nodes and arcs, enabling `fiber_at_node` queries. For full details, see @sec-polynomial-operations.</span></span>
 <span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="st">## Design Rationale</span></span>
+<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="st">## Design rationale</span></span>
 <span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a><span class="st">### Why Separate Node IDs from Anchors</span></span>
+<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a><span class="st">### Why separate node ids from anchors</span></span>
 <span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a><span class="st">Node IDs are `u32` values. Anchors are `String` schema vertex IDs. Multiple nodes can share the same anchor (e.g., an array of strings all anchored to the same `"items"` vertex). Keeping IDs numeric and anchors semantic gives $O(1)$ node lookup by ID while preserving the schema-level meaning through the anchor.</span></span>
 <span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a><span class="st">### Why Precomputed Parent and Children Maps</span></span>
+<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a><span class="st">### Why precomputed parent and children maps</span></span>
 <span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a><span class="st">The `parent_map` and `children_map` are computed once in `WInstance::new()` and never updated. This is safe because `WInstance` is immutable after construction. The restrict pipeline creates a new `WInstance` rather than mutating the source.</span></span>
 <span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a><span class="st">### Why Five Steps Instead of One</span></span>
+<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a><span class="st">### Why five steps instead of one</span></span>
 <span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a><span class="st">Decomposing the restrict algorithm into five independent functions serves two purposes:</span></span>
 <span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a></span>

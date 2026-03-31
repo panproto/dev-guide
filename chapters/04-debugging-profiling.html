@@ -620,8 +620,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tracing-with-rust_log" id="toc-tracing-with-rust_log" class="nav-link active" data-scroll-target="#tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with RUST_LOG</a></li>
-  <li><a href="#stepping-through-the-w-type-restrict-pipeline" id="toc-stepping-through-the-w-type-restrict-pipeline" class="nav-link" data-scroll-target="#stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</a></li>
+  <li><a href="#tracing-with-rust_log" id="toc-tracing-with-rust_log" class="nav-link active" data-scroll-target="#tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with rust_log</a></li>
+  <li><a href="#stepping-through-the-w-type-restrict-pipeline" id="toc-stepping-through-the-w-type-restrict-pipeline" class="nav-link" data-scroll-target="#stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the w-type restrict pipeline</a></li>
   <li><a href="#inspecting-wasm-boundary-data" id="toc-inspecting-wasm-boundary-data" class="nav-link" data-scroll-target="#inspecting-wasm-boundary-data"><span class="header-section-number">4.3</span> Inspecting WASM boundary data</a>
   <ul class="collapse">
   <li><a href="#hex-dump-a-messagepack-payload" id="toc-hex-dump-a-messagepack-payload" class="nav-link" data-scroll-target="#hex-dump-a-messagepack-payload"><span class="header-section-number">4.3.1</span> Hex-dump a MessagePack payload</a></li>
@@ -675,7 +675,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="tracing-with-rust_log" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with RUST_LOG</h2>
+<h2 data-number="4.1" class="anchored" data-anchor-id="tracing-with-rust_log"><span class="header-section-number">4.1</span> Tracing with rust_log</h2>
 <p>panproto uses the <code>tracing</code> crate for structured logging. Control verbosity through the <code>RUST_LOG</code> environment variable:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Debug output for a single crate</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">RUST_LOG</span><span class="op">=</span>panproto_inst=debug <span class="ex">cargo</span> nextest run <span class="at">-p</span> panproto-inst</span>
@@ -704,16 +704,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="stepping-through-the-w-type-restrict-pipeline" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the W-type restrict pipeline</h2>
+<h2 data-number="4.2" class="anchored" data-anchor-id="stepping-through-the-w-type-restrict-pipeline"><span class="header-section-number">4.2</span> Stepping through the w-type restrict pipeline</h2>
 <p>The restrict pipeline in <code>panproto-inst</code> transforms a W-type instance (a tree-shaped data record whose structure is determined by the schema) when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</p>
 <ol type="1">
-<li><p><strong><code>anchor_surviving()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</p></li>
+<li><p><strong><code>anchor_surviving()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: determines which nodes survive the migration. If output is missing data, check whether the surviving set is too small.</p></li>
 <li><p><strong><code>reachable_from_root()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: BFS from root through anchor-surviving nodes. If nodes appear unreachable despite surviving, the reachability check is the place to look.</p></li>
 <li><p><strong><code>ancestor_contraction()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: merges ancestor chains when intermediate vertices are removed. Panics here usually mean the surviving set is inconsistent with the vertex remap.</p></li>
 <li><p><strong><code>resolve_edge()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: rewires edges according to the compiled migration’s edge remap. If edges point to wrong targets, inspect the resolver.</p></li>
 <li><p><strong><code>reconstruct_fans()</code></strong> in <code>crates/panproto-inst/src/wtype.rs</code>: rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</p></li>
 </ol>
-<p>Set <code>RUST_LOG=panproto_inst=debug</code> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</p>
+<p>Set <code>RUST_LOG=panproto_inst=debug</code> to see entry/exit traces for each function, including the sizes of intermediate data structures.</p>
 </section>
 <section id="inspecting-wasm-boundary-data" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="inspecting-wasm-boundary-data"><span class="header-section-number">4.3</span> Inspecting WASM boundary data</h2>
@@ -1414,7 +1414,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Debugging and Profiling {#sec-debugging-profiling}</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tracing with RUST_LOG</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tracing with rust_log</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>panproto uses the <span class="in">`tracing`</span> crate for structured logging. Control verbosity through the <span class="in">`RUST_LOG`</span> environment variable:</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1442,11 +1442,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stepping through the W-type restrict pipeline</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stepping through the w-type restrict pipeline</span></span>
 <span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>The restrict pipeline in <span class="in">`panproto-inst`</span> transforms a W-type instance (a tree-shaped data record whose structure is determined by the schema) when a migration removes or restructures schema elements. The pipeline has five key functions that serve as natural debugging waypoints:</span>
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`anchor_surviving()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>: determines which nodes survive the migration. If your output is missing data, check whether the surviving set is too small.</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**`anchor_surviving()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>: determines which nodes survive the migration. If output is missing data, check whether the surviving set is too small.</span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**`reachable_from_root()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>: BFS from root through anchor-surviving nodes. If nodes appear unreachable despite surviving, the reachability check is the place to look.</span>
 <span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
@@ -1456,7 +1456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**`reconstruct_fans()`** in <span class="in">`crates/panproto-inst/src/wtype.rs`</span>: rebuilds fan structures (ordered child collections) after restrict. Missing or reordered children point to fan reconstruction issues.</span>
 <span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`RUST_LOG=panproto_inst=debug`</span> to see entry/exit traces for each of these functions, including the sizes of intermediate data structures.</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>Set <span class="in">`RUST_LOG=panproto_inst=debug`</span> to see entry/exit traces for each function, including the sizes of intermediate data structures.</span>
 <span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inspecting WASM boundary data</span></span>
 <span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a></span>

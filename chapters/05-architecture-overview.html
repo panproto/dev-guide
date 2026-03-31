@@ -672,21 +672,21 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-crate-dependency-hierarchy" id="toc-the-crate-dependency-hierarchy" class="nav-link active" data-scroll-target="#the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</a>
+  <li><a href="#the-crate-dependency-hierarchy" id="toc-the-crate-dependency-hierarchy" class="nav-link active" data-scroll-target="#the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The crate dependency hierarchy</a>
   <ul class="collapse">
-  <li><a href="#the-re-export-facade" id="toc-the-re-export-facade" class="nav-link" data-scroll-target="#the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</a></li>
-  <li><a href="#crate-dependency-graph" id="toc-crate-dependency-graph" class="nav-link" data-scroll-target="#crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate Dependency Graph</a></li>
+  <li><a href="#the-re-export-facade" id="toc-the-re-export-facade" class="nav-link" data-scroll-target="#the-re-export-facade"><span class="header-section-number">5.1.1</span> The re-export facade</a></li>
+  <li><a href="#crate-dependency-graph" id="toc-crate-dependency-graph" class="nav-link" data-scroll-target="#crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate dependency graph</a></li>
   </ul></li>
-  <li><a href="#key-design-decisions" id="toc-key-design-decisions" class="nav-link" data-scroll-target="#key-design-decisions"><span class="header-section-number">5.2</span> Key Design Decisions</a>
+  <li><a href="#key-design-decisions" id="toc-key-design-decisions" class="nav-link" data-scroll-target="#key-design-decisions"><span class="header-section-number">5.2</span> Key design decisions</a>
   <ul class="collapse">
   <li><a href="#why-gats" id="toc-why-gats" class="nav-link" data-scroll-target="#why-gats"><span class="header-section-number">5.2.1</span> Why GATs</a></li>
-  <li><a href="#why-handle-based-wasm-api" id="toc-why-handle-based-wasm-api" class="nav-link" data-scroll-target="#why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why Handle-Based WASM API</a></li>
+  <li><a href="#why-handle-based-wasm-api" id="toc-why-handle-based-wasm-api" class="nav-link" data-scroll-target="#why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why handle-based WASM API</a></li>
   <li><a href="#why-messagepack" id="toc-why-messagepack" class="nav-link" data-scroll-target="#why-messagepack"><span class="header-section-number">5.2.3</span> Why MessagePack</a></li>
-  <li><a href="#why-immutable-fluent-builders" id="toc-why-immutable-fluent-builders" class="nav-link" data-scroll-target="#why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why Immutable Fluent Builders</a></li>
+  <li><a href="#why-immutable-fluent-builders" id="toc-why-immutable-fluent-builders" class="nav-link" data-scroll-target="#why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why immutable fluent builders</a></li>
   </ul></li>
-  <li><a href="#the-two-parameter-architecture" id="toc-the-two-parameter-architecture" class="nav-link" data-scroll-target="#the-two-parameter-architecture"><span class="header-section-number">5.3</span> The Two-Parameter Architecture</a></li>
-  <li><a href="#migration-lifecycle" id="toc-migration-lifecycle" class="nav-link" data-scroll-target="#migration-lifecycle"><span class="header-section-number">5.4</span> Migration Lifecycle</a></li>
-  <li><a href="#what-lives-where" id="toc-what-lives-where" class="nav-link" data-scroll-target="#what-lives-where"><span class="header-section-number">5.5</span> What Lives Where</a></li>
+  <li><a href="#the-two-parameter-architecture" id="toc-the-two-parameter-architecture" class="nav-link" data-scroll-target="#the-two-parameter-architecture"><span class="header-section-number">5.3</span> The two-parameter architecture</a></li>
+  <li><a href="#migration-lifecycle" id="toc-migration-lifecycle" class="nav-link" data-scroll-target="#migration-lifecycle"><span class="header-section-number">5.4</span> Migration lifecycle</a></li>
+  <li><a href="#what-lives-where" id="toc-what-lives-where" class="nav-link" data-scroll-target="#what-lives-where"><span class="header-section-number">5.5</span> What lives where</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/05-architecture-overview.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -715,7 +715,7 @@ window.Quarto = {
 
 <p>panproto is organized into eleven crates arranged in six dependency levels. Consider a simple example: <code>panproto::gat::Theory</code> flows down through <code>panproto-schema</code> (which builds hypergraphs from theories) and <code>panproto-inst</code> (which populates those graphs with data), then up through <code>panproto-mig</code> (which compiles migrations between schema versions). Each level depends only on the levels below it, producing a strict DAG: <span class="math inline">\(L_0 \to L_1 \to \cdots \to L_4\)</span>.</p>
 <section id="the-crate-dependency-hierarchy" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The Crate Dependency Hierarchy</h2>
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-crate-dependency-hierarchy"><span class="header-section-number">5.1</span> The crate dependency hierarchy</h2>
 <div id="tbl-crate-levels" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-crate-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -788,7 +788,7 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <p><strong>Level 3.5</strong> provides <strong>instance-level presentation</strong> via <code>panproto-io</code>. This crate connects raw data bytes (HTML, CoNLL-U, Protobuf wire messages, JSON documents, CSV rows) to abstract instance models (<code>WInstance</code>/<code>FInstance</code>). Together with <code>panproto-protocols</code>, it completes both levels of the data migration pipeline: schema presentations map format specs to schema models, and instance presentations map format data to instance models. The commutativity guarantee from <span class="citation" data-cites="spivak2012">Spivak (<a href="#ref-spivak2012" role="doc-biblioref">2012</a>)</span> ensures that parse, restrict, and emit compose correctly.</p>
 <p><strong>Level 4</strong> provides the consumer-facing surfaces. <code>panproto-core</code> re-exports everything through a single dependency. <code>panproto-wasm</code> exposes a handle-based WebAssembly API. <code>panproto-cli</code> wraps it all in a command-line tool.</p>
 <section id="the-re-export-facade" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-re-export-facade"><span class="header-section-number">5.1.1</span> The Re-export Facade</h3>
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-re-export-facade"><span class="header-section-number">5.1.1</span> The re-export facade</h3>
 <p><code>panproto-core</code> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">//! # panproto-core</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">//!</span></span>
@@ -819,7 +819,7 @@ Table&nbsp;5.1: The six-level crate hierarchy.
 <p>Downstream code writes <code>panproto::gat::Theory</code> rather than importing <code>panproto-gat</code> directly. The facade adds no logic of its own.</p>
 </section>
 <section id="crate-dependency-graph" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate Dependency Graph</h3>
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="crate-dependency-graph"><span class="header-section-number">5.1.2</span> Crate dependency graph</h3>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div id="fig-crate-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -899,7 +899,7 @@ Figure&nbsp;5.1: Crate dependency graph. Arrows point from dependant to dependen
 </section>
 </section>
 <section id="key-design-decisions" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="key-design-decisions"><span class="header-section-number">5.2</span> Key Design Decisions</h2>
+<h2 data-number="5.2" class="anchored" data-anchor-id="key-design-decisions"><span class="header-section-number">5.2</span> Key design decisions</h2>
 <section id="why-gats" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="why-gats"><span class="header-section-number">5.2.1</span> Why GATs</h3>
 <p>panproto formalizes data format specifications as <em>generalized algebraic theories</em> (GATs).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> A GAT describes a schema language’s vocabulary: what kinds of entities exist (<strong>sorts</strong>, i.e., types in a formal theory, like <code>Vertex</code> and <code>Edge</code>), what relationships connect them (<strong>operations</strong>, like <code>src: Edge → Vertex</code>), and what consistency rules hold (<strong>equations</strong>, like “a foreign key’s source column must belong to its source table”). The “generalized” part is that sorts can depend on other sorts: the set of valid constraints for a string vertex is different from the set for an integer vertex. This dependent structure appears in every real schema language. The type of a Protobuf field depends on a discriminator tag. The valid constraints on a JSON Schema node depend on its <code>type</code> keyword. The applicable column constraints in SQL depend on the column’s data type.</p>
@@ -937,7 +937,7 @@ Note
 </div>
 </section>
 <section id="why-handle-based-wasm-api" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why Handle-Based WASM API</h3>
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="why-handle-based-wasm-api"><span class="header-section-number">5.2.2</span> Why handle-based WASM API</h3>
 <p>The WASM boundary (<code>panproto-wasm</code>) uses a handle/slab architecture rather than <code>serde-wasm-bindgen</code> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side. JavaScript receives an opaque <code>u32</code> handle.</p>
 <p>The reason is performance. Serializing a large schema through <code>serde-wasm-bindgen</code> on every API call would dominate the cost of actual computation. With handles, the only data that crosses the WASM boundary is numeric IDs and small MessagePack payloads for results. The TypeScript SDK wraps these handles in ergonomic classes with <code>Symbol.dispose</code> support for deterministic cleanup.</p>
 </section>
@@ -952,7 +952,7 @@ Note
 <p>JSON is still used as the human-facing format for CLI output and the <code>parse_json</code>/<code>to_json</code> round-trip in <code>panproto-inst</code>.</p>
 </section>
 <section id="why-immutable-fluent-builders" class="level3" data-number="5.2.4">
-<h3 data-number="5.2.4" class="anchored" data-anchor-id="why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why Immutable Fluent Builders</h3>
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="why-immutable-fluent-builders"><span class="header-section-number">5.2.4</span> Why immutable fluent builders</h3>
 <p><code>SchemaBuilder</code> and the migration DSL use an immutable fluent pattern: each method consumes <code>self</code> and returns <code>Result&lt;Self, Error&gt;</code>. This prevents partial construction. You can’t hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <code>build()</code> only needs to check global properties (like non-emptiness) and compute indices.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -970,7 +970,7 @@ Note
 </section>
 </section>
 <section id="the-two-parameter-architecture" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="the-two-parameter-architecture"><span class="header-section-number">5.3</span> The Two-Parameter Architecture</h2>
+<h2 data-number="5.3" class="anchored" data-anchor-id="the-two-parameter-architecture"><span class="header-section-number">5.3</span> The two-parameter architecture</h2>
 <p>Every protocol in panproto is defined by a pair of GATs. Formally, a protocol <span class="math inline">\(P = (T_{\mathrm{schema}}, T_{\mathrm{inst}}, R)\)</span> where <span class="math inline">\(T_{\mathrm{schema}}\)</span> is the schema theory, <span class="math inline">\(T_{\mathrm{inst}}\)</span> is the instance theory, and <span class="math inline">\(R\)</span> is a set of edge rules:</p>
 <ol type="1">
 <li><strong>Schema theory</strong> describes the <em>shape</em> of a data format. Its models (concrete instances that satisfy a theory’s requirements) are schemas (hypergraphs of vertex kinds and edge rules).</li>
@@ -981,7 +981,7 @@ Note
 <p>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The guarantee is that restriction (projecting data from the target schema onto the source schema, keeping only what the source schema expects) along a theory morphism composes correctly and preserves the structural axioms of the instance theory.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
 <section id="migration-lifecycle" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="migration-lifecycle"><span class="header-section-number">5.4</span> Migration Lifecycle</h2>
+<h2 data-number="5.4" class="anchored" data-anchor-id="migration-lifecycle"><span class="header-section-number">5.4</span> Migration lifecycle</h2>
 <p>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -1031,7 +1031,7 @@ Figure&nbsp;5.2: Full migration lifecycle, from raw data through migration to ta
 </ol>
 </section>
 <section id="what-lives-where" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="what-lives-where"><span class="header-section-number">5.5</span> What Lives Where</h2>
+<h2 data-number="5.5" class="anchored" data-anchor-id="what-lives-where"><span class="header-section-number">5.5</span> What lives where</h2>
 <p>A quick reference for locating functionality:</p>
 <div id="tbl-where" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1619,7 +1619,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>panproto is organized into eleven crates arranged in six dependency levels. Consider a simple example: <span class="in">`panproto::gat::Theory`</span> flows down through <span class="in">`panproto-schema`</span> (which builds hypergraphs from theories) and <span class="in">`panproto-inst`</span> (which populates those graphs with data), then up through <span class="in">`panproto-mig`</span> (which compiles migrations between schema versions). Each level depends only on the levels below it, producing a strict DAG: $L_0 \to L_1 \to \cdots \to L_4$.</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Crate Dependency Hierarchy</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## The crate dependency hierarchy</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Crates <span class="pp">|</span> Role <span class="pp">|</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|--------|------|</span></span>
@@ -1646,7 +1646,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>**Level 4** provides the consumer-facing surfaces. <span class="in">`panproto-core`</span> re-exports everything through a single dependency. <span class="in">`panproto-wasm`</span> exposes a handle-based WebAssembly API. <span class="in">`panproto-cli`</span> wraps it all in a command-line tool.</span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Re-export Facade</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### The re-export facade</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">`panproto-core`</span> is the entry point most consumers import. It re-exports all sub-crate APIs under short module names:</span>
 <span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
@@ -1655,7 +1655,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>Downstream code writes <span class="in">`panproto::gat::Theory`</span> rather than importing <span class="in">`panproto-gat`</span> directly. The facade adds no logic of its own.</span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Crate Dependency Graph</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### Crate dependency graph</span></span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>%%| label: fig-crate-dag</span>
@@ -1722,7 +1722,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    cli --&gt; expr-parser</span>
 <span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Design Decisions</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key design decisions</span></span>
 <span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why GATs</span></span>
 <span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
@@ -1743,7 +1743,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>If your new functionality depends on Level 0 but nothing in Levels 1 or 2, it belongs as a new Level 1 crate (or an extension of an existing one). Adding a cross-level dependency breaks the DAG invariant and increases compile times for everything downstream. When in doubt, check the dependency graph in @fig-crate-dag.</span>
 <span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Handle-Based WASM API</span></span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why handle-based WASM API</span></span>
 <span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>The WASM boundary (<span class="in">`panproto-wasm`</span>) uses a handle/slab architecture rather than <span class="in">`serde-wasm-bindgen`</span> serialization. Each Rust object (theory, schema, instance, migration) is stored in a typed slab on the Rust side. JavaScript receives an opaque <span class="in">`u32`</span> handle.</span>
 <span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a></span>
@@ -1759,7 +1759,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>JSON is still used as the human-facing format for CLI output and the <span class="in">`parse_json`</span>/<span class="in">`to_json`</span> round-trip in <span class="in">`panproto-inst`</span>.</span>
 <span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Immutable Fluent Builders</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why immutable fluent builders</span></span>
 <span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">`SchemaBuilder`</span> and the migration DSL use an immutable fluent pattern: each method consumes <span class="in">`self`</span> and returns <span class="in">`Result&lt;Self, Error&gt;`</span>. This prevents partial construction. You can't hold a reference to a half-built schema and accidentally use it. The pattern also makes validation composable: each step validates its own invariant, and <span class="in">`build()`</span> only needs to check global properties (like non-emptiness) and compute indices.</span>
 <span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a></span>
@@ -1768,7 +1768,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>An <span class="in">`&amp;mut self`</span> builder would allow callers to hold a reference to a partially constructed schema. A bug that reads from the builder mid-construction would see an incomplete adjacency index. The consume-self pattern makes this impossible at the type level.</span>
 <span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Two-Parameter Architecture</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a><span class="fu">## The two-parameter architecture</span></span>
 <span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a>Every protocol in panproto is defined by a pair of GATs. Formally, a protocol $P = (T_{\mathrm{schema}}, T_{\mathrm{inst}}, R)$ where $T_{\mathrm{schema}}$ is the schema theory, $T_{\mathrm{inst}}$ is the instance theory, and $R$ is a set of edge rules:</span>
 <span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
@@ -1783,7 +1783,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a>Migration between protocol versions is then a morphism at the schema theory level, compiled into executable operations at the instance theory level. The guarantee is that restriction (projecting data from the target schema onto the source schema, keeping only what the source schema expects) along a theory morphism composes correctly and preserves the structural axioms of the instance theory.^<span class="co">[</span><span class="ot">Restriction composes correctly: restricting along two successive migrations produces the same result as restricting along their composition. This compositionality property is called functoriality, and is established formally in @spivak2012.</span><span class="co">]</span></span>
 <span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration Lifecycle</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Migration lifecycle</span></span>
 <span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a>The following sequence diagram traces the full lifecycle from defining a protocol through migrating data:</span>
 <span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a></span>
@@ -1822,7 +1822,7 @@ Spivak, David I. 2012. <span>“Functorial Data Migration.”</span> <em>Informa
 <span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Compile migration**: <span class="in">`panproto-mig`</span> compiles a migration specification into a <span class="in">`CompiledMigration`</span> containing vertex remaps, edge remaps, and contraction resolvers.</span>
 <span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Lift data**: <span class="in">`panproto-inst`</span> executes the 5-step <span class="in">`wtype_restrict`</span> pipeline to project instance data from v1 to v2.</span>
 <span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Lives Where</span></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## What lives where</span></span>
 <span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a>A quick reference for locating functionality:</span>
 <span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a></span>

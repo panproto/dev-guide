@@ -683,8 +683,8 @@ window.Quarto = {
   <li><a href="#complement_cost-cost.rs" id="toc-complement_cost-cost.rs" class="nav-link" data-scroll-target="#complement_cost-cost.rs"><span class="header-section-number">24.6.1</span> complement_cost (cost.rs)</a></li>
   <li><a href="#lensgraph-graph.rs" id="toc-lensgraph-graph.rs" class="nav-link" data-scroll-target="#lensgraph-graph.rs"><span class="header-section-number">24.6.2</span> LensGraph (graph.rs)</a></li>
   </ul></li>
-  <li><a href="#sec-poly-wasm" id="toc-sec-poly-wasm" class="nav-link" data-scroll-target="#sec-poly-wasm"><span class="header-section-number">24.7</span> WASM boundary</a></li>
-  <li><a href="#sec-poly-typescript" id="toc-sec-poly-typescript" class="nav-link" data-scroll-target="#sec-poly-typescript"><span class="header-section-number">24.8</span> TypeScript SDK</a></li>
+  <li><a href="#sec-poly-WASM" id="toc-sec-poly-WASM" class="nav-link" data-scroll-target="#sec-poly-WASM"><span class="header-section-number">24.7</span> WASM boundary</a></li>
+  <li><a href="#sec-poly-TypeScript" id="toc-sec-poly-TypeScript" class="nav-link" data-scroll-target="#sec-poly-TypeScript"><span class="header-section-number">24.8</span> TypeScript SDK</a></li>
   <li><a href="#sec-poly-source" id="toc-sec-poly-source" class="nav-link" data-scroll-target="#sec-poly-source"><span class="header-section-number">24.9</span> Source locations</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/30-polynomial-operations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -763,7 +763,7 @@ Note
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    target_node_id<span class="op">:</span> <span class="dt">u32</span><span class="op">,</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    complement<span class="op">:</span> <span class="op">&amp;</span>Complement<span class="op">,</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Computes the fiber at a specific node ID in the restricted (target) instance, rather than at an anchor. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <code>Complement</code> that were contracted into the target node during ancestor contraction. Requires a <code>Complement</code> from <code>restrict_with_complement</code>.</p>
+<p>Computes the fiber at a specific node ID in the restricted (target) instance. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <code>Complement</code> that were contracted into the target node during ancestor contraction. Requires a <code>Complement</code> from <code>restrict_with_complement</code>.</p>
 </section>
 </section>
 <section id="sec-complement-tracking" class="level2" data-number="24.2">
@@ -794,7 +794,7 @@ Note
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    migration<span class="op">:</span> <span class="op">&amp;</span>CompiledMigration<span class="op">,</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span>(WInstance<span class="op">,</span> Complement)<span class="op">,</span> RestrictError<span class="op">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A BFS-based restrict that produces both the restricted instance and a <code>Complement</code>. The BFS traversal tracks the nearest surviving ancestor for each node. Surviving nodes are remapped and have field transforms applied; non-surviving nodes are recorded in the complement.</p>
-<p>This is distinct from the <code>Complement</code> in <code>panproto-lens/src/asymmetric.rs</code>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <code>poly.rs</code> complement is a lighter-weight structure focused on fiber operations.</p>
+<p>This differs from the <code>Complement</code> in <code>panproto-lens/src/asymmetric.rs</code>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <code>poly.rs</code> complement is lighter-weight and focuses on fiber operations.</p>
 </section>
 </section>
 <section id="sec-section-construction" class="level2" data-number="24.3">
@@ -824,7 +824,7 @@ Note
 <li>Remaps arcs to use source-schema anchors.</li>
 <li>Adds enrichment nodes with fresh IDs, connected to base nodes via the specified edges.</li>
 </ol>
-<p>The roundtrip property: <code>restrict(section(base, projection, enrichments), projection) ≅ base</code>. The restricted section has the same nodes and anchors as the base.</p>
+<p>The roundtrip property holds: <code>restrict(section(base, projection, enrichments), projection) ≅ base</code>. The restricted section has the same nodes and anchors as the base.</p>
 </section>
 </section>
 <section id="sec-group-by-join" class="level2" data-number="24.4">
@@ -891,7 +891,7 @@ Note
 <li>Extract edge remap from backward nodes: scan for <code>backward_</code>-prefixed anchors, read source/target edge metadata from extra fields.</li>
 <li>Build a <code>CompiledMigration</code> and apply <code>wtype_restrict</code>.</li>
 </ol>
-<p>The roundtrip property: <code>eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)</code>.</p>
+<p>The roundtrip property holds: <code>eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)</code>.</p>
 </section>
 </section>
 <section id="sec-lawvere-metric" class="level2" data-number="24.6">
@@ -901,8 +901,7 @@ Note
 <h3 data-number="24.6.1" class="anchored" data-anchor-id="complement_cost-cost.rs"><span class="header-section-number">24.6.1</span> complement_cost (cost.rs)</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> complement_cost(complement<span class="op">:</span> <span class="op">&amp;</span>ComplementConstructor) <span class="op">-&gt;</span> <span class="dt">f64</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Assigns a numeric cost to each <code>ComplementConstructor</code> variant:</p>
-<table class="table-striped caption-top table">
-<caption>Complement cost table.</caption>
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Variant</th>
@@ -958,11 +957,10 @@ Note
 <p>The Floyd-Warshall implementation is <span class="math inline">\(O(n^3)\)</span> where <span class="math inline">\(n\)</span> is the number of schemas. This is acceptable because lens graphs are typically small (tens of schemas, not thousands).</p>
 </section>
 </section>
-<section id="sec-poly-wasm" class="level2" data-number="24.7">
-<h2 data-number="24.7" class="anchored" data-anchor-id="sec-poly-wasm"><span class="header-section-number">24.7</span> WASM boundary</h2>
+<section id="sec-poly-WASM" class="level2" data-number="24.7">
+<h2 data-number="24.7" class="anchored" data-anchor-id="sec-poly-WASM"><span class="header-section-number">24.7</span> WASM boundary</h2>
 <p>Five WASM exports in <code>panproto-wasm/src/api.rs</code> expose polynomial operations:</p>
-<table class="table-striped caption-top table">
-<caption>WASM exports for polynomial operations.</caption>
+<table class="caption-top table">
 <colgroup>
 <col style="width: 13%">
 <col style="width: 36%">
@@ -1012,8 +1010,8 @@ Note
 </table>
 <p><code>preferred_conversion_path</code> and <code>conversion_distance</code> both construct a <code>LensGraph</code> from the provided edges and call <code>compute_distances()</code> before querying. The graph is not cached across calls; each invocation builds it from scratch.</p>
 </section>
-<section id="sec-poly-typescript" class="level2" data-number="24.8">
-<h2 data-number="24.8" class="anchored" data-anchor-id="sec-poly-typescript"><span class="header-section-number">24.8</span> TypeScript SDK</h2>
+<section id="sec-poly-TypeScript" class="level2" data-number="24.8">
+<h2 data-number="24.8" class="anchored" data-anchor-id="sec-poly-TypeScript"><span class="header-section-number">24.8</span> TypeScript SDK</h2>
 <p>The TypeScript SDK wraps these WASM exports in three modules:</p>
 <p><strong><code>fiber.ts</code></strong>: exports <code>fiberAt(instanceBytes, migrationBytes, anchor, wasm)</code> and <code>fiberDecomposition(instanceBytes, migrationBytes, wasm)</code>. Both serialize inputs as MessagePack, call the WASM function, and deserialize the result.</p>
 <p><strong><code>hom.ts</code></strong>: exports <code>polyHom(sourceBytes, targetBytes, wasm)</code>, returning the serialized hom schema.</p>
@@ -1596,7 +1594,7 @@ Note
 <span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> Vec<span class="sc">&lt;</span>u32<span class="sc">&gt;</span></span>
 <span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>Computes the fiber at a specific node ID in the restricted (target) instance, rather than at an anchor. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <span class="in">`Complement`</span> that were contracted into the target node during ancestor contraction. Requires a <span class="in">`Complement`</span> from <span class="in">`restrict_with_complement`</span>.</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>Computes the fiber at a specific node ID in the restricted (target) instance. Finds source nodes in two ways: (a) direct preimage via anchor matching, and (b) nodes from the <span class="in">`Complement`</span> that were contracted into the target node during ancestor contraction. Requires a <span class="in">`Complement`</span> from <span class="in">`restrict_with_complement`</span>.</span>
 <span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complement tracking {#sec-complement-tracking}</span></span>
 <span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a></span>
@@ -1636,7 +1634,7 @@ Note
 <span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>A BFS-based restrict that produces both the restricted instance and a <span class="in">`Complement`</span>. The BFS traversal tracks the nearest surviving ancestor for each node. Surviving nodes are remapped and have field transforms applied; non-surviving nodes are recorded in the complement.</span>
 <span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>This is distinct from the <span class="in">`Complement`</span> in <span class="in">`panproto-lens/src/asymmetric.rs`</span>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <span class="in">`poly.rs`</span> complement is a lighter-weight structure focused on fiber operations.</span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>This differs from the <span class="in">`Complement`</span> in <span class="in">`panproto-lens/src/asymmetric.rs`</span>, which tracks dropped nodes, arcs, fans, contraction choices, and original parents for the bidirectional lens. The <span class="in">`poly.rs`</span> complement is lighter-weight and focuses on fiber operations.</span>
 <span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Section construction {#sec-section-construction}</span></span>
 <span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a></span>
@@ -1672,7 +1670,7 @@ Note
 <span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Remaps arcs to use source-schema anchors.</span>
 <span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Adds enrichment nodes with fresh IDs, connected to base nodes via the specified edges.</span>
 <span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a>The roundtrip property: <span class="in">`restrict(section(base, projection, enrichments), projection) ≅ base`</span>. The restricted section has the same nodes and anchors as the base.</span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a>The roundtrip property holds: <span class="in">`restrict(section(base, projection, enrichments), projection) ≅ base`</span>. The restricted section has the same nodes and anchors as the base.</span>
 <span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a><span class="fu">## Group-by and join {#sec-group-by-join}</span></span>
 <span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a></span>
@@ -1754,7 +1752,7 @@ Note
 <span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Extract edge remap from backward nodes: scan for <span class="in">`backward_`</span>-prefixed anchors, read source/target edge metadata from extra fields.</span>
 <span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Build a <span class="in">`CompiledMigration`</span> and apply <span class="in">`wtype_restrict`</span>.</span>
 <span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a>The roundtrip property: <span class="in">`eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)`</span>.</span>
+<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a>The roundtrip property holds: <span class="in">`eval_hom(curry_migration(m, S, [S,T]), x, S, T) = wtype_restrict(x, S, T, m)`</span>.</span>
 <span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lawvere metric {#sec-lawvere-metric}</span></span>
 <span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a></span>
@@ -1777,94 +1775,90 @@ Note
 <span id="cb17-237"><a href="#cb17-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`NatTransKernel`</span> <span class="pp">|</span> 10.0 <span class="pp">|</span></span>
 <span id="cb17-238"><a href="#cb17-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Composite(children)`</span> <span class="pp">|</span> <span class="in">`sum(children)`</span> <span class="pp">|</span></span>
 <span id="cb17-239"><a href="#cb17-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-240"><a href="#cb17-240" aria-hidden="true" tabindex="-1"></a>: Complement cost table. {.striped}</span>
+<span id="cb17-240"><a href="#cb17-240" aria-hidden="true" tabindex="-1"></a><span class="in">`chain_cost`</span> sums the complement costs of all steps in a <span class="in">`ProtolensChain`</span>.</span>
 <span id="cb17-241"><a href="#cb17-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="in">`chain_cost`</span> sums the complement costs of all steps in a <span class="in">`ProtolensChain`</span>.</span>
+<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="fu">### LensGraph (graph.rs)</span></span>
 <span id="cb17-243"><a href="#cb17-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-244"><a href="#cb17-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### LensGraph (graph.rs)</span></span>
-<span id="cb17-245"><a href="#cb17-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-246"><a href="#cb17-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
-<span id="cb17-247"><a href="#cb17-247" aria-hidden="true" tabindex="-1"></a>pub struct LensGraph {</span>
-<span id="cb17-248"><a href="#cb17-248" aria-hidden="true" tabindex="-1"></a>    schemas<span class="sc">:</span> Vec<span class="sc">&lt;</span>Name<span class="sc">&gt;</span>,</span>
-<span id="cb17-249"><a href="#cb17-249" aria-hidden="true" tabindex="-1"></a>    schema_index<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>Name, usize<span class="sc">&gt;</span>,</span>
-<span id="cb17-250"><a href="#cb17-250" aria-hidden="true" tabindex="-1"></a>    edges<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>(usize, usize), (f64, ProtolensChain)<span class="sc">&gt;</span>,</span>
-<span id="cb17-251"><a href="#cb17-251" aria-hidden="true" tabindex="-1"></a>    distances<span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>f64<span class="sc">&gt;</span><span class="er">&gt;&gt;</span>,</span>
-<span id="cb17-252"><a href="#cb17-252" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span><span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Option<span class="sc">&lt;</span>usize<span class="sc">&gt;</span><span class="er">&gt;&gt;&gt;</span>,</span>
-<span id="cb17-253"><a href="#cb17-253" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-254"><a href="#cb17-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-244"><a href="#cb17-244" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust}</span></span>
+<span id="cb17-245"><a href="#cb17-245" aria-hidden="true" tabindex="-1"></a>pub struct LensGraph {</span>
+<span id="cb17-246"><a href="#cb17-246" aria-hidden="true" tabindex="-1"></a>    schemas<span class="sc">:</span> Vec<span class="sc">&lt;</span>Name<span class="sc">&gt;</span>,</span>
+<span id="cb17-247"><a href="#cb17-247" aria-hidden="true" tabindex="-1"></a>    schema_index<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>Name, usize<span class="sc">&gt;</span>,</span>
+<span id="cb17-248"><a href="#cb17-248" aria-hidden="true" tabindex="-1"></a>    edges<span class="sc">:</span> FxHashMap<span class="sc">&lt;</span>(usize, usize), (f64, ProtolensChain)<span class="sc">&gt;</span>,</span>
+<span id="cb17-249"><a href="#cb17-249" aria-hidden="true" tabindex="-1"></a>    distances<span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>f64<span class="sc">&gt;</span><span class="er">&gt;&gt;</span>,</span>
+<span id="cb17-250"><a href="#cb17-250" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span><span class="sc">:</span> Option<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Vec<span class="sc">&lt;</span>Option<span class="sc">&lt;</span>usize<span class="sc">&gt;</span><span class="er">&gt;&gt;&gt;</span>,</span>
+<span id="cb17-251"><a href="#cb17-251" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-252"><a href="#cb17-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-253"><a href="#cb17-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-254"><a href="#cb17-254" aria-hidden="true" tabindex="-1"></a>A weighted directed graph of schemas. Key methods:</span>
 <span id="cb17-255"><a href="#cb17-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-256"><a href="#cb17-256" aria-hidden="true" tabindex="-1"></a>A weighted directed graph of schemas. Key methods:</span>
-<span id="cb17-257"><a href="#cb17-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-258"><a href="#cb17-258" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_schema(name)`**: registers a schema, returns its index.</span>
-<span id="cb17-259"><a href="#cb17-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_lens(src, tgt, chain)`**: adds an edge with cost <span class="in">`chain_cost(&amp;chain)`</span>. Auto-adds schemas. Keeps the cheaper edge when duplicates exist. Invalidates cached distances.</span>
-<span id="cb17-260"><a href="#cb17-260" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compute_distances()`**: runs Floyd-Warshall. Initializes identity distances to 0, direct edges to their costs, then relaxes via the standard triple loop.</span>
-<span id="cb17-261"><a href="#cb17-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`preferred_path(src, tgt)`**: reconstructs the shortest path from the <span class="in">`next`</span> matrix. Returns <span class="in">`(cost, ProtolensChain)`</span> by composing the chains along the path.</span>
-<span id="cb17-262"><a href="#cb17-262" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`distance(src, tgt)`**: returns the shortest distance, or <span class="in">`f64::INFINITY`</span> if unreachable or distances not yet computed.</span>
+<span id="cb17-256"><a href="#cb17-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_schema(name)`**: registers a schema, returns its index.</span>
+<span id="cb17-257"><a href="#cb17-257" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`add_lens(src, tgt, chain)`**: adds an edge with cost <span class="in">`chain_cost(&amp;chain)`</span>. Auto-adds schemas. Keeps the cheaper edge when duplicates exist. Invalidates cached distances.</span>
+<span id="cb17-258"><a href="#cb17-258" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`compute_distances()`**: runs Floyd-Warshall. Initializes identity distances to 0, direct edges to their costs, then relaxes via the standard triple loop.</span>
+<span id="cb17-259"><a href="#cb17-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`preferred_path(src, tgt)`**: reconstructs the shortest path from the <span class="in">`next`</span> matrix. Returns <span class="in">`(cost, ProtolensChain)`</span> by composing the chains along the path.</span>
+<span id="cb17-260"><a href="#cb17-260" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`distance(src, tgt)`**: returns the shortest distance, or <span class="in">`f64::INFINITY`</span> if unreachable or distances not yet computed.</span>
+<span id="cb17-261"><a href="#cb17-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-262"><a href="#cb17-262" aria-hidden="true" tabindex="-1"></a>The Floyd-Warshall implementation is $O(n^3)$ where $n$ is the number of schemas. This is acceptable because lens graphs are typically small (tens of schemas, not thousands).</span>
 <span id="cb17-263"><a href="#cb17-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-264"><a href="#cb17-264" aria-hidden="true" tabindex="-1"></a>The Floyd-Warshall implementation is $O(n^3)$ where $n$ is the number of schemas. This is acceptable because lens graphs are typically small (tens of schemas, not thousands).</span>
+<span id="cb17-264"><a href="#cb17-264" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary {#sec-poly-WASM}</span></span>
 <span id="cb17-265"><a href="#cb17-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-266"><a href="#cb17-266" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary {#sec-poly-wasm}</span></span>
+<span id="cb17-266"><a href="#cb17-266" aria-hidden="true" tabindex="-1"></a>Five WASM exports in <span class="in">`panproto-wasm/src/api.rs`</span> expose polynomial operations:</span>
 <span id="cb17-267"><a href="#cb17-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-268"><a href="#cb17-268" aria-hidden="true" tabindex="-1"></a>Five WASM exports in <span class="in">`panproto-wasm/src/api.rs`</span> expose polynomial operations:</span>
-<span id="cb17-269"><a href="#cb17-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-270"><a href="#cb17-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Export <span class="pp">|</span> Input (MessagePack) <span class="pp">|</span> Output (MessagePack) <span class="pp">|</span> Calls <span class="pp">|</span></span>
-<span id="cb17-271"><a href="#cb17-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------------------|----------------------|-------|</span></span>
-<span id="cb17-272"><a href="#cb17-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_at`</span> <span class="pp">|</span> instance, migration, anchor name <span class="pp">|</span> <span class="in">`Vec&lt;u32&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_at_anchor`</span> <span class="pp">|</span></span>
-<span id="cb17-273"><a href="#cb17-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_decomposition_wasm`</span> <span class="pp">|</span> instance, migration <span class="pp">|</span> <span class="in">`HashMap&lt;Name, Vec&lt;u32&gt;&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_decomposition`</span> <span class="pp">|</span></span>
-<span id="cb17-274"><a href="#cb17-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`poly_hom`</span> <span class="pp">|</span> source schema, target schema <span class="pp">|</span> schema bytes <span class="pp">|</span> <span class="in">`hom::hom_schema`</span> <span class="pp">|</span></span>
-<span id="cb17-275"><a href="#cb17-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`preferred_conversion_path`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`(cost, chain)`</span> <span class="pp">|</span> <span class="in">`LensGraph::preferred_path`</span> <span class="pp">|</span></span>
-<span id="cb17-276"><a href="#cb17-276" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`conversion_distance`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`f64`</span> <span class="pp">|</span> <span class="in">`LensGraph::distance`</span> <span class="pp">|</span></span>
+<span id="cb17-268"><a href="#cb17-268" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Export <span class="pp">|</span> Input (MessagePack) <span class="pp">|</span> Output (MessagePack) <span class="pp">|</span> Calls <span class="pp">|</span></span>
+<span id="cb17-269"><a href="#cb17-269" aria-hidden="true" tabindex="-1"></a><span class="pp">|--------|---------------------|----------------------|-------|</span></span>
+<span id="cb17-270"><a href="#cb17-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_at`</span> <span class="pp">|</span> instance, migration, anchor name <span class="pp">|</span> <span class="in">`Vec&lt;u32&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_at_anchor`</span> <span class="pp">|</span></span>
+<span id="cb17-271"><a href="#cb17-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fiber_decomposition_wasm`</span> <span class="pp">|</span> instance, migration <span class="pp">|</span> <span class="in">`HashMap&lt;Name, Vec&lt;u32&gt;&gt;`</span> <span class="pp">|</span> <span class="in">`inst::fiber_decomposition`</span> <span class="pp">|</span></span>
+<span id="cb17-272"><a href="#cb17-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`poly_hom`</span> <span class="pp">|</span> source schema, target schema <span class="pp">|</span> schema bytes <span class="pp">|</span> <span class="in">`hom::hom_schema`</span> <span class="pp">|</span></span>
+<span id="cb17-273"><a href="#cb17-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`preferred_conversion_path`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`(cost, chain)`</span> <span class="pp">|</span> <span class="in">`LensGraph::preferred_path`</span> <span class="pp">|</span></span>
+<span id="cb17-274"><a href="#cb17-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`conversion_distance`</span> <span class="pp">|</span> edges, src name, tgt name <span class="pp">|</span> <span class="in">`f64`</span> <span class="pp">|</span> <span class="in">`LensGraph::distance`</span> <span class="pp">|</span></span>
+<span id="cb17-275"><a href="#cb17-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-276"><a href="#cb17-276" aria-hidden="true" tabindex="-1"></a><span class="in">`preferred_conversion_path`</span> and <span class="in">`conversion_distance`</span> both construct a <span class="in">`LensGraph`</span> from the provided edges and call <span class="in">`compute_distances()`</span> before querying. The graph is not cached across calls; each invocation builds it from scratch.</span>
 <span id="cb17-277"><a href="#cb17-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-278"><a href="#cb17-278" aria-hidden="true" tabindex="-1"></a>: WASM exports for polynomial operations. {.striped}</span>
+<span id="cb17-278"><a href="#cb17-278" aria-hidden="true" tabindex="-1"></a><span class="fu">## TypeScript SDK {#sec-poly-TypeScript}</span></span>
 <span id="cb17-279"><a href="#cb17-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-280"><a href="#cb17-280" aria-hidden="true" tabindex="-1"></a><span class="in">`preferred_conversion_path`</span> and <span class="in">`conversion_distance`</span> both construct a <span class="in">`LensGraph`</span> from the provided edges and call <span class="in">`compute_distances()`</span> before querying. The graph is not cached across calls; each invocation builds it from scratch.</span>
+<span id="cb17-280"><a href="#cb17-280" aria-hidden="true" tabindex="-1"></a>The TypeScript SDK wraps these WASM exports in three modules:</span>
 <span id="cb17-281"><a href="#cb17-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-282"><a href="#cb17-282" aria-hidden="true" tabindex="-1"></a><span class="fu">## TypeScript SDK {#sec-poly-typescript}</span></span>
+<span id="cb17-282"><a href="#cb17-282" aria-hidden="true" tabindex="-1"></a>**`fiber.ts`**: exports <span class="in">`fiberAt(instanceBytes, migrationBytes, anchor, wasm)`</span> and <span class="in">`fiberDecomposition(instanceBytes, migrationBytes, wasm)`</span>. Both serialize inputs as MessagePack, call the WASM function, and deserialize the result.</span>
 <span id="cb17-283"><a href="#cb17-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-284"><a href="#cb17-284" aria-hidden="true" tabindex="-1"></a>The TypeScript SDK wraps these WASM exports in three modules:</span>
+<span id="cb17-284"><a href="#cb17-284" aria-hidden="true" tabindex="-1"></a>**`hom.ts`**: exports <span class="in">`polyHom(sourceBytes, targetBytes, wasm)`</span>, returning the serialized hom schema.</span>
 <span id="cb17-285"><a href="#cb17-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-286"><a href="#cb17-286" aria-hidden="true" tabindex="-1"></a>**`fiber.ts`**: exports <span class="in">`fiberAt(instanceBytes, migrationBytes, anchor, wasm)`</span> and <span class="in">`fiberDecomposition(instanceBytes, migrationBytes, wasm)`</span>. Both serialize inputs as MessagePack, call the WASM function, and deserialize the result.</span>
+<span id="cb17-286"><a href="#cb17-286" aria-hidden="true" tabindex="-1"></a>**`graph.ts`**: exports <span class="in">`preferredPath(edges, src, tgt, wasm)`</span> returning <span class="in">`{ cost: number, chain: ProtolensChain }`</span>, and <span class="in">`distance(edges, src, tgt, wasm)`</span> returning a number. The <span class="in">`GraphEdge`</span> type describes an edge as <span class="in">`{ src: string, tgt: string, chain: ProtolensChain }`</span>.</span>
 <span id="cb17-287"><a href="#cb17-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-288"><a href="#cb17-288" aria-hidden="true" tabindex="-1"></a>**`hom.ts`**: exports <span class="in">`polyHom(sourceBytes, targetBytes, wasm)`</span>, returning the serialized hom schema.</span>
+<span id="cb17-288"><a href="#cb17-288" aria-hidden="true" tabindex="-1"></a>All functions accept and return MessagePack-encoded bytes for the heavy data (instances, schemas, migrations). Schema and anchor names are passed as plain strings.</span>
 <span id="cb17-289"><a href="#cb17-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-290"><a href="#cb17-290" aria-hidden="true" tabindex="-1"></a>**`graph.ts`**: exports <span class="in">`preferredPath(edges, src, tgt, wasm)`</span> returning <span class="in">`{ cost: number, chain: ProtolensChain }`</span>, and <span class="in">`distance(edges, src, tgt, wasm)`</span> returning a number. The <span class="in">`GraphEdge`</span> type describes an edge as <span class="in">`{ src: string, tgt: string, chain: ProtolensChain }`</span>.</span>
+<span id="cb17-290"><a href="#cb17-290" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-poly-source}</span></span>
 <span id="cb17-291"><a href="#cb17-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-292"><a href="#cb17-292" aria-hidden="true" tabindex="-1"></a>All functions accept and return MessagePack-encoded bytes for the heavy data (instances, schemas, migrations). Schema and anchor names are passed as plain strings.</span>
+<span id="cb17-292"><a href="#cb17-292" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/poly.rs`**:</span>
 <span id="cb17-293"><a href="#cb17-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-294"><a href="#cb17-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Source locations {#sec-poly-source}</span></span>
-<span id="cb17-295"><a href="#cb17-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-296"><a href="#cb17-296" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/poly.rs`**:</span>
-<span id="cb17-297"><a href="#cb17-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-298"><a href="#cb17-298" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Complement`</span>, <span class="in">`DroppedNode`</span>, <span class="in">`SectionEnrichment`</span> structs</span>
-<span id="cb17-299"><a href="#cb17-299" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at_anchor`</span>, <span class="in">`fiber_decomposition`</span>, <span class="in">`fiber_with_predicate`</span></span>
-<span id="cb17-300"><a href="#cb17-300" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`restrict_with_complement`</span>, <span class="in">`fiber_at_node`</span></span>
-<span id="cb17-301"><a href="#cb17-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`group_by`</span>, <span class="in">`join`</span>, <span class="in">`section`</span></span>
-<span id="cb17-302"><a href="#cb17-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`extract_subinstance`</span> (private)</span>
-<span id="cb17-303"><a href="#cb17-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-304"><a href="#cb17-304" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/hom.rs`**:</span>
-<span id="cb17-305"><a href="#cb17-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-306"><a href="#cb17-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom_schema`</span>, <span class="in">`curry_migration`</span>, <span class="in">`eval_hom`</span></span>
-<span id="cb17-307"><a href="#cb17-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`add_maps_to_edges`</span>, <span class="in">`add_backward_vertices`</span>, <span class="in">`edge_label`</span> (private)</span>
+<span id="cb17-294"><a href="#cb17-294" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Complement`</span>, <span class="in">`DroppedNode`</span>, <span class="in">`SectionEnrichment`</span> structs</span>
+<span id="cb17-295"><a href="#cb17-295" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at_anchor`</span>, <span class="in">`fiber_decomposition`</span>, <span class="in">`fiber_with_predicate`</span></span>
+<span id="cb17-296"><a href="#cb17-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`restrict_with_complement`</span>, <span class="in">`fiber_at_node`</span></span>
+<span id="cb17-297"><a href="#cb17-297" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`group_by`</span>, <span class="in">`join`</span>, <span class="in">`section`</span></span>
+<span id="cb17-298"><a href="#cb17-298" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`extract_subinstance`</span> (private)</span>
+<span id="cb17-299"><a href="#cb17-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-300"><a href="#cb17-300" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-inst/src/hom.rs`**:</span>
+<span id="cb17-301"><a href="#cb17-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-302"><a href="#cb17-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom_schema`</span>, <span class="in">`curry_migration`</span>, <span class="in">`eval_hom`</span></span>
+<span id="cb17-303"><a href="#cb17-303" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`add_maps_to_edges`</span>, <span class="in">`add_backward_vertices`</span>, <span class="in">`edge_label`</span> (private)</span>
+<span id="cb17-304"><a href="#cb17-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-305"><a href="#cb17-305" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/cost.rs`**:</span>
+<span id="cb17-306"><a href="#cb17-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-307"><a href="#cb17-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`complement_cost`</span>, <span class="in">`chain_cost`</span></span>
 <span id="cb17-308"><a href="#cb17-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-309"><a href="#cb17-309" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/cost.rs`**:</span>
+<span id="cb17-309"><a href="#cb17-309" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/graph.rs`**:</span>
 <span id="cb17-310"><a href="#cb17-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-311"><a href="#cb17-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`complement_cost`</span>, <span class="in">`chain_cost`</span></span>
-<span id="cb17-312"><a href="#cb17-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-313"><a href="#cb17-313" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-lens/src/graph.rs`**:</span>
-<span id="cb17-314"><a href="#cb17-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-315"><a href="#cb17-315" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph`</span>, <span class="in">`LensGraph::add_schema`</span>, <span class="in">`LensGraph::add_lens`</span></span>
-<span id="cb17-316"><a href="#cb17-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph::compute_distances`</span>, <span class="in">`LensGraph::preferred_path`</span>, <span class="in">`LensGraph::distance`</span></span>
-<span id="cb17-317"><a href="#cb17-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-318"><a href="#cb17-318" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-wasm/src/api.rs`**:</span>
-<span id="cb17-319"><a href="#cb17-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-320"><a href="#cb17-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at`</span>, <span class="in">`fiber_decomposition_wasm`</span>, <span class="in">`poly_hom`</span></span>
-<span id="cb17-321"><a href="#cb17-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`preferred_conversion_path`</span>, <span class="in">`conversion_distance`</span></span>
-<span id="cb17-322"><a href="#cb17-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-323"><a href="#cb17-323" aria-hidden="true" tabindex="-1"></a>**`sdk/typescript/src/`**:</span>
-<span id="cb17-324"><a href="#cb17-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-325"><a href="#cb17-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber.ts`</span>: <span class="in">`fiberAt`</span>, <span class="in">`fiberDecomposition`</span></span>
-<span id="cb17-326"><a href="#cb17-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom.ts`</span>: <span class="in">`polyHom`</span></span>
-<span id="cb17-327"><a href="#cb17-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`graph.ts`</span>: <span class="in">`preferredPath`</span>, <span class="in">`distance`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb17-311"><a href="#cb17-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph`</span>, <span class="in">`LensGraph::add_schema`</span>, <span class="in">`LensGraph::add_lens`</span></span>
+<span id="cb17-312"><a href="#cb17-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LensGraph::compute_distances`</span>, <span class="in">`LensGraph::preferred_path`</span>, <span class="in">`LensGraph::distance`</span></span>
+<span id="cb17-313"><a href="#cb17-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-314"><a href="#cb17-314" aria-hidden="true" tabindex="-1"></a>**`crates/panproto-wasm/src/api.rs`**:</span>
+<span id="cb17-315"><a href="#cb17-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-316"><a href="#cb17-316" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber_at`</span>, <span class="in">`fiber_decomposition_wasm`</span>, <span class="in">`poly_hom`</span></span>
+<span id="cb17-317"><a href="#cb17-317" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`preferred_conversion_path`</span>, <span class="in">`conversion_distance`</span></span>
+<span id="cb17-318"><a href="#cb17-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-319"><a href="#cb17-319" aria-hidden="true" tabindex="-1"></a>**`sdk/typescript/src/`**:</span>
+<span id="cb17-320"><a href="#cb17-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-321"><a href="#cb17-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fiber.ts`</span>: <span class="in">`fiberAt`</span>, <span class="in">`fiberDecomposition`</span></span>
+<span id="cb17-322"><a href="#cb17-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hom.ts`</span>: <span class="in">`polyHom`</span></span>
+<span id="cb17-323"><a href="#cb17-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`graph.ts`</span>: <span class="in">`preferredPath`</span>, <span class="in">`distance`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

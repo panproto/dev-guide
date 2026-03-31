@@ -624,20 +624,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link active" data-scroll-target="#design-rationale"><span class="header-section-number">13.1</span> Design Rationale</a></li>
-  <li><a href="#the-resource-enum-and-slab-allocator" id="toc-the-resource-enum-and-slab-allocator" class="nav-link" data-scroll-target="#the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The Resource Enum and Slab Allocator</a></li>
-  <li><a href="#the-with_resource-pattern" id="toc-the-with_resource-pattern" class="nav-link" data-scroll-target="#the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> Pattern</a></li>
-  <li><a href="#the-buildop-tagged-enum" id="toc-the-buildop-tagged-enum" class="nav-link" data-scroll-target="#the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>BuildOp</code> Tagged Enum</a></li>
-  <li><a href="#entry-points" id="toc-entry-points" class="nav-link" data-scroll-target="#entry-points"><span class="header-section-number">13.5</span> Entry Points</a>
+  <li><a href="#design-rationale" id="toc-design-rationale" class="nav-link active" data-scroll-target="#design-rationale"><span class="header-section-number">13.1</span> Design rationale</a></li>
+  <li><a href="#the-resource-enum-and-slab-allocator" id="toc-the-resource-enum-and-slab-allocator" class="nav-link" data-scroll-target="#the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The resource enum and slab allocator</a></li>
+  <li><a href="#the-with_resource-pattern" id="toc-the-with_resource-pattern" class="nav-link" data-scroll-target="#the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> pattern</a></li>
+  <li><a href="#the-buildop-tagged-enum" id="toc-the-buildop-tagged-enum" class="nav-link" data-scroll-target="#the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>buildop</code> tagged Enum</a></li>
+  <li><a href="#entry-points" id="toc-entry-points" class="nav-link" data-scroll-target="#entry-points"><span class="header-section-number">13.5</span> Entry points</a>
   <ul class="collapse">
   <li><a href="#define_protocol" id="toc-define_protocol" class="nav-link" data-scroll-target="#define_protocol"><span class="header-section-number">13.5.1</span> <code>define_protocol</code></a></li>
   <li><a href="#build_schema" id="toc-build_schema" class="nav-link" data-scroll-target="#build_schema"><span class="header-section-number">13.5.2</span> <code>build_schema</code></a></li>
-  <li><a href="#all-entry-points" id="toc-all-entry-points" class="nav-link" data-scroll-target="#all-entry-points"><span class="header-section-number">13.5.3</span> All Entry Points</a></li>
+  <li><a href="#complete-entry-point-catalog" id="toc-complete-entry-point-catalog" class="nav-link" data-scroll-target="#complete-entry-point-catalog"><span class="header-section-number">13.5.3</span> Complete entry point catalog</a></li>
   </ul></li>
-  <li><a href="#data-flow-js-to-rust-and-back" id="toc-data-flow-js-to-rust-and-back" class="nav-link" data-scroll-target="#data-flow-js-to-rust-and-back"><span class="header-section-number">13.6</span> Data Flow: JS to Rust and Back</a></li>
-  <li><a href="#slab-lifecycle" id="toc-slab-lifecycle" class="nav-link" data-scroll-target="#slab-lifecycle"><span class="header-section-number">13.7</span> Slab Lifecycle</a></li>
-  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">13.8</span> Error Handling</a></li>
-  <li><a href="#adding-a-new-entry-point" id="toc-adding-a-new-entry-point" class="nav-link" data-scroll-target="#adding-a-new-entry-point"><span class="header-section-number">13.9</span> Adding a New Entry Point</a></li>
+  <li><a href="#data-flow-js-to-rust-and-back" id="toc-data-flow-js-to-rust-and-back" class="nav-link" data-scroll-target="#data-flow-js-to-rust-and-back"><span class="header-section-number">13.6</span> Data flow: JS to Rust and back</a></li>
+  <li><a href="#slab-lifecycle" id="toc-slab-lifecycle" class="nav-link" data-scroll-target="#slab-lifecycle"><span class="header-section-number">13.7</span> Slab lifecycle</a></li>
+  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">13.8</span> Error handling</a></li>
+  <li><a href="#adding-a-new-entry-point" id="toc-adding-a-new-entry-point" class="nav-link" data-scroll-target="#adding-a-new-entry-point"><span class="header-section-number">13.9</span> Adding a new entry point</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/13-wasm-boundary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -664,10 +664,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The <code>panproto-wasm</code> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes <code>#[wasm_bindgen]</code> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes, never as a JS object graph.</p>
+<p>The <code>panproto-wasm</code> crate is the glue layer between the Rust core and the TypeScript SDK. It exposes <code>#[wasm_bindgen]</code> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes, never as a JS object graph.</p>
 <section id="design-rationale" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">13.1</span> Design Rationale</h2>
-<p>Two design decisions shape the entire WASM boundary:</p>
+<h2 data-number="13.1" class="anchored" data-anchor-id="design-rationale"><span class="header-section-number">13.1</span> Design rationale</h2>
+<p>Two design decisions shape everything:</p>
 <ol type="1">
 <li><p><strong>Handle-based API.</strong> Complex Rust objects (protocols, schemas, compiled migrations) never cross the boundary. Instead, they live in a Rust-side slab allocator, and JS holds opaque <code>u32</code> handles. This avoids the overhead and fragility of <code>serde-wasm-bindgen</code>, which must recursively convert Rust structs into JS objects on every call.</p></li>
 <li><p><strong>MessagePack over serde-wasm-bindgen.</strong> Structured arguments (builder operations, migration mappings, records) are encoded as MessagePack byte slices with <code>rmp_serde</code>. MessagePack is faster than JSON for encode/decode, produces smaller payloads, and (critically) is deterministic: the same Rust struct always encodes to the same bytes, which simplifies testing and caching.</p></li>
@@ -687,7 +687,7 @@ Tip
 </div>
 </section>
 <section id="the-resource-enum-and-slab-allocator" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The Resource Enum and Slab Allocator</h2>
+<h2 data-number="13.2" class="anchored" data-anchor-id="the-resource-enum-and-slab-allocator"><span class="header-section-number">13.2</span> The resource enum and slab allocator</h2>
 <p>All WASM-side resources are stored in a thread-local <code>Vec&lt;Option&lt;Resource&gt;&gt;</code>. Each resource is one of ten variants:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="20"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 19;"><span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">/// A resource stored in the slab.</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -728,12 +728,12 @@ Tip
 <span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="pp">thread_local!</span> <span class="op">{</span></span>
 <span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">static</span> SLAB<span class="op">:</span> RefCell<span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span><span class="dt">Option</span><span class="op">&lt;</span>Resource<span class="op">&gt;&gt;&gt;</span> <span class="op">=</span> <span class="kw">const</span> <span class="op">{</span> <span class="pp">RefCell::</span>new(<span class="dt">Vec</span><span class="pp">::</span>new()) <span class="op">};</span></span>
 <span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>Resource</code> enum captures the core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus the <code>MigrationWithSchemas</code> variant that bundles a compiled migration with its source and target schemas (needed for lens <code>get</code>/<code>put</code> operations).</p>
-<p>The <code>alloc</code> function scans for a freed slot before appending, so handle values are reused. Handles are <code>u32</code> indices, which means the slab can hold up to 4 billion simultaneous resources, more than sufficient for any realistic workload.</p>
+<p>The <code>Resource</code> enum captures core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus <code>MigrationWithSchemas</code>, which bundles a compiled migration with its source and target schemas (needed for lens <code>get</code>/<code>put</code> operations).</p>
+<p>The <code>alloc</code> function scans for a freed slot before appending, so handle values are reused. Handles are <code>u32</code> indices, supporting up to 4 billion simultaneous resources.</p>
 </section>
 <section id="the-with_resource-pattern" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> Pattern</h2>
-<p>Accessing a resource requires borrowing the thread-local slab. The <code>with_resource</code> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</p>
+<h2 data-number="13.3" class="anchored" data-anchor-id="the-with_resource-pattern"><span class="header-section-number">13.3</span> The <code>with_resource</code> pattern</h2>
+<p>Accessing a resource requires borrowing the thread-local slab. The <code>with_resource</code> function encapsulates this: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, preventing references from escaping:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="78"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 77;"><span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co">/// Access a resource by handle, returning an error if the handle is</span></span>
 <span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="co">/// invalid or the slot is empty.</span></span>
 <span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -753,7 +753,7 @@ Tip
 <span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>        f(resource)<span class="op">.</span>map_err(<span class="bu">Into</span><span class="pp">::</span>into)</span>
 <span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span>)</span>
 <span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <code>RefCell</code> rules). The callback-based API makes it structurally impossible.</p>
+<p>This prevents a common bug: holding a reference to a slab entry while mutating the slab (which would panic due to <code>RefCell</code> rules). The callback-based API makes this structurally impossible.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -773,17 +773,17 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Why not just return references?
+<span class="screen-reader-only">Tip</span>Why Not Return References?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Returning a <code>&amp;Resource</code> from the slab would require the caller to hold the <code>RefCell</code> borrow for the lifetime of the reference. Any nested call that also borrows the slab would panic. The callback pattern scopes each borrow precisely.</p>
+<p>Returning a <code>&amp;Resource</code> would require the caller to hold the <code>RefCell</code> borrow for the reference’s lifetime. Any nested call that also borrows the slab would panic. The callback pattern scopes each borrow precisely.</p>
 </div>
 </div>
 </section>
 <section id="the-buildop-tagged-enum" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>BuildOp</code> Tagged Enum</h2>
-<p>Schema construction operations are sent from JS as a MessagePack-encoded <code>Vec&lt;BuildOp&gt;</code>. The <code>BuildOp</code> enum uses serde’s internally-tagged representation (<code>#[serde(tag = "op")]</code>), so each operation is a flat object with an <code>op</code> discriminant:</p>
+<h2 data-number="13.4" class="anchored" data-anchor-id="the-buildop-tagged-enum"><span class="header-section-number">13.4</span> The <code>buildop</code> tagged Enum</h2>
+<p>Schema construction operations are sent from JS as a MessagePack-encoded <code>Vec&lt;BuildOp&gt;</code>. The <code>BuildOp</code> enum uses serde’s internally-tagged representation, so each operation is a flat object with an <code>op</code> discriminant:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="26"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 25;"><span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">/// A serializable builder operation for constructing schemas.</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>serde<span class="at">(</span>tag <span class="op">=</span> <span class="st">"op"</span><span class="at">)]</span></span>
@@ -841,10 +841,10 @@ Note
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>        edges<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span><span class="pp">panproto_core::schema::</span>Edge<span class="op">&gt;,</span></span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
 <span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The five variants (<code>Vertex</code>, <code>Edge</code>, <code>Constraint</code>, <code>HyperEdge</code>, <code>Required</code>) mirror the <code>SchemaBuilder</code> methods in <code>panproto-schema</code>. The TypeScript SDK constructs these as plain objects and encodes them with <code>@msgpack/msgpack</code>.</p>
+<p>The five variants (<code>Vertex</code>, <code>Edge</code>, <code>Constraint</code>, <code>HyperEdge</code>, <code>Required</code>) mirror <code>SchemaBuilder</code> methods. The TypeScript SDK constructs these as plain objects and encodes them with <code>@msgpack/msgpack</code>.</p>
 </section>
 <section id="entry-points" class="level2" data-number="13.5">
-<h2 data-number="13.5" class="anchored" data-anchor-id="entry-points"><span class="header-section-number">13.5</span> Entry Points</h2>
+<h2 data-number="13.5" class="anchored" data-anchor-id="entry-points"><span class="header-section-number">13.5</span> Entry points</h2>
 <section id="define_protocol" class="level3" data-number="13.5.1">
 <h3 data-number="13.5.1" class="anchored" data-anchor-id="define_protocol"><span class="header-section-number">13.5.1</span> <code>define_protocol</code></h3>
 <p>Registers a protocol specification and returns a handle:</p>
@@ -863,7 +863,7 @@ Note
 <span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span>)<span class="op">?;</span></span>
 <span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Protocol(protocol)))</span>
 <span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The pattern is representative of all entry points: deserialize MessagePack input with <code>rmp_serde::from_slice</code>, perform the operation, allocate the result in the slab, and return the handle.</p>
+<p>The pattern is representative: deserialize MessagePack input with <code>rmp_serde::from_slice</code>, perform the operation, allocate the result in the slab, and return the handle.</p>
 </section>
 <section id="build_schema" class="level3" data-number="13.5.2">
 <h3 data-number="13.5.2" class="anchored" data-anchor-id="build_schema"><span class="header-section-number">13.5.2</span> <code>build_schema</code></h3>
@@ -941,9 +941,9 @@ Note
 <span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>    <span class="cn">Ok</span>(<span class="pp">slab::</span>alloc(<span class="pp">Resource::</span>Schema(<span class="pp">std::sync::Arc::</span>new(schema))))</span>
 <span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="all-entry-points" class="level3" data-number="13.5.3">
-<h3 data-number="13.5.3" class="anchored" data-anchor-id="all-entry-points"><span class="header-section-number">13.5.3</span> All Entry Points</h3>
-<p>The WASM boundary exposes far more than the original ten entry points. The complete set is organized into six categories.</p>
+<section id="complete-entry-point-catalog" class="level3" data-number="13.5.3">
+<h3 data-number="13.5.3" class="anchored" data-anchor-id="complete-entry-point-catalog"><span class="header-section-number">13.5.3</span> Complete entry point catalog</h3>
+<p>The WASM boundary exposes far more than the original ten entry points. The full set is organized into six categories.</p>
 <section id="core-schema-and-migration" class="level4" data-number="13.5.3.1">
 <h4 data-number="13.5.3.1" class="anchored" data-anchor-id="core-schema-and-migration"><span class="header-section-number">13.5.3.1</span> Core Schema and Migration</h4>
 <table class="caption-top table">
@@ -1032,7 +1032,7 @@ Note
 <tr class="even">
 <td><code>diff_schemas_full</code></td>
 <td><code>(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;</code></td>
-<td>Full MessagePack diff with all fields</td>
+<td>Full MessagePack diff</td>
 </tr>
 <tr class="odd">
 <td><code>classify_diff</code></td>
@@ -1283,7 +1283,7 @@ Note
 </tr>
 </tbody>
 </table>
-<p><code>parse_expr</code> tokenizes and parses Haskell-style expression text into an AST. <code>eval_func_expr</code> evaluates an expression with environment bindings; note that this is distinct from <code>eval_expr</code> (which evaluates GAT terms). <code>execute_query</code> runs a declarative query against an instance.</p>
+<p><code>parse_expr</code> tokenizes and parses Haskell-style source text into an AST. <code>eval_func_expr</code> evaluates an expression with environment bindings. <code>execute_query</code> runs a declarative query against an instance.</p>
 </section>
 <section id="gat-engine" class="level4" data-number="13.5.3.6">
 <h4 data-number="13.5.3.6" class="anchored" data-anchor-id="gat-engine"><span class="header-section-number">13.5.3.6</span> GAT Engine</h4>
@@ -1472,15 +1472,15 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>check_existence</code>, <code>diff_schemas</code>, and <code>diff_schemas_full</code> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where “failure” is an expected, structured result.</p>
+<p><code>check_existence</code>, <code>diff_schemas</code>, and <code>diff_schemas_full</code> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies JS-side error handling for operations where “failure” is an expected, structured result.</p>
 </div>
 </div>
 </section>
 </section>
 </section>
 <section id="data-flow-js-to-rust-and-back" class="level2" data-number="13.6">
-<h2 data-number="13.6" class="anchored" data-anchor-id="data-flow-js-to-rust-and-back"><span class="header-section-number">13.6</span> Data Flow: JS to Rust and Back</h2>
-<p>The following diagram shows the complete lifecycle of a call across the WASM boundary:</p>
+<h2 data-number="13.6" class="anchored" data-anchor-id="data-flow-js-to-rust-and-back"><span class="header-section-number">13.6</span> Data flow: JS to Rust and back</h2>
+<p>The complete lifecycle of a call across the WASM boundary:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -1509,10 +1509,10 @@ Important
 </div>
 </div>
 </div>
-<p>The key property is that <code>wasm_bindgen</code> passes byte slices as zero-copy views into WASM linear memory. The only copies happen during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</p>
+<p>The key property: <code>wasm_bindgen</code> passes byte slices as zero-copy views into WASM linear memory. Copies happen only during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</p>
 </section>
 <section id="slab-lifecycle" class="level2" data-number="13.7">
-<h2 data-number="13.7" class="anchored" data-anchor-id="slab-lifecycle"><span class="header-section-number">13.7</span> Slab Lifecycle</h2>
+<h2 data-number="13.7" class="anchored" data-anchor-id="slab-lifecycle"><span class="header-section-number">13.7</span> Slab lifecycle</h2>
 <p>Handles follow a simple lifecycle. Freed slots are reused on subsequent allocations:</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -1535,7 +1535,7 @@ Important
 <p>On the TypeScript side, <code>WasmHandle</code> wraps each raw <code>u32</code> handle and calls <code>free_handle</code> in its <code>Symbol.dispose</code> implementation. A <code>FinalizationRegistry</code> acts as a safety net: if a <code>WasmHandle</code> is garbage-collected without being disposed, the registry calls <code>free_handle</code> to prevent leaks.</p>
 </section>
 <section id="error-handling" class="level2" data-number="13.8">
-<h2 data-number="13.8" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">13.8</span> Error Handling</h2>
+<h2 data-number="13.8" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">13.8</span> Error handling</h2>
 <p>Errors are represented as <code>WasmError</code> variants (an internal <code>thiserror</code> enum) and converted to <code>JsError</code> at the boundary via <code>Into</code>. The JS side receives them as standard <code>Error</code> objects. The five error variants are:</p>
 <ul>
 <li><code>DeserializationFailed</code>: MessagePack input could not be decoded</li>
@@ -1550,16 +1550,16 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>What happens if JS passes a freed handle?
+<span class="screen-reader-only">Note</span>What Happens If JS Passes a Freed Handle?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The slab slot contains <code>None</code>, so <code>with_resource</code> returns <code>Err(WasmError::InvalidHandle)</code>. The JS side receives a standard <code>Error</code> with the message “invalid handle: 42”. There’s no undefined behavior or silent corruption.</p>
+<p>The slab slot contains <code>None</code>, so <code>with_resource</code> returns <code>Err(WasmError::InvalidHandle)</code>. The JS side receives a standard <code>Error</code> with message “invalid handle: 42”. No undefined behavior or silent corruption.</p>
 </div>
 </div>
 </section>
 <section id="adding-a-new-entry-point" class="level2" data-number="13.9">
-<h2 data-number="13.9" class="anchored" data-anchor-id="adding-a-new-entry-point"><span class="header-section-number">13.9</span> Adding a New Entry Point</h2>
+<h2 data-number="13.9" class="anchored" data-anchor-id="adding-a-new-entry-point"><span class="header-section-number">13.9</span> Adding a new entry point</h2>
 <p>To add a new WASM entry point:</p>
 <ol type="1">
 <li>Add a <code>#[wasm_bindgen] pub fn</code> to <code>crates/panproto-wasm/src/api.rs</code></li>
@@ -1578,7 +1578,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code>check_existence</code> entry point demonstrates the pattern for functions that should never throw across the boundary: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</p>
+<p>The <code>check_existence</code> entry point demonstrates the pattern for functions that should never throw: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</p>
 </div>
 </div>
 
@@ -2066,11 +2066,11 @@ Tip
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># panproto-wasm: The WASM Boundary {#sec-wasm-boundary}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-wasm`</span> crate is the thin glue layer between the Rust core and the TypeScript SDK. It exposes <span class="in">`#[wasm_bindgen]`</span> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes, never as a JS object graph.</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-wasm`</span> crate is the glue layer between the Rust core and the TypeScript SDK. It exposes <span class="in">`#[wasm_bindgen]`</span> entry points for schema construction, migration, analysis, lens operations, GAT engine access, and version control. Every structured value crossing the boundary is serialized as MessagePack bytes, never as a JS object graph.</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design Rationale</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Design rationale</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Two design decisions shape the entire WASM boundary:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>Two design decisions shape everything:</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Handle-based API.** Complex Rust objects (protocols, schemas, compiled migrations) never cross the boundary. Instead, they live in a Rust-side slab allocator, and JS holds opaque <span class="in">`u32`</span> handles. This avoids the overhead and fragility of <span class="in">`serde-wasm-bindgen`</span>, which must recursively convert Rust structs into JS objects on every call.</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
@@ -2080,46 +2080,46 @@ Tip
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>The handle + MessagePack design means the WASM boundary has zero JS-heap allocations for data that stays on the Rust side. The only JS objects created are the <span class="in">`Uint8Array`</span> wrappers around byte slices.</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Resource Enum and Slab Allocator</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## The resource enum and slab allocator</span></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>All WASM-side resources are stored in a thread-local <span class="in">`Vec&lt;Option&lt;Resource&gt;&gt;`</span>. Each resource is one of ten variants:</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=20 end-line=58}</span></span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Resource`</span> enum captures the core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus the <span class="in">`MigrationWithSchemas`</span> variant that bundles a compiled migration with its source and target schemas (needed for lens <span class="in">`get`</span>/<span class="in">`put`</span> operations).</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>The <span class="in">`Resource`</span> enum captures core resource types (protocol, schema, compiled migration, I/O registry, theory, VCS repository, protolens chain, symmetric lens, data set) plus <span class="in">`MigrationWithSchemas`</span>, which bundles a compiled migration with its source and target schemas (needed for lens <span class="in">`get`</span>/<span class="in">`put`</span> operations).</span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alloc`</span> function scans for a freed slot before appending, so handle values are reused. Handles are <span class="in">`u32`</span> indices, which means the slab can hold up to 4 billion simultaneous resources, more than sufficient for any realistic workload.</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>The <span class="in">`alloc`</span> function scans for a freed slot before appending, so handle values are reused. Handles are <span class="in">`u32`</span> indices, supporting up to 4 billion simultaneous resources.</span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `with_resource` Pattern</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `with_resource` pattern</span></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>Accessing a resource requires borrowing the thread-local slab. The <span class="in">`with_resource`</span> function encapsulates this pattern: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, so the reference cannot escape:</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>Accessing a resource requires borrowing the thread-local slab. The <span class="in">`with_resource`</span> function encapsulates this: it borrows the slab, looks up the handle, and passes a reference to a callback. The borrow is released when the callback returns, preventing references from escaping:</span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/slab.rs" start-line=78 end-line=96}</span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>This pattern prevents a common class of bugs: holding a reference to a slab entry while mutating the slab (which would panic at runtime due to <span class="in">`RefCell`</span> rules). The callback-based API makes it structurally impossible.</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>This prevents a common bug: holding a reference to a slab entry while mutating the slab (which would panic due to <span class="in">`RefCell`</span> rules). The callback-based API makes this structurally impossible.</span>
 <span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>A <span class="in">`with_two_resources`</span> variant exists for operations that need two handles simultaneously (e.g., <span class="in">`compile_migration`</span> needs both source and target schemas). It takes the borrow once and looks up both indices.</span>
 <span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why not just return references?</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why Not Return References?</span></span>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>Returning a <span class="in">`&amp;Resource`</span> from the slab would require the caller to hold the <span class="in">`RefCell`</span> borrow for the lifetime of the reference. Any nested call that also borrows the slab would panic. The callback pattern scopes each borrow precisely.</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>Returning a <span class="in">`&amp;Resource`</span> would require the caller to hold the <span class="in">`RefCell`</span> borrow for the reference's lifetime. Any nested call that also borrows the slab would panic. The callback pattern scopes each borrow precisely.</span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `BuildOp` Tagged Enum</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `buildop` tagged Enum</span></span>
 <span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>Schema construction operations are sent from JS as a MessagePack-encoded <span class="in">`Vec&lt;BuildOp&gt;`</span>. The <span class="in">`BuildOp`</span> enum uses serde's internally-tagged representation (<span class="in">`#[serde(tag = "op")]`</span>), so each operation is a flat object with an <span class="in">`op`</span> discriminant:</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>Schema construction operations are sent from JS as a MessagePack-encoded <span class="in">`Vec&lt;BuildOp&gt;`</span>. The <span class="in">`BuildOp`</span> enum uses serde's internally-tagged representation, so each operation is a flat object with an <span class="in">`op`</span> discriminant:</span>
 <span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=26 end-line=82}</span></span>
 <span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>The five variants (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Constraint`</span>, <span class="in">`HyperEdge`</span>, <span class="in">`Required`</span>) mirror the <span class="in">`SchemaBuilder`</span> methods in <span class="in">`panproto-schema`</span>. The TypeScript SDK constructs these as plain objects and encodes them with <span class="in">`@msgpack/msgpack`</span>.</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>The five variants (<span class="in">`Vertex`</span>, <span class="in">`Edge`</span>, <span class="in">`Constraint`</span>, <span class="in">`HyperEdge`</span>, <span class="in">`Required`</span>) mirror <span class="in">`SchemaBuilder`</span> methods. The TypeScript SDK constructs these as plain objects and encodes them with <span class="in">`@msgpack/msgpack`</span>.</span>
 <span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Entry Points</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Entry points</span></span>
 <span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### `define_protocol`</span></span>
 <span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a></span>
@@ -2128,7 +2128,7 @@ Tip
 <span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=84 end-line=98}</span></span>
 <span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>The pattern is representative of all entry points: deserialize MessagePack input with <span class="in">`rmp_serde::from_slice`</span>, perform the operation, allocate the result in the slab, and return the handle.</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>The pattern is representative: deserialize MessagePack input with <span class="in">`rmp_serde::from_slice`</span>, perform the operation, allocate the result in the slab, and return the handle.</span>
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### `build_schema`</span></span>
 <span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
@@ -2137,9 +2137,9 @@ Tip
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{.rust include="../../crates/panproto-wasm/src/api.rs" start-line=100 end-line=171}</span></span>
 <span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### All Entry Points</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### Complete entry point catalog</span></span>
 <span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>The WASM boundary exposes far more than the original ten entry points. The complete set is organized into six categories.</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>The WASM boundary exposes far more than the original ten entry points. The full set is organized into six categories.</span>
 <span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Core Schema and Migration</span></span>
 <span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a></span>
@@ -2160,7 +2160,7 @@ Tip
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Entry Point <span class="pp">|</span> Signature <span class="pp">|</span> Returns <span class="pp">|</span></span>
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
 <span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack diff <span class="pp">|</span></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas_full`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> Full MessagePack diff with all fields <span class="pp">|</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`diff_schemas_full`</span> <span class="pp">|</span> <span class="in">`(s1: u32, s2: u32) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> Full MessagePack diff <span class="pp">|</span></span>
 <span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`classify_diff`</span> <span class="pp">|</span> <span class="in">`(proto: u32, diff_bytes: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MessagePack compat report <span class="pp">|</span></span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report_text`</span> <span class="pp">|</span> <span class="in">`(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;`</span> <span class="pp">|</span> Human-readable text <span class="pp">|</span></span>
 <span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`report_json`</span> <span class="pp">|</span> <span class="in">`(report_bytes: &amp;[u8]) -&gt; Result&lt;String, JsError&gt;`</span> <span class="pp">|</span> JSON string <span class="pp">|</span></span>
@@ -2215,7 +2215,7 @@ Tip
 <span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`eval_func_expr`</span> <span class="pp">|</span> <span class="in">`(expr: &amp;[u8], env: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MsgPack Literal <span class="pp">|</span></span>
 <span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`execute_query`</span> <span class="pp">|</span> <span class="in">`(query: &amp;[u8], instance: &amp;[u8]) -&gt; Vec&lt;u8&gt;`</span> <span class="pp">|</span> MsgPack results <span class="pp">|</span></span>
 <span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="in">`parse_expr`</span> tokenizes and parses Haskell-style expression text into an AST. <span class="in">`eval_func_expr`</span> evaluates an expression with environment bindings; note that this is distinct from <span class="in">`eval_expr`</span> (which evaluates GAT terms). <span class="in">`execute_query`</span> runs a declarative query against an instance.</span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="in">`parse_expr`</span> tokenizes and parses Haskell-style source text into an AST. <span class="in">`eval_func_expr`</span> evaluates an expression with environment bindings. <span class="in">`execute_query`</span> runs a declarative query against an instance.</span>
 <span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="fu">#### GAT Engine</span></span>
 <span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a></span>
@@ -2256,12 +2256,12 @@ Tip
 <span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`get_migration_complement`</span> <span class="pp">|</span> <span class="in">`(complement: &amp;[u8]) -&gt; Result&lt;Vec&lt;u8&gt;, JsError&gt;`</span> <span class="pp">|</span> MessagePack complement <span class="pp">|</span></span>
 <span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span>, <span class="in">`diff_schemas`</span>, and <span class="in">`diff_schemas_full`</span> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies the JS-side error handling for operations where "failure" is an expected, structured result.</span>
+<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a><span class="in">`check_existence`</span>, <span class="in">`diff_schemas`</span>, and <span class="in">`diff_schemas_full`</span> never return errors at the WASM boundary. Instead, they encode error information inside the returned MessagePack report. This simplifies JS-side error handling for operations where "failure" is an expected, structured result.</span>
 <span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Flow: JS to Rust and Back</span></span>
+<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data flow: JS to Rust and back</span></span>
 <span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>The following diagram shows the complete lifecycle of a call across the WASM boundary:</span>
+<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>The complete lifecycle of a call across the WASM boundary:</span>
 <span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
 <span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>sequenceDiagram</span>
@@ -2283,9 +2283,9 @@ Tip
 <span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>    Unpack-&gt;&gt;JS: structured JS value</span>
 <span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a>The key property is that <span class="in">`wasm_bindgen`</span> passes byte slices as zero-copy views into WASM linear memory. The only copies happen during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a>The key property: <span class="in">`wasm_bindgen`</span> passes byte slices as zero-copy views into WASM linear memory. Copies happen only during MessagePack encode (JS side) and decode (Rust side), plus the reverse on the way back.</span>
 <span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Slab Lifecycle</span></span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Slab lifecycle</span></span>
 <span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>Handles follow a simple lifecycle. Freed slots are reused on subsequent allocations:</span>
 <span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a></span>
@@ -2301,7 +2301,7 @@ Tip
 <span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a>On the TypeScript side, <span class="in">`WasmHandle`</span> wraps each raw <span class="in">`u32`</span> handle and calls <span class="in">`free_handle`</span> in its <span class="in">`Symbol.dispose`</span> implementation. A <span class="in">`FinalizationRegistry`</span> acts as a safety net: if a <span class="in">`WasmHandle`</span> is garbage-collected without being disposed, the registry calls <span class="in">`free_handle`</span> to prevent leaks.</span>
 <span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error Handling</span></span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error handling</span></span>
 <span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>Errors are represented as <span class="in">`WasmError`</span> variants (an internal <span class="in">`thiserror`</span> enum) and converted to <span class="in">`JsError`</span> at the boundary via <span class="in">`Into`</span>. The JS side receives them as standard <span class="in">`Error`</span> objects. The five error variants are:</span>
 <span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a></span>
@@ -2312,12 +2312,12 @@ Tip
 <span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MigrationFailed`</span> / <span class="in">`LiftFailed`</span> / <span class="in">`PutFailed`</span>: runtime operation errors</span>
 <span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## What happens if JS passes a freed handle?</span></span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Happens If JS Passes a Freed Handle?</span></span>
 <span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>The slab slot contains <span class="in">`None`</span>, so <span class="in">`with_resource`</span> returns <span class="in">`Err(WasmError::InvalidHandle)`</span>. The JS side receives a standard <span class="in">`Error`</span> with the message "invalid handle: 42". There's no undefined behavior or silent corruption.</span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>The slab slot contains <span class="in">`None`</span>, so <span class="in">`with_resource`</span> returns <span class="in">`Err(WasmError::InvalidHandle)`</span>. The JS side receives a standard <span class="in">`Error`</span> with message "invalid handle: 42". No undefined behavior or silent corruption.</span>
 <span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a New Entry Point</span></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a><span class="fu">## Adding a new entry point</span></span>
 <span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>To add a new WASM entry point:</span>
 <span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a></span>
@@ -2328,7 +2328,7 @@ Tip
 <span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Add an integration test in <span class="in">`tests/integration/tests/wasm_boundary.rs`</span></span>
 <span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_existence`</span> entry point demonstrates the pattern for functions that should never throw across the boundary: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>The <span class="in">`check_existence`</span> entry point demonstrates the pattern for functions that should never throw: wrap the inner logic in a fallible helper, and convert errors into a structured report in the outer function.</span>
 <span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>

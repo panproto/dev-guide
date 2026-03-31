@@ -669,15 +669,15 @@ window.Quarto = {
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">36.1</span> Overview</a></li>
-  <li><a href="#sec-opt-index-cache" id="toc-sec-opt-index-cache" class="nav-link" data-scroll-target="#sec-opt-index-cache"><span class="header-section-number">36.2</span> Theory Index Cache</a></li>
-  <li><a href="#sec-opt-arc-str" id="toc-sec-opt-arc-str" class="nav-link" data-scroll-target="#sec-opt-arc-str"><span class="header-section-number">36.3</span> Arc&lt;str&gt; for Zero-Cost Cloning</a></li>
-  <li><a href="#sec-opt-fxhash" id="toc-sec-opt-fxhash" class="nav-link" data-scroll-target="#sec-opt-fxhash"><span class="header-section-number">36.4</span> FxHash in Hot Paths</a></li>
-  <li><a href="#sec-opt-path-compression" id="toc-sec-opt-path-compression" class="nav-link" data-scroll-target="#sec-opt-path-compression"><span class="header-section-number">36.5</span> Path Compression in Ancestor Contraction</a></li>
-  <li><a href="#sec-opt-fused-pipeline" id="toc-sec-opt-fused-pipeline" class="nav-link" data-scroll-target="#sec-opt-fused-pipeline"><span class="header-section-number">36.6</span> Fused Restrict Pipeline</a></li>
-  <li><a href="#sec-opt-inverse-map" id="toc-sec-opt-inverse-map" class="nav-link" data-scroll-target="#sec-opt-inverse-map"><span class="header-section-number">36.7</span> Inverse Map Precomputation</a></li>
-  <li><a href="#sec-opt-arc-schema" id="toc-sec-opt-arc-schema" class="nav-link" data-scroll-target="#sec-opt-arc-schema"><span class="header-section-number">36.8</span> WASM Boundary: Arc&lt;Schema&gt;</a></li>
-  <li><a href="#sec-opt-wasm-optlevel" id="toc-sec-opt-wasm-optlevel" class="nav-link" data-scroll-target="#sec-opt-wasm-optlevel"><span class="header-section-number">36.9</span> WASM opt-level = 3</a></li>
-  <li><a href="#sec-benchmarking" id="toc-sec-benchmarking" class="nav-link" data-scroll-target="#sec-benchmarking"><span class="header-section-number">36.10</span> Benchmarking Guide</a>
+  <li><a href="#sec-opt-index-cache" id="toc-sec-opt-index-cache" class="nav-link" data-scroll-target="#sec-opt-index-cache"><span class="header-section-number">36.2</span> Theory index cache</a></li>
+  <li><a href="#sec-opt-arc-str" id="toc-sec-opt-arc-str" class="nav-link" data-scroll-target="#sec-opt-arc-str"><span class="header-section-number">36.3</span> Arc<str> for zero-cost cloning</str></a></li>
+  <li><a href="#sec-opt-fxhash" id="toc-sec-opt-fxhash" class="nav-link" data-scroll-target="#sec-opt-fxhash"><span class="header-section-number">36.4</span> FxHash in hot paths</a></li>
+  <li><a href="#sec-opt-path-compression" id="toc-sec-opt-path-compression" class="nav-link" data-scroll-target="#sec-opt-path-compression"><span class="header-section-number">36.5</span> Path compression in ancestor contraction</a></li>
+  <li><a href="#sec-opt-fused-pipeline" id="toc-sec-opt-fused-pipeline" class="nav-link" data-scroll-target="#sec-opt-fused-pipeline"><span class="header-section-number">36.6</span> Fused restrict pipeline</a></li>
+  <li><a href="#sec-opt-inverse-map" id="toc-sec-opt-inverse-map" class="nav-link" data-scroll-target="#sec-opt-inverse-map"><span class="header-section-number">36.7</span> Inverse map precomputation</a></li>
+  <li><a href="#sec-opt-arc-schema" id="toc-sec-opt-arc-schema" class="nav-link" data-scroll-target="#sec-opt-arc-schema"><span class="header-section-number">36.8</span> WASM boundary: arc<schema></schema></a></li>
+  <li><a href="#sec-opt-WASM-optlevel" id="toc-sec-opt-WASM-optlevel" class="nav-link" data-scroll-target="#sec-opt-WASM-optlevel"><span class="header-section-number">36.9</span> WASM opt-level = 3</a></li>
+  <li><a href="#sec-benchmarking" id="toc-sec-benchmarking" class="nav-link" data-scroll-target="#sec-benchmarking"><span class="header-section-number">36.10</span> Benchmarking guide</a>
   <ul class="collapse">
   <li><a href="#running-benchmarks" id="toc-running-benchmarks" class="nav-link" data-scroll-target="#running-benchmarks"><span class="header-section-number">36.10.1</span> Running benchmarks</a></li>
   <li><a href="#interpreting-divan-output" id="toc-interpreting-divan-output" class="nav-link" data-scroll-target="#interpreting-divan-output"><span class="header-section-number">36.10.2</span> Interpreting divan output</a></li>
@@ -722,7 +722,7 @@ window.Quarto = {
 <p>Every optimization preserves correctness. Formal proofs are provided in the <a href="https://panproto.dev/tutorial/appendices/A-formal-foundations.html">tutorial’s formal foundations appendix</a>.</p>
 </section>
 <section id="sec-opt-index-cache" class="level2" data-number="36.2">
-<h2 data-number="36.2" class="anchored" data-anchor-id="sec-opt-index-cache"><span class="header-section-number">36.2</span> Theory Index Cache</h2>
+<h2 data-number="36.2" class="anchored" data-anchor-id="sec-opt-index-cache"><span class="header-section-number">36.2</span> Theory index cache</h2>
 <p><strong>Location:</strong> <code>crates/panproto-gat/src/theory.rs</code>, in <code>Theory::new()</code> and <code>Theory::extending()</code>.</p>
 <p><strong>Problem:</strong> <code>find_sort(name)</code> and <code>find_op(name)</code> are called frequently during morphism checking, colimit computation, and migration compilation. The naive implementation scans a <code>Vec&lt;Sort&gt;</code> linearly.</p>
 <p><strong>Solution:</strong> A <code>HashMap&lt;Arc&lt;str&gt;, usize&gt;</code> index from names to vector positions is built once during <code>Theory</code> construction. Lookups become <span class="math inline">\(O(1)\)</span> amortized instead of <span class="math inline">\(O(n)\)</span>.</p>
@@ -756,7 +756,7 @@ window.Quarto = {
 </table>
 </section>
 <section id="sec-opt-arc-str" class="level2" data-number="36.3">
-<h2 data-number="36.3" class="anchored" data-anchor-id="sec-opt-arc-str"><span class="header-section-number">36.3</span> Arc&lt;str&gt; for Zero-Cost Cloning</h2>
+<h2 data-number="36.3" class="anchored" data-anchor-id="sec-opt-arc-str"><span class="header-section-number">36.3</span> Arc<str> for zero-cost cloning</str></h2>
 <p><strong>Location:</strong> All crates. Sort names, operation names, edge labels, vertex labels, and other string identifiers are <code>Arc&lt;str&gt;</code> throughout.</p>
 <p><strong>Problem:</strong> String-heavy data structures (theories, schemas, instances) are cloned frequently—during morphism construction, colimit computation, migration compilation, and WASM boundary crossings. With <code>String</code>, every clone copies the entire string buffer.</p>
 <p><strong>Solution:</strong> <code>Arc&lt;str&gt;</code> wraps the string data in an atomically reference-counted pointer. Cloning increments a counter (<span class="math inline">\(O(1)\)</span>) instead of allocating and copying (<span class="math inline">\(O(n)\)</span> in string length).</p>
@@ -769,7 +769,7 @@ window.Quarto = {
 <p><strong>Semantic equivalence:</strong> <code>Arc&lt;str&gt;</code> delegates <code>Eq</code>, <code>Hash</code>, <code>Ord</code>, <code>Serialize</code>, and <code>Deserialize</code> to the inner <code>str</code>. It is a drop-in replacement for <code>String</code> in all trait-dependent contexts.</p>
 </section>
 <section id="sec-opt-fxhash" class="level2" data-number="36.4">
-<h2 data-number="36.4" class="anchored" data-anchor-id="sec-opt-fxhash"><span class="header-section-number">36.4</span> FxHash in Hot Paths</h2>
+<h2 data-number="36.4" class="anchored" data-anchor-id="sec-opt-fxhash"><span class="header-section-number">36.4</span> FxHash in hot paths</h2>
 <p><strong>Location:</strong> <code>panproto-gat</code>, <code>panproto-schema</code>, <code>panproto-inst</code>, <code>panproto-mig</code>, <code>panproto-lens</code>. Used via <code>rustc_hash::FxHashMap</code> and <code>rustc_hash::FxHashSet</code>.</p>
 <p><strong>Problem:</strong> The default Rust hasher (<code>SipHash</code>) is designed for HashDoS resistance, which adds overhead for small, non-adversarial keys. Internal hash maps keyed by sort names, vertex IDs, or edge IDs do not face adversarial inputs.</p>
 <p><strong>Solution:</strong> <code>FxHash</code> is a non-cryptographic hash function optimized for small keys. It is 2–5x faster than <code>SipHash</code> for keys under 16 bytes.</p>
@@ -782,7 +782,7 @@ window.Quarto = {
 <p><strong>Rule of thumb:</strong> Use <code>FxHashMap</code>/<code>FxHashSet</code> for internal, short-lived maps in hot paths. Use <code>BTreeMap</code> at serialization boundaries. Use <code>HashMap</code> (default hasher) if the map is exposed publicly and performance is not critical.</p>
 </section>
 <section id="sec-opt-path-compression" class="level2" data-number="36.5">
-<h2 data-number="36.5" class="anchored" data-anchor-id="sec-opt-path-compression"><span class="header-section-number">36.5</span> Path Compression in Ancestor Contraction</h2>
+<h2 data-number="36.5" class="anchored" data-anchor-id="sec-opt-path-compression"><span class="header-section-number">36.5</span> Path compression in ancestor contraction</h2>
 <p><strong>Location:</strong> <code>crates/panproto-inst/src/wtype.rs</code>, in <code>ancestor_contraction()</code>.</p>
 <p><strong>Problem:</strong> Step 3 of the restrict pipeline walks each surviving node up the instance tree to find its nearest surviving ancestor. In the worst case (a deeply nested schema with many pruned intermediate nodes), each walk is <span class="math inline">\(O(d)\)</span> where <span class="math inline">\(d\)</span> is the tree depth. With <span class="math inline">\(n\)</span> surviving nodes, total cost is <span class="math inline">\(O(n \cdot d)\)</span>.</p>
 <p><strong>Solution:</strong> Path compression, borrowed from the union-find data structure <span class="citation" data-cites="tarjan1975">(<a href="#ref-tarjan1975" role="doc-biblioref">Tarjan 1975</a>)</span>. After finding the nearest surviving ancestor for a node, cache the result. Also update all intermediate nodes on the walk to point directly to the answer.</p>
@@ -805,7 +805,7 @@ window.Quarto = {
 <p><strong>Amortized complexity:</strong> Each node’s pointer is compressed at most once. Total work across all calls is <span class="math inline">\(O(|V|)\)</span>, giving <span class="math inline">\(O(1)\)</span> amortized per query after the first pass. This is safe because both the tree structure and the surviving set are immutable during the contraction phase.</p>
 </section>
 <section id="sec-opt-fused-pipeline" class="level2" data-number="36.6">
-<h2 data-number="36.6" class="anchored" data-anchor-id="sec-opt-fused-pipeline"><span class="header-section-number">36.6</span> Fused Restrict Pipeline</h2>
+<h2 data-number="36.6" class="anchored" data-anchor-id="sec-opt-fused-pipeline"><span class="header-section-number">36.6</span> Fused restrict pipeline</h2>
 <p><strong>Location:</strong> <code>crates/panproto-inst/src/wtype.rs</code>, in <code>wtype_restrict()</code>.</p>
 <p><strong>Problem:</strong> The five-step restrict pipeline (anchor check, reachability BFS, ancestor contraction, edge resolution, fan reconstruction) requires five passes over the instance tree. Each pass has good cache locality on its own, but the repeated traversal has a cost.</p>
 <p><strong>Solution:</strong> Steps 1–4 are fused into a single BFS pass. The BFS carries the nearest surviving ancestor as metadata on the frontier, so ancestor contraction happens inline. Edge resolution is performed immediately when a surviving node is emitted. Fan reconstruction remains a separate pass because it operates on a different data structure (fans, not tree nodes).</p>
@@ -820,20 +820,20 @@ window.Quarto = {
 <p><strong>Why individual step functions are retained:</strong> The unfused step functions serve as the reference implementation. Integration tests run both the fused and sequential versions on every test case and assert identical output. This provides ongoing regression protection for the fused optimization.</p>
 </section>
 <section id="sec-opt-inverse-map" class="level2" data-number="36.7">
-<h2 data-number="36.7" class="anchored" data-anchor-id="sec-opt-inverse-map"><span class="header-section-number">36.7</span> Inverse Map Precomputation</h2>
+<h2 data-number="36.7" class="anchored" data-anchor-id="sec-opt-inverse-map"><span class="header-section-number">36.7</span> Inverse map precomputation</h2>
 <p><strong>Location:</strong> <code>crates/panproto-mig/src/compose.rs</code>.</p>
 <p><strong>Problem:</strong> Composing two migrations <span class="math inline">\(m_1: S_2 \to S_1\)</span> and <span class="math inline">\(m_2: S_3 \to S_2\)</span> requires mapping vertices and edges through <span class="math inline">\(m_1\)</span>’s vertex/edge maps. A naive implementation scans <span class="math inline">\(m_1\)</span>’s maps for each vertex in <span class="math inline">\(m_2\)</span>, giving <span class="math inline">\(O(|V_1| \cdot |V_2|)\)</span> total cost.</p>
 <p><strong>Solution:</strong> Precompute the inverse map <span class="math inline">\(m_1^{-1}\)</span> (from target positions to source positions) once in <span class="math inline">\(O(|V_1|)\)</span>, then use it for <span class="math inline">\(O(1)\)</span> lookups during composition. Total cost drops to <span class="math inline">\(O(|V_1| + |V_2|)\)</span>.</p>
 </section>
 <section id="sec-opt-arc-schema" class="level2" data-number="36.8">
-<h2 data-number="36.8" class="anchored" data-anchor-id="sec-opt-arc-schema"><span class="header-section-number">36.8</span> WASM Boundary: Arc&lt;Schema&gt;</h2>
+<h2 data-number="36.8" class="anchored" data-anchor-id="sec-opt-arc-schema"><span class="header-section-number">36.8</span> WASM boundary: arc<schema></schema></h2>
 <p><strong>Location:</strong> <code>crates/panproto-wasm/src/slab.rs</code>.</p>
 <p><strong>Problem:</strong> The WASM slab allocator stores schemas, migrations, and instances. Multiple migrations may reference the same schema. Without sharing, each migration would hold its own copy, wasting memory in the constrained WASM heap.</p>
 <p><strong>Solution:</strong> Schemas are stored as <code>Arc&lt;Schema&gt;</code> in the slab. When a migration is compiled against a schema, it receives a clone of the <code>Arc</code> (reference count increment), not a deep copy. The schema is deallocated only when all references are dropped.</p>
 <p>This is especially important for the TypeScript SDK, where a single <code>Panproto</code> instance may hold dozens of schemas and migrations simultaneously.</p>
 </section>
-<section id="sec-opt-wasm-optlevel" class="level2" data-number="36.9">
-<h2 data-number="36.9" class="anchored" data-anchor-id="sec-opt-wasm-optlevel"><span class="header-section-number">36.9</span> WASM opt-level = 3</h2>
+<section id="sec-opt-WASM-optlevel" class="level2" data-number="36.9">
+<h2 data-number="36.9" class="anchored" data-anchor-id="sec-opt-WASM-optlevel"><span class="header-section-number">36.9</span> WASM opt-level = 3</h2>
 <p><strong>Location:</strong> Workspace <code>Cargo.toml</code>, in the <code>[profile.release]</code> section.</p>
 <p><strong>Problem:</strong> The default <code>opt-level</code> for release builds is <code>3</code>, but WASM builds sometimes use <code>opt-level = "s"</code> or <code>"z"</code> to minimize binary size. For a compiler library, execution speed matters more than download size.</p>
 <p><strong>Decision:</strong> panproto uses <code>opt-level = 3</code> for WASM release builds, prioritizing compute speed over binary size. The rationale:</p>
@@ -845,7 +845,7 @@ window.Quarto = {
 <p>LTO (<code>lto = true</code>) and single codegen unit (<code>codegen-units = 1</code>) are also enabled to maximize cross-crate inlining.</p>
 </section>
 <section id="sec-benchmarking" class="level2" data-number="36.10">
-<h2 data-number="36.10" class="anchored" data-anchor-id="sec-benchmarking"><span class="header-section-number">36.10</span> Benchmarking Guide</h2>
+<h2 data-number="36.10" class="anchored" data-anchor-id="sec-benchmarking"><span class="header-section-number">36.10</span> Benchmarking guide</h2>
 <section id="running-benchmarks" class="level3" data-number="36.10.1">
 <h3 data-number="36.10.1" class="anchored" data-anchor-id="running-benchmarks"><span class="header-section-number">36.10.1</span> Running benchmarks</h3>
 <p>panproto uses <a href="https://github.com/nvzqz/divan">divan</a> for benchmarks. Each crate with benchmarks has a <code>benches/</code> directory.</p>
@@ -1441,245 +1441,236 @@ Tarjan, Robert Endre. 1975. <span>“Efficiency of a Good but Not Linear Set Uni
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>panproto is a compiler library. Its restrict pipeline targets over 1 million records per second in WASM, and the native target should be significantly faster. The optimizations fall into three categories:</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Algorithmic** --- fusing pipeline passes, precomputing inverse maps, path compression.</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Data representation** --- <span class="in">`Arc&lt;str&gt;`</span> for zero-cost cloning, <span class="in">`FxHash`</span> for faster hashing.</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Build configuration** --- WASM <span class="in">`opt-level = 3`</span>, LTO, codegen-units.</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Algorithmic** — fusing pipeline passes, precomputing inverse maps, path compression.</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Data representation** — <span class="in">`Arc&lt;str&gt;`</span> for zero-cost cloning, <span class="in">`FxHash`</span> for faster hashing.</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Build configuration** — WASM <span class="in">`opt-level = 3`</span>, LTO, codegen-units.</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>Every optimization preserves correctness. Formal proofs are provided in the <span class="co">[</span><span class="ot">tutorial's formal foundations appendix</span><span class="co">](https://panproto.dev/tutorial/appendices/A-formal-foundations.html)</span>.</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory Index Cache {#sec-opt-index-cache}</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-gat/src/theory.rs`</span>, in <span class="in">`Theory::new()`</span> and <span class="in">`Theory::extending()`</span>.</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>**Problem:** <span class="in">`find_sort(name)`</span> and <span class="in">`find_op(name)`</span> are called frequently during morphism checking, colimit computation, and migration compilation. The naive implementation scans a <span class="in">`Vec&lt;Sort&gt;`</span> linearly.</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>**Solution:** A <span class="in">`HashMap&lt;Arc&lt;str&gt;, usize&gt;`</span> index from names to vector positions is built once during <span class="in">`Theory`</span> construction. Lookups become $O(1)$ amortized instead of $O(n)$.</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>**Why it is safe:** <span class="in">`Theory`</span> is immutable after construction. The index is a deterministic function of the sort vector, so it cannot become stale.</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>**Performance characteristics:**</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Operation <span class="pp">|</span> Without cache <span class="pp">|</span> With cache <span class="pp">|</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`find_sort(name)`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(1)$ amortized <span class="pp">|</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Theory::new()`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(n)$ (index build) <span class="pp">|</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Memory overhead <span class="pp">|</span> None <span class="pp">|</span> One <span class="in">`HashMap`</span> (~48 bytes + entries) <span class="pp">|</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory index cache {#sec-opt-index-cache}</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-gat/src/theory.rs`</span>, in <span class="in">`Theory::new()`</span> and <span class="in">`Theory::extending()`</span>.</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>**Problem:** <span class="in">`find_sort(name)`</span> and <span class="in">`find_op(name)`</span> are called frequently during morphism checking, colimit computation, and migration compilation. The naive implementation scans a <span class="in">`Vec&lt;Sort&gt;`</span> linearly.</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>**Solution:** A <span class="in">`HashMap&lt;Arc&lt;str&gt;, usize&gt;`</span> index from names to vector positions is built once during <span class="in">`Theory`</span> construction. Lookups become $O(1)$ amortized instead of $O(n)$.</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>**Why it is safe:** <span class="in">`Theory`</span> is immutable after construction. The index is a deterministic function of the sort vector, so it cannot become stale.</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>**Performance characteristics:**</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Operation <span class="pp">|</span> Without cache <span class="pp">|</span> With cache <span class="pp">|</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`find_sort(name)`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(1)$ amortized <span class="pp">|</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Theory::new()`</span> <span class="pp">|</span> $O(n)$ <span class="pp">|</span> $O(n)$ (index build) <span class="pp">|</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Memory overhead <span class="pp">|</span> None <span class="pp">|</span> One <span class="in">`HashMap`</span> (~48 bytes + entries) <span class="pp">|</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Arc&lt;str&gt; for zero-cost cloning {#sec-opt-arc-str}</span></span>
 <span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Arc\&lt;str\&gt; for Zero-Cost Cloning {#sec-opt-arc-str}</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>**Location:** All crates. Sort names, operation names, edge labels, vertex labels, and other string identifiers are <span class="in">`Arc&lt;str&gt;`</span> throughout.</span>
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>**Location:** All crates. Sort names, operation names, edge labels, vertex labels, and other string identifiers are <span class="in">`Arc&lt;str&gt;`</span> throughout.</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>**Problem:** String-heavy data structures (theories, schemas, instances) are cloned frequently—during morphism construction, colimit computation, migration compilation, and WASM boundary crossings. With <span class="in">`String`</span>, every clone copies the entire string buffer.</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>**Problem:** String-heavy data structures (theories, schemas, instances) are cloned frequently---during morphism construction, colimit computation, migration compilation, and WASM boundary crossings. With <span class="in">`String`</span>, every clone copies the entire string buffer.</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`Arc&lt;str&gt;`</span> wraps the string data in an atomically reference-counted pointer. Cloning increments a counter ($O(1)$) instead of allocating and copying ($O(n)$ in string length).</span>
 <span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`Arc&lt;str&gt;`</span> wraps the string data in an atomically reference-counted pointer. Cloning increments a counter ($O(1)$) instead of allocating and copying ($O(n)$ in string length).</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>**Migration path from String:** If you introduce a new struct with string fields:</span>
 <span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>**Migration path from String:** If you introduce a new struct with string fields:</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Use <span class="in">`Arc&lt;str&gt;`</span> for any field that will be cloned, hashed, or compared by value.</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Accept <span class="in">`impl Into&lt;Arc&lt;str&gt;&gt;`</span> in constructors so callers can pass <span class="in">`&amp;str`</span>, <span class="in">`String`</span>, or <span class="in">`Arc&lt;str&gt;`</span>.</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use <span class="in">`.as_ref()`</span> or <span class="in">`&amp;*name`</span> to get a <span class="in">`&amp;str`</span> when needed.</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Use <span class="in">`Arc&lt;str&gt;`</span> for any field that will be cloned, hashed, or compared by value.</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Accept <span class="in">`impl Into&lt;Arc&lt;str&gt;&gt;`</span> in constructors so callers can pass <span class="in">`&amp;str`</span>, <span class="in">`String`</span>, or <span class="in">`Arc&lt;str&gt;`</span>.</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Use <span class="in">`.as_ref()`</span> or <span class="in">`&amp;*name`</span> to get a <span class="in">`&amp;str`</span> when needed.</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>**Semantic equivalence:** <span class="in">`Arc&lt;str&gt;`</span> delegates <span class="in">`Eq`</span>, <span class="in">`Hash`</span>, <span class="in">`Ord`</span>, <span class="in">`Serialize`</span>, and <span class="in">`Deserialize`</span> to the inner <span class="in">`str`</span>. It is a drop-in replacement for <span class="in">`String`</span> in all trait-dependent contexts.</span>
 <span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>**Semantic equivalence:** <span class="in">`Arc&lt;str&gt;`</span> delegates <span class="in">`Eq`</span>, <span class="in">`Hash`</span>, <span class="in">`Ord`</span>, <span class="in">`Serialize`</span>, and <span class="in">`Deserialize`</span> to the inner <span class="in">`str`</span>. It is a drop-in replacement for <span class="in">`String`</span> in all trait-dependent contexts.</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## FxHash in hot paths {#sec-opt-fxhash}</span></span>
 <span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## FxHash in Hot Paths {#sec-opt-fxhash}</span></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`panproto-gat`</span>, <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span>, <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>. Used via <span class="in">`rustc_hash::FxHashMap`</span> and <span class="in">`rustc_hash::FxHashSet`</span>.</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>**Problem:** The default Rust hasher (<span class="in">`SipHash`</span>) is designed for HashDoS resistance, which adds overhead for small, non-adversarial keys. Internal hash maps keyed by sort names, vertex IDs, or edge IDs do not face adversarial inputs.</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`FxHash`</span> is a non-cryptographic hash function optimized for small keys. It is 2--5x faster than <span class="in">`SipHash`</span> for keys under 16 bytes.</span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>**Where standard HashMap is still appropriate:**</span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Serialization boundaries:** Any map that is serialized to MessagePack, JSON, or another format must use <span class="in">`BTreeMap`</span> for deterministic key ordering (not <span class="in">`FxHashMap`</span>, whose iteration order is unstable).</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Public API surfaces:** If a <span class="in">`HashMap`</span> is exposed in a public type signature, prefer the standard hasher to avoid leaking the <span class="in">`rustc-hash`</span> dependency.</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WASM bridge:** Maps crossing the WASM boundary use <span class="in">`BTreeMap`</span> for deterministic round-trips.</span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>**Rule of thumb:** Use <span class="in">`FxHashMap`</span>/<span class="in">`FxHashSet`</span> for internal, short-lived maps in hot paths. Use <span class="in">`BTreeMap`</span> at serialization boundaries. Use <span class="in">`HashMap`</span> (default hasher) if the map is exposed publicly and performance is not critical.</span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`panproto-gat`</span>, <span class="in">`panproto-schema`</span>, <span class="in">`panproto-inst`</span>, <span class="in">`panproto-mig`</span>, <span class="in">`panproto-lens`</span>. Used via <span class="in">`rustc_hash::FxHashMap`</span> and <span class="in">`rustc_hash::FxHashSet`</span>.</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>**Problem:** The default Rust hasher (<span class="in">`SipHash`</span>) is designed for HashDoS resistance, which adds overhead for small, non-adversarial keys. Internal hash maps keyed by sort names, vertex IDs, or edge IDs do not face adversarial inputs.</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>**Solution:** <span class="in">`FxHash`</span> is a non-cryptographic hash function optimized for small keys. It is 2–5x faster than <span class="in">`SipHash`</span> for keys under 16 bytes.</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>**Where standard HashMap is still appropriate:**</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Serialization boundaries:** Any map that is serialized to MessagePack, JSON, or another format must use <span class="in">`BTreeMap`</span> for deterministic key ordering (not <span class="in">`FxHashMap`</span>, whose iteration order is unstable).</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Public API surfaces:** If a <span class="in">`HashMap`</span> is exposed in a public type signature, prefer the standard hasher to avoid leaking the <span class="in">`rustc-hash`</span> dependency.</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WASM bridge:** Maps crossing the WASM boundary use <span class="in">`BTreeMap`</span> for deterministic round-trips.</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>**Rule of thumb:** Use <span class="in">`FxHashMap`</span>/<span class="in">`FxHashSet`</span> for internal, short-lived maps in hot paths. Use <span class="in">`BTreeMap`</span> at serialization boundaries. Use <span class="in">`HashMap`</span> (default hasher) if the map is exposed publicly and performance is not critical.</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Path compression in ancestor contraction {#sec-opt-path-compression}</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`ancestor_contraction()`</span>.</span>
 <span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Path Compression in Ancestor Contraction {#sec-opt-path-compression}</span></span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>**Problem:** Step 3 of the restrict pipeline walks each surviving node up the instance tree to find its nearest surviving ancestor. In the worst case (a deeply nested schema with many pruned intermediate nodes), each walk is $O(d)$ where $d$ is the tree depth. With $n$ surviving nodes, total cost is $O(n \cdot d)$.</span>
 <span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`ancestor_contraction()`</span>.</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>**Solution:** Path compression, borrowed from the union-find data structure <span class="co">[</span><span class="ot">@tarjan1975</span><span class="co">]</span>. After finding the nearest surviving ancestor for a node, cache the result. Also update all intermediate nodes on the walk to point directly to the answer.</span>
 <span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>**Problem:** Step 3 of the restrict pipeline walks each surviving node up the instance tree to find its nearest surviving ancestor. In the worst case (a deeply nested schema with many pruned intermediate nodes), each walk is $O(d)$ where $d$ is the tree depth. With $n$ surviving nodes, total cost is $O(n \cdot d)$.</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>**Algorithm sketch:**</span>
 <span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>**Solution:** Path compression, borrowed from the union-find data structure <span class="co">[</span><span class="ot">@tarjan1975</span><span class="co">]</span>. After finding the nearest surviving ancestor for a node, cache the result. Also update all intermediate nodes on the walk to point directly to the answer.</span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>**Algorithm sketch:**</span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="in">fn find_ancestor(node, cache, surviving, parent):</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="in">    if node in cache:</span></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="in">        return cache[node]</span></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="in">    chain = []</span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="in">    current = parent(node)</span></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="in">    while current not in surviving:</span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="in">        chain.push(current)</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="in">        current = parent(current)</span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="in">    // current is the nearest surviving ancestor</span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="in">    for p in chain:</span></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="in">        cache[p] = current</span></span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="in">    cache[node] = current</span></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="in">    return current</span></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="in">fn find_ancestor(node, cache, surviving, parent):</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a><span class="in">    if node in cache:</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a><span class="in">        return cache[node]</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="in">    chain = []</span></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="in">    current = parent(node)</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="in">    while current not in surviving:</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="in">        chain.push(current)</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="in">        current = parent(current)</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="in">    // current is the nearest surviving ancestor</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="in">    for p in chain:</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="in">        cache[p] = current</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="in">    cache[node] = current</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="in">    return current</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a>**Amortized complexity:** Each node's pointer is compressed at most once. Total work across all calls is $O(|V|)$, giving $O(1)$ amortized per query after the first pass. This is safe because both the tree structure and the surviving set are immutable during the contraction phase.</span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fused restrict pipeline {#sec-opt-fused-pipeline}</span></span>
 <span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>**Amortized complexity:** Each node's pointer is compressed at most once. Total work across all calls is $O(|V|)$, giving $O(1)$ amortized per query after the first pass. This is safe because both the tree structure and the surviving set are immutable during the contraction phase.</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`wtype_restrict()`</span>.</span>
 <span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fused Restrict Pipeline {#sec-opt-fused-pipeline}</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-inst/src/wtype.rs`</span>, in <span class="in">`wtype_restrict()`</span>.</span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>**Problem:** The five-step restrict pipeline (anchor check, reachability BFS, ancestor contraction, edge resolution, fan reconstruction) requires five passes over the instance tree. Each pass has good cache locality on its own, but the repeated traversal has a cost.</span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>**Solution:** Steps 1--4 are fused into a single BFS pass. The BFS carries the nearest surviving ancestor as metadata on the frontier, so ancestor contraction happens inline. Edge resolution is performed immediately when a surviving node is emitted. Fan reconstruction remains a separate pass because it operates on a different data structure (fans, not tree nodes).</span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>**How it works:**</span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Enqueue the root with ancestor = root.</span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Dequeue a node. Check whether its anchor survives the migration (step 1).</span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If it survives and was reached through a surviving path (step 2): emit it to the output tree, resolve its edge label (step 4), and set it as the "current ancestor" for its children.</span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If it does not survive: propagate the parent's ancestor annotation to its children (step 3).</span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Enqueue children and repeat.</span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>**Why individual step functions are retained:** The unfused step functions serve as the reference implementation. Integration tests run both the fused and sequential versions on every test case and assert identical output. This provides ongoing regression protection for the fused optimization.</span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>**Problem:** The five-step restrict pipeline (anchor check, reachability BFS, ancestor contraction, edge resolution, fan reconstruction) requires five passes over the instance tree. Each pass has good cache locality on its own, but the repeated traversal has a cost.</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>**Solution:** Steps 1–4 are fused into a single BFS pass. The BFS carries the nearest surviving ancestor as metadata on the frontier, so ancestor contraction happens inline. Edge resolution is performed immediately when a surviving node is emitted. Fan reconstruction remains a separate pass because it operates on a different data structure (fans, not tree nodes).</span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>**How it works:**</span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Enqueue the root with ancestor = root.</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Dequeue a node. Check whether its anchor survives the migration (step 1).</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>If it survives and was reached through a surviving path (step 2): emit it to the output tree, resolve its edge label (step 4), and set it as the "current ancestor" for its children.</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>If it does not survive: propagate the parent's ancestor annotation to its children (step 3).</span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Enqueue children and repeat.</span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>**Why individual step functions are retained:** The unfused step functions serve as the reference implementation. Integration tests run both the fused and sequential versions on every test case and assert identical output. This provides ongoing regression protection for the fused optimization.</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inverse map precomputation {#sec-opt-inverse-map}</span></span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-mig/src/compose.rs`</span>.</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>**Problem:** Composing two migrations $m_1: S_2 \to S_1$ and $m_2: S_3 \to S_2$ requires mapping vertices and edges through $m_1$'s vertex/edge maps. A naive implementation scans $m_1$'s maps for each vertex in $m_2$, giving $O(|V_1| \cdot |V_2|)$ total cost.</span>
 <span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inverse Map Precomputation {#sec-opt-inverse-map}</span></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>**Solution:** Precompute the inverse map $m_1^{-1}$ (from target positions to source positions) once in $O(|V_1|)$, then use it for $O(1)$ lookups during composition. Total cost drops to $O(|V_1| + |V_2|)$.</span>
 <span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-mig/src/compose.rs`</span>.</span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM boundary: arc&lt;schema&gt; {#sec-opt-arc-schema}</span></span>
 <span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>**Problem:** Composing two migrations $m_1: S_2 \to S_1$ and $m_2: S_3 \to S_2$ requires mapping vertices and edges through $m_1$'s vertex/edge maps. A naive implementation scans $m_1$'s maps for each vertex in $m_2$, giving $O(|V_1| \cdot |V_2|)$ total cost.</span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-wasm/src/slab.rs`</span>.</span>
 <span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>**Solution:** Precompute the inverse map $m_1^{-1}$ (from target positions to source positions) once in $O(|V_1|)$, then use it for $O(1)$ lookups during composition. Total cost drops to $O(|V_1| + |V_2|)$.</span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>**Problem:** The WASM slab allocator stores schemas, migrations, and instances. Multiple migrations may reference the same schema. Without sharing, each migration would hold its own copy, wasting memory in the constrained WASM heap.</span>
 <span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM Boundary: Arc\&lt;Schema\&gt; {#sec-opt-arc-schema}</span></span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>**Location:** <span class="in">`crates/panproto-wasm/src/slab.rs`</span>.</span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>**Problem:** The WASM slab allocator stores schemas, migrations, and instances. Multiple migrations may reference the same schema. Without sharing, each migration would hold its own copy, wasting memory in the constrained WASM heap.</span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>**Solution:** Schemas are stored as <span class="in">`Arc&lt;Schema&gt;`</span> in the slab. When a migration is compiled against a schema, it receives a clone of the <span class="in">`Arc`</span> (reference count increment), not a deep copy. The schema is deallocated only when all references are dropped.</span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>This is especially important for the TypeScript SDK, where a single <span class="in">`Panproto`</span> instance may hold dozens of schemas and migrations simultaneously.</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>**Solution:** Schemas are stored as <span class="in">`Arc&lt;Schema&gt;`</span> in the slab. When a migration is compiled against a schema, it receives a clone of the <span class="in">`Arc`</span> (reference count increment), not a deep copy. The schema is deallocated only when all references are dropped.</span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a>This is especially important for the TypeScript SDK, where a single <span class="in">`Panproto`</span> instance may hold dozens of schemas and migrations simultaneously.</span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM opt-level = 3 {#sec-opt-WASM-optlevel}</span></span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>**Location:** Workspace <span class="in">`Cargo.toml`</span>, in the <span class="in">`[profile.release]`</span> section.</span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>**Problem:** The default <span class="in">`opt-level`</span> for release builds is <span class="in">`3`</span>, but WASM builds sometimes use <span class="in">`opt-level = "s"`</span> or <span class="in">`"z"`</span> to minimize binary size. For a compiler library, execution speed matters more than download size.</span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>**Decision:** panproto uses <span class="in">`opt-level = 3`</span> for WASM release builds, prioritizing compute speed over binary size. The rationale:</span>
 <span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM opt-level = 3 {#sec-opt-wasm-optlevel}</span></span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>**Location:** Workspace <span class="in">`Cargo.toml`</span>, in the <span class="in">`[profile.release]`</span> section.</span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>panproto is a compiler library, not a UI widget. Users load it once and run many migrations.</span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The binary size difference between <span class="in">`opt-level = 3`</span> and <span class="in">`opt-level = "s"`</span> is roughly 15–20% for panproto.</span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The performance difference on the restrict hot path is 20–40% in benchmarks.</span>
 <span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a>**Problem:** The default <span class="in">`opt-level`</span> for release builds is <span class="in">`3`</span>, but WASM builds sometimes use <span class="in">`opt-level = "s"`</span> or <span class="in">`"z"`</span> to minimize binary size. For a compiler library, execution speed matters more than download size.</span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a>LTO (<span class="in">`lto = true`</span>) and single codegen unit (<span class="in">`codegen-units = 1`</span>) are also enabled to maximize cross-crate inlining.</span>
 <span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>**Decision:** panproto uses <span class="in">`opt-level = 3`</span> for WASM release builds, prioritizing compute speed over binary size. The rationale:</span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Benchmarking guide {#sec-benchmarking}</span></span>
 <span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>panproto is a compiler library, not a UI widget. Users load it once and run many migrations.</span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The binary size difference between <span class="in">`opt-level = 3`</span> and <span class="in">`opt-level = "s"`</span> is roughly 15--20% for panproto.</span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The performance difference on the restrict hot path is 20--40% in benchmarks.</span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running benchmarks</span></span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a>panproto uses <span class="co">[</span><span class="ot">divan</span><span class="co">](https://github.com/nvzqz/divan)</span> for benchmarks. Each crate with benchmarks has a <span class="in">`benches/`</span> directory.</span>
 <span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a>LTO (<span class="in">`lto = true`</span>) and single codegen unit (<span class="in">`codegen-units = 1`</span>) are also enabled to maximize cross-crate inlining.</span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a>Run all benchmarks:</span>
 <span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Benchmarking Guide {#sec-benchmarking}</span></span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running benchmarks</span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>panproto uses <span class="co">[</span><span class="ot">divan</span><span class="co">](https://github.com/nvzqz/divan)</span> for benchmarks. Each crate with benchmarks has a <span class="in">`benches/`</span> directory.</span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>Run all benchmarks:</span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span></span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>Run benchmarks for a specific crate:</span>
+<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
+<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-io</span>
 <span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>Run benchmarks for a specific crate:</span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>Run a specific benchmark by name:</span>
 <span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat</span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst</span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-mig</span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-io</span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>Run a specific benchmark by name:</span>
-<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> colimit</span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpreting divan output</span></span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>divan reports:</span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column <span class="pp">|</span> Meaning <span class="pp">|</span></span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fastest`</span> <span class="pp">|</span> The fastest observed iteration time <span class="pp">|</span></span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`median`</span> <span class="pp">|</span> The median iteration time (most representative) <span class="pp">|</span></span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean`</span> <span class="pp">|</span> The arithmetic mean (sensitive to outliers) <span class="pp">|</span></span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`samples`</span> <span class="pp">|</span> Number of samples collected <span class="pp">|</span></span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`iters`</span> <span class="pp">|</span> Number of iterations per sample <span class="pp">|</span></span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>Focus on the **median** for comparing before/after. If the median improves but the fastest does not, the optimization reduced variance (also valuable). If the fastest improves but the median does not, the optimization helped only in the best case (less valuable).</span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a><span class="fu">### Adding a new benchmark</span></span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add a function in the appropriate <span class="in">`benches/*.rs`</span> file:</span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench]</span></span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">my_new_benchmark</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher) {</span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a>        <span class="sc">/</span><span class="er">/</span> <span class="fu">Setup</span> (not timed)</span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>        let input <span class="ot">=</span> <span class="fu">setup_input</span>();</span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">-p</span> panproto-gat <span class="at">--</span> colimit</span>
+<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpreting divan output</span></span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>divan reports:</span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Column <span class="pp">|</span> Meaning <span class="pp">|</span></span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fastest`</span> <span class="pp">|</span> The fastest observed iteration time <span class="pp">|</span></span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`median`</span> <span class="pp">|</span> The median iteration time (most representative) <span class="pp">|</span></span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean`</span> <span class="pp">|</span> The arithmetic mean (sensitive to outliers) <span class="pp">|</span></span>
+<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`samples`</span> <span class="pp">|</span> Number of samples collected <span class="pp">|</span></span>
+<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`iters`</span> <span class="pp">|</span> Number of iterations per sample <span class="pp">|</span></span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>Focus on the **median** for comparing before/after. If the median improves but the fastest does not, the optimization reduced variance (also valuable). If the fastest improves but the median does not, the optimization helped only in the best case (less valuable).</span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="fu">### Adding a new benchmark</span></span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Add a function in the appropriate <span class="in">`benches/*.rs`</span> file:</span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench]</span></span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">my_new_benchmark</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher) {</span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>        <span class="sc">/</span><span class="er">/</span> <span class="fu">Setup</span> (not timed)</span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>        let input <span class="ot">=</span> <span class="fu">setup_input</span>();</span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>            <span class="sc">/</span><span class="er">/</span> Timed section</span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>            <span class="fu">my_function</span>(<span class="sc">&amp;</span>input)</span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For parameterized benchmarks, use <span class="in">`#[divan::bench(args = [...])]`</span>:</span>
 <span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>            <span class="sc">/</span><span class="er">/</span> Timed section</span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>            <span class="fu">my_function</span>(<span class="sc">&amp;</span>input)</span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>        });</span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
-<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>For parameterized benchmarks, use <span class="in">`#[divan::bench(args = [...])]`</span>:</span>
-<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
-<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench(args = [10, 100, 1000, 10_000])]</span></span>
-<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">restrict_n_nodes</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher, n<span class="sc">:</span> usize) {</span>
-<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>        <span class="fu">let</span> (instance, migration) <span class="ot">=</span> <span class="fu">build_test_case</span>(n);</span>
-<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
-<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>            <span class="fu">wtype_restrict</span>(<span class="sc">&amp;</span>instance, <span class="sc">&amp;</span>migration)</span>
-<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a>        });</span>
-<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
-<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Run the new benchmark to verify it works:</span>
-<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a>    <span class="in">```bash</span></span>
-<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> my_new_benchmark</span>
-<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
-<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="fu">### Comparing branches</span></span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>    <span class="in">```rust</span></span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>    <span class="co">#[divan::bench(args = [10, 100, 1000, 10_000])]</span></span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>    fn <span class="fu">restrict_n_nodes</span>(bencher<span class="sc">:</span> divan<span class="sc">::</span>Bencher, n<span class="sc">:</span> usize) {</span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>        <span class="fu">let</span> (instance, migration) <span class="ot">=</span> <span class="fu">build_test_case</span>(n);</span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>        <span class="fu">bencher.bench_local</span>(<span class="sc">||</span> {</span>
+<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a>            <span class="fu">wtype_restrict</span>(<span class="sc">&amp;</span>instance, <span class="sc">&amp;</span>migration)</span>
+<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Run the new benchmark to verify it works:</span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a>    <span class="in">```bash</span></span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a>    <span class="ex">cargo</span> bench <span class="at">-p</span> panproto-inst <span class="at">--</span> my_new_benchmark</span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a>    <span class="in">```</span></span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a><span class="fu">### Comparing branches</span></span>
+<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>To compare performance before and after a change:</span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a><span class="co"># On main branch</span></span>
+<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a><span class="co"># On your feature branch</span></span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> feature</span>
 <span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>To compare performance before and after a change:</span>
-<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a><span class="co"># On main branch</span></span>
-<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> main</span>
-<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a><span class="co"># On your feature branch</span></span>
-<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a><span class="ex">cargo</span> bench <span class="at">--workspace</span> <span class="at">--</span> <span class="at">--save-baseline</span> feature</span>
-<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare (requires critcmp: cargo install critcmp)</span></span>
-<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a><span class="ex">critcmp</span> main feature</span>
-<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a>divan does not natively support <span class="in">`--save-baseline`</span> / <span class="in">`critcmp`</span> in the same way as Criterion. For divan, the simplest approach is to run benchmarks on each branch and compare the terminal output manually, or pipe the output to files and diff them.</span>
-<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare (requires critcmp: cargo install critcmp)</span></span>
+<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a><span class="ex">critcmp</span> main feature</span>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a>divan does not natively support <span class="in">`--save-baseline`</span> / <span class="in">`critcmp`</span> in the same way as Criterion. For divan, the simplest approach is to run benchmarks on each branch and compare the terminal output manually, or pipe the output to files and diff them.</span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

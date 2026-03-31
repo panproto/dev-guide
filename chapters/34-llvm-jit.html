@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>28&nbsp; LLVM Integration and JIT Compilation – panproto: Developer Guide</title>
+<title>29&nbsp; LLVM Integration and JIT Compilation – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -287,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/34-llvm-jit.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/34-llvm-jit.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -475,50 +475,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/35-dependent-optics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Dependent Optics and Scoped Transforms</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/31-edit-lenses.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/32-parse-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/33-project-assembly.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/34-llvm-jit.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
   </div>
 </li>
       </ul>
@@ -535,19 +541,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -564,7 +570,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -581,31 +587,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -620,19 +626,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#panproto-llvm" id="toc-panproto-llvm" class="nav-link active" data-scroll-target="#panproto-llvm"><span class="header-section-number">28.1</span> panproto-llvm</a>
+  <li><a href="#panproto-llvm" id="toc-panproto-llvm" class="nav-link active" data-scroll-target="#panproto-llvm"><span class="header-section-number">29.1</span> panproto-llvm</a>
   <ul class="collapse">
-  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">28.1.1</span> Module map</a></li>
-  <li><a href="#protocol-definition" id="toc-protocol-definition" class="nav-link" data-scroll-target="#protocol-definition"><span class="header-section-number">28.1.2</span> Protocol definition</a></li>
-  <li><a href="#lowering-morphisms" id="toc-lowering-morphisms" class="nav-link" data-scroll-target="#lowering-morphisms"><span class="header-section-number">28.1.3</span> Lowering morphisms</a></li>
-  <li><a href="#inkwell-ir-parser" id="toc-inkwell-ir-parser" class="nav-link" data-scroll-target="#inkwell-ir-parser"><span class="header-section-number">28.1.4</span> inkwell IR parser</a></li>
+  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">29.1.1</span> Module map</a></li>
+  <li><a href="#protocol-definition" id="toc-protocol-definition" class="nav-link" data-scroll-target="#protocol-definition"><span class="header-section-number">29.1.2</span> Protocol definition</a></li>
+  <li><a href="#lowering-morphisms" id="toc-lowering-morphisms" class="nav-link" data-scroll-target="#lowering-morphisms"><span class="header-section-number">29.1.3</span> Lowering morphisms</a></li>
+  <li><a href="#inkwell-ir-parser" id="toc-inkwell-ir-parser" class="nav-link" data-scroll-target="#inkwell-ir-parser"><span class="header-section-number">29.1.4</span> inkwell IR parser</a></li>
   </ul></li>
-  <li><a href="#panproto-jit" id="toc-panproto-jit" class="nav-link" data-scroll-target="#panproto-jit"><span class="header-section-number">28.2</span> panproto-jit</a>
+  <li><a href="#panproto-jit" id="toc-panproto-jit" class="nav-link" data-scroll-target="#panproto-jit"><span class="header-section-number">29.2</span> panproto-jit</a>
   <ul class="collapse">
-  <li><a href="#module-map-1" id="toc-module-map-1" class="nav-link" data-scroll-target="#module-map-1"><span class="header-section-number">28.2.1</span> Module map</a></li>
-  <li><a href="#jit-compiler-architecture" id="toc-jit-compiler-architecture" class="nav-link" data-scroll-target="#jit-compiler-architecture"><span class="header-section-number">28.2.2</span> JIT compiler architecture</a></li>
-  <li><a href="#compilation-mapping" id="toc-compilation-mapping" class="nav-link" data-scroll-target="#compilation-mapping"><span class="header-section-number">28.2.3</span> Compilation mapping</a></li>
-  <li><a href="#lint-configuration" id="toc-lint-configuration" class="nav-link" data-scroll-target="#lint-configuration"><span class="header-section-number">28.2.4</span> Lint configuration</a></li>
+  <li><a href="#module-map-1" id="toc-module-map-1" class="nav-link" data-scroll-target="#module-map-1"><span class="header-section-number">29.2.1</span> Module map</a></li>
+  <li><a href="#jit-compiler-architecture" id="toc-jit-compiler-architecture" class="nav-link" data-scroll-target="#jit-compiler-architecture"><span class="header-section-number">29.2.2</span> JIT compiler architecture</a></li>
+  <li><a href="#compilation-mapping" id="toc-compilation-mapping" class="nav-link" data-scroll-target="#compilation-mapping"><span class="header-section-number">29.2.3</span> Compilation mapping</a></li>
+  <li><a href="#lint-configuration" id="toc-lint-configuration" class="nav-link" data-scroll-target="#lint-configuration"><span class="header-section-number">29.2.4</span> Lint configuration</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/34-llvm-jit.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -641,9 +647,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/34-llvm-jit.html"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/34-llvm-jit.html"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-llvm-jit" class="quarto-section-identifier"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-llvm-jit" class="quarto-section-identifier"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -661,10 +667,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>panproto’s expression language (<code>panproto-expr</code>) is interpreted by default: each <code>Expr</code> node is pattern-matched at runtime and evaluated recursively. For migrations that touch millions of records, interpretation overhead adds up. The <code>panproto-jit</code> crate eliminates it by compiling expressions to native code via LLVM. Meanwhile, <code>panproto-llvm</code> treats LLVM IR itself as a panproto protocol—meaning you can model compiler lowering as a theory morphism and use the full migration/lens toolkit on IR transformations.</p>
-<section id="panproto-llvm" class="level2" data-number="28.1">
-<h2 data-number="28.1" class="anchored" data-anchor-id="panproto-llvm"><span class="header-section-number">28.1</span> panproto-llvm</h2>
-<section id="module-map" class="level3" data-number="28.1.1">
-<h3 data-number="28.1.1" class="anchored" data-anchor-id="module-map"><span class="header-section-number">28.1.1</span> Module map</h3>
+<section id="panproto-llvm" class="level2" data-number="29.1">
+<h2 data-number="29.1" class="anchored" data-anchor-id="panproto-llvm"><span class="header-section-number">29.1</span> panproto-llvm</h2>
+<section id="module-map" class="level3" data-number="29.1.1">
+<h3 data-number="29.1.1" class="anchored" data-anchor-id="module-map"><span class="header-section-number">29.1.1</span> Module map</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 47%">
@@ -696,8 +702,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="protocol-definition" class="level3" data-number="28.1.2">
-<h3 data-number="28.1.2" class="anchored" data-anchor-id="protocol-definition"><span class="header-section-number">28.1.2</span> Protocol definition</h3>
+<section id="protocol-definition" class="level3" data-number="29.1.2">
+<h3 data-number="29.1.2" class="anchored" data-anchor-id="protocol-definition"><span class="header-section-number">29.1.2</span> Protocol definition</h3>
 <p>The LLVM IR protocol is composed from <code>colimit(ThGraph, ThConstraint, ThOrder)</code> with vertex kinds for:</p>
 <ul>
 <li><strong>Module level</strong>: <code>module</code>, <code>function</code>, <code>global-variable</code>, <code>alias</code></li>
@@ -707,8 +713,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Values</strong>: <code>constant</code>, <code>undef</code>, <code>poison</code>, <code>null</code>, <code>zero-initializer</code></li>
 </ul>
 </section>
-<section id="lowering-morphisms" class="level3" data-number="28.1.3">
-<h3 data-number="28.1.3" class="anchored" data-anchor-id="lowering-morphisms"><span class="header-section-number">28.1.3</span> Lowering morphisms</h3>
+<section id="lowering-morphisms" class="level3" data-number="29.1.3">
+<h3 data-number="29.1.3" class="anchored" data-anchor-id="lowering-morphisms"><span class="header-section-number">29.1.3</span> Lowering morphisms</h3>
 <p>Three lowering morphisms are defined:</p>
 <ul>
 <li><code>lower_typescript()</code>: <code>ThTypeScriptFullAST</code> to <code>ThLLVMIRSchema</code></li>
@@ -717,8 +723,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Each maps AST sorts to LLVM IR sorts (e.g., <code>function_declaration</code> to <code>function</code>, <code>binary_expression</code> to <code>instruction</code>) and edge kinds (e.g., <code>body</code> to <code>entry-block</code>, <code>condition</code> to <code>operand</code>).</p>
 </section>
-<section id="inkwell-ir-parser" class="level3" data-number="28.1.4">
-<h3 data-number="28.1.4" class="anchored" data-anchor-id="inkwell-ir-parser"><span class="header-section-number">28.1.4</span> inkwell IR parser</h3>
+<section id="inkwell-ir-parser" class="level3" data-number="29.1.4">
+<h3 data-number="29.1.4" class="anchored" data-anchor-id="inkwell-ir-parser"><span class="header-section-number">29.1.4</span> inkwell IR parser</h3>
 <p><code>parse_llvm_ir</code> creates an inkwell <code>Context</code>, parses the IR text via <code>MemoryBuffer::create_from_memory_range_copy</code>, and walks the module:</p>
 <ol type="1">
 <li>Root <code>module</code> vertex with <code>target-triple</code> constraint</li>
@@ -729,10 +735,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="panproto-jit" class="level2" data-number="28.2">
-<h2 data-number="28.2" class="anchored" data-anchor-id="panproto-jit"><span class="header-section-number">28.2</span> panproto-jit</h2>
-<section id="module-map-1" class="level3" data-number="28.2.1">
-<h3 data-number="28.2.1" class="anchored" data-anchor-id="module-map-1"><span class="header-section-number">28.2.1</span> Module map</h3>
+<section id="panproto-jit" class="level2" data-number="29.2">
+<h2 data-number="29.2" class="anchored" data-anchor-id="panproto-jit"><span class="header-section-number">29.2</span> panproto-jit</h2>
+<section id="module-map-1" class="level3" data-number="29.2.1">
+<h3 data-number="29.2.1" class="anchored" data-anchor-id="module-map-1"><span class="header-section-number">29.2.1</span> Module map</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -756,8 +762,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="jit-compiler-architecture" class="level3" data-number="28.2.2">
-<h3 data-number="28.2.2" class="anchored" data-anchor-id="jit-compiler-architecture"><span class="header-section-number">28.2.2</span> JIT compiler architecture</h3>
+<section id="jit-compiler-architecture" class="level3" data-number="29.2.2">
+<h3 data-number="29.2.2" class="anchored" data-anchor-id="jit-compiler-architecture"><span class="header-section-number">29.2.2</span> JIT compiler architecture</h3>
 <p><code>JitCompiler::new</code> leaks an LLVM <code>Context</code> (intentional; reuse the compiler across expressions). <code>compile(&amp;expr)</code> creates a module, builds a function <code>__panproto_eval() -&gt; i64</code>, compiles the expression body, and JIT-executes via ORC.</p>
 <p>Key codegen methods:</p>
 <ul>
@@ -767,8 +773,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>compile_literal</code>: <code>i64</code>/<code>f64</code>/<code>i1</code> constants (i64 uses <code>from_ne_bytes</code> for sign-safe casting)</li>
 </ul>
 </section>
-<section id="compilation-mapping" class="level3" data-number="28.2.3">
-<h3 data-number="28.2.3" class="anchored" data-anchor-id="compilation-mapping"><span class="header-section-number">28.2.3</span> Compilation mapping</h3>
+<section id="compilation-mapping" class="level3" data-number="29.2.3">
+<h3 data-number="29.2.3" class="anchored" data-anchor-id="compilation-mapping"><span class="header-section-number">29.2.3</span> Compilation mapping</h3>
 <p><code>classify_expr</code> statically classifies each expression node into an <code>ExprMapping</code>:</p>
 <ul>
 <li><code>ArithmeticOp</code>: maps to a single LLVM instruction (add, sub, icmp, etc.)</li>
@@ -779,8 +785,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><code>classify_jittable_builtin</code> (const fn) handles the 22 builtins compilable to direct LLVM instructions. <code>classify_runtime_builtin</code> handles the remaining 33 that need runtime functions.</p>
 </section>
-<section id="lint-configuration" class="level3" data-number="28.2.4">
-<h3 data-number="28.2.4" class="anchored" data-anchor-id="lint-configuration"><span class="header-section-number">28.2.4</span> Lint configuration</h3>
+<section id="lint-configuration" class="level3" data-number="29.2.4">
+<h3 data-number="29.2.4" class="anchored" data-anchor-id="lint-configuration"><span class="header-section-number">29.2.4</span> Lint configuration</h3>
 <p><code>panproto-jit</code> uses per-crate lints instead of workspace lints because LLVM FFI requires <code>unsafe_code = "allow"</code>. All other lint levels match the workspace (pedantic, nursery, <code>unwrap_used = "deny"</code>).</p>
 
 
@@ -1257,12 +1263,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/33-project-assembly.html" class="pagination-link" aria-label="Project Assembly and Git Bridge">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
-        <span class="nav-page-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

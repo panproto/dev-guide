@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>21&nbsp; Data Versioning Internals – panproto: Developer Guide</title>
+<title>22&nbsp; Data Versioning Internals – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/23-field-transforms.html" rel="next">
-<link href="../chapters/27-auto-lens-pipeline.html" rel="prev">
+<link href="../chapters/35-dependent-optics.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -287,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -475,50 +475,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/35-dependent-optics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Dependent Optics and Scoped Transforms</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/31-edit-lenses.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/32-parse-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/33-project-assembly.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/34-llvm-jit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
   </div>
 </li>
       </ul>
@@ -535,19 +541,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -564,7 +570,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -581,31 +587,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -620,33 +626,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-data-object-model" id="toc-sec-data-object-model" class="nav-link active" data-scroll-target="#sec-data-object-model"><span class="header-section-number">21.1</span> Object model: datasetobject, complementobject, Protocol</a>
+  <li><a href="#sec-data-object-model" id="toc-sec-data-object-model" class="nav-link active" data-scroll-target="#sec-data-object-model"><span class="header-section-number">22.1</span> Object model: datasetobject, complementobject, Protocol</a>
   <ul class="collapse">
-  <li><a href="#datasetobject" id="toc-datasetobject" class="nav-link" data-scroll-target="#datasetobject"><span class="header-section-number">21.1.1</span> DataSetObject</a></li>
-  <li><a href="#complementobject" id="toc-complementobject" class="nav-link" data-scroll-target="#complementobject"><span class="header-section-number">21.1.2</span> ComplementObject</a></li>
-  <li><a href="#protocol-variant" id="toc-protocol-variant" class="nav-link" data-scroll-target="#protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</a></li>
+  <li><a href="#datasetobject" id="toc-datasetobject" class="nav-link" data-scroll-target="#datasetobject"><span class="header-section-number">22.1.1</span> DataSetObject</a></li>
+  <li><a href="#complementobject" id="toc-complementobject" class="nav-link" data-scroll-target="#complementobject"><span class="header-section-number">22.1.2</span> ComplementObject</a></li>
+  <li><a href="#protocol-variant" id="toc-protocol-variant" class="nav-link" data-scroll-target="#protocol-variant"><span class="header-section-number">22.1.3</span> Protocol variant</a></li>
   </ul></li>
-  <li><a href="#sec-commit-extensions" id="toc-sec-commit-extensions" class="nav-link" data-scroll-target="#sec-commit-extensions"><span class="header-section-number">21.2</span> CommitObject extensions</a></li>
-  <li><a href="#sec-data-hash-functions" id="toc-sec-data-hash-functions" class="nav-link" data-scroll-target="#sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for data types</a></li>
-  <li><a href="#sec-data-mig-algorithms" id="toc-sec-data-mig-algorithms" class="nav-link" data-scroll-target="#sec-data-mig-algorithms"><span class="header-section-number">21.4</span> data_mig.rs: migrate_forward/backward algorithms</a>
+  <li><a href="#sec-commit-extensions" id="toc-sec-commit-extensions" class="nav-link" data-scroll-target="#sec-commit-extensions"><span class="header-section-number">22.2</span> CommitObject extensions</a></li>
+  <li><a href="#sec-data-hash-functions" id="toc-sec-data-hash-functions" class="nav-link" data-scroll-target="#sec-data-hash-functions"><span class="header-section-number">22.3</span> Hash functions: canonical forms for data types</a></li>
+  <li><a href="#sec-data-mig-algorithms" id="toc-sec-data-mig-algorithms" class="nav-link" data-scroll-target="#sec-data-mig-algorithms"><span class="header-section-number">22.4</span> data_mig.rs: migrate_forward/backward algorithms</a>
   <ul class="collapse">
-  <li><a href="#migrate_forward" id="toc-migrate_forward" class="nav-link" data-scroll-target="#migrate_forward"><span class="header-section-number">21.4.1</span> migrate_forward</a></li>
-  <li><a href="#migrate_backward" id="toc-migrate_backward" class="nav-link" data-scroll-target="#migrate_backward"><span class="header-section-number">21.4.2</span> migrate_backward</a></li>
-  <li><a href="#detect_staleness" id="toc-detect_staleness" class="nav-link" data-scroll-target="#detect_staleness"><span class="header-section-number">21.4.3</span> detect_staleness</a></li>
-  <li><a href="#migrate_through_path" id="toc-migrate_through_path" class="nav-link" data-scroll-target="#migrate_through_path"><span class="header-section-number">21.4.4</span> migrate_through_path</a></li>
+  <li><a href="#migrate_forward" id="toc-migrate_forward" class="nav-link" data-scroll-target="#migrate_forward"><span class="header-section-number">22.4.1</span> migrate_forward</a></li>
+  <li><a href="#migrate_backward" id="toc-migrate_backward" class="nav-link" data-scroll-target="#migrate_backward"><span class="header-section-number">22.4.2</span> migrate_backward</a></li>
+  <li><a href="#detect_staleness" id="toc-detect_staleness" class="nav-link" data-scroll-target="#detect_staleness"><span class="header-section-number">22.4.3</span> detect_staleness</a></li>
+  <li><a href="#migrate_through_path" id="toc-migrate_through_path" class="nav-link" data-scroll-target="#migrate_through_path"><span class="header-section-number">22.4.4</span> migrate_through_path</a></li>
   </ul></li>
-  <li><a href="#sec-complement-lifecycle" id="toc-sec-complement-lifecycle" class="nav-link" data-scroll-target="#sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, gc</a></li>
-  <li><a href="#sec-dag-path-migration" id="toc-sec-dag-path-migration" class="nav-link" data-scroll-target="#sec-dag-path-migration"><span class="header-section-number">21.6</span> DAG path migration: multi-step data migration through commit history</a></li>
-  <li><a href="#sec-data-sync-pipeline" id="toc-sec-data-sync-pipeline" class="nav-link" data-scroll-target="#sec-data-sync-pipeline"><span class="header-section-number">21.7</span> <code>schema data sync</code> pipeline</a></li>
-  <li><a href="#sec-checkout-merge-integration" id="toc-sec-checkout-merge-integration" class="nav-link" data-scroll-target="#sec-checkout-merge-integration"><span class="header-section-number">21.8</span> checkout_with_data / merge_with_data integration</a>
+  <li><a href="#sec-complement-lifecycle" id="toc-sec-complement-lifecycle" class="nav-link" data-scroll-target="#sec-complement-lifecycle"><span class="header-section-number">22.5</span> Complement lifecycle: creation, storage, retrieval, gc</a></li>
+  <li><a href="#sec-dag-path-migration" id="toc-sec-dag-path-migration" class="nav-link" data-scroll-target="#sec-dag-path-migration"><span class="header-section-number">22.6</span> DAG path migration: multi-step data migration through commit history</a></li>
+  <li><a href="#sec-data-sync-pipeline" id="toc-sec-data-sync-pipeline" class="nav-link" data-scroll-target="#sec-data-sync-pipeline"><span class="header-section-number">22.7</span> <code>schema data sync</code> pipeline</a></li>
+  <li><a href="#sec-checkout-merge-integration" id="toc-sec-checkout-merge-integration" class="nav-link" data-scroll-target="#sec-checkout-merge-integration"><span class="header-section-number">22.8</span> checkout_with_data / merge_with_data integration</a>
   <ul class="collapse">
-  <li><a href="#checkout_with_data" id="toc-checkout_with_data" class="nav-link" data-scroll-target="#checkout_with_data"><span class="header-section-number">21.8.1</span> checkout_with_data</a></li>
-  <li><a href="#merge_with_data" id="toc-merge_with_data" class="nav-link" data-scroll-target="#merge_with_data"><span class="header-section-number">21.8.2</span> merge_with_data</a></li>
+  <li><a href="#checkout_with_data" id="toc-checkout_with_data" class="nav-link" data-scroll-target="#checkout_with_data"><span class="header-section-number">22.8.1</span> checkout_with_data</a></li>
+  <li><a href="#merge_with_data" id="toc-merge_with_data" class="nav-link" data-scroll-target="#merge_with_data"><span class="header-section-number">22.8.2</span> merge_with_data</a></li>
   </ul></li>
-  <li><a href="#sec-index-staging" id="toc-sec-index-staging" class="nav-link" data-scroll-target="#sec-index-staging"><span class="header-section-number">21.9</span> Index staging: stageddata, staged_protocol</a>
+  <li><a href="#sec-index-staging" id="toc-sec-index-staging" class="nav-link" data-scroll-target="#sec-index-staging"><span class="header-section-number">22.9</span> Index staging: stageddata, staged_protocol</a>
   <ul class="collapse">
-  <li><a href="#stageddata" id="toc-stageddata" class="nav-link" data-scroll-target="#stageddata"><span class="header-section-number">21.9.1</span> StagedData</a></li>
-  <li><a href="#staged_protocol" id="toc-staged_protocol" class="nav-link" data-scroll-target="#staged_protocol"><span class="header-section-number">21.9.2</span> staged_protocol</a></li>
+  <li><a href="#stageddata" id="toc-stageddata" class="nav-link" data-scroll-target="#stageddata"><span class="header-section-number">22.9.1</span> StagedData</a></li>
+  <li><a href="#staged_protocol" id="toc-staged_protocol" class="nav-link" data-scroll-target="#staged_protocol"><span class="header-section-number">22.9.2</span> staged_protocol</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/28-data-versioning.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -655,9 +661,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/28-data-versioning.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-data-versioning-internals" class="quarto-section-identifier"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-data-versioning-internals" class="quarto-section-identifier"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -675,8 +681,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>The <code>panproto-vcs</code> object model extends beyond schemas and migrations to include data snapshots, complements, and protocol definitions as first-class versioned objects. For the user-facing workflow, see the <a href="https://panproto.dev/tutorial/chapters/19-data-versioning.html">tutorial’s data versioning chapter</a>.</p>
-<section id="sec-data-object-model" class="level2" data-number="21.1">
-<h2 data-number="21.1" class="anchored" data-anchor-id="sec-data-object-model"><span class="header-section-number">21.1</span> Object model: datasetobject, complementobject, Protocol</h2>
+<section id="sec-data-object-model" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="sec-data-object-model"><span class="header-section-number">22.1</span> Object model: datasetobject, complementobject, Protocol</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
 <p>Three new variants join the <code>Object</code> enum:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">enum</span> Object <span class="op">{</span></span>
@@ -688,8 +694,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    Complement(ComplementObject)<span class="op">,</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    Protocol(Protocol)<span class="op">,</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="datasetobject" class="level3" data-number="21.1.1">
-<h3 data-number="21.1.1" class="anchored" data-anchor-id="datasetobject"><span class="header-section-number">21.1.1</span> DataSetObject</h3>
+<section id="datasetobject" class="level3" data-number="22.1.1">
+<h3 data-number="22.1.1" class="anchored" data-anchor-id="datasetobject"><span class="header-section-number">22.1.1</span> DataSetObject</h3>
 <p>A <code>DataSetObject</code> is a content-addressed snapshot of instance data bound to a specific schema version:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> DataSetObject <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> schema_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
@@ -699,8 +705,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The <code>data</code> field stores all instances as a single MessagePack array. Each element is a serialized <code>WInstance</code> or <code>FInstance</code>. The <code>schema_id</code> links the snapshot to the schema these instances conform to.</p>
 <p>Content addressing means two snapshots with identical data and schema produce the same <code>ObjectId</code>. This provides deduplication: if the same records are staged multiple times against the same schema, only one object is stored.</p>
 </section>
-<section id="complementobject" class="level3" data-number="21.1.2">
-<h3 data-number="21.1.2" class="anchored" data-anchor-id="complementobject"><span class="header-section-number">21.1.2</span> ComplementObject</h3>
+<section id="complementobject" class="level3" data-number="22.1.2">
+<h3 data-number="22.1.2" class="anchored" data-anchor-id="complementobject"><span class="header-section-number">22.1.2</span> ComplementObject</h3>
 <p>A <code>ComplementObject</code> stores the data lost during a forward migration step:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> ComplementObject <span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> migration_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
@@ -714,13 +720,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>The complement’s content hash depends on all three fields. Two different migrations applied to the same data produce different complement objects even if the complement bytes happen to be identical, because the <code>migration_id</code> differs.</p>
 </section>
-<section id="protocol-variant" class="level3" data-number="21.1.3">
-<h3 data-number="21.1.3" class="anchored" data-anchor-id="protocol-variant"><span class="header-section-number">21.1.3</span> Protocol variant</h3>
+<section id="protocol-variant" class="level3" data-number="22.1.3">
+<h3 data-number="22.1.3" class="anchored" data-anchor-id="protocol-variant"><span class="header-section-number">22.1.3</span> Protocol variant</h3>
 <p>The <code>Protocol</code> variant stores a complete <code>panproto_protocols::Protocol</code> value. This is the same struct used throughout the codebase; no wrapper or subset. Serialization uses the <code>serde</code> implementation with MessagePack encoding.</p>
 </section>
 </section>
-<section id="sec-commit-extensions" class="level2" data-number="21.2">
-<h2 data-number="21.2" class="anchored" data-anchor-id="sec-commit-extensions"><span class="header-section-number">21.2</span> CommitObject extensions</h2>
+<section id="sec-commit-extensions" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="sec-commit-extensions"><span class="header-section-number">22.2</span> CommitObject extensions</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
 <p><code>CommitObject</code> gains three fields:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> CommitObject <span class="op">{</span></span>
@@ -755,8 +761,8 @@ Note
 </div>
 </div>
 </section>
-<section id="sec-data-hash-functions" class="level2" data-number="21.3">
-<h2 data-number="21.3" class="anchored" data-anchor-id="sec-data-hash-functions"><span class="header-section-number">21.3</span> Hash functions: canonical forms for data types</h2>
+<section id="sec-data-hash-functions" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="sec-data-hash-functions"><span class="header-section-number">22.3</span> Hash functions: canonical forms for data types</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/hash.rs</code></p>
 <p>Content addressing requires a canonical serialization. The <code>hash_object</code> function dispatches on the <code>Object</code> variant. Three arms handle these types:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">Object::</span>DataSet(ds) <span class="op">=&gt;</span> <span class="op">{</span></span>
@@ -782,11 +788,11 @@ Note
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Each canonical form starts with a type tag (<code>dataset\0</code>, <code>complement\0</code>, <code>protocol\0</code>) to prevent hash collisions between objects of different types that happen to have the same byte content. This follows the same pattern used by <code>Schema</code>, <code>Migration</code>, and <code>Commit</code>.</p>
 </section>
-<section id="sec-data-mig-algorithms" class="level2" data-number="21.4">
-<h2 data-number="21.4" class="anchored" data-anchor-id="sec-data-mig-algorithms"><span class="header-section-number">21.4</span> data_mig.rs: migrate_forward/backward algorithms</h2>
+<section id="sec-data-mig-algorithms" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="sec-data-mig-algorithms"><span class="header-section-number">22.4</span> data_mig.rs: migrate_forward/backward algorithms</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/data_mig.rs</code></p>
-<section id="migrate_forward" class="level3" data-number="21.4.1">
-<h3 data-number="21.4.1" class="anchored" data-anchor-id="migrate_forward"><span class="header-section-number">21.4.1</span> migrate_forward</h3>
+<section id="migrate_forward" class="level3" data-number="22.4.1">
+<h3 data-number="22.4.1" class="anchored" data-anchor-id="migrate_forward"><span class="header-section-number">22.4.1</span> migrate_forward</h3>
 <p><code>migrate_forward</code> takes a <code>DataSetObject</code>, a <code>CompiledMigration</code>, and the store, and returns a new <code>DataSetObject</code> plus a <code>ComplementObject</code>:</p>
 <ol type="1">
 <li>Deserialize the MessagePack instances from <code>data.data</code>.</li>
@@ -798,8 +804,8 @@ Note
 </ol>
 <p>If the migration is lossless (complement is empty for every instance), no <code>ComplementObject</code> is created. The function returns <code>None</code> for the complement ID.</p>
 </section>
-<section id="migrate_backward" class="level3" data-number="21.4.2">
-<h3 data-number="21.4.2" class="anchored" data-anchor-id="migrate_backward"><span class="header-section-number">21.4.2</span> migrate_backward</h3>
+<section id="migrate_backward" class="level3" data-number="22.4.2">
+<h3 data-number="22.4.2" class="anchored" data-anchor-id="migrate_backward"><span class="header-section-number">22.4.2</span> migrate_backward</h3>
 <p><code>migrate_backward</code> takes a <code>DataSetObject</code>, a <code>ComplementObject</code>, and a <code>CompiledMigration</code>:</p>
 <ol type="1">
 <li>Invert the migration via <code>panproto_mig::invert</code>.</li>
@@ -809,8 +815,8 @@ Note
 </ol>
 <p>Backward migration fails with <code>Error::MissingComplement</code> if the complement object can’t be found in the store. Lossless steps don’t need complements; the inverted migration can reconstruct the original data without external input.</p>
 </section>
-<section id="detect_staleness" class="level3" data-number="21.4.3">
-<h3 data-number="21.4.3" class="anchored" data-anchor-id="detect_staleness"><span class="header-section-number">21.4.3</span> detect_staleness</h3>
+<section id="detect_staleness" class="level3" data-number="22.4.3">
+<h3 data-number="22.4.3" class="anchored" data-anchor-id="detect_staleness"><span class="header-section-number">22.4.3</span> detect_staleness</h3>
 <p><code>detect_staleness</code> takes a list of <code>DataSetObject</code> IDs and the current HEAD commit’s schema ID:</p>
 <ol type="1">
 <li>For each data set, compare <code>data.schema_id</code> against the HEAD schema ID.</li>
@@ -819,8 +825,8 @@ Note
 </ol>
 <p>The function doesn’t migrate data. It’s a read-only diagnostic.</p>
 </section>
-<section id="migrate_through_path" class="level3" data-number="21.4.4">
-<h3 data-number="21.4.4" class="anchored" data-anchor-id="migrate_through_path"><span class="header-section-number">21.4.4</span> migrate_through_path</h3>
+<section id="migrate_through_path" class="level3" data-number="22.4.4">
+<h3 data-number="22.4.4" class="anchored" data-anchor-id="migrate_through_path"><span class="header-section-number">22.4.4</span> migrate_through_path</h3>
 <p><code>migrate_through_path</code> composes <code>migrate_forward</code> along a DAG path:</p>
 <ol type="1">
 <li>Walk the commit path from the data’s schema version to the target commit.</li>
@@ -844,8 +850,8 @@ Note
 </div>
 </section>
 </section>
-<section id="sec-complement-lifecycle" class="level2" data-number="21.5">
-<h2 data-number="21.5" class="anchored" data-anchor-id="sec-complement-lifecycle"><span class="header-section-number">21.5</span> Complement lifecycle: creation, storage, retrieval, gc</h2>
+<section id="sec-complement-lifecycle" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="sec-complement-lifecycle"><span class="header-section-number">22.5</span> Complement lifecycle: creation, storage, retrieval, gc</h2>
 <p>Complements follow the same lifecycle as other objects in the store:</p>
 <ol type="1">
 <li><strong>Creation</strong>: <code>migrate_forward</code> produces a <code>ComplementObject</code> and writes it to the store.</li>
@@ -873,16 +879,16 @@ Tip
 <li>If found, deserialize and use. If not found and the step is lossy, return <code>Error::MissingComplement</code>.</li>
 </ol>
 </section>
-<section id="sec-dag-path-migration" class="level2" data-number="21.6">
-<h2 data-number="21.6" class="anchored" data-anchor-id="sec-dag-path-migration"><span class="header-section-number">21.6</span> DAG path migration: multi-step data migration through commit history</h2>
+<section id="sec-dag-path-migration" class="level2" data-number="22.6">
+<h2 data-number="22.6" class="anchored" data-anchor-id="sec-dag-path-migration"><span class="header-section-number">22.6</span> DAG path migration: multi-step data migration through commit history</h2>
 <p><code>migrate_through_path</code> handles three cases:</p>
 <p><strong>Linear path (ancestor to descendant)</strong>: walk forward through each commit, applying <code>migrate_forward</code> at each step. Each step’s output <code>DataSetObject</code> becomes the next step’s input.</p>
 <p><strong>Linear path (descendant to ancestor)</strong>: walk backward through each commit, applying <code>migrate_backward</code> with stored complements. This is the <code>--backward</code> flag in the CLI.</p>
 <p><strong>Non-linear path (across branches)</strong>: find the LCA (lowest common ancestor) of the source and target commits. Walk backward from the source to the LCA, then forward from the LCA to the target. The backward leg consumes complements; the forward leg produces new ones.</p>
 <p>The path is computed by <code>dag::find_path</code>, which returns a sequence of <code>(CommitObject, Direction)</code> pairs. <code>Direction::Forward</code> means the migration at this commit should be applied as-is. <code>Direction::Backward</code> means the migration should be inverted.</p>
 </section>
-<section id="sec-data-sync-pipeline" class="level2" data-number="21.7">
-<h2 data-number="21.7" class="anchored" data-anchor-id="sec-data-sync-pipeline"><span class="header-section-number">21.7</span> <code>schema data sync</code> pipeline</h2>
+<section id="sec-data-sync-pipeline" class="level2" data-number="22.7">
+<h2 data-number="22.7" class="anchored" data-anchor-id="sec-data-sync-pipeline"><span class="header-section-number">22.7</span> <code>schema data sync</code> pipeline</h2>
 <p>The <code>schema data sync</code> command (implemented in <code>crates/panproto-cli/src/cmd/data.rs</code>) synchronizes data files to match a target schema version:</p>
 <ol type="1">
 <li>Open the repository and resolve the old and new schema versions (from HEAD’s parent and HEAD, or a specific target ref).</li>
@@ -895,11 +901,11 @@ Tip
 <p>The <code>schema data status</code> command reads the HEAD commit, counts JSON files in the data directory, and reports the HEAD schema ID and number of tracked data sets.</p>
 <p>Both commands are in the <code>cmd::data</code> module and use shared helpers from <code>cmd::helpers</code> and <code>cmd::migrate</code>.</p>
 </section>
-<section id="sec-checkout-merge-integration" class="level2" data-number="21.8">
-<h2 data-number="21.8" class="anchored" data-anchor-id="sec-checkout-merge-integration"><span class="header-section-number">21.8</span> checkout_with_data / merge_with_data integration</h2>
+<section id="sec-checkout-merge-integration" class="level2" data-number="22.8">
+<h2 data-number="22.8" class="anchored" data-anchor-id="sec-checkout-merge-integration"><span class="header-section-number">22.8</span> checkout_with_data / merge_with_data integration</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/repo.rs</code></p>
-<section id="checkout_with_data" class="level3" data-number="21.8.1">
-<h3 data-number="21.8.1" class="anchored" data-anchor-id="checkout_with_data"><span class="header-section-number">21.8.1</span> checkout_with_data</h3>
+<section id="checkout_with_data" class="level3" data-number="22.8.1">
+<h3 data-number="22.8.1" class="anchored" data-anchor-id="checkout_with_data"><span class="header-section-number">22.8.1</span> checkout_with_data</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> checkout_with_data(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    target<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
@@ -915,8 +921,8 @@ Tip
 <li>Return the <code>ObjectId</code> values of any complements generated.</li>
 </ol>
 </section>
-<section id="merge_with_data" class="level3" data-number="21.8.2">
-<h3 data-number="21.8.2" class="anchored" data-anchor-id="merge_with_data"><span class="header-section-number">21.8.2</span> merge_with_data</h3>
+<section id="merge_with_data" class="level3" data-number="22.8.2">
+<h3 data-number="22.8.2" class="anchored" data-anchor-id="merge_with_data"><span class="header-section-number">22.8.2</span> merge_with_data</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> merge_with_data(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span><span class="kw">mut</span> <span class="kw">self</span><span class="op">,</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    branch<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span><span class="op">,</span></span>
@@ -934,8 +940,8 @@ Tip
 <p>If the merge has conflicts, data migration is skipped. The <code>MergeResult</code> contains the conflicts, and the caller must resolve them before migrating data.</p>
 </section>
 </section>
-<section id="sec-index-staging" class="level2" data-number="21.9">
-<h2 data-number="21.9" class="anchored" data-anchor-id="sec-index-staging"><span class="header-section-number">21.9</span> Index staging: stageddata, staged_protocol</h2>
+<section id="sec-index-staging" class="level2" data-number="22.9">
+<h2 data-number="22.9" class="anchored" data-anchor-id="sec-index-staging"><span class="header-section-number">22.9</span> Index staging: stageddata, staged_protocol</h2>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/objects.rs</code></p>
 <p>The <code>Index</code> struct gains two fields:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> <span class="bu">Index</span> <span class="op">{</span></span>
@@ -943,8 +949,8 @@ Tip
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> staged_data<span class="op">:</span> <span class="dt">Vec</span><span class="op">&lt;</span>StagedData<span class="op">&gt;,</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> staged_protocol<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Protocol<span class="op">&gt;,</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="stageddata" class="level3" data-number="21.9.1">
-<h3 data-number="21.9.1" class="anchored" data-anchor-id="stageddata"><span class="header-section-number">21.9.1</span> StagedData</h3>
+<section id="stageddata" class="level3" data-number="22.9.1">
+<h3 data-number="22.9.1" class="anchored" data-anchor-id="stageddata"><span class="header-section-number">22.9.1</span> StagedData</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> StagedData <span class="op">{</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> path<span class="op">:</span> <span class="dt">PathBuf</span><span class="op">,</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> data<span class="op">:</span> DataSetObject<span class="op">,</span></span>
@@ -952,8 +958,8 @@ Tip
 <p><code>StagedData</code> records the filesystem path and the constructed <code>DataSetObject</code>. Multiple data directories can be staged simultaneously (one <code>StagedData</code> per directory).</p>
 <p><code>Repository::add_data(path)</code> reads all files in <code>path</code>, serializes them as instances, constructs a <code>DataSetObject</code> bound to the current HEAD schema, and appends to <code>staged_data</code>.</p>
 </section>
-<section id="staged_protocol" class="level3" data-number="21.9.2">
-<h3 data-number="21.9.2" class="anchored" data-anchor-id="staged_protocol"><span class="header-section-number">21.9.2</span> staged_protocol</h3>
+<section id="staged_protocol" class="level3" data-number="22.9.2">
+<h3 data-number="22.9.2" class="anchored" data-anchor-id="staged_protocol"><span class="header-section-number">22.9.2</span> staged_protocol</h3>
 <p><code>Repository::add_protocol(protocol)</code> sets <code>staged_protocol</code> to the provided <code>Protocol</code> value. At commit time, the protocol is stored as an <code>Object::Protocol</code> and its <code>ObjectId</code> is written to the <code>CommitObject</code>’s <code>protocol_id</code> field.</p>
 <p>Only one protocol can be staged per commit. Calling <code>add_protocol</code> twice overwrites the first.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -1443,13 +1449,13 @@ Note
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/27-auto-lens-pipeline.html" class="pagination-link" aria-label="Automated Lens Generation Pipeline">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Automated Lens Generation Pipeline</span></span>
+      <a href="../chapters/35-dependent-optics.html" class="pagination-link" aria-label="Dependent Optics and Scoped Transforms">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Dependent Optics and Scoped Transforms</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/23-field-transforms.html" class="pagination-link" aria-label="Field Transform Architecture">
-        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

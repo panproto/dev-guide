@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>25&nbsp; Edit Lens Internals – panproto: Developer Guide</title>
+<title>26&nbsp; Edit Lens Internals – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -316,7 +316,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -504,50 +504,56 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/35-dependent-optics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Dependent Optics and Scoped Transforms</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/28-data-versioning.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Data Versioning Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/23-field-transforms.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Field Transform Architecture</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/29-expression-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Expression Parser &amp; Query Engine</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/30-polynomial-operations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/31-edit-lenses.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/32-parse-engine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/33-project-assembly.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Project Assembly and Git Bridge</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/34-llvm-jit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">LLVM Integration and JIT Compilation</span></span></a>
   </div>
 </li>
       </ul>
@@ -564,19 +570,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/16-conventions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/17-testing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Test Strategy and Property Testing</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/18-pr-workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span></a>
   </div>
 </li>
       </ul>
@@ -593,7 +599,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
       </ul>
@@ -610,31 +616,31 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A-glossary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Glossary</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/B-source-code-map.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Source Code Map</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/C-troubleshooting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Troubleshooting FAQ</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/D-optimization-guide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Optimization Guide</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/E-benchmark-results.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Benchmark Results</span></span></a>
   </div>
 </li>
       </ul>
@@ -649,37 +655,37 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#editlens-struct" id="toc-editlens-struct" class="nav-link active" data-scroll-target="#editlens-struct"><span class="header-section-number">25.1</span> <code>EditLens</code> struct</a>
+  <li><a href="#editlens-struct" id="toc-editlens-struct" class="nav-link active" data-scroll-target="#editlens-struct"><span class="header-section-number">26.1</span> <code>EditLens</code> struct</a>
   <ul class="collapse">
-  <li><a href="#construction-and-initialization" id="toc-construction-and-initialization" class="nav-link" data-scroll-target="#construction-and-initialization"><span class="header-section-number">25.1.1</span> Construction and initialization</a></li>
+  <li><a href="#construction-and-initialization" id="toc-construction-and-initialization" class="nav-link" data-scroll-target="#construction-and-initialization"><span class="header-section-number">26.1.1</span> Construction and initialization</a></li>
   </ul></li>
-  <li><a href="#the-get_edit-translation" id="toc-the-get_edit-translation" class="nav-link" data-scroll-target="#the-get_edit-translation"><span class="header-section-number">25.2</span> The <code>get_edit</code> translation</a></li>
-  <li><a href="#the-put_edit-translation" id="toc-the-put_edit-translation" class="nav-link" data-scroll-target="#the-put_edit-translation"><span class="header-section-number">25.3</span> The <code>put_edit</code> translation</a></li>
-  <li><a href="#the-five-step-editpipeline" id="toc-the-five-step-editpipeline" class="nav-link" data-scroll-target="#the-five-step-editpipeline"><span class="header-section-number">25.4</span> The five-step <code>EditPipeline</code></a>
+  <li><a href="#the-get_edit-translation" id="toc-the-get_edit-translation" class="nav-link" data-scroll-target="#the-get_edit-translation"><span class="header-section-number">26.2</span> The <code>get_edit</code> translation</a></li>
+  <li><a href="#the-put_edit-translation" id="toc-the-put_edit-translation" class="nav-link" data-scroll-target="#the-put_edit-translation"><span class="header-section-number">26.3</span> The <code>put_edit</code> translation</a></li>
+  <li><a href="#the-five-step-editpipeline" id="toc-the-five-step-editpipeline" class="nav-link" data-scroll-target="#the-five-step-editpipeline"><span class="header-section-number">26.4</span> The five-step <code>EditPipeline</code></a>
   <ul class="collapse">
-  <li><a href="#step-1-anchor-survival" id="toc-step-1-anchor-survival" class="nav-link" data-scroll-target="#step-1-anchor-survival"><span class="header-section-number">25.4.1</span> Step 1: anchor survival</a></li>
-  <li><a href="#step-2-reachability" id="toc-step-2-reachability" class="nav-link" data-scroll-target="#step-2-reachability"><span class="header-section-number">25.4.2</span> Step 2: reachability</a></li>
-  <li><a href="#step-3-ancestor-contraction" id="toc-step-3-ancestor-contraction" class="nav-link" data-scroll-target="#step-3-ancestor-contraction"><span class="header-section-number">25.4.3</span> Step 3: ancestor contraction</a></li>
-  <li><a href="#step-4-edge-resolution" id="toc-step-4-edge-resolution" class="nav-link" data-scroll-target="#step-4-edge-resolution"><span class="header-section-number">25.4.4</span> Step 4: edge resolution</a></li>
-  <li><a href="#step-5-fan-reconstruction" id="toc-step-5-fan-reconstruction" class="nav-link" data-scroll-target="#step-5-fan-reconstruction"><span class="header-section-number">25.4.5</span> Step 5: fan reconstruction</a></li>
-  <li><a href="#forward-and-reverse" id="toc-forward-and-reverse" class="nav-link" data-scroll-target="#forward-and-reverse"><span class="header-section-number">25.4.6</span> Forward and reverse</a></li>
+  <li><a href="#step-1-anchor-survival" id="toc-step-1-anchor-survival" class="nav-link" data-scroll-target="#step-1-anchor-survival"><span class="header-section-number">26.4.1</span> Step 1: anchor survival</a></li>
+  <li><a href="#step-2-reachability" id="toc-step-2-reachability" class="nav-link" data-scroll-target="#step-2-reachability"><span class="header-section-number">26.4.2</span> Step 2: reachability</a></li>
+  <li><a href="#step-3-ancestor-contraction" id="toc-step-3-ancestor-contraction" class="nav-link" data-scroll-target="#step-3-ancestor-contraction"><span class="header-section-number">26.4.3</span> Step 3: ancestor contraction</a></li>
+  <li><a href="#step-4-edge-resolution" id="toc-step-4-edge-resolution" class="nav-link" data-scroll-target="#step-4-edge-resolution"><span class="header-section-number">26.4.4</span> Step 4: edge resolution</a></li>
+  <li><a href="#step-5-fan-reconstruction" id="toc-step-5-fan-reconstruction" class="nav-link" data-scroll-target="#step-5-fan-reconstruction"><span class="header-section-number">26.4.5</span> Step 5: fan reconstruction</a></li>
+  <li><a href="#forward-and-reverse" id="toc-forward-and-reverse" class="nav-link" data-scroll-target="#forward-and-reverse"><span class="header-section-number">26.4.6</span> Forward and reverse</a></li>
   </ul></li>
-  <li><a href="#complement-state-machine-transitions" id="toc-complement-state-machine-transitions" class="nav-link" data-scroll-target="#complement-state-machine-transitions"><span class="header-section-number">25.5</span> Complement state machine transitions</a></li>
-  <li><a href="#edit-lens-law-verification" id="toc-edit-lens-law-verification" class="nav-link" data-scroll-target="#edit-lens-law-verification"><span class="header-section-number">25.6</span> Edit lens law verification</a>
+  <li><a href="#complement-state-machine-transitions" id="toc-complement-state-machine-transitions" class="nav-link" data-scroll-target="#complement-state-machine-transitions"><span class="header-section-number">26.5</span> Complement state machine transitions</a></li>
+  <li><a href="#edit-lens-law-verification" id="toc-edit-lens-law-verification" class="nav-link" data-scroll-target="#edit-lens-law-verification"><span class="header-section-number">26.6</span> Edit lens law verification</a>
   <ul class="collapse">
-  <li><a href="#check_edit_consistency" id="toc-check_edit_consistency" class="nav-link" data-scroll-target="#check_edit_consistency"><span class="header-section-number">25.6.1</span> <code>check_edit_consistency</code></a></li>
-  <li><a href="#check_complement_coherence" id="toc-check_complement_coherence" class="nav-link" data-scroll-target="#check_complement_coherence"><span class="header-section-number">25.6.2</span> <code>check_complement_coherence</code></a></li>
+  <li><a href="#check_edit_consistency" id="toc-check_edit_consistency" class="nav-link" data-scroll-target="#check_edit_consistency"><span class="header-section-number">26.6.1</span> <code>check_edit_consistency</code></a></li>
+  <li><a href="#check_complement_coherence" id="toc-check_complement_coherence" class="nav-link" data-scroll-target="#check_complement_coherence"><span class="header-section-number">26.6.2</span> <code>check_complement_coherence</code></a></li>
   </ul></li>
-  <li><a href="#optics-dispatch" id="toc-optics-dispatch" class="nav-link" data-scroll-target="#optics-dispatch"><span class="header-section-number">25.7</span> Optics dispatch</a></li>
-  <li><a href="#editprovenance" id="toc-editprovenance" class="nav-link" data-scroll-target="#editprovenance"><span class="header-section-number">25.8</span> <code>EditProvenance</code></a></li>
-  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">25.9</span> VCS integration</a>
+  <li><a href="#optics-dispatch" id="toc-optics-dispatch" class="nav-link" data-scroll-target="#optics-dispatch"><span class="header-section-number">26.7</span> Optics dispatch</a></li>
+  <li><a href="#editprovenance" id="toc-editprovenance" class="nav-link" data-scroll-target="#editprovenance"><span class="header-section-number">26.8</span> <code>EditProvenance</code></a></li>
+  <li><a href="#vcs-integration" id="toc-vcs-integration" class="nav-link" data-scroll-target="#vcs-integration"><span class="header-section-number">26.9</span> VCS integration</a>
   <ul class="collapse">
-  <li><a href="#editlogobject" id="toc-editlogobject" class="nav-link" data-scroll-target="#editlogobject"><span class="header-section-number">25.9.1</span> <code>EditLogObject</code></a></li>
-  <li><a href="#incremental_migrate" id="toc-incremental_migrate" class="nav-link" data-scroll-target="#incremental_migrate"><span class="header-section-number">25.9.2</span> <code>incremental_migrate</code></a></li>
-  <li><a href="#encode_edit_log-decode_edit_log" id="toc-encode_edit_log-decode_edit_log" class="nav-link" data-scroll-target="#encode_edit_log-decode_edit_log"><span class="header-section-number">25.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></a></li>
+  <li><a href="#editlogobject" id="toc-editlogobject" class="nav-link" data-scroll-target="#editlogobject"><span class="header-section-number">26.9.1</span> <code>EditLogObject</code></a></li>
+  <li><a href="#incremental_migrate" id="toc-incremental_migrate" class="nav-link" data-scroll-target="#incremental_migrate"><span class="header-section-number">26.9.2</span> <code>incremental_migrate</code></a></li>
+  <li><a href="#encode_edit_log-decode_edit_log" id="toc-encode_edit_log-decode_edit_log" class="nav-link" data-scroll-target="#encode_edit_log-decode_edit_log"><span class="header-section-number">26.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></a></li>
   </ul></li>
-  <li><a href="#error-types" id="toc-error-types" class="nav-link" data-scroll-target="#error-types"><span class="header-section-number">25.10</span> Error types</a></li>
-  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">25.11</span> Module map</a></li>
+  <li><a href="#error-types" id="toc-error-types" class="nav-link" data-scroll-target="#error-types"><span class="header-section-number">26.10</span> Error types</a></li>
+  <li><a href="#module-map" id="toc-module-map" class="nav-link" data-scroll-target="#module-map"><span class="header-section-number">26.11</span> Module map</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/31-edit-lenses.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -687,9 +693,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/31-edit-lenses.html"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-edit-lenses-internals" class="quarto-section-identifier"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-edit-lenses-internals" class="quarto-section-identifier"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Edit Lens Internals</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -708,8 +714,8 @@ window.Quarto = {
 
 <p>The edit lens subsystem translates individual edits (patches) between schema versions, maintaining a stateful complement. This chapter covers the internal architecture: the <code>EditLens</code> struct, the five-step translation pipeline, complement state machine transitions, law verification, provenance tracking, and VCS integration.</p>
 <p>For the user-facing tutorial, see the <a href="https://panproto.dev/tutorial/chapters/23-edit-lenses.html">tutorial’s edit lenses chapter</a>.</p>
-<section id="editlens-struct" class="level2" data-number="25.1">
-<h2 data-number="25.1" class="anchored" data-anchor-id="editlens-struct"><span class="header-section-number">25.1</span> <code>EditLens</code> struct</h2>
+<section id="editlens-struct" class="level2" data-number="26.1">
+<h2 data-number="26.1" class="anchored" data-anchor-id="editlens-struct"><span class="header-section-number">26.1</span> <code>EditLens</code> struct</h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_lens.rs</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="31"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 30;"><span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::edit_provenance::</span>EditProvenance<span class="op">;</span></span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="kw">crate</span><span class="pp">::optic::</span>OpticKind<span class="op">;</span></span>
@@ -742,8 +748,8 @@ window.Quarto = {
 <li><strong><code>reverse_vertex_remap</code> / <code>reverse_edge_remap</code></strong>: precomputed inverse maps for the <code>put_edit</code> direction.</li>
 <li><strong><code>pipeline</code></strong>: an optional <code>EditPipeline</code> for the per-step incremental translation. Initialized by <code>initialize()</code>.</li>
 </ul>
-<section id="construction-and-initialization" class="level3" data-number="25.1.1">
-<h3 data-number="25.1.1" class="anchored" data-anchor-id="construction-and-initialization"><span class="header-section-number">25.1.1</span> Construction and initialization</h3>
+<section id="construction-and-initialization" class="level3" data-number="26.1.1">
+<h3 data-number="26.1.1" class="anchored" data-anchor-id="construction-and-initialization"><span class="header-section-number">26.1.1</span> Construction and initialization</h3>
 <p><code>EditLens::from_lens(lens, protocol)</code> constructs the edit lens from an existing state-based <code>Lens</code>. It builds the reverse remap tables by inverting the compiled migration’s vertex and edge maps. The complement starts empty.</p>
 <p><code>initialize(source)</code> performs a whole-state <code>get</code> on the source instance to populate the initial complement and creates the <code>EditPipeline</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="82"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 81;"><span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -765,8 +771,8 @@ window.Quarto = {
 <span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>        <span class="kw">self</span><span class="op">.</span>complement <span class="op">=</span> complement<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="the-get_edit-translation" class="level2" data-number="25.2">
-<h2 data-number="25.2" class="anchored" data-anchor-id="the-get_edit-translation"><span class="header-section-number">25.2</span> The <code>get_edit</code> translation</h2>
+<section id="the-get_edit-translation" class="level2" data-number="26.2">
+<h2 data-number="26.2" class="anchored" data-anchor-id="the-get_edit-translation"><span class="header-section-number">26.2</span> The <code>get_edit</code> translation</h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_lens.rs</code></p>
 <p>Each <code>get_edit</code> call dispatches on the <code>TreeEdit</code> variant and applies the translation pipeline:</p>
 <ol type="1">
@@ -810,13 +816,13 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="the-put_edit-translation" class="level2" data-number="25.3">
-<h2 data-number="25.3" class="anchored" data-anchor-id="the-put_edit-translation"><span class="header-section-number">25.3</span> The <code>put_edit</code> translation</h2>
+<section id="the-put_edit-translation" class="level2" data-number="26.3">
+<h2 data-number="26.3" class="anchored" data-anchor-id="the-put_edit-translation"><span class="header-section-number">26.3</span> The <code>put_edit</code> translation</h2>
 <p><code>put_edit</code> reverses <code>get_edit</code> using the precomputed <code>reverse_vertex_remap</code> and <code>reverse_edge_remap</code>. For <code>InsertNode</code>, the node and edge are un-remapped to source-schema coordinates. For <code>SetField</code>, the field name is translated backward through field transforms.</p>
 <p><code>put_edit</code> does not need to check anchor survival (the edit is already in view-schema coordinates, so all anchors are surviving by definition).</p>
 </section>
-<section id="the-five-step-editpipeline" class="level2" data-number="25.4">
-<h2 data-number="25.4" class="anchored" data-anchor-id="the-five-step-editpipeline"><span class="header-section-number">25.4</span> The five-step <code>EditPipeline</code></h2>
+<section id="the-five-step-editpipeline" class="level2" data-number="26.4">
+<h2 data-number="26.4" class="anchored" data-anchor-id="the-five-step-editpipeline"><span class="header-section-number">26.4</span> The five-step <code>EditPipeline</code></h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_pipeline.rs</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="19"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 18;"><span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">/// Incremental state for per-step edit translation.</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -838,12 +844,12 @@ window.Quarto = {
 <span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    tgt_schema<span class="op">:</span> Schema<span class="op">,</span></span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>EditPipeline</code> mirrors the five stages of <code>wtype_restrict</code> but operates incrementally on individual edits rather than whole instances.</p>
-<section id="step-1-anchor-survival" class="level3" data-number="25.4.1">
-<h3 data-number="25.4.1" class="anchored" data-anchor-id="step-1-anchor-survival"><span class="header-section-number">25.4.1</span> Step 1: anchor survival</h3>
+<section id="step-1-anchor-survival" class="level3" data-number="26.4.1">
+<h3 data-number="26.4.1" class="anchored" data-anchor-id="step-1-anchor-survival"><span class="header-section-number">26.4.1</span> Step 1: anchor survival</h3>
 <p>Checks whether the edit targets a surviving vertex. Non-surviving <code>InsertNode</code> edits are absorbed into the complement. <code>DeleteNode</code> edits for complement nodes remove them from the complement. <code>SetField</code> edits for complement nodes update the complement’s copy.</p>
 </section>
-<section id="step-2-reachability" class="level3" data-number="25.4.2">
-<h3 data-number="25.4.2" class="anchored" data-anchor-id="step-2-reachability"><span class="header-section-number">25.4.2</span> Step 2: reachability</h3>
+<section id="step-2-reachability" class="level3" data-number="26.4.2">
+<h3 data-number="26.4.2" class="anchored" data-anchor-id="step-2-reachability"><span class="header-section-number">26.4.2</span> Step 2: reachability</h3>
 <p>Uses the <code>ReachabilityIndex</code> to track which nodes can reach the root:</p>
 <ul>
 <li><code>InsertNode</code>: calls <code>insert_edge(parent, child)</code>, which BFS-marks the child’s subtree as reachable.</li>
@@ -853,8 +859,8 @@ window.Quarto = {
 <p><strong>File</strong>: <code>crates/panproto-inst/src/reachability.rs</code></p>
 <p>The <code>ReachabilityIndex</code> maintains a <code>reachable</code> set (backed by <code>FxHashSet</code>), plus parent/children adjacency maps. Updates are proportional to the affected subtree, not the whole instance.</p>
 </section>
-<section id="step-3-ancestor-contraction" class="level3" data-number="25.4.3">
-<h3 data-number="25.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction"><span class="header-section-number">25.4.3</span> Step 3: ancestor contraction</h3>
+<section id="step-3-ancestor-contraction" class="level3" data-number="26.4.3">
+<h3 data-number="26.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction"><span class="header-section-number">26.4.3</span> Step 3: ancestor contraction</h3>
 <p>Uses the <code>ContractionTracker</code> to record which nodes have been contracted:</p>
 <ul>
 <li><code>ContractNode</code>: records the contraction via <code>ContractionTracker::contract</code>, including the original parent, children, and edge.</li>
@@ -863,21 +869,21 @@ window.Quarto = {
 <p><strong>File</strong>: <code>crates/panproto-inst/src/contraction.rs</code></p>
 <p>The <code>ContractionTracker</code> maps each contracted node to its <code>ContractionRecord</code> and tracks which surviving nodes absorbed which contracted nodes via the <code>absorptions</code> map.</p>
 </section>
-<section id="step-4-edge-resolution" class="level3" data-number="25.4.4">
-<h3 data-number="25.4.4" class="anchored" data-anchor-id="step-4-edge-resolution"><span class="header-section-number">25.4.4</span> Step 4: edge resolution</h3>
+<section id="step-4-edge-resolution" class="level3" data-number="26.4.4">
+<h3 data-number="26.4.4" class="anchored" data-anchor-id="step-4-edge-resolution"><span class="header-section-number">26.4.4</span> Step 4: edge resolution</h3>
 <p>For edits that create arcs with <code>kind = "contracted"</code> (from contraction), the pipeline resolves the correct schema edge using <code>panproto_inst::resolve_edge</code> with the compiled migration’s resolver.</p>
 </section>
-<section id="step-5-fan-reconstruction" class="level3" data-number="25.4.5">
-<h3 data-number="25.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction"><span class="header-section-number">25.4.5</span> Step 5: fan reconstruction</h3>
+<section id="step-5-fan-reconstruction" class="level3" data-number="26.4.5">
+<h3 data-number="26.4.5" class="anchored" data-anchor-id="step-5-fan-reconstruction"><span class="header-section-number">26.4.5</span> Step 5: fan reconstruction</h3>
 <p>Fans with dropped participants (parent or child in the complement) are absorbed into <code>complement.dropped_fans</code>. Fans whose participants all survive pass through.</p>
 </section>
-<section id="forward-and-reverse" class="level3" data-number="25.4.6">
-<h3 data-number="25.4.6" class="anchored" data-anchor-id="forward-and-reverse"><span class="header-section-number">25.4.6</span> Forward and reverse</h3>
+<section id="forward-and-reverse" class="level3" data-number="26.4.6">
+<h3 data-number="26.4.6" class="anchored" data-anchor-id="forward-and-reverse"><span class="header-section-number">26.4.6</span> Forward and reverse</h3>
 <p><code>translate_get</code> runs steps 1 through 5 in order. <code>translate_put</code> runs them in reverse order (5, 4, 3, 2, 1), mirroring the <code>put</code> operation’s reverse-step reconstruction.</p>
 </section>
 </section>
-<section id="complement-state-machine-transitions" class="level2" data-number="25.5">
-<h2 data-number="25.5" class="anchored" data-anchor-id="complement-state-machine-transitions"><span class="header-section-number">25.5</span> Complement state machine transitions</h2>
+<section id="complement-state-machine-transitions" class="level2" data-number="26.5">
+<h2 data-number="26.5" class="anchored" data-anchor-id="complement-state-machine-transitions"><span class="header-section-number">26.5</span> Complement state machine transitions</h2>
 <p>The complement is a <code>Complement</code> struct (from <code>panproto-lens/src/asymmetric.rs</code>) whose fields are mutated by each edit:</p>
 <table class="caption-top table">
 <colgroup>
@@ -919,11 +925,11 @@ window.Quarto = {
 </table>
 <p>The state machine invariant: after processing a sequence of edits <span class="math inline">\(e_1, \ldots, e_n\)</span>, the complement state is identical to the complement produced by applying all edits to the source and running a whole-state <code>get</code>.</p>
 </section>
-<section id="edit-lens-law-verification" class="level2" data-number="25.6">
-<h2 data-number="25.6" class="anchored" data-anchor-id="edit-lens-law-verification"><span class="header-section-number">25.6</span> Edit lens law verification</h2>
+<section id="edit-lens-law-verification" class="level2" data-number="26.6">
+<h2 data-number="26.6" class="anchored" data-anchor-id="edit-lens-law-verification"><span class="header-section-number">26.6</span> Edit lens law verification</h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_laws.rs</code></p>
-<section id="check_edit_consistency" class="level3" data-number="25.6.1">
-<h3 data-number="25.6.1" class="anchored" data-anchor-id="check_edit_consistency"><span class="header-section-number">25.6.1</span> <code>check_edit_consistency</code></h3>
+<section id="check_edit_consistency" class="level3" data-number="26.6.1">
+<h3 data-number="26.6.1" class="anchored" data-anchor-id="check_edit_consistency"><span class="header-section-number">26.6.1</span> <code>check_edit_consistency</code></h3>
 <p>Verifies the Consistency law by comparing two paths:</p>
 <ol type="1">
 <li><strong>Path 1</strong> (incremental): call <code>get_edit(edit)</code> on a clone of the lens, apply the result to the current view.</li>
@@ -931,8 +937,8 @@ window.Quarto = {
 </ol>
 <p>Compares the resulting views node by node. Returns <code>EditLawViolation::Consistency</code> if node counts or anchors diverge.</p>
 </section>
-<section id="check_complement_coherence" class="level3" data-number="25.6.2">
-<h3 data-number="25.6.2" class="anchored" data-anchor-id="check_complement_coherence"><span class="header-section-number">25.6.2</span> <code>check_complement_coherence</code></h3>
+<section id="check_complement_coherence" class="level3" data-number="26.6.2">
+<h3 data-number="26.6.2" class="anchored" data-anchor-id="check_complement_coherence"><span class="header-section-number">26.6.2</span> <code>check_complement_coherence</code></h3>
 <p>Verifies the Complement coherence law:</p>
 <ol type="1">
 <li><strong>Path 1</strong>: call <code>get_edit(edit)</code> on a clone, inspect the resulting complement.</li>
@@ -941,8 +947,8 @@ window.Quarto = {
 <p>Compares <code>dropped_nodes</code> counts. Returns <code>EditLawViolation::ComplementCoherence</code> on mismatch.</p>
 </section>
 </section>
-<section id="optics-dispatch" class="level2" data-number="25.7">
-<h2 data-number="25.7" class="anchored" data-anchor-id="optics-dispatch"><span class="header-section-number">25.7</span> Optics dispatch</h2>
+<section id="optics-dispatch" class="level2" data-number="26.7">
+<h2 data-number="26.7" class="anchored" data-anchor-id="optics-dispatch"><span class="header-section-number">26.7</span> Optics dispatch</h2>
 <p>The <code>optic_kind()</code> classification from <code>panproto-lens/src/optic.rs</code> determines how the edit lens translates structural edits:</p>
 <table class="caption-top table">
 <thead>
@@ -976,8 +982,8 @@ window.Quarto = {
 </table>
 <p>For <code>Iso</code> transformations, <code>get_edit</code> skips complement checks entirely.</p>
 </section>
-<section id="editprovenance" class="level2" data-number="25.8">
-<h2 data-number="25.8" class="anchored" data-anchor-id="editprovenance"><span class="header-section-number">25.8</span> <code>EditProvenance</code></h2>
+<section id="editprovenance" class="level2" data-number="26.8">
+<h2 data-number="26.8" class="anchored" data-anchor-id="editprovenance"><span class="header-section-number">26.8</span> <code>EditProvenance</code></h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_provenance.rs</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="16"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 15;"><span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">#[</span>derive<span class="at">(</span><span class="bu">Clone</span><span class="op">,</span> <span class="bu">Debug</span><span class="op">,</span> Serialize<span class="op">,</span> Deserialize<span class="at">)]</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">struct</span> EditProvenance <span class="op">{</span></span>
@@ -993,10 +999,10 @@ window.Quarto = {
 <p>Provenance is populated by <code>get_edit_with_provenance</code>, which wraps <code>get_edit</code> and records which rules fired. The <code>rules_applied</code> vector captures named rules (e.g., <code>"structural_remap"</code>, <code>"field_text"</code>). The <code>policy_consulted</code> field records which complement policy (from the schema’s policy sorts) was used. The <code>was_total</code> flag is <code>false</code> when a refinement constraint failed, indicating a partial translation.</p>
 <p><code>EditProvenance</code> derives <code>Serialize</code> and <code>Deserialize</code>, so provenance records can be stored alongside edit logs for auditing.</p>
 </section>
-<section id="vcs-integration" class="level2" data-number="25.9">
-<h2 data-number="25.9" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">25.9</span> VCS integration</h2>
-<section id="editlogobject" class="level3" data-number="25.9.1">
-<h3 data-number="25.9.1" class="anchored" data-anchor-id="editlogobject"><span class="header-section-number">25.9.1</span> <code>EditLogObject</code></h3>
+<section id="vcs-integration" class="level2" data-number="26.9">
+<h2 data-number="26.9" class="anchored" data-anchor-id="vcs-integration"><span class="header-section-number">26.9</span> VCS integration</h2>
+<section id="editlogobject" class="level3" data-number="26.9.1">
+<h3 data-number="26.9.1" class="anchored" data-anchor-id="editlogobject"><span class="header-section-number">26.9.1</span> <code>EditLogObject</code></h3>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/object.rs</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="148"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 147;"><span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>            migration_id<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
 <span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>into()<span class="op">,</span></span>
@@ -1026,8 +1032,8 @@ window.Quarto = {
 </ul>
 <p><code>CommitObject</code> includes an <code>edit_log_ids: Vec&lt;ObjectId&gt;</code> field referencing any edit logs generated at that commit.</p>
 </section>
-<section id="incremental_migrate" class="level3" data-number="25.9.2">
-<h3 data-number="25.9.2" class="anchored" data-anchor-id="incremental_migrate"><span class="header-section-number">25.9.2</span> <code>incremental_migrate</code></h3>
+<section id="incremental_migrate" class="level3" data-number="26.9.2">
+<h3 data-number="26.9.2" class="anchored" data-anchor-id="incremental_migrate"><span class="header-section-number">26.9.2</span> <code>incremental_migrate</code></h3>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/edit_mig.rs</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-startfrom="13"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 12;"><span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">/// Translate a sequence of source edits through an edit lens.</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -1056,8 +1062,8 @@ window.Quarto = {
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Translates a sequence of source edits through an edit lens. Non-identity results are collected into the output. Returns <code>VcsError::DataMigrationFailed</code> if any translation fails.</p>
 </section>
-<section id="encode_edit_log-decode_edit_log" class="level3" data-number="25.9.3">
-<h3 data-number="25.9.3" class="anchored" data-anchor-id="encode_edit_log-decode_edit_log"><span class="header-section-number">25.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></h3>
+<section id="encode_edit_log-decode_edit_log" class="level3" data-number="26.9.3">
+<h3 data-number="26.9.3" class="anchored" data-anchor-id="encode_edit_log-decode_edit_log"><span class="header-section-number">26.9.3</span> <code>encode_edit_log</code> / <code>decode_edit_log</code></h3>
 <p>Serialize and deserialize edit sequences as MessagePack bytes:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-startfrom="39"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 38;"><span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">/// Encode an edit sequence as `MessagePack` bytes.</span></span>
 <span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">///</span></span>
@@ -1079,8 +1085,8 @@ window.Quarto = {
 <p>These are used by the CLI <code>schema data sync --edits</code> command to store edit logs in the VCS object store.</p>
 </section>
 </section>
-<section id="error-types" class="level2" data-number="25.10">
-<h2 data-number="25.10" class="anchored" data-anchor-id="error-types"><span class="header-section-number">25.10</span> Error types</h2>
+<section id="error-types" class="level2" data-number="26.10">
+<h2 data-number="26.10" class="anchored" data-anchor-id="error-types"><span class="header-section-number">26.10</span> Error types</h2>
 <p><strong>File</strong>: <code>crates/panproto-lens/src/edit_error.rs</code></p>
 <p><code>EditLensError</code> covers translation failures:</p>
 <table class="caption-top table">
@@ -1122,8 +1128,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="module-map" class="level2" data-number="25.11">
-<h2 data-number="25.11" class="anchored" data-anchor-id="module-map"><span class="header-section-number">25.11</span> Module map</h2>
+<section id="module-map" class="level2" data-number="26.11">
+<h2 data-number="26.11" class="anchored" data-anchor-id="module-map"><span class="header-section-number">26.11</span> Module map</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -1669,12 +1675,12 @@ window.Quarto = {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/30-polynomial-operations.html" class="pagination-link" aria-label="Polynomial Operations">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Polynomial Operations</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/32-parse-engine.html" class="pagination-link" aria-label="Parse Engine Internals">
-        <span class="nav-page-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Parse Engine Internals</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

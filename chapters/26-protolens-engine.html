@@ -742,15 +742,15 @@ window.Quarto = {
 <h2 data-number="19.1" class="anchored" data-anchor-id="sec-theory-endofunctor"><span class="header-section-number">19.1</span> <code>TheoryEndofunctor</code> and <code>TheoryTransform</code></h2>
 <p><strong>File</strong>: <code>crates/panproto-gat/src/schema_functor.rs</code></p>
 <p>A <code>TheoryEndofunctor</code> pairs a precondition with a schema transform:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        old<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new operation name.</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an equation.</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    AddEquation(Equation)<span class="op">,</span></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop an equation.</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    DropEquation(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Coerce a sort to a different value kind.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new sort name.</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an operation.</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    AddOp(Operation)<span class="op">,</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop an operation and dependent equations.</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    DropOp(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename an operation.</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    RenameOp <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>TheoryTransform</code> enum describes how a schema transform acts on a theory:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-startfrom="32"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 31;"><span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        to<span class="op">:</span> ValueKind<span class="op">,</span></span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
@@ -772,21 +772,21 @@ window.Quarto = {
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Identity: T ↦ T</span></span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    Identity<span class="op">,</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a sort: T ↦ T + {sort}</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    AddSort(Sort)<span class="op">,</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop a sort and all dependent ops/equations.</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    DropSort(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename a sort.</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    RenameSort <span class="op">{</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The old sort name.</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        old<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new sort name.</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an operation.</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    AddOp(Operation)<span class="op">,</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop an operation and dependent equations.</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    DropOp(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename an operation.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// The optional `vertex_kind` specifies the schema-level vertex kind</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// for the Grothendieck fibration. When `None`, the vertex kind is</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// derived from the sort: `Val(vk)` → canonical value kind name,</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `Structural` → sort name.</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    AddSort <span class="op">{</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort to add.</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Sort<span class="op">,</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Schema-level vertex kind override.</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>        vertex_kind<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span>Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;&gt;,</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop a sort and all dependent ops/equations.</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    DropSort(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename a sort.</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    RenameSort <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Each variant modifies a theory in one specific way:</p>
 <table class="caption-top table">
 <colgroup>
@@ -897,40 +897,40 @@ window.Quarto = {
 <section id="cascading-drops" class="level3" data-number="19.1.2">
 <h3 data-number="19.1.2" class="anchored" data-anchor-id="cascading-drops"><span class="header-section-number">19.1.2</span> Cascading drops</h3>
 <p><code>DropSort</code> cascades: removing a sort also removes all operations referencing it (as input or output) and all equations referencing those operations. <code>DropOp</code> similarly cascades to equations. The result is always well-formed.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="96"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 95;"><span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The name for the merged sort.</span></span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>        merged_name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The merger expression.</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>        merger_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a sort with a default expression for backward compatibility.</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>    AddSortWithDefault <span class="op">{</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The sort to add.</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>        sort<span class="op">:</span> Sort<span class="op">,</span></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The default expression for existing data.</span></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>        default_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a directed equation.</span></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>    AddDirectedEquation(DirectedEquation)<span class="op">,</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop a directed equation by name.</span></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    DropDirectedEquation(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-startfrom="96"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 95;"><span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>        inverse_expr<span class="op">:</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="pp">panproto_expr::</span>Expr<span class="op">&gt;,</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// Round-trip classification of this coercion.</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>        coercion_class<span class="op">:</span> CoercionClass<span class="op">,</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Merge two sorts into one.</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>    MergeSorts <span class="op">{</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The first sort to merge.</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>        sort_a<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The second sort to merge.</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>        sort_b<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The name for the merged sort.</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>        merged_name<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The merger expression.</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>        merger_expr<span class="op">:</span> <span class="pp">panproto_expr::</span>Expr<span class="op">,</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add a sort with a default expression for backward compatibility.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="composing-schema-transforms" class="level3" data-number="19.1.3">
 <h3 data-number="19.1.3" class="anchored" data-anchor-id="composing-schema-transforms"><span class="header-section-number">19.1.3</span> Composing schema transforms</h3>
 <p><code>TheoryEndofunctor::compose</code> chains two transforms <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> into “apply <span class="math inline">\(F\)</span>, then apply <span class="math inline">\(G\)</span>”. The precondition of the composed transform is the conjunction of the first transform’s precondition with an unconstrained placeholder for the second (the second’s precondition applies to the <em>output</em> of the first, which can’t be statically checked). Dynamic checking occurs at <code>apply</code> time.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="331"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 330;"><span id="cb4-331"><a href="#cb4-331" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> ops <span class="op">=</span> theory<span class="op">.</span>ops<span class="op">.</span>clone()<span class="op">;</span></span>
-<span id="cb4-332"><a href="#cb4-332" aria-hidden="true" tabindex="-1"></a>                ops<span class="op">.</span>push(op<span class="op">.</span>clone())<span class="op">;</span></span>
-<span id="cb4-333"><a href="#cb4-333" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="pp">Theory::</span>full(</span>
-<span id="cb4-334"><a href="#cb4-334" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">Arc::</span>clone(<span class="op">&amp;</span>theory<span class="op">.</span>name)<span class="op">,</span></span>
-<span id="cb4-335"><a href="#cb4-335" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>extends<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-336"><a href="#cb4-336" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>sorts<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-337"><a href="#cb4-337" aria-hidden="true" tabindex="-1"></a>                    ops<span class="op">,</span></span>
-<span id="cb4-338"><a href="#cb4-338" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>eqs<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-339"><a href="#cb4-339" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>directed_eqs<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-340"><a href="#cb4-340" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>policies<span class="op">.</span>clone()<span class="op">,</span></span>
-<span id="cb4-341"><a href="#cb4-341" aria-hidden="true" tabindex="-1"></a>                ))</span>
-<span id="cb4-342"><a href="#cb4-342" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
-<span id="cb4-343"><a href="#cb4-343" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>DropOp(name) <span class="op">=&gt;</span> <span class="cn">Ok</span>(apply_drop_op(theory<span class="op">,</span> name))<span class="op">,</span></span>
-<span id="cb4-344"><a href="#cb4-344" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>RenameOp <span class="op">{</span> old<span class="op">,</span> new <span class="op">}</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(apply_rename_op(theory<span class="op">,</span> old<span class="op">,</span> new))<span class="op">,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-startfrom="331"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 330;"><span id="cb4-331"><a href="#cb4-331" aria-hidden="true" tabindex="-1"></a>                <span class="cn">Ok</span>(<span class="pp">Theory::</span>full(</span>
+<span id="cb4-332"><a href="#cb4-332" aria-hidden="true" tabindex="-1"></a>                    <span class="pp">Arc::</span>clone(<span class="op">&amp;</span>theory<span class="op">.</span>name)<span class="op">,</span></span>
+<span id="cb4-333"><a href="#cb4-333" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>extends<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-334"><a href="#cb4-334" aria-hidden="true" tabindex="-1"></a>                    sorts<span class="op">,</span></span>
+<span id="cb4-335"><a href="#cb4-335" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>ops<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-336"><a href="#cb4-336" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>eqs<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-337"><a href="#cb4-337" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>directed_eqs<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-338"><a href="#cb4-338" aria-hidden="true" tabindex="-1"></a>                    theory<span class="op">.</span>policies<span class="op">.</span>clone()<span class="op">,</span></span>
+<span id="cb4-339"><a href="#cb4-339" aria-hidden="true" tabindex="-1"></a>                ))</span>
+<span id="cb4-340"><a href="#cb4-340" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb4-341"><a href="#cb4-341" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>DropSort(name) <span class="op">=&gt;</span> <span class="cn">Ok</span>(apply_drop_sort(theory<span class="op">,</span> name))<span class="op">,</span></span>
+<span id="cb4-342"><a href="#cb4-342" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>RenameSort <span class="op">{</span> old<span class="op">,</span> new <span class="op">}</span> <span class="op">=&gt;</span> <span class="cn">Ok</span>(apply_rename_sort(theory<span class="op">,</span> old<span class="op">,</span> new))<span class="op">,</span></span>
+<span id="cb4-343"><a href="#cb4-343" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Self</span><span class="pp">::</span>AddOp(op) <span class="op">=&gt;</span> <span class="op">{</span></span>
+<span id="cb4-344"><a href="#cb4-344" aria-hidden="true" tabindex="-1"></a>                <span class="kw">let</span> <span class="kw">mut</span> ops <span class="op">=</span> theory<span class="op">.</span>ops<span class="op">.</span>clone()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="sec-theory-constraint" class="level2" data-number="19.2">

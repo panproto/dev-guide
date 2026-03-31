@@ -1230,15 +1230,15 @@ Figure&nbsp;6.3: Pullback of two theories over a common codomain. The pullback c
 <li><strong>Renames</strong> (sorts, then operations): apply the sort-map and op-map.</li>
 <li><strong>Adds</strong> (sorts topologically sorted by dependencies, then operations, then equations): introduce elements in the codomain but not in the (renamed) domain.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>        old<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new operation name.</span></span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an equation.</span></span>
-<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>    AddEquation(Equation)<span class="op">,</span></span>
-<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop an equation.</span></span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>    DropEquation(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
-<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Coerce a sort to a different value kind.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-startfrom="69"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 68;"><span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>        <span class="co">/// The new sort name.</span></span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>        new<span class="op">:</span> Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;,</span></span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Add an operation.</span></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    AddOp(Operation)<span class="op">,</span></span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Drop an operation and dependent equations.</span></span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>    DropOp(Arc<span class="op">&lt;</span><span class="dt">str</span><span class="op">&gt;</span>)<span class="op">,</span></span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Rename an operation.</span></span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>    RenameOp <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The ordering matters. Drops come before renames because renaming a sort that will be dropped wastes work and risks name collisions. Renames come before adds because a newly-added sort might share a name with one being renamed away. Violating this ordering can produce intermediate theories that are ill-formed.</p>
 <p>A key design principle is <em>cascading</em>: dropping a sort automatically drops all operations that reference it, and dropping an operation automatically drops all equations that reference it. <code>TheoryTransform::apply</code> always produces a well-formed theory; you cannot accidentally leave a dangling reference.</p>
 <p>Endofunctors compose via <code>TheoryEndofunctor::compose</code>. The precondition of the composite conservatively requires the first endofunctor’s precondition and defers the second’s to runtime checking.</p>

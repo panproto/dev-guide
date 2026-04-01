@@ -1004,24 +1004,24 @@ window.Quarto = {
 <section id="editlogobject" class="level3" data-number="26.9.1">
 <h3 data-number="26.9.1" class="anchored" data-anchor-id="editlogobject"><span class="header-section-number">26.9.1</span> <code>EditLogObject</code></h3>
 <p><strong>File</strong>: <code>crates/panproto-vcs/src/object.rs</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="148"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 147;"><span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>            migration_id<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>into()<span class="op">,</span></span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>            author<span class="op">:</span> author<span class="op">.</span>into()<span class="op">,</span></span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>            timestamp<span class="op">:</span> <span class="pp">std::time::SystemTime::</span>now()</span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>duration_since(<span class="pp">std::time::</span><span class="cn">UNIX_EPOCH</span>)</span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>unwrap_or_default()</span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>as_secs()<span class="op">,</span></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>            message<span class="op">:</span> message<span class="op">.</span>into()<span class="op">,</span></span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>            renames<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>            protocol_id<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
-<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>            data_ids<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>            complement_ids<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>            edit_log_ids<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>            theory_ids<span class="op">:</span> <span class="pp">BTreeMap::</span>new()<span class="op">,</span></span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="148"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 147;"><span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> CommitObject <span class="op">{</span></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create a builder for `CommitObject` with required fields.</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> builder(</span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>        schema_id<span class="op">:</span> ObjectId<span class="op">,</span></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>        protocol<span class="op">:</span> <span class="kw">impl</span> <span class="bu">Into</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>        author<span class="op">:</span> <span class="kw">impl</span> <span class="bu">Into</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>        message<span class="op">:</span> <span class="kw">impl</span> <span class="bu">Into</span><span class="op">&lt;</span><span class="dt">String</span><span class="op">&gt;,</span></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">-&gt;</span> CommitObjectBuilder <span class="op">{</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>        CommitObjectBuilder <span class="op">{</span></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a>            schema_id<span class="op">,</span></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>            parents<span class="op">:</span> <span class="dt">Vec</span><span class="pp">::</span>new()<span class="op">,</span></span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>            migration_id<span class="op">:</span> <span class="cn">None</span><span class="op">,</span></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>            protocol<span class="op">:</span> protocol<span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>            author<span class="op">:</span> author<span class="op">.</span>into()<span class="op">,</span></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>            timestamp<span class="op">:</span> <span class="pp">std::time::SystemTime::</span>now()</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>duration_since(<span class="pp">std::time::</span><span class="cn">UNIX_EPOCH</span>)</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span>unwrap_or_default()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>An <code>EditLogObject</code> is a content-addressed VCS object storing:</p>
 <ul>
 <li><code>schema_id</code>: the schema the edits apply to</li>

@@ -959,14 +959,14 @@ Note
 <section id="step-3-ancestor-contraction-ancestor_contraction" class="level3" data-number="8.4.3">
 <h3 data-number="8.4.3" class="anchored" data-anchor-id="step-3-ancestor-contraction-ancestor_contraction"><span class="header-section-number">8.4.3</span> Step 3: ancestor contraction (ancestor_contraction)</h3>
 <p>When intermediate nodes are pruned, their children need to be re-attached to the nearest surviving ancestor. Step 3 walks up the parent chain for each surviving non-root node to find that ancestor.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="188"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 187;"><span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `Π(x : Value). FieldTransform` — a transform that depends on the</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-startfrom="188"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust" style="counter-reset: source-line 187;"><span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `Π(x : Value). FieldTransform`, a transform that depends on the</span></span>
 <span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// runtime value of the node, not just its schema vertex. It composes</span></span>
 <span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// naturally with all other transform variants (including nesting</span></span>
 <span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// inside `PathTransform`).</span></span>
 <span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
 <span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Use cases:</span></span>
 <span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - `matchAttrs`: "if `level == 1` then rename to `h1`, if `level == 2`</span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   then rename to `h2`" — each heading level is a branch.</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   then rename to `h2`", where each heading level is a branch.</span></span>
 <span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// - Conditional attribute injection: "if `list == 'ordered'` then add</span></span>
 <span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>    <span class="co">///   `type: ol`, else add `type: ul`".</span></span>
 <span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>    Case <span class="op">{</span></span>

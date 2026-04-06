@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>35&nbsp; Release Process – panproto: Developer Guide</title>
+<title>31&nbsp; Theory DSL Engine – panproto: Developer Guide</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,8 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../appendices/A-glossary.html" rel="next">
-<link href="../chapters/18-pr-workflow.html" rel="prev">
+<link href="../chapters/16-conventions.html" rel="next">
+<link href="../chapters/36-lens-dsl-engine.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -111,10 +111,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<meta name="mermaid-theme" content="neutral">
-<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -291,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/19-release.html">Project Operations</a></li><li class="breadcrumb-item"><a href="../chapters/19-release.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Release Process</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/37-theory-dsl-engine.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Theory DSL Engine</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -539,7 +535,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/37-theory-dsl-engine.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/37-theory-dsl-engine.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Theory DSL Engine</span></span></a>
   </div>
 </li>
@@ -585,7 +581,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/19-release.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Release Process</span></span></a>
   </div>
 </li>
@@ -642,25 +638,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tag-triggered-pipeline" id="toc-tag-triggered-pipeline" class="nav-link active" data-scroll-target="#tag-triggered-pipeline"><span class="header-section-number">35.1</span> Tag-triggered pipeline</a></li>
-  <li><a href="#ordered-crate-publishing" id="toc-ordered-crate-publishing" class="nav-link" data-scroll-target="#ordered-crate-publishing"><span class="header-section-number">35.2</span> Ordered crate publishing</a></li>
-  <li><a href="#wasm-and-npm-publishing" id="toc-wasm-and-npm-publishing" class="nav-link" data-scroll-target="#wasm-and-npm-publishing"><span class="header-section-number">35.3</span> WASM and npm publishing</a></li>
-  <li><a href="#changelog-generation-with-git-cliff" id="toc-changelog-generation-with-git-cliff" class="nav-link" data-scroll-target="#changelog-generation-with-git-cliff"><span class="header-section-number">35.4</span> Changelog generation with <code>git-cliff</code></a></li>
-  <li><a href="#github-release-creation" id="toc-github-release-creation" class="nav-link" data-scroll-target="#github-release-creation"><span class="header-section-number">35.5</span> Github release creation</a></li>
-  <li><a href="#version-bumping-strategy" id="toc-version-bumping-strategy" class="nav-link" data-scroll-target="#version-bumping-strategy"><span class="header-section-number">35.6</span> Version bumping strategy</a></li>
-  <li><a href="#doc-deployments" id="toc-doc-deployments" class="nav-link" data-scroll-target="#doc-deployments"><span class="header-section-number">35.7</span> Doc deployments</a></li>
-  <li><a href="#pre-release-checklist" id="toc-pre-release-checklist" class="nav-link" data-scroll-target="#pre-release-checklist"><span class="header-section-number">35.8</span> Pre-release checklist</a></li>
-  <li><a href="#hotfix-releases" id="toc-hotfix-releases" class="nav-link" data-scroll-target="#hotfix-releases"><span class="header-section-number">35.9</span> Hotfix releases</a></li>
+  <li><a href="#crate-structure" id="toc-crate-structure" class="nav-link active" data-scroll-target="#crate-structure"><span class="header-section-number">31.1</span> Crate structure</a></li>
+  <li><a href="#dependencies" id="toc-dependencies" class="nav-link" data-scroll-target="#dependencies"><span class="header-section-number">31.2</span> Dependencies</a></li>
+  <li><a href="#parallel-to-panproto-lens-dsl" id="toc-parallel-to-panproto-lens-dsl" class="nav-link" data-scroll-target="#parallel-to-panproto-lens-dsl"><span class="header-section-number">31.3</span> Parallel to panproto-lens-dsl</a></li>
+  <li><a href="#evaluation-layer" id="toc-evaluation-layer" class="nav-link" data-scroll-target="#evaluation-layer"><span class="header-section-number">31.4</span> Evaluation layer</a></li>
+  <li><a href="#body-discrimination" id="toc-body-discrimination" class="nav-link" data-scroll-target="#body-discrimination"><span class="header-section-number">31.5</span> Body discrimination</a></li>
+  <li><a href="#theory-compilation" id="toc-theory-compilation" class="nav-link" data-scroll-target="#theory-compilation"><span class="header-section-number">31.6</span> Theory compilation</a></li>
+  <li><a href="#morphism-compilation" id="toc-morphism-compilation" class="nav-link" data-scroll-target="#morphism-compilation"><span class="header-section-number">31.7</span> Morphism compilation</a></li>
+  <li><a href="#composition-compilation" id="toc-composition-compilation" class="nav-link" data-scroll-target="#composition-compilation"><span class="header-section-number">31.8</span> Composition compilation</a></li>
+  <li><a href="#protocol-compilation" id="toc-protocol-compilation" class="nav-link" data-scroll-target="#protocol-compilation"><span class="header-section-number">31.9</span> Protocol compilation</a></li>
+  <li><a href="#bundle-compilation" id="toc-bundle-compilation" class="nav-link" data-scroll-target="#bundle-compilation"><span class="header-section-number">31.10</span> Bundle compilation</a></li>
+  <li><a href="#builtin-resolver" id="toc-builtin-resolver" class="nav-link" data-scroll-target="#builtin-resolver"><span class="header-section-number">31.11</span> Builtin resolver</a></li>
+  <li><a href="#error-handling" id="toc-error-handling" class="nav-link" data-scroll-target="#error-handling"><span class="header-section-number">31.12</span> Error handling</a></li>
+  <li><a href="#cli-integration" id="toc-cli-integration" class="nav-link" data-scroll-target="#cli-integration"><span class="header-section-number">31.13</span> CLI integration</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/19-release.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/37-theory-dsl-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/19-release.html">Project Operations</a></li><li class="breadcrumb-item"><a href="../chapters/19-release.html"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Release Process</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-architecture-overview.html">Architecture &amp; Internals</a></li><li class="breadcrumb-item"><a href="../chapters/37-theory-dsl-engine.html"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Theory DSL Engine</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-release" class="quarto-section-identifier"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Release Process</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-theory-dsl-engine" class="quarto-section-identifier"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Theory DSL Engine</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -677,201 +677,262 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>panproto uses tag-triggered releases. Pushing a <code>v*</code> tag to <code>main</code> triggers the full release pipeline: crate publishing, WASM build, npm publishing, changelog generation, and GitHub release creation.</p>
-<section id="tag-triggered-pipeline" class="level2" data-number="35.1">
-<h2 data-number="35.1" class="anchored" data-anchor-id="tag-triggered-pipeline"><span class="header-section-number">35.1</span> Tag-triggered pipeline</h2>
-<p>The <code>release.yml</code> workflow is triggered by tags matching <code>v*</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"v*"</span><span class="kw">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The pipeline has three jobs that run in sequence:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    Tag["Push v* tag"] --&gt; PC[publish-crates]
-    PC --&gt; PN[publish-npm]
-    PC --&gt; GR[github-release]
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
+<p>The <code>panproto-theory-dsl</code> crate compiles declarative theory specifications (Nickel, JSON, or YAML) into the panproto GAT algebra (<code>Theory</code> + <code>TheoryMorphism</code> + <code>Protocol</code>). This chapter covers the crate’s architecture, compilation logic, and integration points.</p>
+<section id="crate-structure" class="level2" data-number="31.1">
+<h2 data-number="31.1" class="anchored" data-anchor-id="crate-structure"><span class="header-section-number">31.1</span> Crate structure</h2>
+<pre><code>crates/panproto-theory-dsl/
+  contracts/theory.ncl       Nickel contract library (bundled via include_str!)
+  src/
+    lib.rs                   Public API: load(), load_dir(), compile(), load_and_compile()
+    document.rs              Serde types: TheoryDocument, TheoryBody (5 variants), all specs
+    eval.rs                  Nickel/JSON/YAML evaluation to TheoryDocument
+    compile.rs               Unified dispatcher, builtin_resolver(), bundle compilation
+    compile_theory.rs        TheorySpec -&gt; Theory (sorts, ops, eqs, typechecking)
+    compile_morphism.rs      MorphismSpec -&gt; TheoryMorphism (with check_morphism)
+    compile_compose.rs       CompositionBody -&gt; Theory (via recompose)
+    compile_protocol.rs      ProtocolSpec -&gt; Protocol (TheoryRef resolution)
+    error.rs                 TheoryDslError with miette diagnostics</code></pre>
 </section>
-<section id="ordered-crate-publishing" class="level2" data-number="35.2">
-<h2 data-number="35.2" class="anchored" data-anchor-id="ordered-crate-publishing"><span class="header-section-number">35.2</span> Ordered crate publishing</h2>
-<p>Crates must be published in dependency order. The <code>publish-crates</code> job publishes them sequentially:</p>
+<section id="dependencies" class="level2" data-number="31.2">
+<h2 data-number="31.2" class="anchored" data-anchor-id="dependencies"><span class="header-section-number">31.2</span> Dependencies</h2>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 53%">
+<col style="width: 46%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Level</th>
 <th>Crate</th>
-<th>Dependencies</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>0</td>
+<td><code>nickel-lang</code> 2.0</td>
+<td>Nickel evaluator with <code>to_serde</code> deserialization</td>
+</tr>
+<tr class="even">
 <td><code>panproto-gat</code></td>
-<td>(none)</td>
+<td><code>Theory</code>, <code>TheoryMorphism</code>, <code>CompositionSpec</code>, <code>Sort</code>, <code>Operation</code>, <code>Term</code>, <code>Equation</code>, <code>typecheck_theory</code>, <code>check_morphism</code>, <code>recompose</code></td>
 </tr>
-<tr class="even">
-<td>1</td>
+<tr class="odd">
 <td><code>panproto-schema</code></td>
-<td>gat</td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td><code>panproto-inst</code></td>
-<td>gat, schema</td>
+<td><code>Protocol</code>, <code>EdgeRule</code></td>
 </tr>
 <tr class="even">
-<td>2</td>
-<td><code>panproto-mig</code></td>
-<td>gat, schema</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td><code>panproto-lens</code></td>
-<td>gat, schema, inst, mig</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td><code>panproto-check</code></td>
-<td>gat, schema, mig</td>
-</tr>
-<tr class="odd">
-<td>3</td>
 <td><code>panproto-protocols</code></td>
-<td>gat, schema</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td><code>panproto-core</code></td>
-<td>all of the above</td>
+<td>Built-in theory constructors (<code>th_graph</code>, <code>th_constraint</code>, etc.)</td>
 </tr>
 <tr class="odd">
-<td>4</td>
-<td><code>panproto-cli</code></td>
-<td>core</td>
+<td><code>panproto-expr</code></td>
+<td><code>Expr</code> AST for directed equations and custom policies</td>
+</tr>
+<tr class="even">
+<td><code>panproto-expr-parser</code></td>
+<td><code>tokenize()</code>, <code>parse()</code> for expression strings</td>
 </tr>
 </tbody>
 </table>
-<p>Each crate is published with <code>--no-verify</code> to skip local rebuild (CI has already verified the build). The <code>CARGO_REGISTRY_TOKEN</code> secret authenticates with crates.io.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If a crate publish fails mid-pipeline (e.g., due to a network error or version conflict), the remaining crates won’t be published. You may need to manually publish the failed crate and re-run the workflow, or bump the version and create a new tag.</p>
-</div>
-</div>
 </section>
-<section id="wasm-and-npm-publishing" class="level2" data-number="35.3">
-<h2 data-number="35.3" class="anchored" data-anchor-id="wasm-and-npm-publishing"><span class="header-section-number">35.3</span> WASM and npm publishing</h2>
-<p>The <code>publish-npm</code> job depends on <code>publish-crates</code> and handles the TypeScript SDK release:</p>
-<ol type="1">
-<li><strong>WASM build</strong>: <code>wasm-pack build crates/panproto-wasm --target bundler --out-dir ../../sdk/typescript/wasm</code></li>
-<li><strong>SDK build</strong>: <code>cd sdk/typescript &amp;&amp; pnpm install &amp;&amp; pnpm build</code></li>
-<li><strong>npm publish</strong>: <code>cd sdk/typescript &amp;&amp; pnpm publish --access public --no-git-checks</code></li>
-</ol>
-<p>The <code>--target bundler</code> flag produces a WASM binary optimized for bundlers (Vite, webpack, esbuild). The <code>--no-git-checks</code> flag is needed because the working directory has uncommitted changes from the WASM build output.</p>
-<p>The npm package is published as <code>@panproto/core</code> with public access. The <code>NODE_AUTH_TOKEN</code> secret authenticates with the npm registry.</p>
+<section id="parallel-to-panproto-lens-dsl" class="level2" data-number="31.3">
+<h2 data-number="31.3" class="anchored" data-anchor-id="parallel-to-panproto-lens-dsl"><span class="header-section-number">31.3</span> Parallel to panproto-lens-dsl</h2>
+<p>The architecture mirrors <code>panproto-lens-dsl</code> (<a href="36-lens-dsl-engine.html" class="quarto-xref"><span>Chapter 30</span></a>):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Lens DSL</th>
+<th>Theory DSL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>LensDocument</code></td>
+<td><code>TheoryDocument</code></td>
+</tr>
+<tr class="even">
+<td><code>Step</code> (19 variants)</td>
+<td><code>TheoryBody</code> (5 variants)</td>
+</tr>
+<tr class="odd">
+<td><code>ComposeSpec</code> (vertical/horizontal)</td>
+<td><code>CompositionBody</code> (colimit steps)</td>
+</tr>
+<tr class="even">
+<td><code>CompiledLens</code></td>
+<td><code>CompiledTheorySet</code></td>
+</tr>
+<tr class="odd">
+<td><code>contracts/lens.ncl</code></td>
+<td><code>contracts/theory.ncl</code></td>
+</tr>
+<tr class="even">
+<td>Outputs <code>ProtolensChain</code></td>
+<td>Outputs <code>Theory</code> + <code>TheoryMorphism</code> + <code>Protocol</code></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="changelog-generation-with-git-cliff" class="level2" data-number="35.4">
-<h2 data-number="35.4" class="anchored" data-anchor-id="changelog-generation-with-git-cliff"><span class="header-section-number">35.4</span> Changelog generation with <code>git-cliff</code></h2>
-<p>The <code>github-release</code> job uses <code>git-cliff</code> to generate a changelog from conventional commits:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Generate changelog</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> orhun/git-cliff-action@v4</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">config</span><span class="kw">:</span><span class="at"> cliff.toml</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">args</span><span class="kw">:</span><span class="at"> --latest --strip header</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>cliff.toml</code> configuration file at the workspace root controls:</p>
+<section id="evaluation-layer" class="level2" data-number="31.4">
+<h2 data-number="31.4" class="anchored" data-anchor-id="evaluation-layer"><span class="header-section-number">31.4</span> Evaluation layer</h2>
+<p>Three evaluation paths converge on <code>TheoryDocument</code>:</p>
+<p><strong>Nickel</strong> (<code>.ncl</code>): The bundled contract library (<code>contracts/theory.ncl</code>) is written to a temp directory. Nickel’s import resolver finds it via <code>import "panproto/theory.ncl"</code>. The evaluator runs <code>eval_deep_for_export</code>, which applies all contracts, resolves merges, evaluates functions, and normalizes. The result is deserialized via <code>to_serde::&lt;TheoryDocument&gt;()</code>.</p>
+<p><strong>JSON</strong> (<code>.json</code>): Direct <code>serde_json::from_str</code>.</p>
+<p><strong>YAML</strong> (<code>.yaml</code>, <code>.yml</code>): Direct <code>yaml_serde::from_str</code>.</p>
+</section>
+<section id="body-discrimination" class="level2" data-number="31.5">
+<h2 data-number="31.5" class="anchored" data-anchor-id="body-discrimination"><span class="header-section-number">31.5</span> Body discrimination</h2>
+<p><code>TheoryBody</code> uses <code>#[serde(untagged)]</code> with five variants. Discrimination works by the presence of distinguishing keys:</p>
 <ul>
-<li>Which commit types are included (feat, fix, refactor, etc.)</li>
-<li>How commits are grouped and sorted</li>
-<li>The output format (Markdown)</li>
+<li><code>theory</code> key present: <code>TheoryBody::Theory</code></li>
+<li><code>morphism</code> key present: <code>TheoryBody::Morphism</code></li>
+<li><code>compose</code> key present: <code>TheoryBody::Composition</code></li>
+<li><code>protocol</code> key present: <code>TheoryBody::Protocol</code></li>
+<li><code>bundle</code> key present: <code>TheoryBody::Bundle</code></li>
 </ul>
-<p>The <code>--latest</code> flag generates only the changelog for the current tag (not the full history). The <code>--strip header</code> flag removes the title line, since the GitHub release UI provides its own title.</p>
+<p>The <code>ProtocolSpec</code> and <code>BundleSpec</code> variants are <code>Box</code>-wrapped to reduce enum size variance (clippy <code>large_enum_variant</code>).</p>
 </section>
-<section id="github-release-creation" class="level2" data-number="35.5">
-<h2 data-number="35.5" class="anchored" data-anchor-id="github-release-creation"><span class="header-section-number">35.5</span> Github release creation</h2>
-<p>After changelog generation, a GitHub release is created with the <code>softprops/action-gh-release</code> action:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Create GitHub Release</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release@v2</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">body</span><span class="kw">:</span><span class="at"> ${{ steps.changelog.outputs.content }}</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">generate_release_notes</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The release body is the <code>git-cliff</code> output. <code>generate_release_notes: false</code> disables GitHub’s auto-generated notes in favor of the structured changelog.</p>
-</section>
-<section id="version-bumping-strategy" class="level2" data-number="35.6">
-<h2 data-number="35.6" class="anchored" data-anchor-id="version-bumping-strategy"><span class="header-section-number">35.6</span> Version bumping strategy</h2>
-<p>panproto uses workspace-level versioning: all crates share the same version number, declared in <code>[workspace.package]</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[workspace.package]</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To bump the version:</p>
+<section id="theory-compilation" class="level2" data-number="31.6">
+<h2 data-number="31.6" class="anchored" data-anchor-id="theory-compilation"><span class="header-section-number">31.6</span> Theory compilation</h2>
+<p><code>compile_theory()</code> in <code>compile_theory.rs</code>:</p>
 <ol type="1">
-<li>Update <code>version</code> in <code>Cargo.toml</code> under <code>[workspace.package]</code></li>
-<li>Update <code>version</code> in <code>sdk/typescript/package.json</code></li>
-<li>Commit with message: <code>chore(workspace): bump version to 0.x.y</code></li>
-<li>Tag: <code>git tag v0.x.y</code></li>
-<li>Push: <code>git push origin main --tags</code></li>
+<li><p><strong>Sorts</strong>: Each <code>SortSpec</code> maps to <code>Sort</code>. <code>SortKindSpec::Structural</code> becomes <code>SortKind::Structural</code>; <code>Val</code>, <code>Coercion</code>, and <code>Merger</code> map to their respective <code>SortKind</code> variants with parsed <code>ValueKind</code> and <code>CoercionClass</code>. Dependent sorts use <code>SortParam::new</code>.</p></li>
+<li><p><strong>Operations</strong>: <code>input</code> shorthand produces <code>Operation::unary</code> (parameter name derived from first character of input sort). <code>inputs</code> produces <code>Operation::new</code> with explicit <code>(Arc&lt;str&gt;, Arc&lt;str&gt;)</code> pairs. Neither produces <code>Operation::nullary</code>.</p></li>
+<li><p><strong>Equations</strong>: <code>lhs</code> and <code>rhs</code> strings are parsed by <code>parse_term()</code>, a recursive-descent parser supporting <code>Var</code> and <code>App</code> forms: <code>parse_term("f(g(x), y)")</code> produces <code>App { op: "f", args: [App { op: "g", args: [Var("x")] }, Var("y")] }</code>.</p></li>
+<li><p><strong>Directed equations</strong>: Term strings parsed via <code>parse_term()</code>, implementation expressions via <code>panproto_expr_parser::tokenize()</code> + <code>parse()</code>.</p></li>
+<li><p><strong>Policies</strong>: Strategy variants map directly; <code>Custom</code> requires expression parsing.</p></li>
+<li><p><strong>Construction</strong>: <code>Theory::full(name, extends, sorts, ops, eqs, directed_eqs, policies)</code>.</p></li>
+<li><p><strong>Typechecking</strong>: <code>panproto_gat::typecheck_theory()</code> verifies equation well-typedness.</p></li>
 </ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>During the 0.x.y phase, minor version bumps may include breaking changes (per semver rules for pre-1.0). After 1.0, breaking changes require a major version bump. The <code>cargo-semver-checks</code> CI job will alert on accidental breakage.</p>
-</div>
-</div>
 </section>
-<section id="doc-deployments" class="level2" data-number="35.7">
-<h2 data-number="35.7" class="anchored" data-anchor-id="doc-deployments"><span class="header-section-number">35.7</span> Doc deployments</h2>
-<p>Two documentation sites auto-deploy on push to <code>main</code>:</p>
+<section id="morphism-compilation" class="level2" data-number="31.7">
+<h2 data-number="31.7" class="anchored" data-anchor-id="morphism-compilation"><span class="header-section-number">31.7</span> Morphism compilation</h2>
+<p><code>compile_morphism()</code> in <code>compile_morphism.rs</code>:</p>
+<ol type="1">
+<li>Resolve <code>domain</code> and <code>codomain</code> via the resolver callback.</li>
+<li>Convert <code>sort_map</code> and <code>op_map</code> from <code>HashMap&lt;String, String&gt;</code> to <code>HashMap&lt;Arc&lt;str&gt;, Arc&lt;str&gt;&gt;</code>.</li>
+<li>Construct <code>TheoryMorphism::new</code>.</li>
+<li>Run <code>panproto_gat::check_morphism</code> to verify sort arities, operation type signatures, and equation preservation.</li>
+</ol>
+</section>
+<section id="composition-compilation" class="level2" data-number="31.8">
+<h2 data-number="31.8" class="anchored" data-anchor-id="composition-compilation"><span class="header-section-number">31.8</span> Composition compilation</h2>
+<p><code>compile_composition()</code> in <code>compile_compose.rs</code>:</p>
+<ol type="1">
+<li>Build a local registry from <code>local_theories</code> plus resolved <code>bases</code>.</li>
+<li>Also resolve any theories referenced in step <code>left</code>/<code>right</code> fields (except <code>step_*</code> intermediates).</li>
+<li>Convert each <code>ColimitStepSpec</code> to <code>CompositionStep::Colimit</code>.</li>
+<li>Call <code>panproto_gat::recompose()</code> which replays the colimit sequence, naming intermediates <code>step_0</code>, <code>step_1</code>, etc.</li>
+</ol>
+</section>
+<section id="protocol-compilation" class="level2" data-number="31.9">
+<h2 data-number="31.9" class="anchored" data-anchor-id="protocol-compilation"><span class="header-section-number">31.9</span> Protocol compilation</h2>
+<p><code>compile_protocol()</code> in <code>compile_protocol.rs</code>:</p>
+<ol type="1">
+<li>Resolve <code>schema_theory</code> and <code>instance_theory</code> via <code>TheoryRef</code>:
 <ul>
-<li><strong>Tutorial</strong> (<code>publish-tutorial.yml</code>): The user-facing tutorial at <code>panproto.dev/tutorial/</code> is built with Quarto and deployed to GitHub Pages.</li>
-<li><strong>Dev guide</strong>: This developer guide at <code>panproto.dev/dev-guide/</code> follows the same pattern.</li>
+<li><code>Named(s)</code>: verify existence in local theories or resolver.</li>
+<li><code>Inline(spec)</code>: compile the inline <code>TheorySpec</code>.</li>
+<li><code>Composed(spec)</code>: compile the inline <code>CompositionSpec_</code>.</li>
+</ul></li>
+<li>Map <code>EdgeRuleSpec</code> (singular <code>src_kind</code>/<code>tgt_kind</code>) to <code>EdgeRule</code> (vector <code>src_kinds</code>/<code>tgt_kinds</code>).</li>
+<li>Construct <code>Protocol</code> with all feature flags defaulting to <code>false</code>.</li>
+</ol>
+</section>
+<section id="bundle-compilation" class="level2" data-number="31.10">
+<h2 data-number="31.10" class="anchored" data-anchor-id="bundle-compilation"><span class="header-section-number">31.10</span> Bundle compilation</h2>
+<p><code>compile_bundle_inner()</code> in <code>compile.rs</code> processes definitions in four phases:</p>
+<ol type="1">
+<li><strong>Theories</strong>: Compile all <code>TheorySpec</code>s (no intra-bundle dependencies).</li>
+<li><strong>Compositions</strong>: Compile all <code>CompositionSpec_</code>s (may reference bundle theories).</li>
+<li><strong>Morphisms</strong>: Compile all <code>MorphismSpec</code>s (reference theories by name).</li>
+<li><strong>Protocols</strong>: Compile all <code>ProtocolSpec</code>s (reference theories by name or inline).</li>
+</ol>
+<p>Each phase creates a fresh combined resolver (<code>local theories + external resolver</code>) to avoid borrow checker conflicts with the mutable result set.</p>
+</section>
+<section id="builtin-resolver" class="level2" data-number="31.11">
+<h2 data-number="31.11" class="anchored" data-anchor-id="builtin-resolver"><span class="header-section-number">31.11</span> Builtin resolver</h2>
+<p><code>builtin_resolver()</code> returns a closure resolving 11 built-in theory names:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ThGraph</code></td>
+<td><code>panproto_protocols::theories::th_graph()</code></td>
+</tr>
+<tr class="even">
+<td><code>ThConstraint</code></td>
+<td><code>panproto_protocols::theories::th_constraint()</code></td>
+</tr>
+<tr class="odd">
+<td><code>ThMulti</code></td>
+<td><code>panproto_protocols::theories::th_multi()</code></td>
+</tr>
+<tr class="even">
+<td><code>ThWType</code></td>
+<td><code>panproto_protocols::theories::th_wtype()</code></td>
+</tr>
+<tr class="odd">
+<td><code>ThMeta</code></td>
+<td><code>panproto_protocols::theories::th_meta()</code></td>
+</tr>
+<tr class="even">
+<td><code>ThSimpleGraph</code></td>
+<td><code>panproto_protocols::theories::th_simple_graph()</code></td>
+</tr>
+<tr class="odd">
+<td><code>ThHypergraph</code></td>
+<td><code>panproto_protocols::theories::th_hypergraph()</code></td>
+</tr>
+<tr class="even">
+<td><code>ThInterface</code></td>
+<td><code>panproto_protocols::theories::th_interface()</code></td>
+</tr>
+<tr class="odd">
+<td><code>ThFunctor</code></td>
+<td><code>panproto_protocols::theories::th_functor()</code></td>
+</tr>
+<tr class="even">
+<td><code>ThFlat</code></td>
+<td><code>panproto_protocols::theories::th_flat()</code></td>
+</tr>
+<tr class="odd">
+<td><code>ThGraphInstance</code></td>
+<td><code>panproto_protocols::theories::th_graph_instance()</code></td>
+</tr>
+</tbody>
+</table>
+<p>The last six were previously private in <code>panproto-protocols</code>; they were made <code>pub</code> to support this resolver.</p>
+</section>
+<section id="error-handling" class="level2" data-number="31.12">
+<h2 data-number="31.12" class="anchored" data-anchor-id="error-handling"><span class="header-section-number">31.12</span> Error handling</h2>
+<p><code>TheoryDslError</code> has 12 variants covering the full pipeline:</p>
+<ul>
+<li>Evaluation: <code>NickelEval</code>, <code>Json</code>, <code>Yaml</code>, <code>UnsupportedExtension</code></li>
+<li>Document: <code>NoBody</code>, <code>MultipleBodies</code></li>
+<li>Parsing: <code>TermParse</code>, <code>ExprParse</code></li>
+<li>Resolution: <code>TheoryNotFound</code></li>
+<li>Validation: <code>TypeCheck</code>, <code>MorphismCheck</code>, <code>ColimitFailed</code></li>
+<li>Bundle: <code>Duplicate</code>, <code>DependencyCycle</code></li>
+<li>Passthrough: <code>Io</code>, <code>Gat</code></li>
 </ul>
-<p>Both workflows build the Quarto site and push the rendered HTML to the <code>gh-pages</code> branch. Deployment is automatic; no manual steps are required after merging to <code>main</code>.</p>
+<p>All variants carry miette diagnostic codes (<code>panproto_theory_dsl::*</code>).</p>
 </section>
-<section id="pre-release-checklist" class="level2" data-number="35.8">
-<h2 data-number="35.8" class="anchored" data-anchor-id="pre-release-checklist"><span class="header-section-number">35.8</span> Pre-release checklist</h2>
-<p>Before creating a release tag:</p>
-<ol type="1">
-<li>All CI checks pass on <code>main</code></li>
-<li>Version numbers are updated in both <code>Cargo.toml</code> and <code>package.json</code></li>
-<li>Changelog entries exist for all notable changes (conventional commit messages)</li>
-<li>Integration tests cover any new features</li>
-<li>Benchmarks show no unexpected regressions</li>
-<li><code>cargo semver-checks</code> passes (or breaking changes are intentional and version-bumped)</li>
-<li>The tutorial and dev guide are up to date</li>
-</ol>
-</section>
-<section id="hotfix-releases" class="level2" data-number="35.9">
-<h2 data-number="35.9" class="anchored" data-anchor-id="hotfix-releases"><span class="header-section-number">35.9</span> Hotfix releases</h2>
-<p>For urgent fixes:</p>
-<ol type="1">
-<li>Create a <code>fix/</code> branch from the latest release tag</li>
-<li>Apply the fix, add tests</li>
-<li>Bump the patch version</li>
-<li>Merge to <code>main</code> via PR (all CI checks must pass)</li>
-<li>Tag and push: <code>git tag v0.x.y+1 &amp;&amp; git push origin main --tags</code></li>
-</ol>
-<p>The release pipeline handles the rest.</p>
+<section id="cli-integration" class="level2" data-number="31.13">
+<h2 data-number="31.13" class="anchored" data-anchor-id="cli-integration"><span class="header-section-number">31.13</span> CLI integration</h2>
+<p>The <code>schema theory</code> subcommand group is wired via <code>TheoryAction</code> enum in <code>panproto-cli/src/main.rs</code>, dispatching to <code>cmd::theory::*</code> functions. Each command calls <code>load()</code> + <code>compile()</code> with the builtin resolver and formats output as either human-readable text or JSON (<code>--json</code> flag).</p>
 
 
 <!-- -->
@@ -1345,165 +1406,182 @@ Note
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/18-pr-workflow.html" class="pagination-link" aria-label="PR Workflow and CI">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">PR Workflow and CI</span></span>
+      <a href="../chapters/36-lens-dsl-engine.html" class="pagination-link" aria-label="Lens DSL Engine">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Lens DSL Engine</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../appendices/A-glossary.html" class="pagination-link" aria-label="Glossary">
-        <span class="nav-page-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Glossary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/16-conventions.html" class="pagination-link" aria-label="Coding Conventions and API Design">
+        <span class="nav-page-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Coding Conventions and API Design</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Release Process {#sec-release}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>panproto uses tag-triggered releases. Pushing a <span class="in">`v*`</span> tag to <span class="in">`main`</span> triggers the full release pipeline: crate publishing, WASM build, npm publishing, changelog generation, and GitHub release creation.</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tag-triggered pipeline</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>The <span class="in">`release.yml`</span> workflow is triggered by tags matching <span class="in">`v*`</span>:</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tags</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"v*"</span><span class="kw">]</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>The pipeline has three jobs that run in sequence:</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    Tag[<span class="ot">"</span><span class="st">Push v* tag</span><span class="ot">"</span>] --&gt; PC[publish-crates]</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    PC --&gt; PN[publish-npm]</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    PC --&gt; GR[github-release]</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ordered crate publishing</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>Crates must be published in dependency order. The <span class="in">`publish-crates`</span> job publishes them sequentially:</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Level <span class="pp">|</span> Crate <span class="pp">|</span> Dependencies <span class="pp">|</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> (none) <span class="pp">|</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> <span class="in">`panproto-schema`</span> <span class="pp">|</span> gat <span class="pp">|</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-inst`</span> <span class="pp">|</span> gat, schema <span class="pp">|</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> <span class="in">`panproto-mig`</span> <span class="pp">|</span> gat, schema <span class="pp">|</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-lens`</span> <span class="pp">|</span> gat, schema, inst, mig <span class="pp">|</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-check`</span> <span class="pp">|</span> gat, schema, mig <span class="pp">|</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> gat, schema <span class="pp">|</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-core`</span> <span class="pp">|</span> all of the above <span class="pp">|</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> <span class="in">`panproto-cli`</span> <span class="pp">|</span> core <span class="pp">|</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>Each crate is published with <span class="in">`--no-verify`</span> to skip local rebuild (CI has already verified the build). The <span class="in">`CARGO_REGISTRY_TOKEN`</span> secret authenticates with crates.io.</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>::: {.callout-important}</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>If a crate publish fails mid-pipeline (e.g., due to a network error or version conflict), the remaining crates won't be published. You may need to manually publish the failed crate and re-run the workflow, or bump the version and create a new tag.</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## WASM and npm publishing</span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>The <span class="in">`publish-npm`</span> job depends on <span class="in">`publish-crates`</span> and handles the TypeScript SDK release:</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**WASM build**: <span class="in">`wasm-pack build crates/panproto-wasm --target bundler --out-dir ../../sdk/typescript/wasm`</span></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**SDK build**: <span class="in">`cd sdk/typescript &amp;&amp; pnpm install &amp;&amp; pnpm build`</span></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**npm publish**: <span class="in">`cd sdk/typescript &amp;&amp; pnpm publish --access public --no-git-checks`</span></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>The <span class="in">`--target bundler`</span> flag produces a WASM binary optimized for bundlers (Vite, webpack, esbuild). The <span class="in">`--no-git-checks`</span> flag is needed because the working directory has uncommitted changes from the WASM build output.</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>The npm package is published as <span class="in">`@panproto/core`</span> with public access. The <span class="in">`NODE_AUTH_TOKEN`</span> secret authenticates with the npm registry.</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## Changelog generation with `git-cliff`</span></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>The <span class="in">`github-release`</span> job uses <span class="in">`git-cliff`</span> to generate a changelog from conventional commits:</span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Generate changelog</span></span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> orhun/git-cliff-action@v4</span></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">config</span><span class="kw">:</span><span class="at"> cliff.toml</span></span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">args</span><span class="kw">:</span><span class="at"> --latest --strip header</span></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>The <span class="in">`cliff.toml`</span> configuration file at the workspace root controls:</span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Which commit types are included (feat, fix, refactor, etc.)</span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>How commits are grouped and sorted</span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The output format (Markdown)</span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>The <span class="in">`--latest`</span> flag generates only the changelog for the current tag (not the full history). The <span class="in">`--strip header`</span> flag removes the title line, since the GitHub release UI provides its own title.</span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Github release creation</span></span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>After changelog generation, a GitHub release is created with the <span class="in">`softprops/action-gh-release`</span> action:</span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="in">```yaml</span></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Create GitHub Release</span></span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release@v2</span></span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">body</span><span class="kw">:</span><span class="at"> ${{ steps.changelog.outputs.content }}</span></span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">generate_release_notes</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>The release body is the <span class="in">`git-cliff`</span> output. <span class="in">`generate_release_notes: false`</span> disables GitHub's auto-generated notes in favor of the structured changelog.</span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="fu">## Version bumping strategy</span></span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>panproto uses workspace-level versioning: all crates share the same version number, declared in <span class="in">`[workspace.package]`</span>:</span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="in">```toml</span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="in">[workspace.package]</span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="in">version = "0.1.0"</span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>To bump the version:</span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Update <span class="in">`version`</span> in <span class="in">`Cargo.toml`</span> under <span class="in">`[workspace.package]`</span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Update <span class="in">`version`</span> in <span class="in">`sdk/typescript/package.json`</span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Commit with message: <span class="in">`chore(workspace): bump version to 0.x.y`</span></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Tag: <span class="in">`git tag v0.x.y`</span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Push: <span class="in">`git push origin main --tags`</span></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>During the 0.x.y phase, minor version bumps may include breaking changes (per semver rules for pre-1.0). After 1.0, breaking changes require a major version bump. The <span class="in">`cargo-semver-checks`</span> CI job will alert on accidental breakage.</span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Doc deployments</span></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>Two documentation sites auto-deploy on push to <span class="in">`main`</span>:</span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Tutorial** (<span class="in">`publish-tutorial.yml`</span>): The user-facing tutorial at <span class="in">`panproto.dev/tutorial/`</span> is built with Quarto and deployed to GitHub Pages.</span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Dev guide**: This developer guide at <span class="in">`panproto.dev/dev-guide/`</span> follows the same pattern.</span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>Both workflows build the Quarto site and push the rendered HTML to the <span class="in">`gh-pages`</span> branch. Deployment is automatic; no manual steps are required after merging to <span class="in">`main`</span>.</span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pre-release checklist</span></span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>Before creating a release tag:</span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>All CI checks pass on <span class="in">`main`</span></span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Version numbers are updated in both <span class="in">`Cargo.toml`</span> and <span class="in">`package.json`</span></span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Changelog entries exist for all notable changes (conventional commit messages)</span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Integration tests cover any new features</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Benchmarks show no unexpected regressions</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span><span class="in">`cargo semver-checks`</span> passes (or breaking changes are intentional and version-bumped)</span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>The tutorial and dev guide are up to date</span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hotfix releases</span></span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>For urgent fixes:</span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Create a <span class="in">`fix/`</span> branch from the latest release tag</span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Apply the fix, add tests</span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Bump the patch version</span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Merge to <span class="in">`main`</span> via PR (all CI checks must pass)</span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Tag and push: <span class="in">`git tag v0.x.y+1 &amp;&amp; git push origin main --tags`</span></span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>The release pipeline handles the rest.</span>
-</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Theory DSL Engine {#sec-theory-dsl-engine}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>The <span class="in">`panproto-theory-dsl`</span> crate compiles declarative theory specifications (Nickel, JSON, or YAML) into the panproto GAT algebra (<span class="in">`Theory`</span> + <span class="in">`TheoryMorphism`</span> + <span class="in">`Protocol`</span>). This chapter covers the crate's architecture, compilation logic, and integration points.</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Crate structure</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="in">crates/panproto-theory-dsl/</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="in">  contracts/theory.ncl       Nickel contract library (bundled via include_str!)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="in">  src/</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="in">    lib.rs                   Public API: load(), load_dir(), compile(), load_and_compile()</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="in">    document.rs              Serde types: TheoryDocument, TheoryBody (5 variants), all specs</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="in">    eval.rs                  Nickel/JSON/YAML evaluation to TheoryDocument</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">    compile.rs               Unified dispatcher, builtin_resolver(), bundle compilation</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">    compile_theory.rs        TheorySpec -&gt; Theory (sorts, ops, eqs, typechecking)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">    compile_morphism.rs      MorphismSpec -&gt; TheoryMorphism (with check_morphism)</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="in">    compile_compose.rs       CompositionBody -&gt; Theory (via recompose)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="in">    compile_protocol.rs      ProtocolSpec -&gt; Protocol (TheoryRef resolution)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="in">    error.rs                 TheoryDslError with miette diagnostics</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dependencies</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Crate <span class="pp">|</span> Role <span class="pp">|</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------|------|</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`nickel-lang`</span> 2.0 <span class="pp">|</span> Nickel evaluator with <span class="in">`to_serde`</span> deserialization <span class="pp">|</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`panproto-gat`</span> <span class="pp">|</span> <span class="in">`Theory`</span>, <span class="in">`TheoryMorphism`</span>, <span class="in">`CompositionSpec`</span>, <span class="in">`Sort`</span>, <span class="in">`Operation`</span>, <span class="in">`Term`</span>, <span class="in">`Equation`</span>, <span class="in">`typecheck_theory`</span>, <span class="in">`check_morphism`</span>, <span class="in">`recompose`</span> <span class="pp">|</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`panproto-schema`</span> <span class="pp">|</span> <span class="in">`Protocol`</span>, <span class="in">`EdgeRule`</span> <span class="pp">|</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`panproto-protocols`</span> <span class="pp">|</span> Built-in theory constructors (<span class="in">`th_graph`</span>, <span class="in">`th_constraint`</span>, etc.) <span class="pp">|</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`panproto-expr`</span> <span class="pp">|</span> <span class="in">`Expr`</span> AST for directed equations and custom policies <span class="pp">|</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`panproto-expr-parser`</span> <span class="pp">|</span> <span class="in">`tokenize()`</span>, <span class="in">`parse()`</span> for expression strings <span class="pp">|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Parallel to panproto-lens-dsl</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>The architecture mirrors <span class="in">`panproto-lens-dsl`</span> (@sec-lens-dsl-engine):</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Lens DSL <span class="pp">|</span> Theory DSL <span class="pp">|</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|----------|------------|</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`LensDocument`</span> <span class="pp">|</span> <span class="in">`TheoryDocument`</span> <span class="pp">|</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Step`</span> (19 variants) <span class="pp">|</span> <span class="in">`TheoryBody`</span> (5 variants) <span class="pp">|</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ComposeSpec`</span> (vertical/horizontal) <span class="pp">|</span> <span class="in">`CompositionBody`</span> (colimit steps) <span class="pp">|</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`CompiledLens`</span> <span class="pp">|</span> <span class="in">`CompiledTheorySet`</span> <span class="pp">|</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`contracts/lens.ncl`</span> <span class="pp">|</span> <span class="in">`contracts/theory.ncl`</span> <span class="pp">|</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Outputs <span class="in">`ProtolensChain`</span> <span class="pp">|</span> Outputs <span class="in">`Theory`</span> + <span class="in">`TheoryMorphism`</span> + <span class="in">`Protocol`</span> <span class="pp">|</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluation layer</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>Three evaluation paths converge on <span class="in">`TheoryDocument`</span>:</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>**Nickel** (<span class="in">`.ncl`</span>): The bundled contract library (<span class="in">`contracts/theory.ncl`</span>) is written to a temp directory. Nickel's import resolver finds it via <span class="in">`import "panproto/theory.ncl"`</span>. The evaluator runs <span class="in">`eval_deep_for_export`</span>, which applies all contracts, resolves merges, evaluates functions, and normalizes. The result is deserialized via <span class="in">`to_serde::&lt;TheoryDocument&gt;()`</span>.</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>**JSON** (<span class="in">`.json`</span>): Direct <span class="in">`serde_json::from_str`</span>.</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>**YAML** (<span class="in">`.yaml`</span>, <span class="in">`.yml`</span>): Direct <span class="in">`yaml_serde::from_str`</span>.</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Body discrimination</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">`TheoryBody`</span> uses <span class="in">`#[serde(untagged)]`</span> with five variants. Discrimination works by the presence of distinguishing keys:</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`theory`</span> key present: <span class="in">`TheoryBody::Theory`</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`morphism`</span> key present: <span class="in">`TheoryBody::Morphism`</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`compose`</span> key present: <span class="in">`TheoryBody::Composition`</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`protocol`</span> key present: <span class="in">`TheoryBody::Protocol`</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`bundle`</span> key present: <span class="in">`TheoryBody::Bundle`</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>The <span class="in">`ProtocolSpec`</span> and <span class="in">`BundleSpec`</span> variants are <span class="in">`Box`</span>-wrapped to reduce enum size variance (clippy <span class="in">`large_enum_variant`</span>).</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory compilation</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="in">`compile_theory()`</span> in <span class="in">`compile_theory.rs`</span>:</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Sorts**: Each <span class="in">`SortSpec`</span> maps to <span class="in">`Sort`</span>. <span class="in">`SortKindSpec::Structural`</span> becomes <span class="in">`SortKind::Structural`</span>; <span class="in">`Val`</span>, <span class="in">`Coercion`</span>, and <span class="in">`Merger`</span> map to their respective <span class="in">`SortKind`</span> variants with parsed <span class="in">`ValueKind`</span> and <span class="in">`CoercionClass`</span>. Dependent sorts use <span class="in">`SortParam::new`</span>.</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Operations**: <span class="in">`input`</span> shorthand produces <span class="in">`Operation::unary`</span> (parameter name derived from first character of input sort). <span class="in">`inputs`</span> produces <span class="in">`Operation::new`</span> with explicit <span class="in">`(Arc&lt;str&gt;, Arc&lt;str&gt;)`</span> pairs. Neither produces <span class="in">`Operation::nullary`</span>.</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Equations**: <span class="in">`lhs`</span> and <span class="in">`rhs`</span> strings are parsed by <span class="in">`parse_term()`</span>, a recursive-descent parser supporting <span class="in">`Var`</span> and <span class="in">`App`</span> forms: <span class="in">`parse_term("f(g(x), y)")`</span> produces <span class="in">`App { op: "f", args: [App { op: "g", args: [Var("x")] }, Var("y")] }`</span>.</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Directed equations**: Term strings parsed via <span class="in">`parse_term()`</span>, implementation expressions via <span class="in">`panproto_expr_parser::tokenize()`</span> + <span class="in">`parse()`</span>.</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Policies**: Strategy variants map directly; <span class="in">`Custom`</span> requires expression parsing.</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Construction**: <span class="in">`Theory::full(name, extends, sorts, ops, eqs, directed_eqs, policies)`</span>.</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Typechecking**: <span class="in">`panproto_gat::typecheck_theory()`</span> verifies equation well-typedness.</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Morphism compilation</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="in">`compile_morphism()`</span> in <span class="in">`compile_morphism.rs`</span>:</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Resolve <span class="in">`domain`</span> and <span class="in">`codomain`</span> via the resolver callback.</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Convert <span class="in">`sort_map`</span> and <span class="in">`op_map`</span> from <span class="in">`HashMap&lt;String, String&gt;`</span> to <span class="in">`HashMap&lt;Arc&lt;str&gt;, Arc&lt;str&gt;&gt;`</span>.</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Construct <span class="in">`TheoryMorphism::new`</span>.</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Run <span class="in">`panproto_gat::check_morphism`</span> to verify sort arities, operation type signatures, and equation preservation.</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Composition compilation</span></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="in">`compile_composition()`</span> in <span class="in">`compile_compose.rs`</span>:</span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Build a local registry from <span class="in">`local_theories`</span> plus resolved <span class="in">`bases`</span>.</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Also resolve any theories referenced in step <span class="in">`left`</span>/<span class="in">`right`</span> fields (except <span class="in">`step_*`</span> intermediates).</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Convert each <span class="in">`ColimitStepSpec`</span> to <span class="in">`CompositionStep::Colimit`</span>.</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Call <span class="in">`panproto_gat::recompose()`</span> which replays the colimit sequence, naming intermediates <span class="in">`step_0`</span>, <span class="in">`step_1`</span>, etc.</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol compilation</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="in">`compile_protocol()`</span> in <span class="in">`compile_protocol.rs`</span>:</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Resolve <span class="in">`schema_theory`</span> and <span class="in">`instance_theory`</span> via <span class="in">`TheoryRef`</span>:</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`Named(s)`</span>: verify existence in local theories or resolver.</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`Inline(spec)`</span>: compile the inline <span class="in">`TheorySpec`</span>.</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span><span class="in">`Composed(spec)`</span>: compile the inline <span class="in">`CompositionSpec_`</span>.</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Map <span class="in">`EdgeRuleSpec`</span> (singular <span class="in">`src_kind`</span>/<span class="in">`tgt_kind`</span>) to <span class="in">`EdgeRule`</span> (vector <span class="in">`src_kinds`</span>/<span class="in">`tgt_kinds`</span>).</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Construct <span class="in">`Protocol`</span> with all feature flags defaulting to <span class="in">`false`</span>.</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bundle compilation</span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="in">`compile_bundle_inner()`</span> in <span class="in">`compile.rs`</span> processes definitions in four phases:</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Theories**: Compile all <span class="in">`TheorySpec`</span>s (no intra-bundle dependencies).</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compositions**: Compile all <span class="in">`CompositionSpec_`</span>s (may reference bundle theories).</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Morphisms**: Compile all <span class="in">`MorphismSpec`</span>s (reference theories by name).</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Protocols**: Compile all <span class="in">`ProtocolSpec`</span>s (reference theories by name or inline).</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>Each phase creates a fresh combined resolver (<span class="in">`local theories + external resolver`</span>) to avoid borrow checker conflicts with the mutable result set.</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="fu">## Builtin resolver</span></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="in">`builtin_resolver()`</span> returns a closure resolving 11 built-in theory names:</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Source <span class="pp">|</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|--------|</span></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThGraph`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_graph()`</span> <span class="pp">|</span></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThConstraint`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_constraint()`</span> <span class="pp">|</span></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThMulti`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_multi()`</span> <span class="pp">|</span></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThWType`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_wtype()`</span> <span class="pp">|</span></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThMeta`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_meta()`</span> <span class="pp">|</span></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThSimpleGraph`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_simple_graph()`</span> <span class="pp">|</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThHypergraph`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_hypergraph()`</span> <span class="pp">|</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThInterface`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_interface()`</span> <span class="pp">|</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThFunctor`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_functor()`</span> <span class="pp">|</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThFlat`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_flat()`</span> <span class="pp">|</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ThGraphInstance`</span> <span class="pp">|</span> <span class="in">`panproto_protocols::theories::th_graph_instance()`</span> <span class="pp">|</span></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>The last six were previously private in <span class="in">`panproto-protocols`</span>; they were made <span class="in">`pub`</span> to support this resolver.</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Error handling</span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a><span class="in">`TheoryDslError`</span> has 12 variants covering the full pipeline:</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Evaluation: <span class="in">`NickelEval`</span>, <span class="in">`Json`</span>, <span class="in">`Yaml`</span>, <span class="in">`UnsupportedExtension`</span></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Document: <span class="in">`NoBody`</span>, <span class="in">`MultipleBodies`</span></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Parsing: <span class="in">`TermParse`</span>, <span class="in">`ExprParse`</span></span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Resolution: <span class="in">`TheoryNotFound`</span></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Validation: <span class="in">`TypeCheck`</span>, <span class="in">`MorphismCheck`</span>, <span class="in">`ColimitFailed`</span></span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bundle: <span class="in">`Duplicate`</span>, <span class="in">`DependencyCycle`</span></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Passthrough: <span class="in">`Io`</span>, <span class="in">`Gat`</span></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>All variants carry miette diagnostic codes (<span class="in">`panproto_theory_dsl::*`</span>).</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## CLI integration</span></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>The <span class="in">`schema theory`</span> subcommand group is wired via <span class="in">`TheoryAction`</span> enum in <span class="in">`panproto-cli/src/main.rs`</span>, dispatching to <span class="in">`cmd::theory::*`</span> functions. Each command calls <span class="in">`load()`</span> + <span class="in">`compile()`</span> with the builtin resolver and formats output as either human-readable text or JSON (<span class="in">`--json`</span> flag).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/19-release.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/panproto/panproto/edit/main/dev-guide/chapters/37-theory-dsl-engine.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/panproto/panproto/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

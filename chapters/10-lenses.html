@@ -804,13 +804,13 @@ Tip
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Used by `put()` to restore the original leaf value.</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> skip_serializing_if <span class="op">=</span> <span class="st">"HashMap::is_empty"</span><span class="at">)]</span></span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> original_values<span class="op">:</span> HashMap<span class="op">&lt;</span><span class="dt">u32</span><span class="op">,</span> <span class="dt">Option</span><span class="op">&lt;</span><span class="pp">panproto_inst::value::</span>FieldPresence<span class="op">&gt;&gt;,</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="kw">impl</span> Complement <span class="op">{</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// Create an empty complement (no data discarded).</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>must_use<span class="at">]</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> <span class="kw">fn</span> empty() <span class="op">-&gt;</span> <span class="dt">Self</span> <span class="op">{</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Self</span> <span class="op">{</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// View node ids synthesized during forward eval by the nest-style</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// `expansion_path` mechanism. These nodes exist in the view (to</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// satisfy the target schema's multi-hop path) but have no</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// counterpart in the source instance. `put` must drop them when</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// reconstructing the source.</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">#[</span>serde<span class="at">(</span><span class="kw">default</span><span class="op">,</span> skip_serializing_if <span class="op">=</span> <span class="st">"std::collections::HashSet::is_empty"</span><span class="at">)]</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">pub</span> synthesized_nodes<span class="op">:</span> <span class="pp">std::collections::</span>HashSet<span class="op">&lt;</span><span class="dt">u32</span><span class="op">&gt;,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Internally, <code>get</code> delegates to <code>wtype_restrict</code> from <code>panproto-inst</code> to compute the view, then calculates the set difference between the source and result to populate each complement field:</p>
 <ol type="1">
 <li><strong>View computation</strong>: calls <code>wtype_restrict</code> with the lens’s compiled migration. This produces the projected instance under the target schema.</li>

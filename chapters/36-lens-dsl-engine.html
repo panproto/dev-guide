@@ -783,7 +783,7 @@ window.Quarto = {
 <ul>
 <li><code>remove_field</code> and <code>rename_field</code> generate qualified vertex IDs (<code>{body_vertex}.{field}</code>) before calling the combinator.</li>
 <li><code>add_field</code> generates both an <code>add_sort</code> + <code>add_op</code> chain and, if <code>expr</code> is present, a <code>ComputeField</code> transform.</li>
-<li><code>hoist_field</code>, <code>nest_field</code> delegate directly.</li>
+<li><code>hoist_field</code> delegates directly. <code>nest_field</code> takes three optional spec fields, <code>old_edge_name</code>, <code>parent_to_intermediate</code>, and <code>intermediate_to_child</code>, letting callers specify edge labels independently from vertex ids; empty values fall back to the intermediate/child vertex ids for backward compatibility.</li>
 <li><code>scoped</code> compiles inner steps recursively <em>with the focus vertex as body</em>, fuses the inner chain, and wraps via <code>map_items</code>.</li>
 <li><code>pullback</code> constructs a <code>TheoryMorphism</code> and delegates to <code>elementary::pullback</code>.</li>
 </ul>
@@ -1420,7 +1420,7 @@ window.Quarto = {
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`remove_field`</span> and <span class="in">`rename_field`</span> generate qualified vertex IDs (<span class="in">`{body_vertex}.{field}`</span>) before calling the combinator.</span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`add_field`</span> generates both an <span class="in">`add_sort`</span> + <span class="in">`add_op`</span> chain and, if <span class="in">`expr`</span> is present, a <span class="in">`ComputeField`</span> transform.</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hoist_field`</span>, <span class="in">`nest_field`</span> delegate directly.</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`hoist_field`</span> delegates directly. <span class="in">`nest_field`</span> takes three optional spec fields, <span class="in">`old_edge_name`</span>, <span class="in">`parent_to_intermediate`</span>, and <span class="in">`intermediate_to_child`</span>, letting callers specify edge labels independently from vertex ids; empty values fall back to the intermediate/child vertex ids for backward compatibility.</span>
 <span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`scoped`</span> compiles inner steps recursively *with the focus vertex as body*, fuses the inner chain, and wraps via <span class="in">`map_items`</span>.</span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pullback`</span> constructs a <span class="in">`TheoryMorphism`</span> and delegates to <span class="in">`elementary::pullback`</span>.</span>
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
